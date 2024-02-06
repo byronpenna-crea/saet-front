@@ -1,0 +1,186 @@
+<div style="display: flex; flex-direction: column; height: 100vh;">
+<div style="position: fixed; top: 0; left: 0; width: 100%; background-color: white; z-index: 100;">
+<p>
+    <mat-toolbar color="primary" mat-mini-toolbar class="main-toolbar">
+
+        <span class="app-title toolbar-item">
+            <img src="assets/logo-sistema.png" alt="Ícono">
+        </span>
+      
+      
+
+      <span class="app-title toolbar-item" style="margin-left: 78%;">
+        <img src="assets/logo-mined-w.png" alt="Ícono">
+    </span>
+     
+
+
+    </mat-toolbar>
+  
+  </p>
+
+  <div style="display: flex;margin-top:-12px ">
+    <div style="background-color: #8cc63f; width: 25%; height: 5px;"></div>
+    <div style="background-color: #f1c40f; width: 25%; height: 5px;"></div>
+    <div style="background-color: #be2857; width: 25%; height: 5px;"></div>
+    <div style="background-color: #29abe2; width: 25%; height: 5px;"></div>
+  </div>
+
+
+  <div class="welcome-message">
+    <span class="welcome-message">
+      Hola, bienvenido(a): <strong>{{ nombre_usuario }}</strong>
+    </span>
+  
+    <button mat-button class="logout-button" (click)="cerrarSesion()">
+      <mat-icon>exit_to_app</mat-icon>
+      <span class="button-text">Cerrar sesión</span>
+      <span class="button-background"></span>
+    </button>
+  </div>
+  
+
+  
+  <div class="large-screen">
+    <p>
+      <span class="large-screen">
+        <strong>Sistema de Información para la Gestión Educativa Salvadoreña</strong>
+      </span>
+    </p>
+  </div>
+</div>
+
+
+
+
+
+<div class="row filaModulos" >
+  <div class="modulo-container">
+    <div class="modulo moduloVerde" *ngIf="W1">
+      <a href="#/menu" (click)="cambiarOpcionMenu('W1')">
+        <img src="assets/iconoCatalogo.svg" alt="Catálogos"/>
+        <p class="nombreModulo">Catálogos</p>
+      </a>
+    </div>
+    
+  
+    <div class="modulo moduloAmarillo" *ngIf="W2">
+      <a href="#/menu" (click)="cambiarOpcionMenu('W2')">
+        <img src="assets/iconoCE.svg" alt="Catálogos"/>
+        <p class="nombreModulo">Centros Educativos</p>
+      </a>
+      
+    </div>
+  
+    <div class="modulo moduloFucsia" *ngIf="W5"> 
+      <a href="#/menu" (click)="cambiarOpcionMenu('W5')">
+        <img src="assets/iconoActivoFijo.svg" alt="Catálogos"/>
+        <p class="nombreModulo">Activo Fijo</p>
+      </a>
+    </div>
+    
+  
+    <div class="modulo moduloCeleste" *ngIf="W4">
+        <a href="#/menu" (click)="cambiarOpcionMenu('W4')">
+          <img src="assets/iconoTramites.svg" alt="Catálogos"/>
+          <p class="nombreModulo">Trámites En Línea</p>
+        </a>
+      
+    </div>
+
+
+    <div class="modulo moduloVerde" *ngIf="W3">
+      <a href="#/menu" (click)="cambiarOpcionMenu('W3')">
+        <img src="assets/iconoSeguridad.svg" alt="Catálogos"/>
+        <p class="nombreModulo">Seguridad</p>
+      </a>
+      
+    </div>
+  
+    <div class="modulo moduloAmarillo" *ngIf="W7">
+      <a href="#/menu" (click)="cambiarOpcionMenu('W7')">
+        <img src="assets/iconoInfraestructura.svg" alt="Catálogos"/>
+        <p class="nombreModulo">Infraestructura</p>
+      </a>
+     
+    </div>
+  
+    <div class="modulo moduloFucsia" *ngIf="W12">
+      <a href="#/menu" (click)="cambiarOpcionMenu('W12')">
+        <img src="assets/icono_leginm.svg" alt="Catálogos"/>
+        <p class="nombreModulo">Legalización De Inmuebles</p>
+      </a>
+    
+    </div>
+  
+    <div class="modulo moduloCeleste" *ngIf="W6">
+        <a href="#/menu" (click)="cambiarOpcionMenu('W6')">
+          <img src="assets/estadisticas.svg" alt="Catálogos"/>
+          <p class="nombreModulo">Estadísticas</p>
+        </a>
+        
+    </div>
+
+
+
+
+  <div class="modulo moduloVerde" *ngIf="W8">
+    <a href="#/menu" (click)="cambiarOpcionMenu('W8')">
+      <img src="assets/iconoHistorial.svg" alt="Catálogos"/>
+      <p class="nombreModulo">Registro Histórico</p>
+    </a>
+   
+  </div>
+
+  <div class="modulo moduloAmarillo" *ngIf="W11">
+    <a href="#/menu" (click)="cambiarOpcionMenu('W11')">
+      <img src="assets/IconoSistemasIntegrados.svg" alt="Catálogos"/>
+      <p class="nombreModulo">Sistemas Integrados</p>
+    </a>
+ 
+  </div>
+
+  <div class="modulo moduloFucsia" *ngIf="W9">
+    <a href="#/menu" (click)="cambiarOpcionMenu('W9')">
+      <img src="assets/pentaho.svg" alt="Catálogos"/>
+      <p class="nombreModulo">Administración Pentaho</p>
+    </a>
+   
+  </div>
+
+  <div class="modulo moduloCeleste" *ngIf="W19">
+      <a href="#/menu" (click)="cambiarOpcionMenu('W19')">
+        <img src="assets/pentaho.svg" alt="Catálogos"/>
+        <p class="nombreModulo">Sistema de Información Gerencial</p>
+      </a>
+    
+  </div>
+
+
+
+
+  <div class="modulo moduloVerde" *ngIf="W10">
+    <a href="#/menu" (click)="cambiarOpcionMenu('W10')">
+      <img src="assets/geografica.svg" alt="Catálogos"/>
+      <p class="nombreModulo">Información Geografica</p>
+    </a>
+   
+  </div>
+
+  <div class="modulo moduloAmarillo" *ngIf="W16">
+    <a href="#/menu" (click)="cambiarOpcionMenu('W16')">
+      <img src="assets/finanzas.svg" alt="Catálogos"/>
+      <p class="nombreModulo">Finanzas</p>
+    </a>
+ 
+  </div>
+</div>
+</div>
+
+<div class="footer-content" style="height: 7.7%;">
+  <!-- Aquí puedes agregar tu contenido del footer -->
+  <p style="float: center;">&copy; Dirección de Innovación y Tecnología - Ministerio de Educación</p>
+<p style="float: right;margin-top:-1%">Versión: 1.0.0 Ambiente: Producción</p>
+  
+</div>
+</div>

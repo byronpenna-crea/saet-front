@@ -1,0 +1,113 @@
+<div class="card">
+  <p-panel header="Administración de categorias">
+    <p-messages [(value)]="msgs" class="p-messages" *ngIf="showMessages"></p-messages>
+
+    <p-toolbar styleClass="mb-4 gap-2">
+      <ng-template pTemplate="left">
+        <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
+          (click)="NewCategoriaDialog()"></button>
+      </ng-template>
+    </p-toolbar>
+
+    <p-table [value]="lista_categorias" [scrollable]="true" [scrollHeight]="tableHeight">
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="min-width:180px; padding: 0; margin: 0;" filterField="id_categoria">
+            Id
+            <p-columnFilter type="text" field="id_categoria" matchMode="contains"></p-columnFilter>
+          </th>
+
+          <th style="min-width:180px; padding: 0; margin: 0;" filterField="nombre_categoria">
+            NOMBRE
+            <p-columnFilter type="text" field="nombre_categoria" matchMode="contains"></p-columnFilter>
+          </th>
+
+          <th style="min-width:100px">ESTADO</th>
+          <th style="min-width:180px">Transacción</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-lista_categorias>
+        <tr>
+          <td>{{lista_categorias.id_categoria}}</td>
+
+          <td>{{lista_categorias.nombre_categoria}}</td>
+
+          <td>
+            <ng-container *ngIf="lista_categorias.estado_categoria === 1">Activo</ng-container>
+            <ng-container *ngIf="lista_categorias.estado_categoria === 2">Inactivo</ng-container>
+          </td>
+          <td>
+            <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
+              (click)="leerCategoria(lista_categorias)"></button>
+            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+              (click)="confirmarEliminacionCategoria(lista_categorias)"></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="footer">
+        <tr>
+          <td>Id</td>
+          <td>NOMBRE</td>
+          <td>ESTADO</td>
+          <td>Transacción</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-panel>
+</div>
+
+<p-dialog [(visible)]="dialog" [style]="{width: '850px'}" header="Administración de categorias" [modal]="true"
+  styleClass="p-fluid" appendTo="body">
+  <ng-template pTemplate="content">
+    <p-messages [(value)]="msgs_dialog" class="p-messages" *ngIf="showMessages_dialog"></p-messages>
+
+    <div class="field">
+      <label for="nombre_categoria">Nombre de la categoria:</label>
+      <input type="text" pInputText id="nombre_categoria" [(ngModel)]="cap.nombre_categoria" required autofocus />
+      <small class="p-error" *ngIf="submitted && !cap.nombre_categoria">El nombre es obligatorio.</small>
+    </div>
+
+    <div class="field">
+      <label for="descripcion_categoria">Descripción:</label>
+      <input type="text" pInputText id="descripcion_categoria" [(ngModel)]="cap.descripcion_categoria" required autofocus />
+      <small class="p-error" *ngIf="submitted && !cap.descripcion_categoria">La descripción es obligatoria.</small>
+    </div>
+  </ng-template>
+
+  <!--div class="p-field">
+    <label>Estado: </label>
+    <select name="estado" id="estado" [(ngModel)]="estado_categoria_seleccionado" class="form-control" required>
+      <option value="0">Seleccione un estado</option>
+      <option value="1">Activo</option>
+      <option value="2">Inactivo</option>
+
+    </select>
+    <small class="p-error" *ngIf="submitted && !estado_categoria_seleccionado">Seleccione un estado.</small>
+  </div-->
+
+
+  <div class="p-field">
+    <label>Estado:</label>
+    <p-dropdown [options]="lista_estados_categorias" [(ngModel)]="estado_categoria_seleccionado" optionLabel="label" optionValue="value"  [showClear]="true" placeholder="Seleccione un estado" appendTo="body">
+    </p-dropdown>
+    <small class="p-error" *ngIf="submitted && !estado_categoria_seleccionado">Seleccione un estado.</small>
+  </div>
+
+
+  <ng-template pTemplate="footer">
+    <button (click)="cancelarDialogo()" pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"></button>
+    <button *ngIf="tipo_transaccion === 'c'" (click)="saveCategoria(cap)" pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text"></button>
+    <button *ngIf="tipo_transaccion === 'r'" (click)="editCategoria(cap)" pButton pRipple label="Modificar" icon="pi pi-check"
+      class="p-button-text"></button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog header="Confirmación" [(visible)]="displayConfirmation">
+  <p>¿Está seguro que desea eliminar la categoria proveedor?</p>
+  <p-footer>
+    <button type="button" pButton label="Sí" class="p-button-danger" (click)="eliminarCategoria()"></button>
+    <button type="button" pButton label="No" class="p-button-secondary" (click)="displayConfirmation = false"></button>
+  </p-footer>
+</p-dialog>
+
+

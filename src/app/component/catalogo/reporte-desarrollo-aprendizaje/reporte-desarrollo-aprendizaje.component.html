@@ -1,0 +1,118 @@
+<p-messages [(value)]="msgs" class="p-messages" *ngIf="showMessages"></p-messages>
+<div class="panel-grid">
+  <div class="panel-grid-row">
+    <div class="panel-grid-cell" style="padding: 2%;">
+      <label for="cboOpcion">CÓDIGO: </label>
+      <br>
+      <p-dropdown [options]="lista_sede_v2" [(ngModel)]="estado_opcion_seleccionado" optionLabel="codigo_grado_seccion"
+        optionValue="id_seccion" (onChange)="cargarAlumnosPorSeccionPorCodigo(estado_opcion_seleccionado)" [showClear]="true" [filter]="true" filterBy="codigo_grado_seccion"
+        [filterPlaceholder]="'Seleccione una opción'" placeholder="Seleccione una opción" appendTo="body">
+      </p-dropdown>
+      <small class="p-error" *ngIf="submitted && !estado_opcion_seleccionado">Seleccione un estado.</small>
+
+      <a  style="margin-left: 58%" href="https://drive.google.com/file/d/14Lysmw4GWRdMcMA7q5ctmTh6YE_Hg5-_/view?usp=drive_link" target="_blank" download="manual_usuario.pdf">Descargar manual de usuario</a>
+    </div>
+
+
+    
+
+
+
+
+    <!--div class="panel-grid-cell">
+      <label for="cboOpcion">CÓDIGO: </label>
+      <br>
+      <p-dropdown [options]="lista_sede" [(ngModel)]="estado_opcion_seleccionado" optionLabel="sed_codigo"
+      [showClear]="true" [filter]="true" filterBy="label"
+      [filterPlaceholder]="'Seleccione una opción'" placeholder="Seleccione una opción"
+      appendTo="body">
+      <ng-template let-sede pTemplate="item">
+          {{ sede.sed_codigo }} - {{ sede.gra_nombre }} - {{ sede.sec_nombre }}
+      </ng-template>
+  </p-dropdown>
+  
+
+      <small class="p-error" *ngIf="submitted && !estado_opcion_seleccionado">Seleccione un estado.</small>
+    </div-->
+
+
+
+
+  </div>
+
+
+
+
+
+  <div style="padding: 1%">
+
+    <p-table [value]="lista_estudiantes" [scrollable]="true" [scrollHeight]="tableHeight" class="prime-table" selectionMode="single">
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="min-width:180px; padding: 0; margin: 0;" filterField="per_nie">
+            NIE
+            <p-columnFilter type="text" field="per_nie" matchMode="contains"></p-columnFilter>
+          </th>
+
+          <th style="min-width:180px; padding: 0; margin: 0;" filterField="nombre_completo">
+            NOMBRE COMPLETO
+            <p-columnFilter type="text" field="nombre_completo" matchMode="contains"></p-columnFilter>
+          </th>
+
+          <th style="min-width:180px;text-align: center;">Transacción</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-lista_estudiantes>
+        <tr>
+          <td>{{lista_estudiantes.per_nie}}</td>
+
+          <td>{{lista_estudiantes.nombre_completo}}</td>
+
+          <td style="text-align: center;">
+            <button pButton pRipple class="p-button-rounded p-button-success mr-2"
+              (click)="imprimirFicha03(lista_estudiantes)">
+              Desarrollo de aprendizajes
+            </button>
+          
+            <button pButton pRipple class="p-button-rounded p-button-warning mr-2"
+              (click)="imprimirFicha04(lista_estudiantes)">
+              Certificados de culminación
+            </button>
+          </td>
+          
+
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="footer">
+        <tr>
+          <td>NIE</td>
+          <td>NOMBRE COMPLETO</td>
+          <td style="text-align: center;">Transacción</td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+
+
+  </div>
+
+
+
+
+  <p-dialog [(visible)]="dialogo_proceso_busqueda" header="PROCESANDO" [modal]="true" styleClass="p-fluid"
+  appendTo="body">
+  <ng-template pTemplate="content">
+
+
+    <div class="card" style="align-items: center;">
+      <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)"
+        animationDuration=".5s"></p-progressSpinner>
+    </div>
+
+
+  </ng-template>
+</p-dialog>
+
+
+
+</div>

@@ -1,0 +1,315 @@
+<div class="card">
+  <p-tabView>
+    <!--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+    <!--------------------------------------------------------------NOTAS------------------------------------------------->
+    <!--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+    <p-tabPanel header="Activo fijo">
+      <p-messages [(value)]="msgs" class="p-messages" *ngIf="showMessages"></p-messages>
+
+      <p-toolbar styleClass="mb-4 gap-2">
+        <div class="panel-grid">
+          <div class="panel-grid-row">
+            <div class="panel-grid-cell">
+              <label for="cboOpcion">Unidades Activo Fijo: </label>
+              <br>
+              <p-dropdown [options]="lista_unidades_activo_fijo" [(ngModel)]="unidad_activo_fijo"
+                optionLabel="uaf_codigo_nombre" optionValue="uaf_pk" (onChange)="cargarUnidadesAdministrativas()"
+                [showClear]="true" [filter]="true" filterBy="uaf_codigo_nombre"
+                [filterPlaceholder]="'Seleccione una opción'" placeholder="Seleccione una opción" appendTo="body">
+              </p-dropdown>
+              <small class="p-error" *ngIf="submitted && !estado_firmante">Seleccione un estado.</small>
+            </div>
+            <div class="panel-grid-cell">
+              <label for="cboOpcion">Unidades administrativas: </label>
+              <br>
+              <p-dropdown [options]="lista_unidades_administrativas" [(ngModel)]="unidad_administrativa"
+                optionLabel="uad_codigo_nombre" optionValue="uad_pk"
+                (onChange)="cargarEmpleadosPorUnidadAdministrativa()" [showClear]="true" [filter]="true"
+                filterBy="uad_codigo_nombre" [filterPlaceholder]="'Seleccione una opción'"
+                placeholder="Seleccione una opción" appendTo="body">
+              </p-dropdown>
+              <small class="p-error" *ngIf="submitted && !estado_firmante">Seleccione un estado.</small>
+            </div>
+
+
+            <div style="color: red; font-weight: bold;">Total Valor de registros: $ {{ calcularTotalAdquisicion() |
+              number: '1.2-2' }}</div>
+            <div style="color: red; font-weight: bold;">Total Valor de existentes: $ {{ calcularTotalAdquisicionBueno()
+              | number: '1.2-2' }}</div>
+            <div style="color: D8D8D8; font-weight: bold;">Resultados: {{this.sumaCorrelativos}} elemento(s)</div>
+          </div>
+        </div>
+        <div class="panel-grid">
+          <div class="panel-grid-row">
+            <div class="panel-grid-cell">
+              <label for="cboOpcion">Empleado por unidad administrativa: </label>
+              <br>
+              <p-dropdown [options]="lista_sg_af_empleados" [(ngModel)]="emp_pk"
+                optionLabel="emp_persona_fk.nombre_completo" optionValue="emp_pk"
+                (onChange)="cargarBienesPorEmpleadosPorUnidadAdministrativa()" [showClear]="true" [filter]="true"
+                filterBy="emp_persona_fk.nombre_completo" [filterPlaceholder]="'Seleccione una opción'"
+                placeholder="Seleccione una opción" appendTo="body">
+              </p-dropdown>
+              <small class="p-error" *ngIf="submitted && !estado_firmante">Seleccione un estado.</small>
+            </div>
+          </div>
+        </div>
+        <div class="panel-grid">
+          <div class="panel-grid-row">
+            <div class="panel-grid-cell">
+              <div style="justify-content:right;">
+
+
+
+                <p-button class="boton_generar_acta" (click)="buscarActaResponsabilidad()">
+                  <i class="fa-solid fa-print"></i>
+                  <span class="ml-2 font-bold">Generar Reporte</span>
+                </p-button>
+
+
+
+                <p-button class="boton_generar_acta" (click)="cargarActa()">
+
+                  <span class="ml-2 font-bold">Cargar acta</span>
+                </p-button>
+
+              </div>
+
+
+
+
+
+            </div>
+          </div>
+        </div>
+      </p-toolbar>
+
+
+
+
+      <p-table [value]="lista_sg_af_bienes_depreciables" [scrollable]="true" [scrollHeight]="tableHeight"
+        (onFilter)="actualizarCantidadResultados($event)">
+        <ng-template pTemplate="header">
+          <tr>
+
+            <th>#</th> <!-- Columna para el índice de fila -->
+
+            <th style="min-width:180px; padding: 0; margin: 0;" filterField="bde_codigo_inventario">
+              Código de inventario
+              <p-columnFilter type="text" field="bde_codigo_inventario" matchMode="contains"></p-columnFilter>
+            </th>
+
+            <th style="min-width:180px; padding: 0; margin: 0;" filterField="bde_descripcion">
+              Descripción
+              <p-columnFilter type="text" field="bde_descripcion" matchMode="contains"></p-columnFilter>
+            </th>
+
+            <th style="min-width:180px; padding: 0; margin: 0;" filterField="bde_marca">
+              Marca
+              <p-columnFilter type="text" field="bde_marca" matchMode="contains"></p-columnFilter>
+            </th>
+
+            <th style="min-width:180px; padding: 0; margin: 0;" filterField="bde_no_serie">
+              Serie
+              <p-columnFilter type="text" field="bde_no_serie" matchMode="contains"></p-columnFilter>
+            </th>
+
+            <th style="min-width:180px; padding: 0; margin: 0;" filterField="bde_fecha_adquisicion">
+              Fecha de adquisición
+              <p-columnFilter type="text" field="bde_fecha_adquisicion" matchMode="contains"></p-columnFilter>
+            </th>
+
+            <th style="min-width:180px; padding: 0; margin: 0;" filterField="ebi_nombre">
+              Estado
+              <p-columnFilter type="text" field="ebi_nombre" matchMode="contains"></p-columnFilter>
+            </th>
+
+            <th style="min-width:180px; padding: 0; margin: 0;" filterField="bde_valor_adquisicion">
+              Valor de adquisición
+              <p-columnFilter type="text" field="bde_valor_adquisicion" matchMode="contains"></p-columnFilter>
+            </th>
+
+            <th style="min-width:180px; padding: 0; margin: 0;" filterField="eca_nombre">
+              Calidad
+              <p-columnFilter type="text" field="eca_nombre" matchMode="contains"></p-columnFilter>
+            </th>
+
+
+
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-lista_sg_af_bienes_depreciables>
+          <tr>
+
+            <td>{{ lista_sg_af_bienes_depreciables.bde_pk }}</td>
+
+            <td>{{lista_sg_af_bienes_depreciables.bde_codigo_inventario}}</td>
+
+            <td>{{lista_sg_af_bienes_depreciables.bde_descripcion}}</td>
+
+            <td>{{lista_sg_af_bienes_depreciables.bde_marca}}</td>
+
+            <td>{{lista_sg_af_bienes_depreciables.bde_no_serie}}</td>
+
+            <td>{{ lista_sg_af_bienes_depreciables.bde_fecha_adquisicion | date: 'dd/MM/yyyy' }}</td>
+
+            <td>{{lista_sg_af_bienes_depreciables.bde_estado_fk.ebi_nombre}}</td>
+
+            <td>$ {{ lista_sg_af_bienes_depreciables.bde_valor_adquisicion | number: '1.2-2' }}</td>
+
+            <td>{{lista_sg_af_bienes_depreciables.bde_calidad_fk.eca_nombre}}</td>
+
+
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="footer">
+          <tr>
+            <td>#</td>
+            <td>Código de inventario</td>
+            <td>Descripción</td>
+            <td>Marca</td>
+            <td>N° de serie</td>
+            <td>Fecha de adquisición</td>
+            <td>Estado</td>
+            <td>Valor de adquisición</td>
+            <td>Calidad</td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </p-tabPanel>
+
+
+
+
+    <!--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+    <!--------------------------------------------------------------TABLEROS------------------------------------------------->
+    <!--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+    <p-tabPanel header="Tableros">
+
+      <button pButton pRipple class="p-button-rounded p-button-warning" (click)="actualizarTablero(reporte=1)">
+        Notas
+      </button>
+
+      <button pButton pRipple class="p-button-rounded p-button-warning" (click)="actualizarTablero(reporte=2)">
+        Titulos
+      </button>
+
+      <div class="card">
+        <p-chart type="bar" [data]="chartData"></p-chart>
+      </div>
+
+
+
+    </p-tabPanel>
+
+  </p-tabView>
+
+
+
+
+
+</div>
+
+
+
+<!--===========================================================================================================================================-->
+<!--Procesando-->
+<!--===========================================================================================================================================-->
+
+<p-dialog [(visible)]="dialogo_proceso_busqueda" header="PROCESANDO" [modal]="true" styleClass="p-fluid"
+  appendTo="body">
+  <ng-template pTemplate="content">
+
+
+    <div class="card" style="align-items: center;">
+      <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)"
+        animationDuration=".5s"></p-progressSpinner>
+    </div>
+
+
+  </ng-template>
+</p-dialog>
+
+
+<!--===========================================================================================================================================-->
+<!--Cargar acta-->
+<!--===========================================================================================================================================-->
+
+<p-dialog [(visible)]="dialogo_carga_acta" header="PROCESANDO"  [modal]="true" styleClass="p-fluid" appendTo="body">
+  <ng-template pTemplate="content">
+
+
+
+ <div class="file-upload-container">
+      <div class="file-input-container">
+        <label for="foto" class="file-label">Seleccione el contrato (solo PDF)</label>
+        <input type="file" id="foto" accept=".pdf" class="file-input" (change)="onFileSelected($event)" />
+      </div>
+      <button class="upload-button" (click)="uploadFile()">Cargar Archivo</button>
+    </div>
+    
+
+
+    <!--div class="card flex justify-content-center">
+      <p-fileUpload name="basic" accept=".pdf"  chooseLabel="Seleccionar documento" (onSelect)="onFileSelected($event)" [multiple]="false" [maxFileSize]="1000000">
+        <ng-template pTemplate="content">
+          <button *ngIf="selectedFile" class="upload-button" (click)="uploadFile()">Cargar Archivo</button>
+          <ul *ngIf="selectedFile">
+            <li>{{ selectedFile.name }} - {{ selectedFile.size }} bytes</li>
+          </ul>
+        </ng-template>
+      </p-fileUpload>
+    </div-->
+
+
+    <!--div class="card flex justify-content-center">
+      <p-fileUpload name="demo[]" accept=".pdf" (onSelect)="onFileSelected($event)" [multiple]="false" [maxFileSize]="1000000">
+        <ng-template pTemplate="content">
+          <button *ngIf="selectedFile" class="upload-button" (click)="uploadFile()">Cargar Archivo</button>
+          <ul *ngIf="selectedFile">
+            <li>{{ selectedFile.name }} - {{ selectedFile.size }} bytes</li>
+          </ul>
+        </ng-template>
+      </p-fileUpload>
+    </div-->
+    
+
+
+
+
+    <!--div class="file-upload-container">
+      <div class="file-input-container">
+        <label for="foto" class="file-label">Seleccione el contrato (solo PDF)</label>
+        <input type="file" id="foto" accept=".pdf" class="file-input" (change)="onFileSelected($event)" />
+      </div>
+      <button class="upload-button" (click)="uploadFile()">Cargar Archivo</button>
+    </div-->
+    
+    
+
+
+    <!--div>
+    <div>
+      <label for="foto">Seleccione el contrato</label>
+      <input type="file" id="foto" (change)="onFileSelected($event)" />
+    </div>
+    <button (click)="uploadFile()">Cargar Archivo</button>
+  </div-->
+
+    <!--div class="card flex justify-content-center">
+      <p-fileUpload name="myfile[]" url="https://www.primefaces.org/cdn/api/upload.php" [multiple]="true" accept="image/*">
+          <ng-template pTemplate="toolbar">
+              <div class="py-3">Upload 3 Files</div>
+          </ng-template>
+          <ng-template let-file pTemplate="file">
+              <div>Custom UI to display a file</div>
+          </ng-template>
+          <ng-template pTemplate="content" let-files>
+              <div>Additional content.</div>
+          </ng-template>
+      </p-fileUpload>
+    </div-->
+
+
+  </ng-template>
+</p-dialog>

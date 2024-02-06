@@ -1,0 +1,233 @@
+
+
+#frm_login{
+  min-width: 250px;
+  max-width: 35%;
+  margin: 0px auto;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 2rem 3rem;
+  margin: auto;
+  border-radius: 2.5rem;
+  background-color: #ecf0f3;
+
+  color: black;
+  margin-top: 5rem;
+}
+
+
+
+#frm_login h2 {
+  display: flex;
+ justify-content: center;
+  margin: 0%;
+  text-align: center;
+
+}
+
+#div_login {
+  display: flex; /* Cambia el contenedor a un contenedor flex */
+  justify-content: center; /* Centra los elementos en el eje horizontal */
+  align-items: center; /* Centra los elementos en el eje vertical */
+  height: 100%; /* Establece la altura del contenedor al 100% para que el contenido esté centrado verticalmente */
+}
+
+#frm_login {
+  max-width: 400px; /* Limita el ancho máximo del formulario */
+  width: 100%; /* Establece el ancho del formulario al 100% para que ocupe todo el ancho disponible */
+  text-align: center; /* Centra el texto dentro del formulario */
+}
+
+.boton-iniciar-sesion {
+  margin-top: 16px; /* Agrega un margen superior al botón */
+  background-color: #00498d;
+}
+
+
+
+
+
+
+
+.main-toolbar {
+  background-color: #00498d;
+  display: flex;
+  height: 100%;
+ 
+}
+
+
+.modulo-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  
+}
+
+.modulo {
+  flex: 0 0 calc(25% - 10px); /* 25% de ancho y un pequeño espacio entre los divs */
+  margin: 10px; /* Espacio entre los divs */
+  box-sizing: border-box; /* Incluye el padding y el borde en el cálculo del ancho */
+
+  background-color: #f4f9fd;
+  width: 240px;
+  max-width: 100%;
+  height: 180px;
+  text-align: center;
+  display: inline-block;
+  margin-bottom: 40px;
+  padding: 5px 5px;
+}
+
+/*MODULOS*/
+.inicio-modulos .frmSalir {
+margin-top: 5px;
+}
+
+.inicio-modulos #main-content {
+max-width: initial;
+}
+.filaModulos{
+margin: 30px 0px 0 0;
+text-align: center;
+justify-content: center;
+flex-grow: 0;
+}
+
+.modulo a {
+text-decoration: none;
+}
+.modulo a:hover, .modulo a:hover > p {
+opacity: .75;
+}
+.modulo img{
+width: 85px;
+padding-top: 10px;
+}
+.modulo p{
+font-size: 17px;
+color: #333;
+margin-bottom: 0;
+}
+.moduloVerde{
+border-bottom: solid 5px #84c03c;
+}
+.moduloAmarillo{
+border-bottom: solid 5px #ebbc1c;
+}
+.moduloFucsia{
+border-bottom: solid 5px #b3204f;
+}
+.moduloCeleste{
+border-bottom: solid 5px #38a4de;
+}
+
+
+.footer-content {
+text-align: center;
+padding: 10px;
+background-color: #333;
+color: white;
+position: sticky;
+bottom: 0;
+}
+
+/* CSS */
+.example-container {
+flex: 1;
+max-height: calc(100vh - 100px); /* Resta la altura del header y el footer */
+overflow-y: auto; /* Agrega una barra de desplazamiento vertical si es necesario */
+}
+
+
+/* Media Query para pantallas de tamaño grande (mayor a 1200px) */
+@media screen and (min-width: 1200px) {
+  /* Estilos para pantallas grandes */
+  div.large-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 5px;
+    margin-top: 5%;
+  }
+
+  p.large-screen {
+    text-align: center;
+    margin-top: 9%;
+  }
+
+  span.large-screen {
+    font-size: 18px;
+  }
+}
+
+/* Media Query para pantallas de tamaño mediano (entre 980px y 1199px) */
+@media screen and (min-width: 980px) and (max-width: 1199px) {
+  /* Estilos para pantallas medianas */
+  div.medium-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 5px;
+    margin-top: 5%;
+  }
+
+  p.medium-screen {
+    text-align: center;
+    margin-top: 9%;
+  }
+
+  span.medium-screen {
+    font-size: 18px;
+  }
+}
+
+
+/* Media Query para pantallas de tamaño pequeño (entre 768px y 979px) */
+@media screen and (min-width: 768px) and (max-width: 979px) {
+  /* Estilos para pantallas pequeñas */
+  div.small-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 5px;
+  }
+
+  p.small-screen {
+    text-align: center;
+    margin-top: 9%;
+  }
+
+  span.small-screen {
+    font-size: 18px;
+  }
+}
+
+
+/* Media Query para pantallas de tamaño extra pequeño (hasta 767px),mi cel HUAWEI JKM-LX3 */
+@media screen and (max-width: 767px) {
+  /* Estilos para pantallas extra pequeñas */
+  .large-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+   
+    text-align: center; /* Centra horizontalmente el texto */
+  }
+}
+
+/* Media Query para pantallas de tamaño extra pequeño (hasta 767px),Pantalla StarView Pequeña */
+@media screen and (max-width: 800px) {
+  /* Estilos para pantallas extra pequeñas */
+  .large-screen {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+   
+    text-align: center; /* Centra horizontalmente el texto */
+  }
+}

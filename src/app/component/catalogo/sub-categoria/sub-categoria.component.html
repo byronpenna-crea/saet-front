@@ -1,0 +1,145 @@
+<div class="card">
+  <p-panel header="Administración de subcategoria">
+    <p-messages [(value)]="msgs" class="p-messages" *ngIf="showMessages"></p-messages>
+
+    <p-toolbar styleClass="mb-4 gap-2">
+      <ng-template pTemplate="left">
+        <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
+          (click)="NewModeloDialog()"></button>
+      </ng-template>
+    </p-toolbar>
+
+    <p-table [value]="lista_sub_categorias" [scrollable]="true" [scrollHeight]="tableHeight">
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="min-width:180px; padding: 0; margin: 0;" filterField="id_sub_categoria">
+            Id
+            <p-columnFilter type="text" field="id_sub_categoria" matchMode="contains"></p-columnFilter>
+          </th>
+
+          <th style="min-width:180px; padding: 0; margin: 0;" filterField="nombre_sub_categoria">
+            SUBCATEGORIA
+            <p-columnFilter type="text" field="nombre_sub_categoria" matchMode="contains"></p-columnFilter>
+          </th>
+
+          <th style="min-width:180px; padding: 0; margin: 0;" filterField="id_categoria.nombre_categoria">
+            CATEGORIA
+            <p-columnFilter type="text" field="id_categoria.nombre_categoria" matchMode="contains"></p-columnFilter>
+          </th>
+
+          <th style="min-width:100px" filterField="estado_sub_categoria">
+            ESTADO
+            <p-columnFilter type="text" field="estado_sub_categoria" matchMode="contains"></p-columnFilter>
+          </th>
+
+          <th style="min-width:180px">Transacción</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-lista_sub_categorias>
+        <tr>
+          <td>{{lista_sub_categorias.id_sub_categoria}}</td>
+
+          <td>{{lista_sub_categorias.nombre_sub_categoria}}</td>
+
+          <td>{{lista_sub_categorias.id_categoria.nombre_categoria}}</td>
+
+          <td>
+            <ng-container *ngIf="lista_sub_categorias.estado_sub_categoria === 1">Activo</ng-container>
+            <ng-container *ngIf="lista_sub_categorias.estado_sub_categoria === 2">Inactivo</ng-container>
+          </td>
+
+          <td>
+            <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
+              (click)="leerSubCategorias(lista_sub_categorias)"></button>
+            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+              (click)="confirmarEliminacionSubCategoria(lista_sub_categorias)"></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="footer">
+        <tr>
+          <td>Id</td>
+          <td>SUBCATEGORIA</td>
+          <td>CATEGORIA</td>
+          <td>ESTADO</td>
+          <td>Transacción</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-panel>
+</div>
+
+<p-dialog [(visible)]="dialog" [style]="{width: '850px'}" header="Administración de subcategorias" [modal]="true"
+  styleClass="p-fluid" appendTo="body">
+  <ng-template pTemplate="content">
+    <p-messages [(value)]="msgs_dialog" class="p-messages" *ngIf="showMessages_dialog"></p-messages>
+    <div class="field">
+      <label for="nombre_sub_categoria">Nombre de subcategoria:</label>
+      <input type="text" pInputText id="nombre_sub_categoria" [(ngModel)]="sub_cat.nombre_sub_categoria" required autofocus />
+      <small class="p-error" *ngIf="submitted && !sub_cat.nombre_sub_categoria">El nombre es obligatorio.</small>
+    </div>
+    <div class="field">
+      <label for="descripcion_sub_categoria">Descripción:</label>
+      <input type="text" pInputText id="descripcion_sub_categoria" [(ngModel)]="sub_cat.descripcion_sub_categoria" required autofocus />
+      <small class="p-error" *ngIf="submitted && !sub_cat.descripcion_sub_categoria">La descripción es obligatoria.</small>
+    </div>
+
+    <!--div class="p-field">
+      <label>Estado sub categoria: </label>
+      <select name="estado" id="estado" [(ngModel)]="estado_sub_categoria_seleccionado" class="form-control" required>
+        <option value="0">Seleccione un estado</option>
+        <option value="1">Activo</option>
+        <option value="2">Inactivo</option>
+
+      </select>
+      <small class="p-error" *ngIf="submitted && !estado_sub_categoria_seleccionado">Seleccione un estado.</small>
+    </div-->
+
+    <div class="p-field">
+      <label>Estado sub categoria: </label>
+      <p-dropdown [options]="lista_estados_sub_categoria" [(ngModel)]="estado_sub_categoria_seleccionado" 
+                  optionLabel="label" optionValue="value" [filter]="false" 
+                  [showClear]="true" [filterPlaceholder]="'Seleccione un estado.'"
+                  placeholder="Seleccione un estado." appendTo="body">
+      </p-dropdown>
+      <small class="p-error" *ngIf="submitted && !estado_sub_categoria_seleccionado">Seleccione un estado.</small>
+    </div>
+
+
+    <!--div class="p-field">
+      <label for="id_categoria">Categoria:</label>
+      <select name="id_categoria" id="id_categoria" [(ngModel)]="categoriaSeleccionado" class="form-control" required>
+        <option value="0">Seleccione una categoria</option>
+        <option [value]="item.id_categoria" *ngFor="let item of lista_categorias">{{item.nombre_categoria}}</option>
+      </select>
+      <small class="p-error" *ngIf="submitted && !categoriaSeleccionado">La categoria es obligatoria.</small>
+    </div-->
+
+    <div class="p-field">
+      <label for="id_categoria">Categoria:</label>
+      <p-dropdown [options]="lista_categorias" [(ngModel)]="categoriaSeleccionado" 
+                  optionLabel="nombre_categoria" optionValue="id_categoria" [filter]="true" 
+                  [showClear]="true" [filterPlaceholder]="'Seleccione una categoria.'"
+                  placeholder="Seleccione una categoria." appendTo="body">
+      </p-dropdown>
+      <small class="p-error" *ngIf="submitted && !categoriaSeleccionado">La categoria es obligatoria.</small>
+    </div>
+    
+
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button (click)="cancelarDialogo()" pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"></button>
+    <button *ngIf="tipo_transaccion === 'c'" (click)="saveSubCategoria(sub_cat)" pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text"></button>
+    <button *ngIf="tipo_transaccion === 'r'"  (click)="editModelo(sub_cat)" pButton pRipple label="Modificar" icon="pi pi-check"
+      class="p-button-text"></button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog header="Confirmación" [(visible)]="displayConfirmation">
+  <p>¿Está seguro que desea eliminar la subcategoria?</p>
+  <p-footer>
+    <button type="button" pButton label="Sí" class="p-button-danger" (click)="eliminarSubCategoria()"></button>
+    <button type="button" pButton label="No" class="p-button-secondary" (click)="displayConfirmation = false"></button>
+  </p-footer>
+</p-dialog>

@@ -1,0 +1,156 @@
+<div class="card" id="div_persona_principal">
+
+  <p-panel header="Administracion de personas">
+
+    <p-toolbar styleClass="mb-4 gap-2">
+      <ng-template pTemplate="left">
+          <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"></button>
+      </ng-template>
+    </p-toolbar>
+
+  <form id="frm_persona">
+
+
+
+  <h2>Registrar persona</h2>
+  <p-messages [(value)]="msgs" class="p-messages" *ngIf="showMessages"></p-messages>
+  <div class="p-inputgroup">
+    <span class="p-inputgroup-addon">
+      <i class="pi pi-id-card"></i>
+    </span>
+    <input type="text" [(ngModel)]="persona.dui_persona" name="dui_persona" pInputText placeholder="DUI" (change)="obtenerDatosPorDUI()" />
+
+  </div>
+
+  <div class="p-inputgroup">
+    <span class="p-inputgroup-addon">
+      <i class="pi pi-user"></i>
+    </span>
+    <input type="text" [(ngModel)]="persona.apellido" name="apellido" pInputText placeholder="Apellidos" />
+  </div>
+
+  <div class="p-inputgroup">
+    <span class="p-inputgroup-addon">
+      <i class="pi pi-user"></i>
+    </span>
+    <input type="text" [(ngModel)]="persona.nombre" name="nombre" pInputText placeholder="Nombres" />
+  </div>
+
+  <div class="p-inputgroup">
+    <span class="p-inputgroup-addon">
+      <i class="pi pi-user"></i>
+    </span>
+    <input type="text" [(ngModel)]="persona.nombre_completo" name="nombre_completo" pInputText placeholder="Nombre completo" />
+  </div>
+
+  <div class="p-inputgroup">
+    <span class="p-inputgroup-addon">
+      <i class="pi pi-institution"></i>
+    </span>
+    <input type="text" [(ngModel)]="persona.institucion" name="institucion" pInputText placeholder="Institucion" />
+  </div>
+
+  <div class="p-inputgroup">
+    <span class="p-inputgroup-addon">
+      <i class="pi pi-map-marker"></i>
+    </span>
+    <input type="text" [(ngModel)]="persona.plaza" name="plaza" pInputText placeholder="Plaza" />
+  </div>
+
+  <div class="p-inputgroup">
+    <span class="p-inputgroup-addon">
+      <i class="pi pi-dollar"></i>
+    </span>
+    <input type="text" [(ngModel)]="persona.salario" name="salario" pInputText placeholder="Salario" />
+  </div>
+
+  <div class="p-inputgroup">
+    <span class="p-inputgroup-addon">
+      <i class="pi pi-briefcase"></i>
+    </span>
+    <input type="text" [(ngModel)]="persona.tipo_contrato" name="tipo_contrato" pInputText placeholder="Tipo de contrato" />
+  </div>
+
+  <div class="p-inputgroup">
+    <span class="p-inputgroup-addon">
+      <i class="pi pi-mobile"></i>
+    </span>
+    <input type="number" [(ngModel)]="persona.celular_personal" name="celular_persona" pInputText placeholder="Celular personal" />
+  </div>
+
+  <div class="p-inputgroup">
+    <span class="p-inputgroup-addon">
+      <i class="pi pi-mobile"></i>
+    </span>
+    <input type="number" [(ngModel)]="persona.celular_trabajo" name="celular_institucional" pInputText placeholder="Celular institucional" />
+  </div>
+
+  <div class="p-inputgroup">
+    <span class="p-inputgroup-addon">
+      <i class="pi pi-phone"></i>
+    </span>
+    <input type="number" [(ngModel)]="persona.telefono_fijo_trabajo" name="telefono_fijo_trabajo" pInputText placeholder="Telefono fijo de trabajo" />
+  </div>
+
+  <div class="p-inputgroup">
+    <span class="p-inputgroup-addon">
+      <i class="pi pi-phone"></i>
+    </span>
+    <input type="number" [(ngModel)]="persona.telefono_fijo_casa" name="telefono_fijo_casa" pInputText placeholder="Telefono fijo de casa" />
+  </div>
+
+  <div class="p-inputgroup">
+    <span class="p-inputgroup-addon">
+      <i class="pi pi-envelope"></i>
+    </span>
+    <input type="email" [(ngModel)]="persona.correo_personal" name="correo_personal" pInputText placeholder="Correo personal" />
+  </div>
+
+  <div class="p-inputgroup">
+    <span class="p-inputgroup-addon">
+      <i class="pi pi-envelope"></i>
+    </span>
+    <input type="email" [(ngModel)]="persona.correo_trabajo" name="correo_institucional" pInputText placeholder="Correo institucional" />
+  </div>
+
+  <div class="p-inputgroup">
+    <span class="p-inputgroup-addon">
+      <i class="pi pi-calendar"></i>
+    </span>
+    <input type="date" [(ngModel)]="persona.fecha_nacimiento" name="fecha_nacimiento" pInputText placeholder="Fecha de nacimiento" />
+  </div>
+
+  <div class="p-inputgroup">
+    <span class="p-inputgroup-addon">
+      <i class="pi pi-user"></i>
+    </span>
+    <input type="text" [(ngModel)]="persona.sexo" name="sexo" pInputText placeholder="Sexo" />
+  </div>
+
+  <div class="p-field">
+    <label>Departamentos: </label>
+    <select name="departamento01" id="departamento02"  class="form-control" (change)="cargarMunicipiosPorDepartamentos($event)">
+    <option [value]="item.codigo_departamento" *ngFor="let item of listaDepartamentos">{{item.codigo_departamento+"-"+item.nombre_departamento}}</option>
+    </select>
+  </div>
+
+<div class="p-field">
+<label>Municipios:  </label>
+<select name="municipio01" id="municipio02" [(ngModel)]="persona.codigo_municipio_departamento" class="form-control">
+<option [value]="item.codigo_municipio_departamento" *ngFor="let item of listaDeMunicipios">{{item.codigo_municipio_departamento+"-"+item.nombre_municipio}}</option>
+</select>
+</div>
+
+
+<br>
+<br>
+<button (click)="guardarPersona(persona)" pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text" ></button>
+
+
+
+
+</form>
+</p-panel>
+</div>
+
+

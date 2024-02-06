@@ -1,0 +1,84 @@
+/* Estilos personalizados para emular PrimeFaces */
+.prime-table {
+    border-collapse: collapse;
+    width: 100%;
+    font-family: Arial, sans-serif;
+  }
+  
+  .prime-table th {
+    background-color: #f2f2f2;
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+  
+  .prime-table td {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+  
+  /* Estilos para las celdas de encabezado */
+  .prime-table th {
+    background-color: #f2f2f2;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  /* Estilos para las filas pares */
+  .prime-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  /* Estilos para las filas impares */
+  .prime-table tr:nth-child(odd) {
+    background-color: #fff;
+  }
+  
+  /* Estilos para los botones en las celdas */
+  .prime-table button {
+    padding: 4px 8px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  /* Estilos para los botones de éxito */
+  .prime-table button.p-button-success {
+    background-color: #5bc0de;
+    color: #fff;
+  }
+  
+  /* Estilos para los botones de advertencia */
+  .prime-table button.p-button-warning {
+    background-color: #d9534f;
+    color: #fff;
+  }
+
+
+  .boton_generar_acta {
+    background-color: #00498d;
+    color: #ffffff;
+  }
+
+
+  .upload-button {
+    background-color: #007bff; /* Color de fondo del botón */
+    color: #fff; /* Color del texto del botón */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .upload-button:hover {
+    background-color: #0056b3; /* Color de fondo del botón al pasar el ratón */
+  }
+
+  /* Agrega este estilo en tu archivo CSS o en tu componente CSS */
+.ui-fileupload-buttonbar .ui-fileupload-upload {
+  display: none; /* Oculta la parte de "Upload" */
+}
+
+

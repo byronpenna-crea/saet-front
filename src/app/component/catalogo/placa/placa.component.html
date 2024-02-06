@@ -1,0 +1,204 @@
+<div class="card">
+  <p-panel header="Administración de placas">
+    <p-messages [(value)]="msgs" class="p-messages" *ngIf="showMessages"></p-messages>
+
+    <p-toolbar styleClass="mb-4 gap-2">
+      <ng-template pTemplate="left">
+        <button pButton pRipple label="New" icon="pi pi-plus" class="p-button-success mr-2"
+          (click)="NewPlacaDialog()"></button>
+          <button pButton pRipple label="Buscar" icon="pi pi-search" class="p-button-rounded p-button-success p-button-text"
+          (click)="BuscarPlacaDialog()"></button>
+      </ng-template>
+    </p-toolbar>
+
+
+
+    <p-table [value]="lista_placa" [scrollable]="true" [scrollHeight]="tableHeight">
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="min-width:120px; padding: 0; margin: 0;" filterField="id_placa">
+            Id
+            <p-columnFilter type="text" field="id_placa" matchMode="contains"></p-columnFilter>
+          </th>
+
+          <th style="min-width:180px; padding: 0; margin: 0;" filterField="numero_placa">
+            Numero de placa
+            <p-columnFilter type="text" field="numero_placa" matchMode="contains"></p-columnFilter>
+          </th>
+
+          <th style="min-width:180px; padding: 0; margin: 0;" filterField="dui_persona_responsable.nombre_completo">
+            Nombre de responsable
+            <p-columnFilter type="text" field="dui_persona_responsable.nombre_completo" matchMode="contains"></p-columnFilter>
+          </th>
+
+          <th style="min-width:180px; padding: 0; margin: 0;" filterField="dui_persona_responsable.telefono_fijo_trabajo">
+            Teléfono fijo de trabajo
+            <p-columnFilter type="text" field="dui_persona_responsable.telefono_fijo_trabajo" matchMode="contains"></p-columnFilter>
+          </th>
+
+          <th style="min-width:180px; padding: 0; margin: 0;" filterField="dui_persona_responsable.celular_personal">
+            Celular personal
+            <p-columnFilter type="text" field="dui_persona_responsable.celular_personal" matchMode="contains"></p-columnFilter>
+          </th>
+
+
+
+          <th style="min-width:180px">Transacción</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-lista_placa>
+        <tr>
+          <td>{{lista_placa.id_placa}}</td>
+
+          <td>{{lista_placa.numero_placa}}</td>
+
+          <td>{{lista_placa.dui_persona_responsable.nombre_completo}}</td>
+
+          <td>{{lista_placa.dui_persona_responsable.telefono_fijo_trabajo}}</td>
+
+          <td>{{lista_placa.dui_persona_responsable.celular_personal}}</td>
+
+
+          <td>
+            <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2"
+              (click)="leerPlaca(lista_placa)"></button>
+            <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning"
+              (click)="confirplaEliminacionPlaca(lista_placa)"></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="footer">
+        <tr>
+          <td>Id</td>
+          <td>Numero de placa</td>
+          <td>Nombre de responsable</td>
+          <td>Teléfono fijo de trabajo</td>
+          <td>Celular personal</td>
+          <td>Transacción</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </p-panel>
+</div>
+
+<p-dialog [(visible)]="dialog" [style]="{width: '850px'}" header="Administración de placas" [modal]="true"
+  styleClass="p-fluid" appendTo="body" (onHide)="limpiar()">
+  <ng-template pTemplate="content">
+    <p-messages [(value)]="msgs_dialog" class="p-messages" *ngIf="showMessages_dialog"></p-messages>
+
+    <div class="p-inputgroup" *ngIf="tipo_transaccion === 'c'">
+      <span class="p-inputgroup-addon">
+        <i class="pi pi-id-card"></i>
+      </span>
+      <input type="text" [(ngModel)]="personaResponsableSeleccionado" name="dui_persona" pInputText placeholder="DUI" (change)="obtenerDatosPorDUI()" maxlength="9" required autofocus/>
+      <small class="p-error" *ngIf="submitted && !personaResponsableSeleccionado">El DUI es obligatorio.</small>
+    </div>
+
+
+
+    <div class="p-inputgroup">
+      <span class="p-inputgroup-addon">
+        <i class="pi pi-user"></i>
+      </span>
+      <input type="text" [(ngModel)]="persona.nombre_completo" name="nombre_completo" pInputText placeholder="Nombre completo" [disabled]="true" />
+    </div>
+
+    <div class="p-inputgroup">
+      <span class="p-inputgroup-addon">
+        <i class="pi pi-mobile"></i>
+      </span>
+      <a [href]="'tel:' + persona.celular_personal"></a>
+      <input type="text" [(ngModel)]="persona.celular_personal" name="celular_persona" pInputText placeholder="Celular personal" maxlength="8" required />
+      <small class="p-error" *ngIf="submitted && !persona.celular_personal">El celular personal es obligatorio.</small>
+    </div>
+
+    <div class="p-inputgroup">
+      <span class="p-inputgroup-addon">
+        <i class="pi pi-phone"></i>
+      </span>
+      <a [href]="'tel:' + persona.telefono_fijo_trabajo"></a>
+      <input type="text" [(ngModel)]="persona.telefono_fijo_trabajo" name="telefono_fijo_trabajo" pInputText placeholder="Telefono fijo de trabajo" maxlength="8" required />
+      <small class="p-error" *ngIf="submitted && !persona.telefono_fijo_trabajo">El telefono fijo es obligatorio.</small>
+    </div>
+
+    <div class="field">
+      <label for="numero_placa">Numero de placa:</label>
+      <input type="text" pInputText id="numero_placa" [(ngModel)]="pla.numero_placa" maxlength="6" required  />
+      <small class="p-error" *ngIf="submitted && !pla.numero_placa">La placa es obligatorio.</small>
+    </div>
+
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button (click)="cancelarDialogo()" pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"></button>
+    <button *ngIf="tipo_transaccion === 'c'" (click)="savePlaca(pla)" pButton pRipple label="Guardar" icon="pi pi-check" class="p-button-text" [disabled]="saveButtonDisabled"></button>
+    <button *ngIf="tipo_transaccion === 'r'" (click)="editPlaca(pla)" pButton pRipple label="Modificar" icon="pi pi-check"
+      class="p-button-text"></button>
+  </ng-template>
+</p-dialog>
+
+
+<p-dialog [(visible)]="dialog_buscar" [style]="{width: '850px'}" header="Busqueda de placas" [modal]="true"
+  styleClass="p-fluid" appendTo="body" (onHide)="limpiar()">
+  <ng-template pTemplate="content">
+    <p-messages [(value)]="msgs_dialog" class="p-messages" *ngIf="showMessages_dialog"></p-messages>
+
+    <div class="field">
+      <label for="numero_placa">Numero de placa:</label>
+      <input type="text" pInputText id="numero_placa" [(ngModel)]="pla.numero_placa" maxlength="6" required (change)="obtenerDatosPorPlaca()"  />
+      <small class="p-error" *ngIf="submitted && !pla.numero_placa">La placa es obligatorio.</small>
+    </div>
+
+
+    <div class="p-inputgroup">
+      <span class="p-inputgroup-addon">
+        <i class="pi pi-user"></i>
+      </span>
+      <input type="text" [(ngModel)]="persona.nombre_completo" name="nombre_completo" pInputText placeholder="Nombre completo" [disabled]="true" />
+    </div>
+
+    <div class="p-inputgroup">
+      <span class="p-inputgroup-addon">
+        <i class="pi pi-mobile"></i>
+      </span>
+      <a [href]="'tel:' + persona.celular_personal"></a>
+      <input type="text" [(ngModel)]="persona.celular_personal" name="celular_persona" pInputText placeholder="Celular personal" maxlength="8" required />
+      <small class="p-error" *ngIf="submitted && !persona.celular_personal">El celular personal es obligatorio.</small>
+    </div>
+
+    <div class="p-inputgroup">
+      <span class="p-inputgroup-addon">
+        <i class="pi pi-phone"></i>
+      </span>
+      <input type="text" [(ngModel)]="persona.telefono_fijo_trabajo" name="telefono_fijo_trabajo" pInputText placeholder="Telefono fijo de trabajo" maxlength="8" required />
+      <small class="p-error" *ngIf="submitted && !persona.telefono_fijo_trabajo">El telefono fijo es obligatorio.</small>
+    </div>
+
+
+
+  </ng-template>
+
+  <ng-template pTemplate="footer">
+    <button (click)="cancelarDialogo()" pButton pRipple label="Cancelar" icon="pi pi-times" class="p-button-text"></button>
+  </ng-template>
+</p-dialog>
+
+
+
+
+
+
+<p-dialog header="Confirmación" [(visible)]="displayConfirmation">
+  <p>¿Está seguro que desea eliminar la placa?</p>
+  <p-footer>
+    <button type="button" pButton label="Sí" class="p-button-danger" (click)="eliminarPlaca()"></button>
+    <button type="button" pButton label="No" class="p-button-secondary" (click)="displayConfirmation = false"></button>
+  </p-footer>
+</p-dialog>
+
+
+
+
+
+
+

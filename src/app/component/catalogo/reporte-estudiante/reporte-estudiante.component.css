@@ -1,0 +1,16 @@
+.panel-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* Una sola columna, ajusta según tus necesidades */
+    gap: 10px; /* Espacio entre filas y columnas */
+  }
+  
+  .panel-grid-row {
+    display: flex;
+    flex-direction: row; /* Columnas en una fila */
+  }
+  
+  .panel-grid-cell {
+    flex: 1; /* Ocupa todo el espacio disponible en la fila */
+    /* Estilos adicionales según sea necesario */
+  }
+  

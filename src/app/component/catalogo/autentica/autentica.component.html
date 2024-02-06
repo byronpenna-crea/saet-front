@@ -1,0 +1,241 @@
+<div class="card">
+  <p-tabView>
+    <!--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+    <!--------------------------------------------------------------PARVULARIA------------------------------------------------->
+    <!--//////////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+    <p-tabPanel header="Autenticas">
+      <p-messages [(value)]="msgs" class="p-messages" *ngIf="showMessages"></p-messages>
+
+      <p-toolbar styleClass="mb-4 gap-2">
+
+        <div class="panel-grid">
+          <div class="panel-grid-row">
+            <div class="panel-grid-cell">
+              <label for="cboOpcion">OPCIÓN: </label>
+              <br>
+              <p-dropdown [options]="lista_opciones" [(ngModel)]="estado_opcion_seleccionado" optionLabel="label"
+                optionValue="value" [showClear]="true" [filter]="true" filterBy="label"
+                [filterPlaceholder]="'Seleccione una opción'" placeholder="Seleccione una opción" appendTo="body">
+              </p-dropdown>
+              <small class="p-error" *ngIf="submitted && !estado_opcion_seleccionado">Seleccione un estado.</small>
+            </div>
+          </div>
+
+          <div class="panel-grid-row">
+            <div class="panel-grid-cell" *ngIf="estado_opcion_seleccionado === '1'">
+              <label for="nie">NIE:</label>
+              <input type="text" pInputText id="nie" [(ngModel)]="valor01" style="width: 90%;" maxlength="8" required
+                autofocus onkeypress="return event.charCode>=48 && event.charCode<=57" />
+              <small class="p-error" *ngIf="submitted ">El valor es obligatorio.</small>
+            </div>
+
+          </div>
+
+
+          <div class="panel-grid-row">
+            <div class="panel-grid-cell" *ngIf="estado_opcion_seleccionado === '2'" style="margin-right: 20%;">
+              <label for="nombre_completo">NOMBRE COMPLETO:</label>
+              <input type="text" pInputText id="nombre_completo" style="width: 115%;" required autofocus />
+              <small class="p-error" *ngIf="submitted ">El valor es obligatorio.</small>
+            </div>
+          </div>
+
+
+          <div class="panel-grid-row">
+            <div class="panel-grid-cell"
+              *ngIf="estado_opcion_seleccionado === '3' || estado_opcion_seleccionado === '2' "
+              style="margin-right: 20%;">
+              <label for="codigo_infra">CODIGO DE INFRAESTRUCTURA:</label>
+              <input type="text" pInputText id="codigo_infra" [(ngModel)]="valor01" style="width: 60%;" maxlength="5"
+                required autofocus onkeypress="return event.charCode>=48 && event.charCode<=57" />
+              <small class="p-error" *ngIf="submitted ">El valor es obligatorio.</small>
+            </div>
+          </div>
+
+          <div class="panel-grid-row">
+            <div class="panel-grid-cell">
+              <label for="cboAnio">Año:</label>
+              <br>
+              <p-dropdown [options]="lista_anios" [(ngModel)]="selectedYear" optionLabel="label" optionValue="value"
+              (onChange)="buscarEstudiantes()" [filter]="true" filterBy="label" [showClear]="true" [filterPlaceholder]="'Seleccione un año'"
+                placeholder="Seleccione un año" appendTo="body">
+              </p-dropdown>
+              <small class="p-error" *ngIf="submitted ">El valor es obligatorio.</small>
+            </div>
+          </div>
+
+        </div>
+
+
+        <div class="panel-grid">
+
+
+          <div class="panel-grid">
+            <div class="panel-grid-row">
+              <div class="panel-grid-cell">
+                <label for="cboOpcion">TIPO DE DOCUMENTO: </label>
+                <br>
+                <p-dropdown [options]="lista_tipo_documentos" [(ngModel)]="estado_tipo_documento" optionLabel="label"
+                  optionValue="value" [showClear]="true" [filter]="true"
+                  filterBy="label" [filterPlaceholder]="'Seleccione una opción'" placeholder="Seleccione una opción"
+                  appendTo="body">
+                </p-dropdown>
+                <small class="p-error" *ngIf="submitted && !estado_tipo_documento">Seleccione un estado.</small>
+              </div>
+
+            </div>
+
+          </div>
+
+
+
+          <div class="panel-grid">
+            <div class="panel-grid-row">
+              <div class="panel-grid-cell">
+                <label for="cboOpcion">FIRMANTE MINED: </label>
+                <br>
+                <p-dropdown [options]="lista_firmantes" [(ngModel)]="estado_firmante" optionLabel="label"
+                  optionValue="value" [showClear]="true" [filter]="true" filterBy="label"
+                  [filterPlaceholder]="'Seleccione una opción'" placeholder="Seleccione una opción" appendTo="body">
+                </p-dropdown>
+                <small class="p-error" *ngIf="submitted && !estado_firmante">Seleccione un estado.</small>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!--div class="panel-grid">
+            <div class="panel-grid-row">
+              <div class="panel-grid-cell">
+                <label for="cboOpcion">FIRMANTE SEDE: </label>
+                <br>
+                <p-dropdown [options]="lista_sellos_firmas" [(ngModel)]="selectedFirma"
+                  optionLabel="sfi_persona_fk.nombre_completo" [showClear]="true" [filter]="true"
+                  filterBy="sfi_persona_fk.nombre_completo" [filterPlaceholder]="'Seleccione una opción'"
+                  placeholder="Seleccione una opción" appendTo="body" (onChange)="onFirmaChange($event.value)">
+                </p-dropdown>
+                <small class="p-error" *ngIf="submitted && !estado_firmante">Seleccione un estado.</small>
+              </div>
+
+            </div>
+
+          </div-->
+          
+          <div class="panel-grid">
+            <div class="panel-grid-row">
+              <div class="panel-grid-cell">
+                <label for="cboOpcion">FIRMANTE SEDE: </label>
+                <br>
+                <p-dropdown [options]="lista_sellos_firmas" [(ngModel)]="selectedFirma"
+                  optionLabel="sede_estado_nombre" [showClear]="true" [filter]="true"
+                  filterBy="sede_estado_nombre" [filterPlaceholder]="'Seleccione una opción'"
+                  placeholder="Seleccione una opción" appendTo="body" (onChange)="onFirmaChange($event.value)">
+                </p-dropdown>
+                <small class="p-error" *ngIf="submitted && !estado_firmante">Seleccione un estado.</small>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+
+
+        <div class="panel-grid">
+
+          <div class="panel-grid-row">
+            <div class="panel-grid-cell">
+
+              <div style="justify-content:right;">
+                <button pButton pRipple label="Generar" icon="pi pi-plus" class="p-button-success mr-2"
+                  (click)="generarPdfAutenticas()"></button>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="panel-grid">
+          <div class="panel-grid-row">
+            <div class="panel-grid-cell">
+              <div style="display: flex; justify-content: center;">
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </p-toolbar>
+
+    </p-tabPanel>
+
+  </p-tabView>
+
+  <p-table [value]="lista_estudiantes" [scrollable]="true" [scrollHeight]="tableHeight">
+    <ng-template pTemplate="header">
+      <tr>
+        <th style="min-width:180px; padding: 0; margin: 0;" filterField="per_nie">
+          Id
+          <p-columnFilter type="text" field="per_nie" matchMode="contains"></p-columnFilter>
+        </th>
+
+        <th style="min-width:180px; padding: 0; margin: 0;" filterField="nombre_completo">
+          NOMBRE COMPLETO
+          <p-columnFilter type="text" field="nombre_completo" matchMode="contains"></p-columnFilter>
+        </th>
+
+        <th style="min-width:180px">Transacción</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-lista_estudiantes>
+      <tr>
+        <td>{{lista_estudiantes.per_nie}}</td>
+
+        <td>{{lista_estudiantes.nombre_completo}}</td>
+
+        <td>
+          <button pButton pRipple class="p-button-rounded p-button-success mr-2"
+            (click)="imprimirFicha01(lista_estudiantes)">
+            Autentica
+          </button>
+
+
+        </td>
+
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="footer">
+      <tr>
+        <td>Id</td>
+        <td>NOMBRE COMPLETO</td>
+        <td>Transacción</td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+
+
+</div>
+
+
+
+<!--===========================================================================================================================================-->
+<!--Procesando-->
+<!--===========================================================================================================================================-->
+
+<p-dialog [(visible)]="dialogo_proceso_busqueda" header="PROCESANDO" [modal]="true" styleClass="p-fluid"
+  appendTo="body">
+  <ng-template pTemplate="content">
+
+
+    <div class="card" style="align-items: center;">
+      <p-progressSpinner styleClass="w-4rem h-4rem" strokeWidth="8" fill="var(--surface-ground)"
+        animationDuration=".5s"></p-progressSpinner>
+    </div>
+
+
+  </ng-template>
+</p-dialog>
