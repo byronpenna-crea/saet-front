@@ -31,7 +31,6 @@
               "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
               "node_modules/primeng/resources/primeng.min.css",
               "node_modules/@fortawesome/fontawesome-free/css/all.css"
-
             ],
             "scripts": []
           },
@@ -79,10 +78,9 @@
             }
           },
           "options": {
-            "host": "192.168.22.80",
+            "host": "192.168.1.12",
             "port": 443
-          }
-          ,
+          },
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
@@ -109,13 +107,23 @@
             ],
             "scripts": []
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     }
   },
   "cli": {
-    "analytics": false
+    "analytics": false,
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ]
   }
-
-  
 }

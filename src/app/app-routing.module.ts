@@ -9,6 +9,7 @@ import { CategoriaComponent } from './component/catalogo/categoria/categoria.com
 import { SubCategoriaComponent } from './component/catalogo/sub-categoria/sub-categoria.component';
 import { PlacaComponent } from './component/catalogo/placa/placa.component';
 import { InicioComponent } from './component/inicio/inicio.component';
+import { SaetComponent } from './component/catalogo/saet/saet.component';
 import { ReporteDocenteComponent } from './component/catalogo/reporte-docente/reporte-docente.component';
 import { ReporteEstudianteComponent } from './component/catalogo/reporte-estudiante/reporte-estudiante.component';
 import { ReporteDesarrolloAprendizajeComponent } from './component/catalogo/reporte-desarrollo-aprendizaje/reporte-desarrollo-aprendizaje.component';
@@ -40,6 +41,7 @@ const routes: Routes = [
   {path: 'inicio', component: InicioComponent },
   { path: 'menu', component: MenuComponent, canActivate: [UserGuardGuard], children: [
       { path: 'empleados', component: SeguridadUsuarioComponent, canActivate: [UserGuardGuard] },
+      {path: 'saet', component: SaetComponent },
       { path: 'persona', component: PersonaComponent, canActivate: [UserGuardGuard] },
       { path: 'categorias', component: CategoriaComponent, canActivate: [UserGuardGuard] },
       { path: 'sub_categorias', component: SubCategoriaComponent, canActivate: [UserGuardGuard] },

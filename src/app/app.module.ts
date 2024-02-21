@@ -8,8 +8,6 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatButtonModule} from '@angular/material/button';
 import {MatSidenavModule} from '@angular/material/sidenav';
 import {MatListModule} from '@angular/material/list';
-import { CatalogoService } from './services/catalogo.service';
-import { SeguridadUsuarioComponent } from './component/seguridad/seguridad.usuario.component';
 import {MatCardModule} from '@angular/material/card';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatGridListModule} from '@angular/material/grid-list';
@@ -31,7 +29,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { SeguridadService } from './services/seguridad.service';
 import { LoginComponent } from './component/login/login.component';
-import { MenuComponent } from './component/menu/menu.component'; 
+import { MenuComponent } from './component/menu/menu.component';
 import { CommonModule, HashLocationStrategy } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -53,6 +51,7 @@ import { ReporteDesarrolloAprendizajeComponent } from './component/catalogo/repo
 import { ReporteActaResponsabilidadComponent } from './component/catalogo/reporte-acta-responsabilidad/reporte-acta-responsabilidad.component';
 import { FileUploadModule } from 'primeng/fileupload';
 import { AutenticaComponent } from './component/catalogo/autentica/autentica.component';
+import {SaetComponent} from "./component/catalogo/saet/saet.component";
 
 
 
@@ -66,12 +65,13 @@ import { AutenticaComponent } from './component/catalogo/autentica/autentica.com
     SubCategoriaComponent,
     PlacaComponent,
     InicioComponent,
+    SaetComponent,
     ReporteDocenteComponent,
     ReporteEstudianteComponent,
     ReporteDesarrolloAprendizajeComponent,
     ReporteActaResponsabilidadComponent,
     AutenticaComponent,
-    
+
 
   ],
   imports: [
