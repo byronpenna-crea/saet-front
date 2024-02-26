@@ -41,7 +41,7 @@ const routes: Routes = [
   {path: 'inicio', component: InicioComponent },
   { path: 'menu', component: MenuComponent, canActivate: [UserGuardGuard], children: [
       { path: 'empleados', component: SeguridadUsuarioComponent, canActivate: [UserGuardGuard] },
-      {path: 'saet', component: SaetComponent },
+      { path: 'saet', component: SaetComponent },
       { path: 'persona', component: PersonaComponent, canActivate: [UserGuardGuard] },
       { path: 'categorias', component: CategoriaComponent, canActivate: [UserGuardGuard] },
       { path: 'sub_categorias', component: SubCategoriaComponent, canActivate: [UserGuardGuard] },

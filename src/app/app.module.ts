@@ -52,6 +52,9 @@ import { ReporteActaResponsabilidadComponent } from './component/catalogo/report
 import { FileUploadModule } from 'primeng/fileupload';
 import { AutenticaComponent } from './component/catalogo/autentica/autentica.component';
 import {SaetComponent} from "./component/catalogo/saet/saet.component";
+import {EditorModule} from 'primeng/editor';
+
+import { RichtextComponent } from './component/richtext/richtext.component';
 
 
 
@@ -71,6 +74,7 @@ import {SaetComponent} from "./component/catalogo/saet/saet.component";
     ReporteDesarrolloAprendizajeComponent,
     ReporteActaResponsabilidadComponent,
     AutenticaComponent,
+    RichtextComponent,
 
 
   ],
@@ -88,6 +92,7 @@ import {SaetComponent} from "./component/catalogo/saet/saet.component";
     MatGridListModule,
     HttpClientModule,
     TableModule,
+    EditorModule,
     PanelModule,
     ToolbarModule,
     ButtonModule,
