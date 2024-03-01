@@ -1,8 +1,6 @@
-<p>status-table works!</p>
 <p-table
   [columns]="cols"
-  [value]="steps"
-  [tableStyle]="{'min-width': '50rem'}">
+  [value]="steps">
   <ng-template pTemplate="header" let-columns>
     <tr>
       <th *ngFor="let col of columns">

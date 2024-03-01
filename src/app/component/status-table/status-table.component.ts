@@ -1,66 +1,43 @@
-import { Component } from '@angular/core';
-enum Status {
+import {Component, Input, OnChanges, OnInit, SimpleChange, SimpleChanges} from '@angular/core';
+
+export enum StepStatus {
   VALIDATED = "Validado",
   PENDING = "Pendiente"
 }
-type StepRow = Record<string, Status>;
+type StepRow = Record<string, StepStatus>;
 interface icolsType {
   field: string;
   header: string;
 }
-interface iStep {
+export interface iStep {
   name: string;
-  status: Status;
+  status: StepStatus;
 }
 @Component({
   selector: 'app-status-table',
   templateUrl: './status-table.component.html',
   styleUrls: ['./status-table.component.css']
 })
-export class StatusTableComponent {
+export class StatusTableComponent implements OnChanges{
+  @Input() stepData: iStep[] = [];
+  steps: Record<string, StepStatus>[] = [];
+  cols: icolsType[] = [];
 
-  /*steps:iStep[] = [
-    {
-      name: "COR especialista en psicologia",
-      status: Status.VALIDATED
-    },
-    {
-      name: "COR especialista en Pedagogía",
-      status: Status.VALIDATED
-    },
-    {
-      name: "COR especialista en Habla y lenguaje",
-      status: Status.PENDING
-    },
-    {
-      name: "Coordinador(a) del COR",
-      status: Status.VALIDATED
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes["stepData"]) {
+      this.processStepData();
     }
-  ];*/
-  steps: StepRow[];
-  status:Status[] = [
-    Status.VALIDATED,
-    Status.VALIDATED,
-    Status.PENDING,
-    Status.VALIDATED,
-  ];
-  cols:icolsType[] = [];
-  constructor() {
-    const stepData: iStep[] = [
-      { name: "COR especialista en psicologia", status: Status.VALIDATED },
-      { name: "COR especialista en Pedagogía", status: Status.VALIDATED },
-      { name: "COR especialista en Habla y lenguaje", status: Status.PENDING },
-      { name: "Coordinador(a) del COR", status: Status.VALIDATED }
-    ];
+  }
 
+  private processStepData() {
     // Crear un objeto único para steps que contenga cada estado como propiedad
-    const stepsRow = stepData.reduce((acc, curr) => ({
+    const stepsRow = this.stepData.reduce((acc, curr) => ({
       ...acc,
       [curr.name]: curr.status
     }), {});
-
+    console.log("process",stepsRow);
     this.steps = [stepsRow];
-    this.cols = stepData.map(step => ({ field: step.name, header: step.name }));
-    console.log(this.steps);
+    this.cols = this.stepData.map(step => ({ field: step.name, header: step.name }));
   }
+
 }
