@@ -1,1 +1,9 @@
-<p>tabs works!</p>
+<p-fieldset [legend]="legend">
+  <ng-container *ngFor="let item of tabRow">
+    <app-tab-item
+      [label]="item.label"
+      [text]="item.value"
+    >
+    </app-tab-item>
+  </ng-container>
+</p-fieldset>
