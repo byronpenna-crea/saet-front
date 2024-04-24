@@ -1,0 +1,16 @@
+<div class="form-container">
+  <p class="title">Escribe el NIE del estudiante.</p>
+  <app-saet-input />
+  <div class="button-container">
+    <app-saet-button [buttonArgs]="searchButton" (click)="toggleTable()" />
+    <span class="clear-text">limpiar búsqueda</span>
+  </div>
+
+  <div *ngIf="showTable" class="table-container">
+    <app-saet-table
+      [columns]="studentTableColumns"
+      [data]="studentData"
+    />
+  </div>
+
+</div>

@@ -1,0 +1,36 @@
+.form-container {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  width: 90%;
+  margin: 3% auto 0;
+}
+
+
+.title {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+app-saet-input {
+  width: 100%;
+}
+
+
+.button-container {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 3%;
+}
+.table-container{
+  margin-top: 5%;
+}
+app-saet-button {
+  min-width: 80px;
+}
+.clear-text {
+  cursor: pointer; /* Hace que el texto parezca clickable */
+  user-select: none; /* Evita que el texto pueda ser seleccionado */
+}
