@@ -1,10 +1,10 @@
-import {Component, Input, OnChanges, OnInit, SimpleChange, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 
 export enum StepStatus {
   VALIDATED = "Validado",
   PENDING = "Pendiente"
 }
-type StepRow = Record<string, StepStatus>;
+
 interface icolsType {
   field: string;
   header: string;
@@ -30,12 +30,10 @@ export class StatusTableComponent implements OnChanges{
   }
 
   private processStepData() {
-    // Crear un objeto único para steps que contenga cada estado como propiedad
     const stepsRow = this.stepData.reduce((acc, curr) => ({
       ...acc,
       [curr.name]: curr.status
     }), {});
-    console.log("process",stepsRow);
     this.steps = [stepsRow];
     this.cols = this.stepData.map(step => ({ field: step.name, header: step.name }));
   }
