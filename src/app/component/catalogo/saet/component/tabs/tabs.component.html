@@ -1,4 +1,7 @@
-<p-fieldset [legend]="legend">
+<p-fieldset [legend]="legend"
+            [ngClass]="{'fieldset-inactive': !isActive}"
+>
+
   <ng-container *ngFor="let item of tabRow">
     <app-tab-item
       [label]="item.label"

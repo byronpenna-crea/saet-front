@@ -13,6 +13,7 @@ export class TabsComponent implements OnChanges{
   @Input() value:string[] = [];
   @Input() legend:string = "";
   @Input() background:string = "red";
+  @Input() isActive:Boolean = true;
   tabRow: TabRowItem[] = []
 
   ngOnChanges(changes: SimpleChanges) {

@@ -1,0 +1,11 @@
+.flex-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+/*:host ::ng-deep p-fieldset.fieldset-inactive .p-fieldset {
+  background-color: red;
+}*/
+:host ::ng-deep p-fieldset.fieldset-inactive .p-fieldset {
+  background-color: #FAFAFA;
+}
