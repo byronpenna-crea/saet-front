@@ -8,7 +8,7 @@ export enum IconDirection{
 export interface SaetInputArgs {
   text: string;
   iconDirection?:IconDirection;
-  icon: IconComponent
+  icon?: IconComponent
 }
 
 @Component({
@@ -20,7 +20,7 @@ export class SaetInputComponent implements OnChanges{
   @Input() inputArgs: SaetInputArgs = {
     text: "",
     iconDirection: IconDirection.RIGHT,
-    icon: IconComponent.SEARCH
+    icon: undefined
   }
 
   spanClases: string = "";
