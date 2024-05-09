@@ -53,8 +53,18 @@ import { FileUploadModule } from 'primeng/fileupload';
 import { AutenticaComponent } from './component/catalogo/autentica/autentica.component';
 import {SaetComponent} from "./component/catalogo/saet/saet.component";
 import {EditorModule} from 'primeng/editor';
+import { FieldsetModule } from 'primeng/fieldset';
+import { RichtextComponent } from './component/catalogo/saet/component/richtext/richtext.component';
+import { StatusTableComponent } from './component/catalogo/saet/component/status-table/status-table.component';
+import { TabsComponent } from './component/catalogo/saet/component/tabs/tabs.component';
+import { TabItemComponent } from './component/catalogo/saet/component/tab-item/tab-item.component';
+import { SaetButtonComponent } from './component/catalogo/saet/component/saet-button/saet-button.component';
+import { BuscarEstudianteComponent } from './component/catalogo/saet/pages/buscar-estudiante/buscar-estudiante.component';
+import { SaetInputComponent } from './component/catalogo/saet/component/saet-input/saet-input.component';
+import { SaetTableComponent } from './component/catalogo/saet/component/saet-table/saet-table.component';
 
-import { RichtextComponent } from './component/richtext/richtext.component';
+import { EstudianteDatosGeneralesComponent } from './component/catalogo/saet/pages/estudiante-datos-generales/estudiante-datos-generales.component';
+import { SaetQuestionComponent } from './component/catalogo/saet/component/saet-question/saet-question.component';
 
 
 
@@ -75,7 +85,15 @@ import { RichtextComponent } from './component/richtext/richtext.component';
     ReporteActaResponsabilidadComponent,
     AutenticaComponent,
     RichtextComponent,
-
+    StatusTableComponent,
+    TabsComponent,
+    TabItemComponent,
+    SaetButtonComponent,
+    BuscarEstudianteComponent,
+    SaetInputComponent,
+    SaetTableComponent,
+    EstudianteDatosGeneralesComponent,
+    SaetQuestionComponent
 
   ],
   imports: [
@@ -116,6 +134,7 @@ import { RichtextComponent } from './component/richtext/richtext.component';
     ProgressSpinnerModule,
     ChartModule,
     FileUploadModule,
+    FieldsetModule
   ],
   providers: [
     SeguridadService,

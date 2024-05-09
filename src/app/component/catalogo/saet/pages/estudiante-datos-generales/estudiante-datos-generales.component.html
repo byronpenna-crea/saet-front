@@ -1,0 +1,23 @@
+<div style="width: 80%; margin: 0 auto">
+<app-tabs [label]="generalInformation.labels"
+[legend]="generalInformation.legend"
+          [value]="generalInformation.values"
+          [isActive]="generalInformation.isActive"
+></app-tabs>
+<ng-container *ngFor="let corSurvey of corSurveys" >
+    <div style="margin-top: 5%">
+      <app-tabs
+        [legend]="corSurvey.titulo"
+      >
+        <ng-container *ngFor="let pregunta of corSurvey.preguntas">
+          <app-tab-item
+            [label]="pregunta.pregunta"
+          >
+            <app-saet-question [type]="getQuestionType(pregunta.tipoPregunta)" />
+          </app-tab-item>
+        </ng-container>
+      </app-tabs>
+    </div>
+</ng-container>
+</div>
+

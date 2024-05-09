@@ -16,6 +16,7 @@ import { ReporteDesarrolloAprendizajeComponent } from './component/catalogo/repo
 import { ReporteActaResponsabilidadComponent } from './component/catalogo/reporte-acta-responsabilidad/reporte-acta-responsabilidad.component';
 import { AutenticaComponent } from './component/catalogo/autentica/autentica.component';
 import {BuscarEstudianteComponent} from "./component/catalogo/saet/pages/buscar-estudiante/buscar-estudiante.component";
+import {EstudianteDatosGeneralesComponent} from "./component/catalogo/saet/pages/estudiante-datos-generales/estudiante-datos-generales.component";
 /*
 const routes: Routes = [
 
@@ -44,6 +45,7 @@ const routes: Routes = [
       { path: 'empleados', component: SeguridadUsuarioComponent, canActivate: [UserGuardGuard] },
       { path: 'saet', component: SaetComponent },
       { path: 'saet-buscar', component: BuscarEstudianteComponent },
+      { path: 'saet-datos-estudiante', component: EstudianteDatosGeneralesComponent },
       { path: 'persona', component: PersonaComponent, canActivate: [UserGuardGuard] },
       { path: 'categorias', component: CategoriaComponent, canActivate: [UserGuardGuard] },
       { path: 'sub_categorias', component: SubCategoriaComponent, canActivate: [UserGuardGuard] },
