@@ -45,7 +45,7 @@ const routes: Routes = [
       { path: 'empleados', component: SeguridadUsuarioComponent, canActivate: [UserGuardGuard] },
       { path: 'saet', component: SaetComponent },
       { path: 'saet-buscar', component: BuscarEstudianteComponent },
-      { path: 'saet-datos-estudiante', component: EstudianteDatosGeneralesComponent },
+      { path: 'saet-datos-estudiante/:nie', component: EstudianteDatosGeneralesComponent },
       { path: 'persona', component: PersonaComponent, canActivate: [UserGuardGuard] },
       { path: 'categorias', component: CategoriaComponent, canActivate: [UserGuardGuard] },
       { path: 'sub_categorias', component: SubCategoriaComponent, canActivate: [UserGuardGuard] },

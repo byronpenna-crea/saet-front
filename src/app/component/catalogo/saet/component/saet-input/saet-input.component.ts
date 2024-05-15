@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, Output, SimpleChanges, EventEmitter} from '@angular/core';
 import {IconComponent} from "../../shared/component.config";
 
 export enum IconDirection{
@@ -17,6 +17,8 @@ export interface SaetInputArgs {
   styleUrls: ['./saet-input.component.css']
 })
 export class SaetInputComponent implements OnChanges{
+  @Output() inputChange = new EventEmitter<string>();
+
   @Input() inputArgs: SaetInputArgs = {
     text: "",
     iconDirection: IconDirection.RIGHT,
@@ -25,6 +27,10 @@ export class SaetInputComponent implements OnChanges{
 
   spanClases: string = "";
 
+  onInputChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    this.inputChange.emit(input.value);
+  }
   ngOnChanges(changes: SimpleChanges) {
     this.updateSpan();
   }

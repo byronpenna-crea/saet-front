@@ -1,5 +1,7 @@
 <span class="p-input-icon-right w-full">
-    <input type="text" pInputText style="width: 100%" [(ngModel)]="inputArgs.text" />
+    <input type="text"
+           (input)="onInputChange($event)"
+           pInputText style="width: 100%" [(ngModel)]="inputArgs.text" />
     <ng-container *ngIf="inputArgs.icon !== undefined">
       <i class="pi pi-search"></i>
     </ng-container>
