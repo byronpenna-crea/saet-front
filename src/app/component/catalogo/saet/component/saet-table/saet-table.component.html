@@ -1,6 +1,4 @@
-<p-table
-  [columns]="columns"
-  [value]="data">
+<p-table [columns]="columns" [value]="data">
   <ng-template pTemplate="header" let-columns>
     <tr>
       <th *ngFor="let col of columns">
@@ -10,8 +8,21 @@
   </ng-template>
   <ng-template pTemplate="body" let-rowData let-columns="columns">
     <tr>
+<!--      <td *ngFor="let col of columns">-->
+<!--        -->
+<!--        {{ rowData[col.key] }}-->
+<!--      </td>-->
+<!--      <td>-->
+<!--        <ng-content></ng-content>-->
+<!--      </td>-->
+
       <td *ngFor="let col of columns">
-        {{ rowData[col.key] }}
+        <ng-container *ngIf="col.key !== 'Acciones'; else noKey">
+          {{ rowData[col.key] }}
+        </ng-container>
+        <ng-template #noKey>
+          <ng-content></ng-content>
+        </ng-template>
       </td>
     </tr>
   </ng-template>

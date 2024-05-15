@@ -1,13 +1,14 @@
 import {Meta, moduleMetadata, Story} from "@storybook/angular";
 import {SaetTableComponent} from "../saet-table.component";
 import {StorybookPrimeNgModule} from "../../../../../../storybook-config/storybook-prime-ng.module";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 
 export default {
   title: 'Saet table',
   component: SaetTableComponent,
   decorators:[
     moduleMetadata({
-      imports: [StorybookPrimeNgModule]
+      imports: [StorybookPrimeNgModule,BrowserAnimationsModule]
     })
   ]
 } as Meta
