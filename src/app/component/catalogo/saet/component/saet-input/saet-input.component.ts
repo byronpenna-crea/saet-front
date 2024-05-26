@@ -18,7 +18,7 @@ export interface SaetInputArgs {
 })
 export class SaetInputComponent implements OnChanges{
   @Output() inputChange = new EventEmitter<string>();
-
+  @Input() testId:string = "";
   @Input() inputArgs: SaetInputArgs = {
     text: "",
     iconDirection: IconDirection.RIGHT,

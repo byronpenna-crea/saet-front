@@ -1,5 +1,6 @@
 <span class="p-input-icon-right w-full">
     <input type="text"
+           [attr.data-testid]="testId"
            (input)="onInputChange($event)"
            pInputText style="width: 100%" [(ngModel)]="inputArgs.text" />
     <ng-container *ngIf="inputArgs.icon !== undefined">
