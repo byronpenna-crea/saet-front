@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
 import {getIconClass, IconComponent} from "../../shared/component.config";
 
 
@@ -9,7 +9,7 @@ export enum ButtonStyle {
 
 export interface SaetButtonArgs {
   text: string;
-  buttonStyle: ButtonStyle;
+  buttonStyle?: ButtonStyle;
   buttonIcon?: IconComponent | null;
 }
 @Component({
@@ -22,11 +22,16 @@ export class SaetButtonComponent implements OnChanges{
   /*@Input() text:string = "";
   @Input() buttonStyle?:ButtonStyle = ButtonStyle.WHITE;
   @Input() buttonIcon?:ButtonIcon | null = null;*/
+  @Input() testId:string = "";
   @Input() buttonArgs: SaetButtonArgs = {
     buttonIcon: null,
     buttonStyle: ButtonStyle.WHITE,
     text: ""
   };
+  @Output() onClick: EventEmitter<Event> = new EventEmitter<Event>();
+  handleClick(event: Event): void {
+    this.onClick.emit(event);
+  }
 
   styleClasses: string = "";
   iconClass: string = "";

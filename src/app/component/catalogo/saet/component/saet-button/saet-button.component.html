@@ -1,4 +1,8 @@
-<p-button [label]="buttonArgs.text"
-          [icon]="iconClass"
-           [class]="styleClasses">
+<p-button
+  [attr.data-testid]="testId"
+  [label]="buttonArgs.text"
+  [icon]="iconClass"
+  [class]="styleClasses"
+  (onClick)="handleClick($event)"
+>
 </p-button>
