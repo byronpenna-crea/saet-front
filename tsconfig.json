@@ -23,7 +23,7 @@
       "ES2022",
       "dom"
     ],
-    "types": ["mousetrap"] // Agrega esta línea
+    "types": ["mousetrap", "cypress", "@types"]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
