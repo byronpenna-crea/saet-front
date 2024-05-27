@@ -1,26 +1,87 @@
+<div class="titlePage">
+  <h2>Buscar estudiante</h2>
+  <div>
+    <a href="#">Buscar estudiante</a>
+    <span *ngIf="searchedNIE !== ''">
+      /
+      <a href="#">{{searchedNIE}}</a>
+    </span>
+  </div>
+</div>
 <div class="form-container">
   <p class="title">Escribe el NIE del estudiante.</p>
   <app-saet-input
+    testId="input-nie"
     [inputArgs]="{text: inputNIE}"
     (inputChange)="onInputChange($event)" />
   <div class="button-container">
-    <app-saet-button [buttonArgs]="searchButton" (click)="toggleTable()" />
-    <span class="clear-text"
+    <app-saet-button
+      testId="btn-buscar"
+      [buttonArgs]="searchButton" (click)="toggleTable()" />
+    <span
+      data-testId="btn-clean"
+      class="clear-text"
       (click)="cleanInput()"
     >limpiar búsqueda</span>
   </div>
-
+  <div *ngIf="showError" class="table-container">
+    {{errorMessage}}
+  </div>
   <div *ngIf="showTable" class="table-container">
-    <app-saet-table
-      [columns]="studentTableColumns"
-      [data]="studentData"
+<!--    <app-saet-table-->
+<!--      testId="table-information"-->
+<!--      [columns]="flowColumns"-->
+<!--      [useChildren]="true"-->
+<!--    >-->
+<!--      <tr>-->
+<!--        <td>Centro de Orientación y Recursos (COR)</td>-->
+<!--        <td>Sin atención</td>-->
+<!--        <td><button pButton type="button" icon="pi pi-eye" label="Ver detalle"></button></td>-->
+<!--      </tr>-->
+<!--    </app-saet-table>-->
 
-    >
-     <app-saet-button [buttonArgs]="{text: 'Ver detalle'}"
-      (click)="navigateToDetails()"
-     >
-     </app-saet-button>
-    </app-saet-table>
+    <p-table
+      attr.data-testid="testId"
+      [columns]="flowColumns"
+      [value]="flowData">
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th *ngFor="let col of columns">
+            {{ col.header }}
+          </th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr *ngFor="let row of flowData">
+          <td>
+            {{ row["col1"] }}
+          </td>
+          <td>
+            {{ row["col2"] }}
+          </td>
+          <td>
+            <app-saet-button
+              (onClick)="goTo(row['href'])"
+              [buttonArgs]="{buttonIcon: 0,buttonStyle: 0, text: 'Ver detalle'}"></app-saet-button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+
+
+    <!--    <app-saet-table-->
+<!--      testId="table-information"-->
+<!--      [columns]="studentTableColumns"-->
+<!--      [data]="studentData"-->
+
+<!--    >-->
+<!--      <app-saet-button-->
+<!--        testId="btn-ver-detalle"-->
+<!--        [buttonArgs]="{text: 'Ver detalle'}"-->
+<!--        (click)="navigateToDetails()"-->
+<!--      >-->
+<!--      </app-saet-button>-->
+<!--    </app-saet-table>-->
   </div>
 
 </div>
