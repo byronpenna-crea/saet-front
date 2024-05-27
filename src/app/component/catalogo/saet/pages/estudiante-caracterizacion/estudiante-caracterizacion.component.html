@@ -1,0 +1,40 @@
+<div class="titlePage">
+  <h2>Buscar estudiante</h2>
+  <div>
+    <a href="#/menu/saet-buscar">Buscar estudiante</a>
+    <span *ngIf="nie !== ''">
+      /
+      <a href="/menu/saet-buscar">{{nie}}</a>
+      /
+      <a href="#">Datos generales</a>
+    </span>
+  </div>
+</div>
+<div class="form-container">
+  <div class="button-container">
+    <a type="button" class="p-button p-component tabButton " [href]="'#/menu/saet-datos-estudiante/' + nie">DATOS GENERALES</a>
+    <a type="button" class="p-button p-component tabButton tabSeletectedButton" > CARACTERIZACIÓN </a>
+    <a  type="button" class="p-button p-component tabButton" href="#">EVALUACIONES</a>
+    <a  type="button" class="p-button p-component tabButton" href="#">PAEI</a>
+  </div>
+
+  <ng-container *ngFor="let corSurvey of corSurveys" >
+    <div style="margin-top: 5%">
+      <app-tabs
+        [legend]="corSurvey.titulo"
+      >
+        <ng-container *ngFor="let pregunta of corSurvey.preguntas">
+          <app-tab-item
+            [label]="pregunta.pregunta"
+          >
+            <app-saet-question [type]="getQuestionType(pregunta.tipoPregunta)"
+                               [name]="getName(pregunta.pregunta)"
+                               [options]="getOptions(pregunta.opcion)" />
+          </app-tab-item>
+        </ng-container>
+      </app-tabs>
+    </div>
+  </ng-container>
+  <app-saet-button [buttonArgs]="{text: 'Guardar',buttonStyle: 0 }" />
+
+</div>
