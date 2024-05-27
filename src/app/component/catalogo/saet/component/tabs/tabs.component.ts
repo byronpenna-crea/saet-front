@@ -1,4 +1,13 @@
-import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {
+  AfterContentInit,
+  Component,
+  ContentChildren,
+  Input,
+  OnChanges,
+  QueryList,
+  SimpleChanges,
+  TemplateRef
+} from '@angular/core';
 export interface TabRowItem {
   label: string;
   value: string;
@@ -14,7 +23,9 @@ export class TabsComponent implements OnChanges{
   @Input() legend:string = "";
   @Input() background:string = "red";
   @Input() isActive:Boolean = true;
+
   tabRow: TabRowItem[] = []
+  hasContentChildren: boolean = false;
 
   ngOnChanges(changes: SimpleChanges) {
     this.fillTabRow();

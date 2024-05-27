@@ -5,6 +5,11 @@
     {{label}}
   </div>
   <div style="flex: 2; text-align: left;">
-    {{text}}
+    <ng-container *ngIf="text !== undefined">
+      {{text}}
+    </ng-container>
+    <ng-container *ngIf="text === ''">
+      <ng-content></ng-content>
+    </ng-container>
   </div>
 </div>

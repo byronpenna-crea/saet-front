@@ -13,7 +13,8 @@ export interface TableColumn<T> {
 export class SaetTableComponent<T> implements OnInit {
   @Input() data: T[] = [];
   @Input() columns: TableColumn<T>[] = [];
-
+  @Input() testId: string = "";
+  @Input() useChildren?: boolean = false;
   ngOnInit() {
   }
 }
