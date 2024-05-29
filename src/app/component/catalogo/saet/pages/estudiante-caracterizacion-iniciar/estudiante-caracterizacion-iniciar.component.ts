@@ -4,6 +4,7 @@ import {CatalogoServiceCor, StudentDetail} from "../../../../../services/catalog
 import {ActivatedRoute, Router} from "@angular/router";
 import {IOptionType} from "../../component/saet-question/saet-question.component";
 import {QuestionType} from "../../shared/component.config";
+import {IMessageComponent} from "../../interfaces/message-component.interface";
 
 
 interface IinformationTab {
@@ -26,7 +27,11 @@ interface iSurvey {
   templateUrl: './estudiante-caracterizacion-iniciar.component.html',
   styleUrls: ['./estudiante-caracterizacion-iniciar.component.css']
 })
-export class EstudianteCaracterizacionIniciarComponent {
+export class EstudianteCaracterizacionIniciarComponent implements IMessageComponent{
+  showMessage:boolean = false;
+  message: string = "";
+  titleMessage: string = "";
+
   nie:string = "";
   studentInfo?: StudentDetail;
   corSurveys:iSurvey[] = [];
@@ -60,6 +65,7 @@ export class EstudianteCaracterizacionIniciarComponent {
     ],
     values: []
   }
+
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private catalogoServiceCOR: CatalogoServiceCor,
@@ -128,6 +134,13 @@ export class EstudianteCaracterizacionIniciarComponent {
 
     return result;
   }
+
+  save() {
+    this.showMessage = true;
+    this.message = "¡Los datos han sido guardados exitosamente!";
+    this.titleMessage = "Datos guardados";
+  }
+
   getName(name:string): string {
     return this.convertString(name)
   }

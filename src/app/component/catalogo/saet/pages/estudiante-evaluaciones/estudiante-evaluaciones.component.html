@@ -1,1 +1,109 @@
-<p>estudiante-evaluaciones works!</p>
+<app-saet-global-header
+  [nie]="nie"
+  [nombreCompleto]="studentInfo?.nombreCompleto ?? ''"
+  selectedTab="evaluaciones"
+/>
+<app-saet-mensaje-usuario
+  [show]="showMessage"
+  [message]="message"
+  [title]="titleMessage"
+/>
+
+
+<div class="form-container">
+  <div class="margin-top " style="width: 100%">
+
+    <app-saet-tab leyend="Evaluación Psicólogica">
+      <div style="padding-left: 20px; padding-right: 20px">
+        <app-saet-tab-buttons>
+          <a
+            type="button"
+            class="p-button p-component tabButton tabSeletectedButton"
+
+            href="#"
+          >
+            Perfil
+          </a>
+          <a
+            type="button"
+            class="p-button p-component tabButton"
+
+            href="#"
+          >
+            Agendar
+          </a>
+        </app-saet-tab-buttons>
+        <app-saet-mensaje-usuario
+
+          [show]="psicologyMessage.show"
+          [title]="psicologyMessage.title"
+          [message]="psicologyMessage.message"
+
+        />
+      </div>
+    </app-saet-tab>
+
+    <app-saet-tab leyend="Evaluación pedagogica">
+      <div style="padding-left: 20px; padding-right: 20px">
+        <app-saet-tab-buttons>
+          <a
+            type="button"
+            class="p-button p-component tabButton tabSeletectedButton"
+
+            href="#"
+          >
+            Perfil
+          </a>
+          <a
+            type="button"
+            class="p-button p-component tabButton"
+
+            href="#"
+          >
+            Agendar
+          </a>
+        </app-saet-tab-buttons>
+        <app-saet-mensaje-usuario
+          [show]="pedagogiaMessage.show"
+          [title]="pedagogiaMessage.title"
+          [message]="pedagogiaMessage.message"
+        />
+      </div>
+
+    </app-saet-tab>
+
+    <app-saet-tab leyend="Evaluación Habla y lenguaje">
+      <div style="padding-left: 20px; padding-right: 20px">
+        <app-saet-tab-buttons>
+          <a
+            type="button"
+            class="p-button p-component tabButton tabSeletectedButton"
+
+            href="#"
+          >
+            Perfil
+          </a>
+          <a
+            type="button"
+            class="p-button p-component tabButton"
+
+            href="#"
+          >
+            Agendar
+          </a>
+        </app-saet-tab-buttons>
+        <app-saet-mensaje-usuario
+
+          [show]="lenguajeHablaMessage.show"
+          [title]="lenguajeHablaMessage.title"
+          [message]="lenguajeHablaMessage.message"
+
+        />
+
+      </div>
+    </app-saet-tab>
+
+
+  </div>
+</div>
+

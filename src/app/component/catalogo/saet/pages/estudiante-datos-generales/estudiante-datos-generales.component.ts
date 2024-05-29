@@ -1,6 +1,6 @@
 import {ChangeDetectorRef, Component, Inject} from '@angular/core';
 import {DOCUMENT} from "@angular/common";
-import {CatalogoServiceCor} from "../../../../../services/catalogo/catalogo.service.cor";
+import {CatalogoServiceCor, StudentDetail} from "../../../../../services/catalogo/catalogo.service.cor";
 import {QuestionType} from "../../shared/component.config";
 import {ActivatedRoute, Router} from "@angular/router";
 import {IOptionType} from "../../component/saet-question/saet-question.component";
@@ -74,7 +74,7 @@ export class EstudianteDatosGeneralesComponent {
     ],
     values: []
   }
-
+  studentInfo?:StudentDetail;
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private catalogoServiceCOR: CatalogoServiceCor,
@@ -90,6 +90,7 @@ export class EstudianteDatosGeneralesComponent {
     });
 
     catalogoServiceCOR.getStudentInfo(this.nie).then((result) => {
+      this.studentInfo = result.estudiante;
       this.generalInformation = {
         ...this.generalInformation,
         values: [

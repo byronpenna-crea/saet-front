@@ -1,29 +1,14 @@
 <app-saet-global-header
   [nie]="nie"
   [nombreCompleto]="studentInfo?.nombreCompleto ?? ''"
-  selectedTab="Caracterizacion"
+  selectedTab=""
 />
 <app-saet-mensaje-usuario
-[show]="showMessage"
-[message]="message"
-[title]="titleMessage"
+  [show]="showMessage"
+  [message]="message"
+  [title]="titleMessage"
 />
 <div class="form-container">
-  <div class="margin-top">
-    <app-tabs [label]="generalInformation.labels"
-              [legend]="generalInformation.legend"
-              [value]="generalInformation.values"
-              [isActive]="generalInformation.isActive"
-    ></app-tabs>
-  </div>
-  <div class="margin-top">
-    <app-tabs [label]="institutionalInfo.labels"
-              [legend]="institutionalInfo.legend"
-              [value]="institutionalInfo.values"
-              [isActive]="institutionalInfo.isActive"
-    ></app-tabs>
-  </div>
-
   <ng-container *ngFor="let corSurvey of corSurveys" >
     <div style="margin-top: 5%">
       <app-tabs
@@ -41,9 +26,4 @@
       </app-tabs>
     </div>
   </ng-container>
-  <app-saet-button
-    (onClick)="save()"
-    [buttonArgs]="{text: 'Guardar',buttonStyle: 0 }" />
 </div>
-
-

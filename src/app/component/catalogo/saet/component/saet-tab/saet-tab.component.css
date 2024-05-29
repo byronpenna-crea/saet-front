@@ -1,0 +1,11 @@
+.tabStyle {
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+}
+.legend {
+  font-weight: bold;
+  padding: 5px;
+  border-radius: 3px;
+}
+

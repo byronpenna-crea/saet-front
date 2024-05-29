@@ -14,9 +14,9 @@ export class SaetGlobalHeaderComponent {
 
   ngOnInit() {
     this.tabMenu = [
-      { name: 'datosGenerales', url: '/caracterizacion', text: 'DATOS GENERALES' },
+      { name: 'datosGenerales', url: `#/menu/saet-datos-estudiante/${this.nie}`, text: 'DATOS GENERALES' },
       { name: 'Caracterizacion', url: `#/menu/saet-caracterizacion-estudiante/${this.nie}`, text: 'CARACTERIZACIÓN' },
-      { name: 'evaluaciones', url: '/evaluaciones', text: 'EVALUACIONES' },
+      { name: 'evaluaciones', url: `#/menu/saet-evaluaciones/${this.nie}`, text: 'EVALUACIONES' },
       { name: 'paei', url: '/paei', text: 'PAEI' }
     ];
   }

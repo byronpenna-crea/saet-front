@@ -19,6 +19,8 @@ import {BuscarEstudianteComponent} from "./component/catalogo/saet/pages/buscar-
 import {EstudianteDatosGeneralesComponent} from "./component/catalogo/saet/pages/estudiante-datos-generales/estudiante-datos-generales.component";
 import {EstudianteCaracterizacionComponent} from "./component/catalogo/saet/pages/estudiante-caracterizacion/estudiante-caracterizacion.component";
 import {EstudianteCaracterizacionIniciarComponent} from "./component/catalogo/saet/pages/estudiante-caracterizacion-iniciar/estudiante-caracterizacion-iniciar.component";
+import {EstudianteEvaluacionesComponent} from "./component/catalogo/saet/pages/estudiante-evaluaciones/estudiante-evaluaciones.component";
+import {EstudianteCuestionarioLenguajeComponent} from "./component/catalogo/saet/pages/estudiante-cuestionario-lenguaje/estudiante-cuestionario-lenguaje.component";
 /*
 const routes: Routes = [
 
@@ -50,6 +52,8 @@ const routes: Routes = [
       { path: 'saet-datos-estudiante/:nie', component: EstudianteDatosGeneralesComponent },
       { path: 'saet-caracterizacion-estudiante/:nie', component: EstudianteCaracterizacionComponent },
       { path: 'saet-caracterizacion-iniciar/:nie', component: EstudianteCaracterizacionIniciarComponent },
+      { path: 'saet-lenguaje-habla/:nie', component: EstudianteCuestionarioLenguajeComponent },
+      { path: 'saet-evaluaciones/:nie', component: EstudianteEvaluacionesComponent },
       { path: 'persona', component: PersonaComponent, canActivate: [UserGuardGuard] },
       { path: 'categorias', component: CategoriaComponent, canActivate: [UserGuardGuard] },
       { path: 'sub_categorias', component: SubCategoriaComponent, canActivate: [UserGuardGuard] },

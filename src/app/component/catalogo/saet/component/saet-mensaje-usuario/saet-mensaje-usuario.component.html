@@ -1,0 +1,13 @@
+<div *ngIf="show" class="form-container"
+  [ngClass]="{'bg-green' : messageType === type.SUCCESS, 'bg-red': messageType === type.ERROR }"
+>
+  <div class="container" >
+    <div>
+      <i class="pi pi-check"></i>
+    </div>
+    <div class="bodyMessage">
+      <div class="title">{{title}}</div>
+      <div>{{message}}</div>
+    </div>
+  </div>
+</div>

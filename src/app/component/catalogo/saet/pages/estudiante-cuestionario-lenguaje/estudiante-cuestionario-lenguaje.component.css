@@ -1,12 +1,6 @@
-.button-container {
-  display: flex;
-  gap: 10px;
-  border-radius: 0px;
-}
 .margin-top{
   margin-top: 2%;
 }
-
 .form-container {
   display: flex;
   flex-direction: column;
