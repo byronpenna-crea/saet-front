@@ -24,6 +24,7 @@ import {EstudianteCuestionarioLenguajeComponent} from "./component/catalogo/saet
 import {EstudianteCuestionarioPsicologiaComponent} from "./component/catalogo/saet/pages/estudiante-cuestionario-psicologia/estudiante-cuestionario-psicologia.component";
 import {EstudianteCuestionarioPedagogiaComponent} from "./component/catalogo/saet/pages/estudiante-cuestionario-pedagogia/estudiante-cuestionario-pedagogia.component";
 import {EstudiantePdfComponent} from "./component/catalogo/saet/pages/estudiante-pdf/estudiante-pdf.component";
+import {EstudianteInformeTrimestralComponent} from "./component/catalogo/saet/pages/estudiante-informe-trimestral/estudiante-informe-trimestral.component";
 /*
 const routes: Routes = [
 
@@ -57,6 +58,7 @@ const routes: Routes = [
       { path: 'saet-pdf', component: EstudiantePdfComponent },
       { path: 'saet-caracterizacion-iniciar/:nie', component: EstudianteCaracterizacionIniciarComponent },
       { path: 'saet-lenguaje-habla/:nie', component: EstudianteCuestionarioLenguajeComponent },
+      { path: 'saet-informe', component: EstudianteInformeTrimestralComponent },
       { path: 'saet-psicologia/:nie', component: EstudianteCuestionarioPsicologiaComponent },
       { path: 'saet-pedagogia/:nie', component: EstudianteCuestionarioPedagogiaComponent },
       { path: 'saet-evaluaciones/:nie', component: EstudianteEvaluacionesComponent },

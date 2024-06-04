@@ -1,10 +1,11 @@
 import {Component, Inject} from '@angular/core';
 import {DOCUMENT} from "@angular/common";
 import {CatalogoServiceCor, StudentDetail} from "../../../../../services/catalogo/catalogo.service.cor";
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute} from "@angular/router";
 import {IOptionType} from "../../component/saet-question/saet-question.component";
 import {QuestionType} from "../../shared/component.config";
-import {IMessageComponent} from "../../interfaces/message-component.interface";
+import {IMessageComponent, MessageType, UserMessage} from "../../interfaces/message-component.interface";
+import {userMessageInit} from "../../shared/messages.model";
 
 
 interface IinformationTab {
@@ -28,9 +29,7 @@ interface iSurvey {
   styleUrls: ['./estudiante-caracterizacion-iniciar.component.css']
 })
 export class EstudianteCaracterizacionIniciarComponent implements IMessageComponent{
-  showMessage:boolean = false;
-  message: string = "";
-  titleMessage: string = "";
+  userMessage: UserMessage = userMessageInit;
 
   nie:string = "";
   studentInfo?: StudentDetail;
@@ -136,9 +135,12 @@ export class EstudianteCaracterizacionIniciarComponent implements IMessageCompon
   }
 
   save() {
-    this.showMessage = true;
-    this.message = "¡Los datos han sido guardados exitosamente!";
-    this.titleMessage = "Datos guardados";
+    this.userMessage = {
+      showMessage: true,
+      message: "¡Los datos han sido guardados exitosamente!",
+      titleMessage: "Datos guardados",
+      type: MessageType.SUCCESS
+    }
   }
 
   getName(name:string): string {

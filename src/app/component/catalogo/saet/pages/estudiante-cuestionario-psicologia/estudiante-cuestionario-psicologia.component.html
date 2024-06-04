@@ -4,9 +4,9 @@
   selectedTab=""
 />
 <app-saet-mensaje-usuario
-  [show]="showMessage"
-  [message]="message"
-  [title]="titleMessage"
+  [show]="userMessage.showMessage"
+  [message]="userMessage.message"
+  [title]="userMessage.titleMessage"
 />
 <div class="form-container">
   <ng-container *ngFor="let corSurvey of corSurveys" >

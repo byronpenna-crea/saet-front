@@ -1,12 +1,7 @@
-<div class="titlePage">
-  <h2>Buscar estudiante</h2>
-  <div>
-    <a href="#">Buscar estudiante</a>
-    <span *ngIf="searchedNIE !== ''">
-      /
-      <a href="#">{{searchedNIE}}</a>
-    </span>
-  </div>
+<div class="form-container divInforme">
+  <a href="#/menu/saet-informe">
+    Informe Trimestral COR
+  </a>
 </div>
 <div class="form-container">
   <p class="title">Escribe el NIE del estudiante.</p>
@@ -24,22 +19,26 @@
       (click)="cleanInput()"
     >limpiar búsqueda</span>
   </div>
-  <div *ngIf="showError" class="table-container" data-testid="userMessage">
-    {{errorMessage}}
+  <div *ngIf="showTable">
+    <app-saet-underlined-title >
+      <div style="display: flex; flex-direction: row">
+        <div style="font-weight: bold; width: 300px">
+          Resultado(s):
+        </div>
+        <div>
+          {{cnResult}} elemento(s)
+        </div>
+      </div>
+    </app-saet-underlined-title>
   </div>
-  <div *ngIf="showTable" class="table-container">
-<!--    <app-saet-table-->
-<!--      testId="table-information"-->
-<!--      [columns]="flowColumns"-->
-<!--      [useChildren]="true"-->
-<!--    >-->
-<!--      <tr>-->
-<!--        <td>Centro de Orientación y Recursos (COR)</td>-->
-<!--        <td>Sin atención</td>-->
-<!--        <td><button pButton type="button" icon="pi pi-eye" label="Ver detalle"></button></td>-->
-<!--      </tr>-->
-<!--    </app-saet-table>-->
 
+  <app-saet-mensaje-usuario
+    [show]="userMessage.showMessage"
+    [message]="userMessage.message"
+    [title]="userMessage.titleMessage"
+    [messageType]="userMessage.type"
+  />
+  <div *ngIf="showTable" class="table-container">
     <p-table
       attr.data-testid="testId"
       data-testid="table-information"
@@ -69,21 +68,6 @@
         </tr>
       </ng-template>
     </p-table>
-
-
-    <!--    <app-saet-table-->
-<!--      testId="table-information"-->
-<!--      [columns]="studentTableColumns"-->
-<!--      [data]="studentData"-->
-
-<!--    >-->
-<!--      <app-saet-button-->
-<!--        testId="btn-ver-detalle"-->
-<!--        [buttonArgs]="{text: 'Ver detalle'}"-->
-<!--        (click)="navigateToDetails()"-->
-<!--      >-->
-<!--      </app-saet-button>-->
-<!--    </app-saet-table>-->
   </div>
 
 </div>

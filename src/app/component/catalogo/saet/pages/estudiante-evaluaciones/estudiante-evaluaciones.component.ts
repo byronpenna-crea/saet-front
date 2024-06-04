@@ -1,8 +1,9 @@
 import {Component, Inject} from '@angular/core';
-import {IMessageComponent} from "../../interfaces/message-component.interface";
+import {IMessageComponent, UserMessage} from "../../interfaces/message-component.interface";
 import {DOCUMENT} from "@angular/common";
 import {CatalogoServiceCor, StudentDetail} from "../../../../../services/catalogo/catalogo.service.cor";
 import {ActivatedRoute} from "@angular/router";
+import {userMessageInit} from "../../shared/messages.model";
 interface IUserMessage  {
   show: boolean,
   title: string,
@@ -14,9 +15,7 @@ interface IUserMessage  {
   styleUrls: ['./estudiante-evaluaciones.component.css']
 })
 export class EstudianteEvaluacionesComponent implements IMessageComponent {
-  showMessage:boolean = true;
-  message: string = "";
-  titleMessage: string = "";
+  userMessage: UserMessage = userMessageInit;
   nie:string = "";
   studentInfo?: StudentDetail;
   psicologyMessage: IUserMessage = {

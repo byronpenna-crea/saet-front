@@ -1,5 +1,5 @@
 import {Component, Inject} from '@angular/core';
-import {IMessageComponent} from "../../interfaces/message-component.interface";
+import {IMessageComponent, MessageType, UserMessage} from "../../interfaces/message-component.interface";
 import {DOCUMENT} from "@angular/common";
 import {CatalogoServiceCor, StudentDetail} from "../../../../../services/catalogo/catalogo.service.cor";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -15,10 +15,12 @@ import {QuestionsComponent} from "../../QuestionsComponent";
   styleUrls: ['./estudiante-cuestionario-lenguaje.component.css']
 })
 export class EstudianteCuestionarioLenguajeComponent extends QuestionsComponent implements IMessageComponent{
-  showMessage:boolean = false;
-  message: string = "";
-  titleMessage: string = "";
-
+  userMessage: UserMessage = {
+    showMessage: false,
+    message: '',
+    titleMessage: '',
+    type: MessageType.SUCCESS
+  }
 
   constructor(
     @Inject(DOCUMENT) document: Document,

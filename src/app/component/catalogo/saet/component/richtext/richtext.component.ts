@@ -6,7 +6,7 @@ import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
   styleUrls: ['./richtext.component.css']
 })
 export class RichtextComponent implements OnChanges{
-  @Input() text: string = "xxx";
+  @Input() text: string = "";
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes["text"]) {

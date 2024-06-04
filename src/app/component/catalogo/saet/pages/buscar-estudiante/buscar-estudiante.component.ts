@@ -1,9 +1,10 @@
-import {Component, TemplateRef, ViewChild} from '@angular/core';
+import {Component} from '@angular/core';
 import {ButtonStyle, SaetButtonArgs} from "../../component/saet-button/saet-button.component";
-import {IconComponent} from "../../shared/component.config";
 import {TableColumn} from "../../component/saet-table/saet-table.component";
-import {Route, Router} from "@angular/router";
+import {Router} from "@angular/router";
 import {CatalogoServiceCor} from "../../../../../services/catalogo/catalogo.service.cor";
+import {IMessageComponent, MessageType, UserMessage} from "../../interfaces/message-component.interface";
+import {userMessageInit} from "../../shared/messages.model";
 
 interface Estudiante {
   nie: string;
@@ -33,8 +34,10 @@ interface flowTableInterface {
   templateUrl: './buscar-estudiante.component.html',
   styleUrls: ['./buscar-estudiante.component.css']
 })
-export class BuscarEstudianteComponent {
+export class BuscarEstudianteComponent implements IMessageComponent{
   inputNIE: string = '';
+  userMessage: UserMessage = userMessageInit;
+  cnResult: number = 0;
   onInputChange(value: string) {
     this.inputNIE = value;
   }
@@ -48,15 +51,7 @@ export class BuscarEstudianteComponent {
   showError = false;
   errorMessage = "";
   searchedNIE = "";
-  /*
-  flowColumns:TableColumn<tableInterface>[] = [
-    { key: "cor", header: "Centro de Orientación y Recursos (COR)" },
-    { key: "dai", header: "Docente de Apoyo a la Inclusión (DAI)" },
-    { key: "ce", header: "Consejería Escolar (CE)"},
-    { key: "eee", header: "Escuela de Educación Especial (EEE)" },
-    { key: "codai", header: "Comité Departamental de Apoyo a la Inclusión (CODAI)" },
-    { key: "criedv", header: "Centro de Recursos de Inclusión Educativa (CRIE-DV)" }
-  ];*/
+
   flowColumns:TableColumn<flowTableInterface>[] = [
     {key: "responsable", header: "Responsables"},
     {key: "estadoApoyo", header: "Estado de apoyo"},
@@ -89,9 +84,11 @@ export class BuscarEstudianteComponent {
     }
   }
   async toggleTable() {
+    this.userMessage.showMessage = false;
     if (this.inputNIE) {
       try {
         const result = await this.catalogoServiceCOR.getStudentInfo(this.inputNIE);
+        this.cnResult = 1;
         this.studentData = [
           {
             nie: result.estudiante.nie,
@@ -101,19 +98,37 @@ export class BuscarEstudianteComponent {
             primerApellido: result.estudiante.nombreCompleto.split(' ')[2],
             verDetalle: "Ver", Acciones: null}
         ]
-        this.showError = false;
-        this.errorMessage = "";
+        this.userMessage = {
+          showMessage: false,
+          message: "",
+          titleMessage: "",
+          type: MessageType.SUCCESS
+        }
+        /*this.showError = false;
+        this.errorMessage = "";*/
         this.showTable = true;
       } catch (error) {
+
+        this.userMessage = {
+          showMessage: true,
+          message: "Error al obtener la información del estudiante",
+          type: MessageType.DANGER
+        }
+
+
+
         this.showTable = false;
-        this.showError = true;
-        this.errorMessage = "Error al obtener la información del estudiante";
         console.error('error console', error);
       }
     }else{
+      this.userMessage = {
+        showMessage: true,
+        message: "Escribe el NIE para realizar busqueda",
+        titleMessage: "",
+        type: MessageType.WARNING
+      }
+
       this.showTable = false;
-      this.showError = true;
-      this.errorMessage = "Escribe el NIE para realizar busqueda";
     }
   }
 
@@ -124,7 +139,7 @@ export class BuscarEstudianteComponent {
 
   cleanInput() {
     this.inputNIE = ''
-    this.showError = false;
+    this.userMessage.showMessage = false;
     this.showTable = false;
   }
 

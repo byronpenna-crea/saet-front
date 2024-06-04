@@ -2,7 +2,8 @@ import {ChangeDetectorRef, Component, Inject} from '@angular/core';
 import {DOCUMENT} from "@angular/common";
 import {CatalogoServiceCor, StudentDetail} from "../../../../../services/catalogo/catalogo.service.cor";
 import {ActivatedRoute, Router} from "@angular/router";
-import {IMessageComponent} from "../../interfaces/message-component.interface";
+import {IMessageComponent, UserMessage} from "../../interfaces/message-component.interface";
+import {userMessageInit} from "../../shared/messages.model";
 
 @Component({
   selector: 'app-estudiante-caracterizacion',
@@ -10,6 +11,7 @@ import {IMessageComponent} from "../../interfaces/message-component.interface";
   styleUrls: ['./estudiante-caracterizacion.component.css']
 })
 export class EstudianteCaracterizacionComponent implements IMessageComponent {
+  userMessage: UserMessage = userMessageInit;
   nie:string = "";
   studentInfo?: StudentDetail;
   async goTo(link:string){
@@ -35,9 +37,7 @@ export class EstudianteCaracterizacionComponent implements IMessageComponent {
 
   }
 
-  showMessage: boolean = false;
-  message: string = "";
-  titleMessage: string = "";
+
 
 
 }

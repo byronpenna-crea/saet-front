@@ -1,9 +1,10 @@
 import {Component, Inject} from '@angular/core';
 import {QuestionsComponent} from "../../QuestionsComponent";
-import {IMessageComponent} from "../../interfaces/message-component.interface";
+import {IMessageComponent, UserMessage} from "../../interfaces/message-component.interface";
 import {DOCUMENT} from "@angular/common";
 import {CatalogoServiceCor} from "../../../../../services/catalogo/catalogo.service.cor";
 import {ActivatedRoute, Router} from "@angular/router";
+import {userMessageInit} from "../../shared/messages.model";
 
 @Component({
   selector: 'app-estudiante-cuestionario-psicologia',
@@ -11,6 +12,7 @@ import {ActivatedRoute, Router} from "@angular/router";
   styleUrls: ['./estudiante-cuestionario-psicologia.component.css']
 })
 export class EstudianteCuestionarioPsicologiaComponent extends QuestionsComponent implements IMessageComponent {
+  userMessage: UserMessage = userMessageInit;
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceCOR: CatalogoServiceCor,

@@ -4,15 +4,14 @@
   selectedTab="evaluaciones"
 />
 <app-saet-mensaje-usuario
-  [show]="showMessage"
-  [message]="message"
-  [title]="titleMessage"
+  [show]="userMessage.showMessage"
+  [message]="userMessage.message"
+  [title]="userMessage.titleMessage"
 />
 
 
 <div class="form-container">
   <div class="margin-top " style="width: 100%">
-
     <app-saet-tab leyend="Evaluación Psicólogica">
       <div style="padding-left: 20px; padding-right: 20px">
         <app-saet-tab-buttons>
