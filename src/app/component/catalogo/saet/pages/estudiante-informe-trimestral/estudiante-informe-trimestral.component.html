@@ -1,0 +1,157 @@
+<div class="form-container divInforme">
+  <div>
+    <a class="selectedOption" href="#/menu/saet-informe">
+      Informe Trimestral COR
+    </a>
+  </div>
+</div>
+<div class="form-container">
+  <p class="title">Escribe el NIE del estudiante.</p>
+  <app-saet-input
+    testId="input-nie"
+    [inputArgs]="{text: inputNIE}"
+    (inputChange)="onInputChange($event)" />
+  <div class="button-container">
+    <app-saet-button
+      testId="btn-buscar"
+      [buttonArgs]="searchButton" (click)="toggleTable()" />
+    <span
+      data-testI-d="btn-clean"
+      class="clear-text"
+      (click)="cleanInput()"
+    >limpiar búsqueda</span>
+  </div>
+  <app-saet-underlined-title *ngIf="showTable">
+    <div style="display: flex; flex-direction: row">
+      <div style="font-weight: bold; width: 300px">
+        Resultado(s):
+      </div>
+      <div>
+        {{cnResult}} elemento(s)
+      </div>
+    </div>
+  </app-saet-underlined-title>
+<
+  <app-saet-mensaje-usuario
+    [show]="userMessage.showMessage"
+    [message]="userMessage.message"
+    [title]="userMessage.titleMessage"
+    [messageType]="userMessage.type"
+  />
+</div>
+
+<div *ngIf="showTable" class="form-container">
+  <div class="mt-2">
+    <app-tabs
+      legend="1. Estudiantes atendidos"
+    >
+      <app-saet-underlined-title >
+        Informe trimestral de estudiantes atendidos en el COR
+      </app-saet-underlined-title>
+
+
+    </app-tabs>
+  </div>
+  <div class="mt-2">
+    <app-tabs
+      legend="2. Dificultades de aprendizaje"
+    >
+      <app-saet-underlined-title >
+        La descripción con base a los resultados de las pruebas aplicadas.
+      </app-saet-underlined-title>
+    </app-tabs>
+  </div>
+  <div class="mt-2">
+    <app-tabs
+      legend="3. Etapas del proceso: fortalezas y limitantes"
+    >
+      <app-saet-underlined-title >
+        Caracterización
+      </app-saet-underlined-title>
+
+      <div class="mt-2 mb-2">
+        <span>Fortalezas</span>
+        <div class="container-rich">
+          <app-richtext />
+        </div>
+      </div>
+      <div class="mt-2 mb-2">
+        <span>Limitantes</span>
+        <div class="container-rich">
+          <app-richtext />
+        </div>
+      </div>
+      <!-- ###################################### -->
+      <div class="mt-2">
+        <app-saet-underlined-title >
+          Evaluación psicopedagógica
+        </app-saet-underlined-title>
+      </div>
+      <div class="mt-2 mb-2">
+        <span>Fortalezas</span>
+        <div class="container-rich">
+          <app-richtext />
+        </div>
+      </div>
+
+      <div class="mt-2 mb-2">
+        <span>Limitantes</span>
+        <div class="container-rich">
+          <app-richtext />
+        </div>
+      </div>
+      <!-- ###################################### -->
+      <div class="mt-2">
+        <app-saet-underlined-title >
+          Análisis de resultados de la evaluación
+        </app-saet-underlined-title>
+      </div>
+
+      <div class="mt-2 mb-2">
+        <span>Fortalezas</span>
+        <div class="container-rich">
+          <app-richtext />
+        </div>
+      </div>
+
+      <div class="mt-2 mb-2">
+        <span>Limitantes</span>
+        <div class="container-rich">
+          <app-richtext />
+        </div>
+      </div>
+      <!-- ###################################### -->
+      <div class="mt-2">
+        <app-saet-underlined-title >
+          Elaboración del PAEI
+        </app-saet-underlined-title>
+      </div>
+
+      <div class="mt-2 mb-2">
+        <span>Fortalezas</span>
+        <div class="container-rich">
+          <app-richtext />
+        </div>
+      </div>
+
+      <div class="mt-2 mb-2">
+        <span>Limitantes</span>
+        <div class="container-rich">
+          <app-richtext />
+        </div>
+      </div>
+      <!-- ###################################### -->
+      <div class="mt-2">
+        <app-saet-underlined-title >
+          Otros aspectos relevantes
+        </app-saet-underlined-title>
+      </div>
+      <div class="mt-2 mb-2">
+        <span>Limitantes</span>
+        <div class="container-rich">
+          <app-richtext />
+        </div>
+      </div>
+    </app-tabs>
+  </div>
+</div>

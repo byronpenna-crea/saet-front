@@ -1,0 +1,67 @@
+.mt-2{
+  margin-top: 35px;
+}
+.mb-2{
+  margin-bottom: 35px;
+}
+.container-rich{
+  padding-left: 105px;
+}
+.form-container {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  width: 90%;
+  margin: 3% auto 0;
+  margin-top: 1%;
+}
+.divInforme{
+  border-bottom: solid 1px black;
+  margin-bottom: 150px;
+  margin-top: 50px;
+}
+.divInforme a {
+  text-decoration: none;
+  padding-bottom: 10px;
+}
+.selectedOption{
+  font-weight: bold;
+  border-bottom: solid 3px black;
+}
+.titlePage{
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  width: 90%;
+  margin: 3% auto 0;
+  margin-bottom: 1%;
+  font-weight: bold;
+}
+
+.title {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+app-saet-input {
+  width: 100%;
+}
+
+
+.button-container {
+  display: flex;
+  align-items: baseline;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 3%;
+}
+.table-container{
+  margin-top: 5%;
+}
+app-saet-button {
+  min-width: 80px;
+}
+.clear-text {
+  cursor: pointer; /* Hace que el texto parezca clickable */
+  user-select: none; /* Evita que el texto pueda ser seleccionado */
+}
