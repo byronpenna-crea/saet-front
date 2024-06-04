@@ -65,7 +65,19 @@ import { SaetTableComponent } from './component/catalogo/saet/component/saet-tab
 
 import { EstudianteDatosGeneralesComponent } from './component/catalogo/saet/pages/estudiante-datos-generales/estudiante-datos-generales.component';
 import { SaetQuestionComponent } from './component/catalogo/saet/component/saet-question/saet-question.component';
-
+import { EstudianteCaracterizacionComponent } from './component/catalogo/saet/pages/estudiante-caracterizacion/estudiante-caracterizacion.component';
+import { EstudianteCaracterizacionIniciarComponent } from './component/catalogo/saet/pages/estudiante-caracterizacion-iniciar/estudiante-caracterizacion-iniciar.component';
+import { SaetStudentNameHeaderComponent } from './component/catalogo/saet/component/saet-student-name-header/saet-student-name-header.component';
+import { EstudianteEvaluacionesComponent } from './component/catalogo/saet/pages/estudiante-evaluaciones/estudiante-evaluaciones.component';
+import { SaetGlobalHeaderComponent } from './component/catalogo/saet/component/saet-global-header/saet-global-header.component';
+import { SaetMensajeUsuarioComponent } from './component/catalogo/saet/component/saet-mensaje-usuario/saet-mensaje-usuario.component';
+import { SaetTabComponent } from './component/catalogo/saet/component/saet-tab/saet-tab.component';
+import { SaetTabButtonsComponent } from './component/catalogo/saet/component/saet-tab-buttons/saet-tab-buttons.component';
+import { EstudianteCuestionarioPsicologiaComponent } from './component/catalogo/saet/pages/estudiante-cuestionario-psicologia/estudiante-cuestionario-psicologia.component';
+import { EstudianteCuestionarioPedagogiaComponent } from './component/catalogo/saet/pages/estudiante-cuestionario-pedagogia/estudiante-cuestionario-pedagogia.component';
+import { EstudianteCuestionarioLenguajeComponent } from './component/catalogo/saet/pages/estudiante-cuestionario-lenguaje/estudiante-cuestionario-lenguaje.component';
+import { EstudianteNoValidoComponent } from './component/catalogo/saet/pages/estudiante-no-valido/estudiante-no-valido.component';
+import { EstudiantePdfComponent } from './component/catalogo/saet/pages/estudiante-pdf/estudiante-pdf.component';
 
 
 @NgModule({
@@ -93,7 +105,20 @@ import { SaetQuestionComponent } from './component/catalogo/saet/component/saet-
     SaetInputComponent,
     SaetTableComponent,
     EstudianteDatosGeneralesComponent,
-    SaetQuestionComponent
+    SaetQuestionComponent,
+    EstudianteCaracterizacionComponent,
+    EstudianteCaracterizacionIniciarComponent,
+    SaetStudentNameHeaderComponent,
+    EstudianteEvaluacionesComponent,
+    SaetGlobalHeaderComponent,
+    SaetMensajeUsuarioComponent,
+    SaetTabComponent,
+    SaetTabButtonsComponent,
+    EstudianteCuestionarioPsicologiaComponent,
+    EstudianteCuestionarioPedagogiaComponent,
+    EstudianteCuestionarioLenguajeComponent,
+    EstudianteNoValidoComponent,
+    EstudiantePdfComponent
 
   ],
   imports: [

@@ -1,1 +1,29 @@
-<p>estudiante-cuestionario-psicologia works!</p>
+<app-saet-global-header
+  [nie]="nie"
+  [nombreCompleto]="studentInfo?.nombreCompleto ?? ''"
+  selectedTab=""
+/>
+<app-saet-mensaje-usuario
+  [show]="showMessage"
+  [message]="message"
+  [title]="titleMessage"
+/>
+<div class="form-container">
+  <ng-container *ngFor="let corSurvey of corSurveys" >
+    <div style="margin-top: 5%">
+      <app-tabs
+        [legend]="corSurvey.titulo"
+      >
+        <ng-container *ngFor="let pregunta of corSurvey.preguntas">
+          <app-tab-item
+            [label]="pregunta.pregunta"
+          >
+            <app-saet-question [type]="getQuestionType(pregunta.tipoPregunta)"
+                               [name]="getName(pregunta.pregunta)"
+                               [options]="getOptions(pregunta.opcion)" />
+          </app-tab-item>
+        </ng-container>
+      </app-tabs>
+    </div>
+  </ng-container>
+</div>

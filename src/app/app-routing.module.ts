@@ -21,6 +21,9 @@ import {EstudianteCaracterizacionComponent} from "./component/catalogo/saet/page
 import {EstudianteCaracterizacionIniciarComponent} from "./component/catalogo/saet/pages/estudiante-caracterizacion-iniciar/estudiante-caracterizacion-iniciar.component";
 import {EstudianteEvaluacionesComponent} from "./component/catalogo/saet/pages/estudiante-evaluaciones/estudiante-evaluaciones.component";
 import {EstudianteCuestionarioLenguajeComponent} from "./component/catalogo/saet/pages/estudiante-cuestionario-lenguaje/estudiante-cuestionario-lenguaje.component";
+import {EstudianteCuestionarioPsicologiaComponent} from "./component/catalogo/saet/pages/estudiante-cuestionario-psicologia/estudiante-cuestionario-psicologia.component";
+import {EstudianteCuestionarioPedagogiaComponent} from "./component/catalogo/saet/pages/estudiante-cuestionario-pedagogia/estudiante-cuestionario-pedagogia.component";
+import {EstudiantePdfComponent} from "./component/catalogo/saet/pages/estudiante-pdf/estudiante-pdf.component";
 /*
 const routes: Routes = [
 
@@ -51,8 +54,11 @@ const routes: Routes = [
       { path: 'saet-buscar', component: BuscarEstudianteComponent },
       { path: 'saet-datos-estudiante/:nie', component: EstudianteDatosGeneralesComponent },
       { path: 'saet-caracterizacion-estudiante/:nie', component: EstudianteCaracterizacionComponent },
+      { path: 'saet-pdf', component: EstudiantePdfComponent },
       { path: 'saet-caracterizacion-iniciar/:nie', component: EstudianteCaracterizacionIniciarComponent },
       { path: 'saet-lenguaje-habla/:nie', component: EstudianteCuestionarioLenguajeComponent },
+      { path: 'saet-psicologia/:nie', component: EstudianteCuestionarioPsicologiaComponent },
+      { path: 'saet-pedagogia/:nie', component: EstudianteCuestionarioPedagogiaComponent },
       { path: 'saet-evaluaciones/:nie', component: EstudianteEvaluacionesComponent },
       { path: 'persona', component: PersonaComponent, canActivate: [UserGuardGuard] },
       { path: 'categorias', component: CategoriaComponent, canActivate: [UserGuardGuard] },

@@ -24,7 +24,7 @@
       (click)="cleanInput()"
     >limpiar búsqueda</span>
   </div>
-  <div *ngIf="showError" class="table-container">
+  <div *ngIf="showError" class="table-container" data-testid="userMessage">
     {{errorMessage}}
   </div>
   <div *ngIf="showTable" class="table-container">
@@ -42,6 +42,7 @@
 
     <p-table
       attr.data-testid="testId"
+      data-testid="table-information"
       [columns]="flowColumns"
       [value]="flowData">
       <ng-template pTemplate="header" let-columns>
@@ -62,6 +63,7 @@
           <td>
             <app-saet-button
               (onClick)="goTo(row['href'])"
+              testId="btn-ver-detalle"
               [buttonArgs]="{buttonIcon: 0,buttonStyle: 0, text: 'Ver detalle'}"></app-saet-button>
           </td>
         </tr>
