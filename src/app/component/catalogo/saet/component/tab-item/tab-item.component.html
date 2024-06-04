@@ -1,10 +1,8 @@
-<div
-  [ngStyle]="{'margin-top': marginTop}"
-  style="display: flex;">
-  <div style="flex: 1; text-align: left; padding-right: 10px;">
+<div [ngStyle]="{'margin-top': marginTop, 'display': 'flex'}">
+  <div style="flex: 4; text-align: left; padding-right: 10px;">
     {{label}}
   </div>
-  <div style="flex: 2; text-align: left;">
+  <div style="flex: 6; text-align: left;">
     <ng-container *ngIf="text !== undefined">
       {{text}}
     </ng-container>

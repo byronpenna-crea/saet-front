@@ -1,10 +1,16 @@
-import {Component} from '@angular/core';
+import {ChangeDetectorRef, Component, Inject} from '@angular/core';
 import {ButtonStyle, SaetButtonArgs} from "../../component/saet-button/saet-button.component";
 import {TableColumn} from "../../component/saet-table/saet-table.component";
-import {Router} from "@angular/router";
-import {CatalogoServiceCor} from "../../../../../services/catalogo/catalogo.service.cor";
+import {ActivatedRoute, Router} from "@angular/router";
+import {
+  CatalogoServiceCor,
+  StudentDetail,
+  StudentInfoResponse
+} from "../../../../../services/catalogo/catalogo.service.cor";
 import {IMessageComponent, MessageType, UserMessage} from "../../interfaces/message-component.interface";
 import {userMessageInit} from "../../shared/messages.model";
+import {BaseComponent} from "../../BaseComponent";
+import {DOCUMENT} from "@angular/common";
 
 interface Estudiante {
   nie: string;
@@ -34,17 +40,42 @@ interface flowTableInterface {
   templateUrl: './buscar-estudiante.component.html',
   styleUrls: ['./buscar-estudiante.component.css']
 })
-export class BuscarEstudianteComponent implements IMessageComponent{
+export class BuscarEstudianteComponent
+  extends BaseComponent
+  implements IMessageComponent{
+
+
   inputNIE: string = '';
   userMessage: UserMessage = userMessageInit;
   cnResult: number = 0;
+  centroEducativo:string = "";
   onInputChange(value: string) {
     this.inputNIE = value;
   }
 
-  constructor(private router: Router,
-  private catalogoServiceCOR: CatalogoServiceCor
+  constructor(
+    @Inject(DOCUMENT) document: Document,
+    catalogoServiceCOR: CatalogoServiceCor,
+    private cdr: ChangeDetectorRef,
+    route: ActivatedRoute,
+    router: Router
   ) {
+    super(document, catalogoServiceCOR, route, router);
+    try{
+      this.loadStudentInfo().then((result) => {
+        this.cnResult = 1;
+        this.studentData = this.populateStudent(result);
+        this.centroEducativo = result.centroEducativo.nombre;
+        this.showTable = true;
+        this.inputNIE = result.estudiante.nie;
+        console.log('loeaded');
+      }).catch((e) => {
+        console.log('no existe NIE en url', e);
+      })
+    }catch (e){
+      console.log('error en constructor', e);
+    }
+
   }
 
   showTable = false;
@@ -83,21 +114,25 @@ export class BuscarEstudianteComponent implements IMessageComponent{
       await this.router.navigate([link,  this.inputNIE ]);
     }
   }
+  private populateStudent(result:StudentInfoResponse) {
+    return [
+      {
+        nie: result.estudiante.nie,
+        EstadoApoyo: "Indefinido",
+        fechaNacimiento: result.estudiante.fechaNacimiento,
+        primerNombre: result.estudiante.nombreCompleto.split(' ')[0],
+        primerApellido: result.estudiante.nombreCompleto.split(' ')[2],
+        verDetalle: "Ver", Acciones: null}
+    ];
+  }
   async toggleTable() {
     this.userMessage.showMessage = false;
     if (this.inputNIE) {
       try {
         const result = await this.catalogoServiceCOR.getStudentInfo(this.inputNIE);
         this.cnResult = 1;
-        this.studentData = [
-          {
-            nie: result.estudiante.nie,
-            EstadoApoyo: "Indefinido",
-            fechaNacimiento: result.estudiante.fechaNacimiento,
-            primerNombre: result.estudiante.nombreCompleto.split(' ')[0],
-            primerApellido: result.estudiante.nombreCompleto.split(' ')[2],
-            verDetalle: "Ver", Acciones: null}
-        ]
+        this.studentData = this.populateStudent(result);
+        this.centroEducativo = result.centroEducativo.nombre;
         this.userMessage = {
           showMessage: false,
           message: "",

@@ -8,10 +8,12 @@
   <app-saet-input
     testId="input-nie"
     [inputArgs]="{text: inputNIE}"
+    [disabled]="showTable"
     (inputChange)="onInputChange($event)" />
   <div class="button-container">
     <app-saet-button
       testId="btn-buscar"
+      [disabled]="showTable"
       [buttonArgs]="searchButton" (click)="toggleTable()" />
     <span
       data-testId="btn-clean"
@@ -39,7 +41,51 @@
     [messageType]="userMessage.type"
   />
   <div *ngIf="showTable" class="table-container">
-    <p-table
+    <app-tabs
+      legend="Estudiante"
+    >
+      <div class="mb-2">
+        <app-tab-item label="NIE" >
+          <app-saet-input
+            testId="input-nie"
+            [disabled]="1 == 1"
+            [inputArgs]="{text: studentInfo?.nie}" />
+        </app-tab-item>
+      </div>
+      <div class="mt-2">
+        <app-tab-item label="NUI" >
+          <app-saet-input
+            testId="input-nui"
+            [disabled]="1 == 1"
+            [inputArgs]="{text: studentInfo?.nui}" />
+        </app-tab-item>
+      </div>
+
+      <div class="mt-2">
+        <app-tab-item label="Nombre completo:" >
+          <app-saet-input
+            testId="input-nombrecompleto"
+            [disabled]="1 == 1"
+            [inputArgs]="{text: studentInfo?.nombreCompleto}" />
+        </app-tab-item>
+      </div>
+
+      <div class="mt-2">
+        <app-tab-item label="Centro Educativo:" >
+          <app-saet-input
+            testId="input-centroeducativo"
+            [disabled]="1 == 1"
+            [inputArgs]="{text: centroEducativo}" />
+        </app-tab-item>
+      </div>
+
+      <div class="mb-2 mt-2">
+        <app-saet-underlined-title >
+
+        </app-saet-underlined-title>
+      </div>
+
+      <p-table
       attr.data-testid="testId"
       data-testid="table-information"
       [columns]="flowColumns"
@@ -51,23 +97,24 @@
           </th>
         </tr>
       </ng-template>
-      <ng-template pTemplate="body" let-rowData let-columns="columns">
-        <tr *ngFor="let row of flowData">
+      <ng-template pTemplate="body" let-rowData>
+        <tr>
           <td>
-            {{ row["col1"] }}
+            {{ rowData["col1"] }}
           </td>
           <td>
-            {{ row["col2"] }}
+            {{ rowData["col2"] }}
           </td>
           <td>
             <app-saet-button
-              (onClick)="goTo(row['href'])"
+              (onClick)="goTo(rowData['href'])"
               testId="btn-ver-detalle"
               [buttonArgs]="{buttonIcon: 0,buttonStyle: 0, text: 'Ver detalle'}"></app-saet-button>
           </td>
         </tr>
       </ng-template>
     </p-table>
+    </app-tabs>
   </div>
 
 </div>

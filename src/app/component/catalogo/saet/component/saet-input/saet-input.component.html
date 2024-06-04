@@ -2,6 +2,7 @@
     <input type="text"
            [attr.data-testid]="testId"
            (input)="onInputChange($event)"
+           [disabled]="disabled"
            pInputText style="width: 100%" [(ngModel)]="inputArgs.text" />
     <ng-container *ngIf="inputArgs.icon !== undefined">
       <i class="pi pi-search"></i>

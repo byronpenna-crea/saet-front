@@ -28,7 +28,7 @@ export class SaetButtonComponent implements OnChanges{
     buttonStyle: ButtonStyle.WHITE,
     text: ""
   };
-
+  @Input() disabled: boolean = false;
   @Output() onClick: EventEmitter<Event> = new EventEmitter<Event>();
   handleClick(event: Event): void {
     this.onClick.emit(event);

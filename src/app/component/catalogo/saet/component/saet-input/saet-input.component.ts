@@ -6,7 +6,7 @@ export enum IconDirection{
   LEFT
 }
 export interface SaetInputArgs {
-  text: string;
+  text?: string;
   iconDirection?:IconDirection;
   icon?: IconComponent
 }
@@ -24,7 +24,7 @@ export class SaetInputComponent implements OnChanges{
     iconDirection: IconDirection.RIGHT,
     icon: undefined
   }
-
+  @Input() disabled:boolean = false;
   spanClases: string = "";
 
   onInputChange(event: Event) {
