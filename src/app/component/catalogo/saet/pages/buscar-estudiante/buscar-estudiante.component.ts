@@ -25,6 +25,7 @@ interface flowTableInterface {
   responsable: string;
   estadoApoyo: string;
   verDetalle: string;
+  referidoPor: string;
 }
 /*interface tableInterface {
   cor: string;
@@ -86,16 +87,17 @@ export class BuscarEstudianteComponent
   flowColumns:TableColumn<flowTableInterface>[] = [
     {key: "responsable", header: "Responsables"},
     {key: "estadoApoyo", header: "Estado de apoyo"},
+    {key: "referidoPor", header: "Referido por"},
     {key: "verDetalle", header: "Ver detalle"},
 
   ]
   flowData = [
-    { col1: 'Centro de Orientación y Recursos (COR)', col2: 'Sin atención', href: '/menu/saet-datos-estudiante' },
-    { col1: 'Docente de Apoyo a la Inclusión (DAI)', col2: 'Sin atención', href: '' },
-    { col1: 'Consejería Escolar (CE)', col2: 'Sin atención', href: '' },
-    { col1: 'Escuela de Educación Especial (EEE)', col2: 'Sin atención', href: '' },
-    { col1: 'Comité Departamental de Apoyo a la Inclusión (CODAI)', col2: 'Sin atención', href: '' },
-    { col1: 'Centro de Recursos de Inclusión Educativa (CRIE-DV)', col2: 'Sin atención', href: '' },
+    { col1: 'Centro de Orientación y Recursos (COR)', col2: 'Sin atención', col3: '', href: '/menu/saet-datos-estudiante' },
+    { col1: 'Docente de Apoyo a la Inclusión (DAI)', col2: 'Sin atención', col3: '', href: '' },
+    { col1: 'Consejería Escolar (CE)', col2: 'Sin atención', col3: '', href: '' },
+    { col1: 'Escuela de Educación Especial (EEE)', col2: 'Sin atención', col3: '/menu/saet-pdf/referencia', href: '' },
+    { col1: 'Comité Departamental de Apoyo a la Inclusión (CODAI)', col2: 'Sin atención', col3: '', href: '' },
+    { col1: 'Centro de Recursos de Inclusión Educativa (CRIE-DV)', col2: 'Sin atención', col3: '', href: '' },
   ]
   studentTableColumns:TableColumn<Estudiante>[] = [
     { key: "nie", header: "NIE" },
@@ -109,6 +111,11 @@ export class BuscarEstudianteComponent
   studentData: Estudiante[] = [
     {nie: "1234", EstadoApoyo: "Indefinido", fechaNacimiento: "23/12/2010", primerNombre: "Carlos", primerApellido: "Mejia", verDetalle: "Ver", Acciones: null}
   ]
+  async goToReferencia(link:string){
+    if(link !== '' && link !== '#'){
+      await this.router.navigate([link]);
+    }
+  }
   async goTo(link:string){
     if(link !== '' && link !== '#'){
       await this.router.navigate([link,  this.inputNIE ]);

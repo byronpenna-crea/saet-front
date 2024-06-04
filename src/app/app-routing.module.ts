@@ -53,9 +53,11 @@ const routes: Routes = [
       { path: 'empleados', component: SeguridadUsuarioComponent, canActivate: [UserGuardGuard] },
       { path: 'saet', component: SaetComponent },
       { path: 'saet-buscar', component: BuscarEstudianteComponent },
+      { path: 'saet-buscar/:nie', component: BuscarEstudianteComponent },
+
       { path: 'saet-datos-estudiante/:nie', component: EstudianteDatosGeneralesComponent },
       { path: 'saet-caracterizacion-estudiante/:nie', component: EstudianteCaracterizacionComponent },
-      { path: 'saet-pdf', component: EstudiantePdfComponent },
+      { path: 'saet-pdf/:name', component: EstudiantePdfComponent },
       { path: 'saet-caracterizacion-iniciar/:nie', component: EstudianteCaracterizacionIniciarComponent },
       { path: 'saet-lenguaje-habla/:nie', component: EstudianteCuestionarioLenguajeComponent },
       { path: 'saet-informe', component: EstudianteInformeTrimestralComponent },
