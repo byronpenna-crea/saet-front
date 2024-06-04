@@ -1,10 +1,10 @@
 <div class="titlePage">
   <h2>Buscar estudiante</h2>
   <div>
-    <a href="/menu/saet-buscar">Buscar estudiante</a>
+    <a href="#/menu/saet-buscar">Buscar estudiante</a>
     <span *ngIf="nie !== ''">
       /
-      <a href="/menu/saet-buscar">{{nie}}</a>
+      <a href="#/menu/saet-buscar">{{nie}}</a>
       /
       <a href="#">Datos generales</a>
     </span>
@@ -15,19 +15,6 @@
     [name]="nombreCompleto"
   />
 </div>
-<!--<div class="form-container">-->
-<!--  <div class="button-container">-->
-<!--    <a-->
-<!--      *ngFor="let tab of tabMenu"-->
-<!--      type="button"-->
-<!--      class="p-button p-component tabButton"-->
-<!--      [ngClass]="{'tabSeletectedButton': isSelected(tab.name)}"-->
-<!--      [href]="tab.url"-->
-<!--    >-->
-<!--      {{ tab.text }}-->
-<!--    </a>-->
-<!--  </div>-->
-<!--</div>-->
 <div class="form-container">
   <app-saet-tab-buttons>
     <a

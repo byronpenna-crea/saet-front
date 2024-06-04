@@ -12,6 +12,12 @@ export interface TabRowItem {
   label: string;
   value: string;
 }
+export interface IinformationTab{
+  labels: string[],
+  values: string[],
+  legend: string,
+  isActive: boolean
+}
 @Component({
   selector: 'app-tabs',
   templateUrl: './tabs.component.html',
