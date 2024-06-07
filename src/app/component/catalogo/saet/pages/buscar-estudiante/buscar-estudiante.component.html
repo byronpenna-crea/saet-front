@@ -8,9 +8,12 @@
   <app-saet-input
     testId="input-nie"
     [inputArgs]="{text: inputNIE}"
+    [value]="inputNIE"
     [disabled]="showTable"
-    (inputChange)="onInputChange($event)" />
+    (inputChange)="onInputChange($event)"
+  />
   <div class="button-container">
+
     <app-saet-button
       testId="btn-buscar"
       [disabled]="showTable"
@@ -20,6 +23,7 @@
       class="clear-text"
       (click)="cleanInput()"
     >limpiar búsqueda</span>
+
   </div>
   <div *ngIf="showTable">
     <app-saet-underlined-title >
@@ -49,7 +53,9 @@
           <app-saet-input
             testId="input-nie"
             [disabled]="1 == 1"
-            [inputArgs]="{text: studentInfo?.nie}" />
+            [value]="studentInfo?.nie ?? ''"
+            [inputArgs]="{text: studentInfo?.nie}"
+          />
         </app-tab-item>
       </div>
       <div class="mt-2">
@@ -57,6 +63,7 @@
           <app-saet-input
             testId="input-nui"
             [disabled]="1 == 1"
+            [value]="studentInfo?.nui ?? ''"
             [inputArgs]="{text: studentInfo?.nui}" />
         </app-tab-item>
       </div>
@@ -66,7 +73,8 @@
           <app-saet-input
             testId="input-nombrecompleto"
             [disabled]="1 == 1"
-            [inputArgs]="{text: studentInfo?.nombreCompleto}" />
+            [value]="studentInfo?.nombreCompleto ?? ''"
+            [inputArgs]="{text: studentInfo?.nombreCompleto}"           />
         </app-tab-item>
       </div>
 
@@ -75,6 +83,7 @@
           <app-saet-input
             testId="input-centroeducativo"
             [disabled]="1 == 1"
+            [value]="centroEducativo ?? ''"
             [inputArgs]="{text: centroEducativo}" />
         </app-tab-item>
       </div>

@@ -150,19 +150,19 @@ ngOnInit() {
 
   const menuMap = new Map();
   this.opcion_menu=this.cookieService.get('opcionMenuPrincipal');
-  console.log("La opcion del menu es: "+this.opcion_menu);
+
     this.menuService.getAllMenusUsuarios(this.opcion_menu)
       .then(response => {
         this.lista_menus_opciones_menu = response;
         ////////console.log(this.lista_menus_opciones_menu);
-  
+
         // Filtrar duplicados en función de id_menu y id_opcion_menu
         const filteredMenus = this.lista_menus_opciones_menu.filter((value, index, self) => {
           const id_menu = value.id_menu.id_menu;
           const id_opcion_menu = value.id_opcion_menu.id_opcion_menu;
           return self.findIndex(v => v.id_menu.id_menu === id_menu && v.id_opcion_menu.id_opcion_menu === id_opcion_menu) === index;
         });
-  
+
         filteredMenus.forEach(m => {
           const menuLabel = m.id_menu.nombre_menu;
           const menuIcon = m.id_menu.icono;
@@ -171,13 +171,13 @@ ngOnInit() {
             icon: '' + menuIcon,
             items: []
           };
-  
+
           const menuItemChild: MenuItem = {
             label: '' + m.id_opcion_menu.nombre_opcion,
             icon: '' + m.id_opcion_menu.icono,
             routerLink: '' + m.id_opcion_menu.router_link
           };
-  
+
           // Verifica si el menú principal ya está en el mapa
           if (menuMap.has(menuLabel)) {
             // Si ya existe, agrega el menuItemChild al submenú existente
@@ -189,7 +189,7 @@ ngOnInit() {
             menuMap.set(menuLabel, menuItem);
           }
         });
-  
+
         menuMap.forEach(menu => {
           this.gfgv2.push(menu);
         });
@@ -200,8 +200,8 @@ ngOnInit() {
         // Manejar errores si es necesario
       });
 
-  
-  
+
+
 }
 
 cerrarSesion() {

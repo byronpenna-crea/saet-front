@@ -6,6 +6,7 @@ import {IOptionType} from "../../component/saet-question/saet-question.component
 import {QuestionType} from "../../shared/component.config";
 import {IMessageComponent, MessageType, UserMessage} from "../../interfaces/message-component.interface";
 import {userMessageInit} from "../../shared/messages.model";
+import {KeyValue} from "../../component/saet-input/saet-input.component";
 
 
 interface IinformationTab {
@@ -15,6 +16,7 @@ interface IinformationTab {
   isActive: boolean
 }
 interface iQuestion {
+  id_pregunta: number,
   tipoPregunta: string,
   pregunta: string,
   opcion: { id_option: number, opcion: string }[]
@@ -70,14 +72,22 @@ export class EstudianteCaracterizacionIniciarComponent implements IMessageCompon
     private catalogoServiceCOR: CatalogoServiceCor,
     private route: ActivatedRoute
   ){
+    const storedValues = localStorage.getItem('values');
+    console.log('stored values ', storedValues);
+    if (storedValues) {
+      this.values = JSON.parse(storedValues);
+    }
+
     this.route.paramMap.subscribe(params => {
       const nie = params.get('nie');
       if (nie) {
         this.nie = nie;
       }
     });
-    catalogoServiceCOR.getQuestions().then((result) => {
+    catalogoServiceCOR.getCORQuestions().then((result) => {
+      console.log('cuestionarios -----', result);
       this.corSurveys.push(...result.cuestionarios);
+
     });
     catalogoServiceCOR.getStudentInfo(this.nie).then((result) => {
       this.studentInfo = result.estudiante;
@@ -146,8 +156,13 @@ export class EstudianteCaracterizacionIniciarComponent implements IMessageCompon
   getName(name:string): string {
     return this.convertString(name)
   }
+  values: { [key: string]: string } = {};
+  onchange(keyValue:KeyValue) {
+    this.values[keyValue.key] = keyValue.value;
+    localStorage.setItem('values', JSON.stringify(this.values));
+    console.log('values ', this.values);
+  }
   getOptions(options: { id_option: number, opcion: string }[]): IOptionType[] {
-    console.log('get opcion', options);
     return options.map( (option) => ({key: option.id_option ? option.id_option.toString(): "", value: option.opcion}) as IOptionType );
   }
 

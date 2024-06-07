@@ -6,6 +6,7 @@ import {ButtonStyle, SaetButtonArgs} from "../../component/saet-button/saet-butt
 import {DOCUMENT} from "@angular/common";
 import {CatalogoServiceCor} from "../../../../../services/catalogo/catalogo.service.cor";
 import {ActivatedRoute, Router} from "@angular/router";
+import {KeyValue} from "../../component/saet-input/saet-input.component";
 
 @Component({
   selector: 'app-estudiante-informe-trimestral',
@@ -33,8 +34,8 @@ export class EstudianteInformeTrimestralComponent extends BaseComponent implemen
     super(document, catalogoServiceCOR, route, router);
   }
 
-  onInputChange(value: string) {
-    this.inputNIE = value;
+  onInputChange(keyValue: KeyValue) {
+    this.inputNIE = keyValue.value;
   }
 
   cleanInput() {

@@ -21,8 +21,6 @@ export class SaetGlobalHeaderComponent {
     ];
   }
   isSelected(name: string): boolean {
-    console.log('passed name', name);
-    console.log('selected tab ',this.selectedTab );
     return this.selectedTab === name;
   }
 

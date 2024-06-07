@@ -67,7 +67,7 @@ export class EstudianteDatosGeneralesComponent extends BaseComponent{
           ...trustedAdultInfo.values
         ]
       }
-
+      console.log("trusted adult info ",trustedAdultInfo);
       this.cdr.markForCheck();
     }).catch((e) => {
       console.log('Error loading student info in derived component:', e);

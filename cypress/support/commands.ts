@@ -35,6 +35,20 @@
 //     }
 //   }
 // }
+const COMMAND_DELAY = 500;
+
+for (const command of ['visit', 'click', 'trigger', 'type', 'clear', 'reload']) {
+  Cypress.Commands.overwrite(command, (originalFn, ...args) => {
+    const origVal = originalFn(...args);
+
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(origVal);
+      }, COMMAND_DELAY);
+    });
+  });
+}
+
 Cypress.Commands.add('login', (username: string, password: string) => {
   cy.visit('http://192.168.1.12/#/login', { timeout: 100000 });
   cy.contains('body', 'Iniciar sesión', { timeout: 100000 }).should('be.visible');

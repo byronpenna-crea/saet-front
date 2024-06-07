@@ -1,6 +1,6 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {QuestionType} from "../../shared/component.config";
-import {SaetInputArgs} from "../saet-input/saet-input.component";
+import {KeyValue, SaetInputArgs} from "../saet-input/saet-input.component";
 import {Router} from "@angular/router";
 
 export interface IOptionType {
@@ -17,14 +17,21 @@ export class SaetQuestionComponent {
   @Input() type:QuestionType = QuestionType.ABIERTA;
   @Input() options:IOptionType[] = [];
   @Input() name:string="";
-
+  @Input() testId:string="";
+  @Output() onChange = new EventEmitter<KeyValue>();
+  @Input() value: string = "";
   constructor(private router: Router) {
-    console.log('options ', this.options);
+
+  }
+  onInputChange(event: KeyValue) {
+    console.log('event in question  -------------', event);
+
+    this.onChange.emit(event);
   }
   QuestionType = QuestionType;
   abiertaComponentArgs:SaetInputArgs = {
     icon: undefined,
-    text: "",
+    text: this.value,
   }
 
 }

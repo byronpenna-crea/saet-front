@@ -58,7 +58,8 @@ export class BaseComponent {
         studentResponse.centroEducativo.telefonoOrientador[0]
       ]
     };
-    const trustedAdultInfo:informationTabBody = {
+    const trustedAdultInfo:informationTabBody =
+      studentResponse.responsables !== undefined && studentResponse.responsables.nombre !== undefined && studentResponse.responsables.nombre !== "" ? {
       values: [
         studentResponse.responsables.nombre,
         studentResponse.responsables.dui,
@@ -66,7 +67,16 @@ export class BaseComponent {
         studentResponse.responsables.direccion,
         studentResponse.responsables.telefono,
       ]
-    };
+    } : {
+        values: [
+          "No disponible",
+          "No disponible",
+          "No disponible",
+          "No disponible",
+          "No disponible",
+        ]
+      };
+
 
     return {
       generalInformation,

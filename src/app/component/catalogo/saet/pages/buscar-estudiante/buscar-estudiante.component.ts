@@ -11,6 +11,7 @@ import {IMessageComponent, MessageType, UserMessage} from "../../interfaces/mess
 import {userMessageInit} from "../../shared/messages.model";
 import {BaseComponent} from "../../BaseComponent";
 import {DOCUMENT} from "@angular/common";
+import {KeyValue} from "../../component/saet-input/saet-input.component";
 
 interface Estudiante {
   nie: string;
@@ -50,8 +51,8 @@ export class BuscarEstudianteComponent
   userMessage: UserMessage = userMessageInit;
   cnResult: number = 0;
   centroEducativo:string = "";
-  onInputChange(value: string) {
-    this.inputNIE = value;
+  onInputChange(keyValue: KeyValue ) {
+    this.inputNIE = keyValue.value;
   }
 
   constructor(
@@ -137,6 +138,7 @@ export class BuscarEstudianteComponent
     if (this.inputNIE) {
       try {
         const result = await this.catalogoServiceCOR.getStudentInfo(this.inputNIE);
+        console.log('result ', result);
         this.cnResult = 1;
         this.studentData = this.populateStudent(result);
         this.centroEducativo = result.centroEducativo.nombre;
@@ -149,11 +151,11 @@ export class BuscarEstudianteComponent
         /*this.showError = false;
         this.errorMessage = "";*/
         this.showTable = true;
-      } catch (error) {
-
+      } catch (error:any) {
+        console.log('error ', error);
         this.userMessage = {
           showMessage: true,
-          message: "Error al obtener la información del estudiante",
+          message: error,
           type: MessageType.DANGER
         }
 

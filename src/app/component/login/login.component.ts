@@ -46,11 +46,11 @@ export class LoginComponent implements OnInit {
 /*
 //Version 1
   validarUsuario(us: Usuarios_login) {
-   
-    
-      
+
+
+
     this.seguridadService.validarUsuario(us.usuario, us.contrasena).subscribe(resp => {
-    
+
       this.cookieService.set('token',resp);
 
     }
@@ -66,13 +66,16 @@ export class LoginComponent implements OnInit {
   */
 
   validarUsuario(us: Usuarios_login) {
+    console.log("validar usuario");
     this.seguridadService.validarUsuario(us.usuario, us.contrasena).subscribe(
       (resp) => {
+        console.log("respuesta es ",resp);
         // Autenticación exitosa
         this.cookieService.set('token', resp);
-        ////////////this.router.navigate(['/inicio']); // Redirigir a la página deseada después de la autenticación exitosa
+        this.router.navigate(['/inicio']); // Redirigir a la página deseada después de la autenticación exitosa
       },
       (error) => {
+        console.log("error ",error)
         // Error de autenticación
         if (error.status === 401) {
           // Credenciales incorrectas
@@ -98,7 +101,7 @@ export class LoginComponent implements OnInit {
       }
     );
   }
-  
+
 
 
 

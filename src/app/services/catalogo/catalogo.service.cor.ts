@@ -3,17 +3,18 @@ import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
 import {CookieService} from "ngx-cookie-service";
 import {Injectable} from "@angular/core";
-
+import {iSurvey, SurveyResponse} from "../../component/catalogo/saet/shared/survey";
+export interface StudentDetail {
+  nie: string;
+  nui: string;
+  nombreCompleto: string;
+  fechaNacimiento: string;
+  direccion: string;
+  telefono: string[];
+  correo: string;
+}
 export interface StudentInfoResponse {
-  estudiante: {
-    nie: string;
-    nui: string;
-    nombreCompleto: string;
-    fechaNacimiento: string;
-    direccion: string;
-    telefono: string[];
-    correo: string;
-  },
+  estudiante: StudentDetail,
   centroEducativo: {
     nombre: string;
     codigo: string;
@@ -23,6 +24,7 @@ export interface StudentInfoResponse {
     seccion:string;
     docenteOrientador:string;
     telefonoOrientador:string[];
+    correoOrientador: string;
   },
   responsables: {
     nombre: string;
@@ -80,7 +82,12 @@ export interface StudentInfoResponse {
 })
 export class CatalogoServiceCor {
   private API_SERVER_URL = `${environment.API_SERVER_URL}`;//v2
-  private API_SERVER_QUESTIONS = `${this.API_SERVER_URL}/caracterizacion/cor/preguntas`;
+  private API_SERVER_COR = `${this.API_SERVER_URL}/caracterizacion/cor/preguntas`;
+  private API_SERVER_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/pedagogia/preguntas`;
+  private API_SERVER_LENGUAJE_HABLA_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/lenguaje_habla/preguntas`;
+  private API_SERVER_PSICOLOGIA_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/psicologia/preguntas`;
+  private API_SERVER_PEDAGOGIA_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/lenguaje_habla/preguntas`;
+
   private API_SERVER_ESTUDIANTE = `${this.API_SERVER_URL}/tempEstudiantesSigesv2/buscarEstudiantePorNIE?nie=[NIE]`
   constructor(private httpClient: HttpClient, private router: Router, private cookieService: CookieService) {
 
@@ -89,31 +96,36 @@ export class CatalogoServiceCor {
 
   token: string | null = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIwNDIzMjYzOTUiLCJleHAiOjE3MTQ4NjA5NjgsInVzdV9jb2RpZ28iOiIwNDIzMjYzOTUifQ.3FaRNEQHzr5kwxYCjRA8iigf9ttoYN3UrpBdEBa7_GbpAQyroMWBxb2PWWYnKWowyeZq8AL3ViT4lmrQ-HWjQQ"; //this.cookieService.get('token');
   public getStudentInfo(NIE:string): Promise<StudentInfoResponse> {
-    return new Promise((resolve, reject) => {
-      fetch(this.API_SERVER_ESTUDIANTE.replace('[NIE]', NIE), {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${this.token}`,
-          'Content-Type': 'application/json'
-        }
-      }).then(response => {
-        console.log('response -------- ', response);
-        if (response.ok) {
-          resolve(response.json());
-        } else {
-          reject(new Error('No se pudo obtener los datos'));
-        }
-      }).catch(error => {
-        console.log('response -------- ', error);
-        reject(new Error('Hubo un error al obtener los datos: ' + error.message));
+    try{
+      return new Promise((resolve, reject) => {
+        fetch(this.API_SERVER_ESTUDIANTE.replace('[NIE]', NIE), {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${this.token}`,
+            'Content-Type': 'application/json'
+          }
+        }).then(response => {
+          if (response.ok) {
+            resolve(response.json());
+          } else {
+            throw new Error('No se pudo obtener los datos');
+          }
+        }).catch(error => {
+          reject(new Error(error.message));
+        })
       })
-    })
-  }
-  public getQuestions(): Promise<any> {
-    //const token: string | null = this.cookieService.get('token');
+    }catch (err: unknown) {
+      console.log("catch error");
+      if (err instanceof Error) {
+        throw new Error('error no controlado' + err.message);
+      }
+      throw new Error('error no controlado');
+    }
 
+  }
+  public getSurveyQuestions(url: string): Promise<SurveyResponse> {
     return new Promise((resolve, reject) => {
-      fetch(this.API_SERVER_QUESTIONS, {
+      fetch(url, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${this.token}`,
@@ -128,6 +140,19 @@ export class CatalogoServiceCor {
       }).catch(error => {
         reject(new Error('Hubo un error al obtener los datos: ' + error.message));
       })
-    })
+    });
+  }
+
+  public getPsicologiaQuestions(): Promise<SurveyResponse> {
+    return this.getSurveyQuestions(this.API_SERVER_PSICOLOGIA_QUESTIONS);
+  }
+  public getLenguajeHablaQuestions(): Promise<SurveyResponse> {
+    return this.getSurveyQuestions(this.API_SERVER_LENGUAJE_HABLA_QUESTIONS);
+  }
+  public getCORQuestions(): Promise<SurveyResponse> {
+    return this.getSurveyQuestions(this.API_SERVER_COR);
+  }
+  public getQuestions(): Promise<SurveyResponse> {
+    return this.getSurveyQuestions(this.API_SERVER_QUESTIONS);
   }
 }

@@ -1,8 +1,9 @@
-import {Component} from "@angular/core";
+import {Component, Inject} from "@angular/core";
 import {SeguridadService} from "../../../services/seguridad.service";
 import {CookieService} from "ngx-cookie-service";
 import {CatalogoServiceUsuarios} from "../../../services/catalogo/catalogo.service.usuarios";
-import {iStep, StepStatus} from "../../status-table/status-table.component";
+import {iStep, StepStatus} from "./component/status-table/status-table.component";
+import {DOCUMENT} from "@angular/common";
 
 @Component({
   selector: 'saet',
@@ -13,9 +14,9 @@ export class SaetComponent {
   constructor(private menuService: SeguridadService,
               private cookieService: CookieService,
               private catalogoServiceUsuarios: CatalogoServiceUsuarios,
+              @Inject(DOCUMENT) private document: Document,
               //,public themeService: ThemeService
   ) {
-    console.log("constructor")
   }
   stepData: iStep[] = [
     { name: "COR especialista en psicologia", status: StepStatus.VALIDATED },
@@ -24,6 +25,5 @@ export class SaetComponent {
     { name: "Coordinador(a) del COR", status: StepStatus.VALIDATED }
   ]
   ngOnInit() {
-    console.log("ini");
   }
 }

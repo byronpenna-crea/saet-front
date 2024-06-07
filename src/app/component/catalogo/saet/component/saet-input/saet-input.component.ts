@@ -10,17 +10,20 @@ export interface SaetInputArgs {
   iconDirection?:IconDirection;
   icon?: IconComponent
 }
-
+export interface KeyValue {
+  key: string;
+  value: string;
+}
 @Component({
   selector: 'app-saet-input',
   templateUrl: './saet-input.component.html',
   styleUrls: ['./saet-input.component.css']
 })
 export class SaetInputComponent implements OnChanges{
-  @Output() inputChange = new EventEmitter<string>();
+  @Output() inputChange = new EventEmitter<KeyValue>();
   @Input() testId:string = "";
+  @Input() value:string = "";
   @Input() inputArgs: SaetInputArgs = {
-    text: "",
     iconDirection: IconDirection.RIGHT,
     icon: undefined
   }
@@ -29,7 +32,10 @@ export class SaetInputComponent implements OnChanges{
 
   onInputChange(event: Event) {
     const input = event.target as HTMLInputElement;
-    this.inputChange.emit(input.value);
+    this.inputChange.emit({
+      key: this.testId,
+      value: input.value
+    });
   }
   ngOnChanges(changes: SimpleChanges) {
     this.updateSpan();

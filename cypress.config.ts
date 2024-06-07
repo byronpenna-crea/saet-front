@@ -2,6 +2,7 @@ import { defineConfig } from "cypress";
 import * as fs from "fs";
 
 export default defineConfig({
+
   e2e: {
     chromeWebSecurity: false,
     baseUrl: 'http://192.168.1.12',

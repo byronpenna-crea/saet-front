@@ -9,21 +9,6 @@
   [title]="userMessage.titleMessage"
 />
 <div class="form-container">
-  <div class="margin-top">
-    <app-tabs [label]="generalInformation.labels"
-              [legend]="generalInformation.legend"
-              [value]="generalInformation.values"
-              [isActive]="generalInformation.isActive"
-    ></app-tabs>
-  </div>
-  <div class="margin-top">
-    <app-tabs [label]="institutionalInfo.labels"
-              [legend]="institutionalInfo.legend"
-              [value]="institutionalInfo.values"
-              [isActive]="institutionalInfo.isActive"
-    ></app-tabs>
-  </div>
-
   <ng-container *ngFor="let corSurvey of corSurveys" >
     <div style="margin-top: 5%">
       <app-tabs
@@ -33,7 +18,11 @@
           <app-tab-item
             [label]="pregunta.pregunta"
           >
-            <app-saet-question [type]="getQuestionType(pregunta.tipoPregunta)"
+            <app-saet-question
+              (onChange)="onchange($event)"
+              [type]="getQuestionType(pregunta.tipoPregunta)"
+              [value]="values[pregunta.id_pregunta.toString()]"
+              [testId]="pregunta.id_pregunta.toString()"
                                [name]="getName(pregunta.pregunta)"
                                [options]="getOptions(pregunta.opcion)" />
           </app-tab-item>

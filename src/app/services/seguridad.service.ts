@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import {Observable, of} from 'rxjs';
 import { Personas } from '../models/personas';
 import { HttpHeaders } from '@angular/common/http';
 import { Usuarios } from '../models/usuarios';
@@ -53,13 +53,13 @@ export class SeguridadService {
 
 
   /*
-  
+
     public getAllUsuarios():Observable<any>{
        console.log("Estoy en seguridad servicio-02");
       return this.httpClient.get(this.API_SERVER)
-  
+
     }
-  
+
   */
 
 
@@ -238,13 +238,13 @@ const httpOptions = {
 
 
   /*
-  
+
   public getAllDepartamentos():Observable<any>{
-  
+
     return this.httpClient.get(this.API_SERVER_SUB_LISTA_DEPARTAMENTOS)
-  
+
   }
-  
+
   */
 
 
@@ -279,13 +279,13 @@ const httpOptions = {
 
   /*
   public getAllaMunicipiosPorDepartamento(idDepartamento:any):Observable<any>{
-  
+
     console.log("Esstoy dentro del metodo01: "+idDepartamento);
-  
+
      return this.httpClient.get(this.API_SERVER_LISTA_MUNICIPIOS_POR_DEPARTAMENTO+idDepartamento);
-  
+
        }
-  
+
   */
 
 
@@ -347,17 +347,17 @@ const httpOptions = {
 
   /*
        public savePersona(persona:Personas): Observable<any>{
-  
+
         const httpOptions = {
           headers: new HttpHeaders({
             'Content-Type':  'application/json'
-  
+
           })};
-  
+
         return this.httpClient.post(this.API_SERVER_REGISTRAR_PERSONA,persona, httpOptions);
-  
+
           }
-  
+
   */
 
   public savePersona(persona: Personas): Promise<any> {
@@ -393,13 +393,13 @@ const httpOptions = {
             this.datosLogin = { usuario, contrasena };
             return this.httpClient.post(this.API_SERVER_LOGIN, this.datosLogin, { observe: 'response' }).pipe(
               map((response: HttpResponse<any>) => {
-  
+
                 const token = response.body.token;
                 const nombre = response.body.nombre;
                 const dui = response.body.dui;
-  
-  
-  
+
+
+
                 if (token) {
                   //localStorage.setItem('token', token);
                   //console.log("Estoy dentro del if del token, el valor del usuario es: "+this.datosLogin.usuario)
@@ -410,23 +410,59 @@ const httpOptions = {
                   localStorage.setItem('usuario', this.datosLogin.usuario);
                   this.router.navigate(['/menu']);
                 }
-  
+
                 return token;
               })
             );
-  
-  
+
+
           }
-  
-  
+
+
   */
 
-  
-       
+
+
 
   //Para el sigest.
   validarUsuario(usu_codigo: string, usu_password: string): Observable<any> {
     this.datosLogin = { usu_codigo, usu_password };
+
+    const datosMockeados = {
+      body: {
+        token: 'token_simulado',
+        nombre: 'Nombre Simulado',
+        dui: '00000000-0',
+        id_persona: 12345,
+        primer_nombre: 'Primer',
+        primer_apellido: 'Apellido'
+      }
+    };
+
+    return of(datosMockeados).pipe(
+      map((response: any) => {
+        const token = response.body.token;
+        const nombre = response.body.nombre;
+        const dui = response.body.dui;
+        const id_persona = response.body.id_persona;
+        const primer_nombre = response.body.primer_nombre;
+        const primer_apellido = response.body.primer_apellido;
+
+
+        localStorage.setItem('nombre', nombre);
+        localStorage.setItem('dui', dui);
+        localStorage.setItem('id_persona', id_persona.toString());
+        localStorage.setItem('primer_nombre', primer_nombre);
+        localStorage.setItem('primer_apellido', primer_apellido);
+
+
+        localStorage.setItem('usuario', this.datosLogin.usu_codigo);
+
+        return token; // Devolver el token simulado
+      })
+    );
+
+
     return this.httpClient.post(this.API_SERVER_LOGIN, this.datosLogin, { observe: 'response' }).pipe(
       map((response: HttpResponse<any>) => {
 
@@ -438,7 +474,7 @@ const httpOptions = {
         const primer_apellido = response.body.primer_apellido;
 
 
-        if (token) {
+        //if (token) {
           //localStorage.setItem('token', token);
           //console.log("Estoy dentro del if del token, el valor del usuario es: "+this.datosLogin.usuario)
           localStorage.setItem('nombre', nombre);
@@ -451,7 +487,7 @@ const httpOptions = {
           //console.log("Estoy dentro del if del token, el valor del dui es: "+dui)
           localStorage.setItem('usuario', this.datosLogin.usuario);
           this.router.navigate(['/inicio']);
-        }
+        //}
 
         return token;
       })
@@ -459,14 +495,14 @@ const httpOptions = {
 
   }
 
-  
+
 
 
 
   opcionMenuPricipal(opcion_menu: string) {
     this.opcion_menu = opcion_menu;
-    
-    
+
+
   }
 
 
@@ -475,14 +511,14 @@ const httpOptions = {
   /*
   validarUsuario(usuario: string, contrasena: string): Observable<any> {
     this.datosLogin = { usuario, contrasena };
-  
+
     return this.httpClient.post(this.API_SERVER_LOGIN, this.datosLogin, { observe: 'response' }).pipe(
       map((response: HttpResponse<any>) => {
-  
+
         const jsonResponse = response.body;
         const token = jsonResponse.token;
         console.log("Estoy en validarUsuario 01: "+token);
-  
+
         if (token) {
           //localStorage.setItem('token', token);
           console.log("Estoy en validarUsuario 02: "+token);

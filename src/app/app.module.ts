@@ -78,6 +78,8 @@ import { EstudianteCuestionarioPedagogiaComponent } from './component/catalogo/s
 import { EstudianteCuestionarioLenguajeComponent } from './component/catalogo/saet/pages/estudiante-cuestionario-lenguaje/estudiante-cuestionario-lenguaje.component';
 import { EstudianteNoValidoComponent } from './component/catalogo/saet/pages/estudiante-no-valido/estudiante-no-valido.component';
 import { EstudiantePdfComponent } from './component/catalogo/saet/pages/estudiante-pdf/estudiante-pdf.component';
+import { EstudianteInformeTrimestralComponent } from './component/catalogo/saet/pages/estudiante-informe-trimestral/estudiante-informe-trimestral.component';
+import { SaetUnderlinedTitleComponent } from './component/catalogo/saet/component/saet-underlined-title/saet-underlined-title.component';
 
 
 @NgModule({
@@ -118,7 +120,9 @@ import { EstudiantePdfComponent } from './component/catalogo/saet/pages/estudian
     EstudianteCuestionarioPedagogiaComponent,
     EstudianteCuestionarioLenguajeComponent,
     EstudianteNoValidoComponent,
-    EstudiantePdfComponent
+    EstudiantePdfComponent,
+    EstudianteInformeTrimestralComponent,
+    SaetUnderlinedTitleComponent
 
   ],
   imports: [
