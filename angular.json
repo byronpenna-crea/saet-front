@@ -78,8 +78,8 @@
             }
           },
           "options": {
-            "host": "192.168.1.12",
-            "port": 443
+            "host": "saet.d1liyv9wjywq7.amplifyapp.com",
+            "port": 80
           },
           "defaultConfiguration": "development"
         },
