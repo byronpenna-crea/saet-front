@@ -20,8 +20,10 @@
           >
             <app-saet-question
               (onChange)="onchange($event)"
+              (checkboxChange)="onCheckboxChange($event)"
               [type]="getQuestionType(pregunta.tipoPregunta)"
               [value]="values[pregunta.id_pregunta.toString()]"
+              [idPregunta]="pregunta.id_pregunta"
               [testId]="pregunta.id_pregunta.toString()"
                                [name]="getName(pregunta.pregunta)"
                                [options]="getOptions(pregunta.opcion)" />

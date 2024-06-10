@@ -3,10 +3,6 @@ import {IMessageComponent, MessageType, UserMessage} from "../../interfaces/mess
 import {DOCUMENT} from "@angular/common";
 import {CatalogoServiceCor, StudentDetail} from "../../../../../services/catalogo/catalogo.service.cor";
 import {ActivatedRoute, Router} from "@angular/router";
-import {QuestionType} from "../../shared/component.config";
-import {IOptionType} from "../../component/saet-question/saet-question.component";
-import {iSurvey} from "../../shared/survey";
-import {BaseComponent} from "../../BaseComponent";
 import {QuestionsComponent} from "../../QuestionsComponent";
 
 @Component({

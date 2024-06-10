@@ -9,35 +9,44 @@
   MULTIPLE_CON_RESPUESTA
 </ng-container>
 <ng-container *ngIf="type === QuestionType.OPCION_UNICA_CON_RESPUESTA">
-  <app-saet-input [inputArgs]="abiertaComponentArgs" />
-  <div *ngFor="let option of options">
-    <label>
-      <input type="radio" [name]="name" [value]="option.key"> {{ option.value }}
-    </label>
-  </div>
+  <app-saet-input
+    (inputChange)="onInputChange($event)"
+    [value]="value"
+    [inputArgs]="abiertaComponentArgs" />
+  <app-saet-radio [name]="idPregunta.toString()"
+                  [selectedValue]="value"
+                  [options]="options"
+                  (radioChange)="onInputChange($event)"
+  />
 </ng-container>
 
 
 <ng-container *ngIf="type === QuestionType.OPCION_UNICA">
-  <div *ngFor="let option of options">
-    <label>
-      <input type="radio" [name]="name" [value]="option.key"> {{ option.value }}
-    </label>
-  </div>
+  <app-saet-radio [name]="idPregunta.toString()"
+                  [selectedValue]="value"
+                  [options]="options"
+                  (radioChange)="onInputChange($event)"
+  />
 </ng-container>
 <ng-container *ngIf="type === QuestionType.ABIERTA_CON_RESPUESTA">
-  <app-saet-input [inputArgs]="abiertaComponentArgs" />
-  <div *ngFor="let option of options">
-    <label>
-      <input type="radio" [name]="name" [value]="option.key"> {{ option.value }}
-    </label>
-  </div>
+  <app-saet-input
+    (inputChange)="onInputChange($event)"
+    [value]="value"
+    name
+    [inputArgs]="abiertaComponentArgs" />
+  <app-saet-radio [name]="idPregunta.toString()"
+                  [selectedValue]="value"
+                  [options]="options"
+                  (radioChange)="onInputChange($event)"
+  />
 </ng-container>
 <ng-container *ngIf="type === QuestionType.OPCION_MULTIPLE">
-  <div *ngFor="let option of options">
-    <label>
-      <input type="checkbox" [name]="name" [value]="option.key"> {{ option.value }}
-    </label>
-  </div>
+  <app-saet-checkbox
+    [name]="idPregunta.toString()"
+    [options]="options"
+    [selectedValues]="value ? value.split(','): []"
+    (checkboxChange)="onCheckBoxChange($event)"
+    [disabled]="false">
+  </app-saet-checkbox>
 </ng-container>
 

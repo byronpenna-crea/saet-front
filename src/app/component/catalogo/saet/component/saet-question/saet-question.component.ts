@@ -3,10 +3,6 @@ import {QuestionType} from "../../shared/component.config";
 import {KeyValue, SaetInputArgs} from "../saet-input/saet-input.component";
 import {Router} from "@angular/router";
 
-export interface IOptionType {
-  key: string;
-  value: string;
-}
 @Component({
   selector: 'app-saet-question',
   templateUrl: './saet-question.component.html',
@@ -15,17 +11,21 @@ export interface IOptionType {
 
 export class SaetQuestionComponent {
   @Input() type:QuestionType = QuestionType.ABIERTA;
-  @Input() options:IOptionType[] = [];
+  @Input() options:KeyValue[] = [];
   @Input() name:string="";
   @Input() testId:string="";
   @Output() onChange = new EventEmitter<KeyValue>();
+  @Output() checkboxChange = new EventEmitter<KeyValue[]>();
   @Input() value: string = "";
+  @Input() idPregunta: number = 0;
   constructor(private router: Router) {
-
+    console.log('id pregunta ', this.idPregunta);
+    console.log('value', this.value);
+  }
+  onCheckBoxChange(event: KeyValue[]){
+    this.checkboxChange.emit(event);
   }
   onInputChange(event: KeyValue) {
-    console.log('event in question  -------------', event);
-
     this.onChange.emit(event);
   }
   QuestionType = QuestionType;

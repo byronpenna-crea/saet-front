@@ -23,6 +23,7 @@ export class SaetInputComponent implements OnChanges{
   @Output() inputChange = new EventEmitter<KeyValue>();
   @Input() testId:string = "";
   @Input() value:string = "";
+  @Input() name:string = "";
   @Input() inputArgs: SaetInputArgs = {
     iconDirection: IconDirection.RIGHT,
     icon: undefined
@@ -33,7 +34,7 @@ export class SaetInputComponent implements OnChanges{
   onInputChange(event: Event) {
     const input = event.target as HTMLInputElement;
     this.inputChange.emit({
-      key: this.testId,
+      key: input.name,
       value: input.value
     });
   }

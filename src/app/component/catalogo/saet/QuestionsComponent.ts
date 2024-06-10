@@ -3,9 +3,9 @@ import {CatalogoServiceCor, StudentDetail} from "../../../services/catalogo/cata
 import {DOCUMENT} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
 import {BaseComponent} from "./BaseComponent";
-import {IOptionType} from "./component/saet-question/saet-question.component";
 import {QuestionType} from "./shared/component.config";
 import {iSurvey} from "./shared/survey";
+import {KeyValue} from "./component/saet-input/saet-input.component";
 
 @Injectable()
 export class QuestionsComponent extends BaseComponent {
@@ -43,8 +43,8 @@ export class QuestionsComponent extends BaseComponent {
   getName(name:string): string {
     return this.convertString(name)
   }
-  getOptions(options: { id_option: number, opcion: string }[]): IOptionType[] {
+  getOptions(options: { id_opcion: number, opcion: string }[]): KeyValue[] {
     console.log('get opcion', options);
-    return options.map( (option) => ({key: option.id_option ? option.id_option.toString(): "", value: option.opcion}) as IOptionType );
+    return options.map( (option) => ({key: option.id_opcion ? option.id_opcion.toString(): "", value: option.opcion}) as KeyValue );
   }
 }

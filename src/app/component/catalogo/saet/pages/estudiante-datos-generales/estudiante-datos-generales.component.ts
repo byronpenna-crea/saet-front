@@ -14,7 +14,7 @@ interface IinformationTab {
 interface iQuestion {
   tipoPregunta: string,
   pregunta: string,
-  opcion: { id_option: number, opcion: string }[]
+  opcion: { id_opcion: number, opcion: string }[]
 }
 interface iSurvey {
   titulo: string,

@@ -80,6 +80,9 @@ import { EstudianteNoValidoComponent } from './component/catalogo/saet/pages/est
 import { EstudiantePdfComponent } from './component/catalogo/saet/pages/estudiante-pdf/estudiante-pdf.component';
 import { EstudianteInformeTrimestralComponent } from './component/catalogo/saet/pages/estudiante-informe-trimestral/estudiante-informe-trimestral.component';
 import { SaetUnderlinedTitleComponent } from './component/catalogo/saet/component/saet-underlined-title/saet-underlined-title.component';
+import {CheckboxModule} from "primeng/checkbox";
+import { SaetRadioComponent } from './component/catalogo/saet/component/saet-radio/saet-radio.component';
+import { SaetCheckboxComponent } from './component/catalogo/saet/component/saet-checkbox/saet-checkbox.component';
 
 
 @NgModule({
@@ -122,7 +125,9 @@ import { SaetUnderlinedTitleComponent } from './component/catalogo/saet/componen
     EstudianteNoValidoComponent,
     EstudiantePdfComponent,
     EstudianteInformeTrimestralComponent,
-    SaetUnderlinedTitleComponent
+    SaetUnderlinedTitleComponent,
+    SaetRadioComponent,
+    SaetCheckboxComponent
 
   ],
   imports: [
@@ -163,7 +168,8 @@ import { SaetUnderlinedTitleComponent } from './component/catalogo/saet/componen
     ProgressSpinnerModule,
     ChartModule,
     FileUploadModule,
-    FieldsetModule
+    FieldsetModule,
+    CheckboxModule
   ],
   providers: [
     SeguridadService,

@@ -2,7 +2,7 @@ export interface iQuestion {
   id_pregunta: number,
   tipoPregunta: string,
   pregunta: string,
-  opcion: { id_option: number, opcion: string }[]
+  opcion: { id_opcion: number, opcion: string }[]
 }
 export interface iSurvey {
   titulo: string,

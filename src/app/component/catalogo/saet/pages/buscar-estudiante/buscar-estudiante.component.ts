@@ -141,6 +141,7 @@ export class BuscarEstudianteComponent
         console.log('result ', result);
         this.cnResult = 1;
         this.studentData = this.populateStudent(result);
+        this.studentInfo = result.estudiante;
         this.centroEducativo = result.centroEducativo.nombre;
         this.userMessage = {
           showMessage: false,

@@ -2,7 +2,6 @@ import {Component, Inject} from '@angular/core';
 import {DOCUMENT} from "@angular/common";
 import {CatalogoServiceCor, StudentDetail} from "../../../../../services/catalogo/catalogo.service.cor";
 import {ActivatedRoute} from "@angular/router";
-import {IOptionType} from "../../component/saet-question/saet-question.component";
 import {QuestionType} from "../../shared/component.config";
 import {IMessageComponent, MessageType, UserMessage} from "../../interfaces/message-component.interface";
 import {userMessageInit} from "../../shared/messages.model";
@@ -19,7 +18,7 @@ interface iQuestion {
   id_pregunta: number,
   tipoPregunta: string,
   pregunta: string,
-  opcion: { id_option: number, opcion: string }[]
+  opcion: { id_opcion: number, opcion: string }[]
 }
 interface iSurvey {
   titulo: string,
@@ -157,13 +156,19 @@ export class EstudianteCaracterizacionIniciarComponent implements IMessageCompon
     return this.convertString(name)
   }
   values: { [key: string]: string } = {};
+  onCheckboxChange(keyValues:KeyValue[]){
+    const selectedValues = keyValues.map(e => e.value);
+    this.values[keyValues[0].key] = selectedValues.toString();
+    localStorage.setItem('values', JSON.stringify(this.values));
+    console.log('values ', this.values);
+  }
   onchange(keyValue:KeyValue) {
     this.values[keyValue.key] = keyValue.value;
     localStorage.setItem('values', JSON.stringify(this.values));
     console.log('values ', this.values);
   }
-  getOptions(options: { id_option: number, opcion: string }[]): IOptionType[] {
-    return options.map( (option) => ({key: option.id_option ? option.id_option.toString(): "", value: option.opcion}) as IOptionType );
+  getOptions(options: { id_opcion: number, opcion: string }[]): KeyValue[] {
+    return options.map( (option) => ({key: option.id_opcion ? option.id_opcion.toString(): "", value: option.opcion}) as KeyValue );
   }
 
 }
