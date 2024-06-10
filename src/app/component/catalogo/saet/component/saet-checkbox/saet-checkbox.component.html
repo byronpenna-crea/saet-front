@@ -1,0 +1,7 @@
+<div *ngFor="let option of options">
+  <label>
+    <input type="checkbox" [name]="name" [value]="option.value"
+           [checked]="selectedValues.includes(option.value)"
+           (change)="onCheckboxChange($event)" [disabled]="disabled"> {{ option.value }}
+  </label>
+</div>

@@ -19,8 +19,6 @@ export class SaetQuestionComponent {
   @Input() value: string = "";
   @Input() idPregunta: number = 0;
   constructor(private router: Router) {
-    console.log('id pregunta ', this.idPregunta);
-    console.log('value', this.value);
   }
   onCheckBoxChange(event: KeyValue[]){
     this.checkboxChange.emit(event);
