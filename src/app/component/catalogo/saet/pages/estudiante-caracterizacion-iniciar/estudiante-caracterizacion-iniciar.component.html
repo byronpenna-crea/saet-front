@@ -2,6 +2,13 @@
   [nie]="nie"
   [nombreCompleto]="studentInfo?.nombreCompleto ?? ''"
   selectedTab="Caracterizacion"
+  [breadcrumb]="[
+    { href: '#/menu/saet-buscar', text: 'Buscar estudiante' },
+    { href: '#/menu/saet-buscar/'+nie, text: nie },
+    { href: '#/menu/saet-caracterizacion-estudiante/'+nie, text: 'Caracterización' },
+    { href: '', text: 'Edición' }
+  ]"
+
 />
 <app-saet-mensaje-usuario
   [show]="userMessage.showMessage"
@@ -32,9 +39,35 @@
       </app-tabs>
     </div>
   </ng-container>
-  <app-saet-button
-    (onClick)="save()"
-    [buttonArgs]="{text: 'Guardar',buttonStyle: 0 }" />
+  <div style="margin-top: 20px;">
+    <div
+      *ngIf="!editMode"
+      class="actionsButton"
+    >
+      <app-saet-button
+
+        [buttonArgs]="{text: 'Salir',buttonStyle: 1,buttonIcon: 6 }" />
+      <app-saet-button
+        (onClick)="save()"
+
+        [buttonArgs]="{text: 'Guardar',buttonStyle: 1 }" />
+    </div>
+    <div
+      *ngIf="editMode"
+    class="actionsButton"
+    >
+      <app-saet-button
+        (onClick)="retornarCaracterizacion()"
+
+        [buttonArgs]="{text: 'Regresar a la caracterización',buttonStyle: 1,buttonIcon: 7 }" />
+      <div class="right-buttons">
+        <app-saet-button
+          [buttonArgs]="{text: 'Editar',buttonStyle: 1 }" />
+        <app-saet-button
+          [buttonArgs]="{text: 'Generar PDF',buttonStyle: 1 }" />
+      </div>
+    </div>
+  </div>
 </div>
 
 

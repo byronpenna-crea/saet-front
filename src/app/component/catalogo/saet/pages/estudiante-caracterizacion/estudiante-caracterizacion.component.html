@@ -2,6 +2,11 @@
   [nie]="nie"
   [nombreCompleto]="studentInfo?.nombreCompleto ?? ''"
   selectedTab="Caracterizacion"
+  [breadcrumb]="[
+    { href: '#/menu/saet-buscar', text: 'Buscar estudiante' },
+    { href: '#/menu/saet-buscar/'+nie, text: nie },
+    { href: '', text: 'Caracterización' }
+  ]"
 />
 <app-saet-mensaje-usuario
   [show]="userMessage.showMessage"
@@ -19,7 +24,10 @@
         Especialista responsable de caracterización:
       </div>
       <div style="flex: 2; text-align: left;">
-        <app-saet-input />
+        <app-saet-input
+        [value]="nombreUsuario"
+        [disabled]="readonlyInput"
+        />
       </div>
     </div>
 
@@ -29,7 +37,7 @@
       <div style="flex: 1; text-align: left; padding-right: 10px;">
       </div>
       <div style="flex: 2; text-align: left;">
-        Especialista en psicología - COR
+        {{especialidad}}
       </div>
     </div>
 

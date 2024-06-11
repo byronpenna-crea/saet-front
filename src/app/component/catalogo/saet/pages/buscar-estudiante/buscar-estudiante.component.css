@@ -54,6 +54,6 @@ app-saet-button {
   min-width: 80px;
 }
 .clear-text {
-  cursor: pointer; /* Hace que el texto parezca clickable */
-  user-select: none; /* Evita que el texto pueda ser seleccionado */
+  cursor: pointer;
+  user-select: none;
 }

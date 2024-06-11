@@ -14,6 +14,9 @@ export class EstudianteCaracterizacionComponent implements IMessageComponent {
   userMessage: UserMessage = userMessageInit;
   nie:string = "";
   studentInfo?: StudentDetail;
+  nombreUsuario:string = "";
+  especialidad: string = "";
+  readonlyInput:boolean = true;
   async goTo(link:string){
     if(link !== '' && link !== '#'){
       await this.router.navigate([link,  this.nie ]);
@@ -31,6 +34,10 @@ export class EstudianteCaracterizacionComponent implements IMessageComponent {
         this.nie = nie;
       }
     });
+
+    this.nombreUsuario = localStorage.getItem('nombre') ?? "";
+    this.especialidad = localStorage.getItem('especialidad') ? `Especialista en ${localStorage.getItem('especialidad')} - COR` : "";
+
     catalogoServiceCOR.getStudentInfo(this.nie).then((result) => {
       this.studentInfo = result.estudiante;
     })

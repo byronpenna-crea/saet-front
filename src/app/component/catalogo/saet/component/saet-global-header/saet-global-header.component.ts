@@ -1,5 +1,9 @@
 import {Component, Input} from '@angular/core';
 
+interface BreadcrumbItem {
+  href: string;
+  text: string;
+}
 @Component({
   selector: 'app-saet-global-header',
   templateUrl: './saet-global-header.component.html',
@@ -10,6 +14,7 @@ export class SaetGlobalHeaderComponent {
   @Input() nombreCompleto: string = "";
   @Input() selectedTab: string = '';
   tabMenu: { url: string, text: string, name:string }[] = [];
+  @Input() breadcrumb: BreadcrumbItem[] = [];
 
 
   ngOnInit() {

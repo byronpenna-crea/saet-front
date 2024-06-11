@@ -1,6 +1,13 @@
 <div class="titlePage">
   <h2>Buscar estudiante</h2>
   <div>
+    <ng-container *ngFor="let item of breadcrumb; let isLast = last">
+      <a *ngIf="item.href !== ''" [href]="item.href">{{ item.text }}</a>
+      <span style="color: #00498D" *ngIf="item.href === ''" >{{ item.text }}</span>
+      <span *ngIf="!isLast"> / </span>
+    </ng-container>
+    <!--
+
     <a href="#/menu/saet-buscar">Buscar estudiante</a>
     <span *ngIf="nie !== ''">
       /
@@ -8,6 +15,8 @@
       /
       <a href="#/menu/saet-datos-estudiante/{{nie}}}">Datos generales</a>
     </span>
+
+    -->
   </div>
 </div>
 <div class="form-container">

@@ -1,7 +1,7 @@
 import {Component, Inject} from '@angular/core';
 import {DOCUMENT} from "@angular/common";
 import {CatalogoServiceCor, StudentDetail} from "../../../../../services/catalogo/catalogo.service.cor";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {QuestionType} from "../../shared/component.config";
 import {IMessageComponent, MessageType, UserMessage} from "../../interfaces/message-component.interface";
 import {userMessageInit} from "../../shared/messages.model";
@@ -35,7 +35,7 @@ export class EstudianteCaracterizacionIniciarComponent implements IMessageCompon
   nie:string = "";
   studentInfo?: StudentDetail;
   corSurveys:iSurvey[] = [];
-
+  editMode:boolean = false;
   generalInformation:IinformationTab = {
     isActive: false,
     legend: 'Datos personales del estudiante',
@@ -69,7 +69,8 @@ export class EstudianteCaracterizacionIniciarComponent implements IMessageCompon
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private catalogoServiceCOR: CatalogoServiceCor,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ){
     const storedValues = localStorage.getItem('values');
     console.log('stored values ', storedValues);
@@ -84,7 +85,6 @@ export class EstudianteCaracterizacionIniciarComponent implements IMessageCompon
       }
     });
     catalogoServiceCOR.getCORQuestions().then((result) => {
-      console.log('cuestionarios -----', result);
       this.corSurveys.push(...result.cuestionarios);
 
     });
@@ -142,7 +142,9 @@ export class EstudianteCaracterizacionIniciarComponent implements IMessageCompon
 
     return result;
   }
-
+  async retornarCaracterizacion() {
+    await this.router.navigate(["menu/saet-caracterizacion-estudiante",this.nie]);
+  }
   save() {
     this.userMessage = {
       showMessage: true,
@@ -153,19 +155,17 @@ export class EstudianteCaracterizacionIniciarComponent implements IMessageCompon
   }
 
   getName(name:string): string {
-    return this.convertString(name)
+    return this.convertString(name);
   }
   values: { [key: string]: string } = {};
   onCheckboxChange(keyValues:KeyValue[]){
     const selectedValues = keyValues.map(e => e.value);
     this.values[keyValues[0].key] = selectedValues.toString();
     localStorage.setItem('values', JSON.stringify(this.values));
-    console.log('values ', this.values);
   }
   onchange(keyValue:KeyValue) {
     this.values[keyValue.key] = keyValue.value;
     localStorage.setItem('values', JSON.stringify(this.values));
-    console.log('values ', this.values);
   }
   getOptions(options: { id_opcion: number, opcion: string }[]): KeyValue[] {
     return options.map( (option) => ({key: option.id_opcion ? option.id_opcion.toString(): "", value: option.opcion}) as KeyValue );

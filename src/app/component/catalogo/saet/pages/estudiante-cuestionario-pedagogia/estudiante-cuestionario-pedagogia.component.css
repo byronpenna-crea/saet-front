@@ -1,0 +1,20 @@
+.margin-top{
+  margin-top: 2%;
+}
+.form-container {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  width: 90%;
+  margin: 3% auto 0;
+  margin-top: 1%;
+}
+.titlePage{
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  width: 90%;
+  margin: 3% auto 0;
+  margin-bottom: 1%;
+  font-weight: bold;
+}

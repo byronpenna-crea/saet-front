@@ -428,16 +428,43 @@ const httpOptions = {
   validarUsuario(usu_codigo: string, usu_password: string): Observable<any> {
     this.datosLogin = { usu_codigo, usu_password };
 
-    const datosMockeados = {
+    const datosMockeados =
+      usu_codigo === "usuario_psicologia" && usu_password === "pass_psicologia" ?
+      {
       body: {
         token: 'token_simulado',
-        nombre: 'Nombre Simulado',
-        dui: '00000000-0',
+        nombre: 'Francisca Eunice Lopez Orellana',
+        dui: '05012569-0',
         id_persona: 12345,
-        primer_nombre: 'Primer',
-        primer_apellido: 'Apellido'
+        primer_nombre: 'Francisca',
+        primer_apellido: 'Lopez',
+        especialidad: 'psicologia'
       }
-    };
+      } : usu_codigo === "usuario_pedagogia" && usu_password === "pass_pedagogia" ?
+          {
+            body: {
+              token: 'token_simulado',
+              nombre: 'Pedagogo',
+              dui: '00000000-0',
+              id_persona: 12345,
+              primer_nombre: 'Primer',
+              primer_apellido: 'Apellido',
+              especialidad: 'pedagogia'
+            }
+          }
+          : usu_codigo === "usuario_lenguaje" && usu_password === "pass_lenguaje" ?
+            {
+              body: {
+                token: 'token_simulado',
+                nombre: 'Lenguaje y habla',
+                dui: '00000000-0',
+                id_persona: 12345,
+                primer_nombre: 'Primer',
+                primer_apellido: 'Apellido',
+                especialidad: 'lenguaje y habla'
+              }
+            } :
+            {};
 
     return of(datosMockeados).pipe(
       map((response: any) => {
@@ -447,17 +474,15 @@ const httpOptions = {
         const id_persona = response.body.id_persona;
         const primer_nombre = response.body.primer_nombre;
         const primer_apellido = response.body.primer_apellido;
-
+        const especialidad = response.body.especialidad;
 
         localStorage.setItem('nombre', nombre);
         localStorage.setItem('dui', dui);
         localStorage.setItem('id_persona', id_persona.toString());
         localStorage.setItem('primer_nombre', primer_nombre);
         localStorage.setItem('primer_apellido', primer_apellido);
-
-
         localStorage.setItem('usuario', this.datosLogin.usu_codigo);
-
+        localStorage.setItem('especialidad', especialidad);
         return token; // Devolver el token simulado
       })
     );
@@ -472,7 +497,7 @@ const httpOptions = {
         const id_persona = response.body.id_persona;
         const primer_nombre = response.body.primer_nombre;
         const primer_apellido = response.body.primer_apellido;
-
+        const especialidad = response.body.especialidad;
 
         //if (token) {
           //localStorage.setItem('token', token);
@@ -482,6 +507,7 @@ const httpOptions = {
           localStorage.setItem('id_persona', id_persona);
           localStorage.setItem('primer_nombre', primer_nombre);
           localStorage.setItem('primer_apellido', primer_apellido);
+          localStorage.setItem('especialidad', especialidad);
 
           //console.log("Estoy dentro del if del token, el valor del nombre es: "+nombre)
           //console.log("Estoy dentro del if del token, el valor del dui es: "+dui)

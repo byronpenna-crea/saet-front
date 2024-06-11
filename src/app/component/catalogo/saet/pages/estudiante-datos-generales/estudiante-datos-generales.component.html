@@ -2,6 +2,11 @@
   [nie]="nie"
   [nombreCompleto]="studentInfo?.nombreCompleto ?? ''"
   selectedTab="datosGenerales"
+  [breadcrumb]="[
+    { href: '#/menu/saet-buscar', text: 'Buscar estudiante' },
+    { href: '#/menu/saet-buscar/'+nie, text: nie },
+    { href: '#/menu/saet-datos-estudiante/'+nie, text: 'Evaluaciones' }
+  ]"
 />
 <app-saet-mensaje-usuario />
 <div class="form-container">
