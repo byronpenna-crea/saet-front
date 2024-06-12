@@ -17,262 +17,29 @@
 
 <div class="form-container">
   <div class="margin-top " style="width: 100%">
-    <app-saet-tab leyend="Evaluación Psicólogica">
-      <div style="padding-left: 20px; padding-right: 20px; display: flex; flex-direction: column;">
-        <div>
-          <app-saet-tab-buttons>
-            <a
-              type="button"
-              class="p-button p-component tabButton tabSeletectedButton"
-
-              href="#"
-            >
-              Perfil
-            </a>
-            <a
-              type="button"
-              class="p-button p-component tabButton"
-
-              href="#"
-            >
-              Agendar evaluación
-            </a>
-          </app-saet-tab-buttons>
-          <app-saet-mensaje-usuario
-
-            [show]="psicologyMessage.show"
-            [title]="psicologyMessage.title"
-            [message]="psicologyMessage.message"
-
-          />
-        </div>
-
-        <div *ngIf="!psicologiaAgendada">
-          <div class="flex wrap margin-top">
-            <div class="first-column">
-              <label class="first-item">Fecha de evaluación:</label>
-              <div class="second-item">
-                <app-saet-input />
-              </div>
-
-            </div>
-            <div class="second-column">
-
-              <label class="first-item">Hora de evaluación:</label>
-              <div class="second-item">
-                <p-dropdown [options]="[]"  placeholder="Seleccione una" style="flex: 1 1 70%;"></p-dropdown>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div *ngIf="psicologiaAgendada">
-          Especialista responsable de agendar
-        </div>
-
-        <div *ngIf="!psicologiaAgendada">
-          <div class="actionsButton">
-            <div></div>
-            <div class="right-buttons">
-              <app-saet-button
-                (onClick)="agendarPsicologia()"
-                [buttonArgs]="{buttonIcon: 1,buttonStyle: 0, text: 'Agendar perfil'}"
-              />
-            </div>
-          </div>
-        </div>
-        <div *ngIf="psicologiaAgendada">
-          <div class="actionsButton">
-            <div></div>
-            <div class="right-buttons">
-              <span
-                data-testId="btn-clean"
-                class="link-text"
-                (click)="cancelarPsicologia()"
-              >Cancelar agenda</span>
-
-              <app-saet-button
-                (onClick)="iniciarPsicologia()"
-                [buttonArgs]="{buttonIcon: 1,buttonStyle: 0, text: 'Iniciar evaluación'}"
-              />
-
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-
-
-    </app-saet-tab>
+    <app-saet-tab-agenda (onAgendar)="agendarPsicologia()"
+                         (onCancelar)="cancelarPsicologia()"
+                         [agendado]="psicologiaAgendada"
+                         (onIniciar)="iniciarPsicologia()"
+                         leyend="Evaluación psicologica"
+    />
     <div class="margin-top">
-      <app-saet-tab leyend="Evaluación pedagogica">
-        <div style="padding-left: 20px; padding-right: 20px">
-          <app-saet-tab-buttons>
-            <a
-              type="button"
-              class="p-button p-component tabButton tabSeletectedButton"
-
-              href="#"
-            >
-              Perfil
-            </a>
-            <a
-              type="button"
-              class="p-button p-component tabButton"
-
-              href="#"
-            >
-              Agendar
-            </a>
-          </app-saet-tab-buttons>
-          <app-saet-mensaje-usuario
-            [show]="pedagogiaMessage.show"
-            [title]="pedagogiaMessage.title"
-            [message]="pedagogiaMessage.message"
-          />
-
-          <div *ngIf="!pedagogiaAgendada">
-            <div
-              class="margin-top flex wrap"
-              >
-              <div class="first-column">
-                <label class="first-item">Fecha de evaluación:</label>
-                <div >
-                  <app-saet-input />
-                </div>
-              </div>
-              <div class="second-column">
-                <label class="first-item">Hora de evaluación:</label>
-                <div class="second-item">
-                  <p-dropdown [options]="[]"  placeholder="Seleccione una" style="flex: 1 1 70%;"></p-dropdown>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div *ngIf="pedagogiaAgendada">
-            Especialista responsable de agendar
-          </div>
-
-          <div *ngIf="!pedagogiaAgendada">
-            <div class="actionsButton">
-              <div></div>
-              <div class="right-buttons">
-                <app-saet-button
-                  (onClick)="agendarPedagogia()"
-                  [buttonArgs]="{buttonIcon: 1,buttonStyle: 0, text: 'Agendar perfil'}"
-                />
-              </div>
-            </div>
-          </div>
-          <div *ngIf="pedagogiaAgendada">
-            <div class="actionsButton">
-              <div></div>
-              <div class="right-buttons">
-                  <span
-                    data-testId="btn-clean"
-                    class="link-text"
-                    (click)="cancelarPedagogia()"
-                  >Cancelar agenda</span>
-
-                <app-saet-button
-                  (onClick)="iniciarPedagogia()"
-                  [buttonArgs]="{buttonIcon: 1,buttonStyle: 0, text: 'Iniciar evaluación'}"
-                />
-
-              </div>
-            </div>
-          </div>
-        </div>
-      </app-saet-tab>
+      <app-saet-tab-agenda (onAgendar)="agendarPedagogia()"
+                           (onCancelar)="cancelarPedagogia()"
+                           [agendado]="pedagogiaAgendada"
+                           (onIniciar)="iniciarPedagogia()"
+                           [readOnly]="readOnlyTab"
+                           leyend="Evaluación pedagogica"
+      />
     </div>
-
     <div class="margin-top">
-      <app-saet-tab leyend="Evaluación Habla y lenguaje">
-        <div style="padding-left: 20px; padding-right: 20px">
-          <app-saet-tab-buttons>
-            <a
-              type="button"
-              class="p-button p-component tabButton tabSeletectedButton"
-
-              href="#"
-            >
-              Perfil
-            </a>
-            <a
-              type="button"
-              class="p-button p-component tabButton"
-
-              href="#"
-            >
-              Agendar
-            </a>
-          </app-saet-tab-buttons>
-          <app-saet-mensaje-usuario
-
-            [show]="lenguajeHablaMessage.show"
-            [title]="lenguajeHablaMessage.title"
-            [message]="lenguajeHablaMessage.message"
-
-          />
-
-          <div *ngIf="!lenguajeHablaAgendada">
-            <div class="flex wrap margin-top">
-              <div class="first-column">
-                <label class="first-item">Fecha de evaluación:</label>
-                <!-- <input style="flex: 2;" /> -->
-                <div class="second-item">
-                  <app-saet-input
-
-                  />
-                </div>
-
-              </div>
-              <div class="second-column">
-                <label class="first-item">Hora de evaluación:</label>
-                <div class="second-item">
-                  <p-dropdown [options]="[]"  placeholder="Seleccione una" style="flex: 1 1 70%;"></p-dropdown>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div *ngIf="lenguajeHablaAgendada">
-            Especialista responsable de agendar
-          </div>
-
-          <div *ngIf="!lenguajeHablaAgendada">
-            <div class="actionsButton">
-              <div></div>
-              <div class="right-buttons">
-                <app-saet-button
-                  (onClick)="agendarLenguaje()"
-                  [buttonArgs]="{buttonIcon: 1,buttonStyle: 0, text: 'Agendar perfil'}"
-                />
-              </div>
-            </div>
-          </div>
-          <div *ngIf="lenguajeHablaAgendada">
-            <div class="actionsButton">
-              <div></div>
-              <div class="right-buttons">
-                  <span
-                    data-testId="btn-clean"
-                    class="link-text"
-                    (click)="cancelarLenguaje()"
-                  >Cancelar agenda</span>
-
-                <app-saet-button
-                  (onClick)="iniciarLenguajeHabla()"
-                  [buttonArgs]="{buttonIcon: 1,buttonStyle: 0, text: 'Iniciar evaluación'}"
-                />
-
-              </div>
-            </div>
-          </div>
-        </div>
-      </app-saet-tab>
+      <app-saet-tab-agenda (onAgendar)="agendarLenguaje()"
+                           (onCancelar)="cancelarLenguaje()"
+                           [agendado]="lenguajeHablaAgendada"
+                           (onIniciar)="iniciarLenguajeHabla()"
+                           [readOnly]="readOnlyTab"
+                           leyend="Evaluación Habla y lenguaje"
+                           />
     </div>
 
   </div>

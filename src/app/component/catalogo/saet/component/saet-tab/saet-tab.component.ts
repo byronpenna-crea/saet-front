@@ -7,4 +7,5 @@ import {Component, Input} from '@angular/core';
 })
 export class SaetTabComponent {
   @Input() leyend:string = "";
+  @Input() readOnly: boolean = false;
 }

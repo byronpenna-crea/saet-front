@@ -83,6 +83,7 @@ import { SaetUnderlinedTitleComponent } from './component/catalogo/saet/componen
 import {CheckboxModule} from "primeng/checkbox";
 import { SaetRadioComponent } from './component/catalogo/saet/component/saet-radio/saet-radio.component';
 import { SaetCheckboxComponent } from './component/catalogo/saet/component/saet-checkbox/saet-checkbox.component';
+import { SaetTabAgendaComponent } from './component/catalogo/saet/component/saet-tab-agenda/saet-tab-agenda.component';
 
 
 @NgModule({
@@ -127,7 +128,8 @@ import { SaetCheckboxComponent } from './component/catalogo/saet/component/saet-
     EstudianteInformeTrimestralComponent,
     SaetUnderlinedTitleComponent,
     SaetRadioComponent,
-    SaetCheckboxComponent
+    SaetCheckboxComponent,
+    SaetTabAgendaComponent
 
   ],
   imports: [

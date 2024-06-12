@@ -9,3 +9,6 @@
   border-radius: 3px;
 }
 
+.read-only .legend {
+  font-weight: normal !important;
+}

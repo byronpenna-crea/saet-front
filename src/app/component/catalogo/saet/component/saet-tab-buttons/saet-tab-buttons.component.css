@@ -5,6 +5,7 @@
   width: 100%;
   margin-top: 1%;
 }
+
 ::ng-deep .button-container-group {
   display: flex;
   gap: 10px;
@@ -12,16 +13,36 @@
   border-bottom: solid 1px #00498D;
   padding-left: 20px;
 }
-::ng-deep .tabButton,.tabSeletectedButton{
+
+::ng-deep .tabButton, .tabSeletectedButton {
   border-radius: 0px;
   background: white;
   border: solid 1px #00498D;
   color: #00498D;
 }
-::ng-deep .tabSeletectedButton{
+
+::ng-deep .tabSeletectedButton {
   background: #00498D;
   color: white;
 }
-::ng-deep .form-container .button-container a{
+
+::ng-deep .form-container .button-container a {
   text-decoration: none;
+}
+
+::ng-deep .read-only .button-container-group,
+::ng-deep .read-only .tabButton,
+::ng-deep .read-only .tabSeletectedButton {
+  border-color: gray;
+  color: gray;
+}
+
+::ng-deep .read-only .tabButton,
+::ng-deep .read-only .tabSeletectedButton {
+  background: lightgray;
+}
+
+::ng-deep .read-only .tabSeletectedButton {
+  background: gray;
+  color: lightgray;
 }

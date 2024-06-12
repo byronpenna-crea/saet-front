@@ -4,10 +4,20 @@ import {DOCUMENT} from "@angular/common";
 import {CatalogoServiceCor, StudentDetail} from "../../../../../services/catalogo/catalogo.service.cor";
 import {ActivatedRoute, Router} from "@angular/router";
 import {userMessageInit} from "../../shared/messages.model";
+
 interface IUserMessage  {
   show: boolean,
   title: string,
   message: string
+}
+interface TabInput {
+  agendado: boolean;
+  readOnly: boolean;
+  leyend: string;
+  name: string;
+  onIniciar: () => void;
+  onAgendar: () => void;
+  onCancelar: () => void;
 }
 @Component({
   selector: 'app-estudiante-evaluaciones',
@@ -21,6 +31,8 @@ export class EstudianteEvaluacionesComponent implements IMessageComponent {
   psicologiaAgendada:boolean = false;
   pedagogiaAgendada:boolean = false;
   lenguajeHablaAgendada:boolean = false;
+  readOnlyTab:boolean = true;
+  agendaTabs:TabInput[] = [];
   successMessage:IUserMessage = {
     show:true,
     message: "¡Los datos han sido guardados exitosamente!",
@@ -41,6 +53,7 @@ export class EstudianteEvaluacionesComponent implements IMessageComponent {
     title: "",
     message: ""
   };
+  especialidad:string = "";
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private catalogoServiceCOR: CatalogoServiceCor,
@@ -58,6 +71,44 @@ export class EstudianteEvaluacionesComponent implements IMessageComponent {
     catalogoServiceCOR.getStudentInfo(this.nie).then((result) => {
       this.studentInfo = result.estudiante;
     })
+
+    this.especialidad = localStorage.getItem('especialidad') ?? "";
+
+
+    this.agendaTabs = [
+      {
+        leyend: 'Evaluación Habla y lenguaje',
+        agendado: this.lenguajeHablaAgendada,
+        readOnly: this.readOnlyTab,
+        onAgendar: this.agendarLenguaje.bind(this),
+        onCancelar: this.cancelarLenguaje.bind(this),
+        onIniciar: this.iniciarLenguajeHabla.bind(this),
+        name: "lenguaje y habla"
+      },
+      {
+        leyend: 'Evaluación psicologica',
+        agendado: this.psicologiaAgendada,
+        readOnly: false,
+        onAgendar: this.agendarPsicologia.bind(this),
+        onCancelar: this.cancelarPsicologia.bind(this),
+        onIniciar: this.iniciarPsicologia.bind(this),
+        name: "psicologia"
+      },
+      {
+        leyend: 'Evaluación pedagogica',
+        agendado: this.pedagogiaAgendada,
+        readOnly: this.readOnlyTab,
+        onAgendar: this.agendarPedagogia.bind(this),
+        onCancelar: this.cancelarPedagogia.bind(this),
+        onIniciar: this.iniciarPedagogia.bind(this),
+        name: "pedagogia"
+      },
+
+    ];
+
+    this.agendaTabs = this.agendaTabs.sort((a, b) => (a.name === this.especialidad ? -1 : 1));
+    console.log('agenda tabs ', this.agendaTabs);
+    console.log('especialidad ', this.especialidad);
   }
   async iniciarPsicologia() {
     await this.router.navigate(['/menu/saet-psicologia/',  this.nie ]);
