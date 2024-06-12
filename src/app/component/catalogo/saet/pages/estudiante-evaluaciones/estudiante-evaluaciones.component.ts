@@ -74,8 +74,20 @@ export class EstudianteEvaluacionesComponent implements IMessageComponent {
 
     this.especialidad = localStorage.getItem('especialidad') ?? "";
 
+    const tabs = this.getTabs();
+    if(tabs !== undefined){
+      this.agendaTabs = tabs ;
+    }
 
-    this.agendaTabs = [
+
+    this.agendaTabs = this.agendaTabs.sort((a, b) => (a.name === this.especialidad ? -1 : 1));
+    this.agendaTabs[0].readOnly = false;
+    console.log('agenda tabs ', this.agendaTabs);
+    console.log('especialidad ', this.especialidad);
+  }
+
+  getTabs(name:string = "") {
+    const tabs = [
       {
         leyend: 'Evaluación Habla y lenguaje',
         agendado: this.lenguajeHablaAgendada,
@@ -88,7 +100,7 @@ export class EstudianteEvaluacionesComponent implements IMessageComponent {
       {
         leyend: 'Evaluación psicologica',
         agendado: this.psicologiaAgendada,
-        readOnly: false,
+        readOnly: this.readOnlyTab,
         onAgendar: this.agendarPsicologia.bind(this),
         onCancelar: this.cancelarPsicologia.bind(this),
         onIniciar: this.iniciarPsicologia.bind(this),
@@ -102,13 +114,25 @@ export class EstudianteEvaluacionesComponent implements IMessageComponent {
         onCancelar: this.cancelarPedagogia.bind(this),
         onIniciar: this.iniciarPedagogia.bind(this),
         name: "pedagogia"
-      },
-
+      }
     ];
-
-    this.agendaTabs = this.agendaTabs.sort((a, b) => (a.name === this.especialidad ? -1 : 1));
-    console.log('agenda tabs ', this.agendaTabs);
-    console.log('especialidad ', this.especialidad);
+    if (name === "") {
+      return tabs;
+    }
+    const tab = tabs.find(tab => tab.name === name);
+    return  tab !== undefined ? [tab] : [];
+  }
+  updateTab(name: string, agendado: boolean) {
+    const index = this.agendaTabs.findIndex(tab => tab.name === name);
+    if (index !== -1) {
+      const tab = this.getTabs(this.agendaTabs[index].name)[0];
+      console.log('tab to set', tab);
+      if(tab){
+        this.agendaTabs[index] = tab;
+        this.agendaTabs[index].readOnly = false;
+      }
+      this.cdr.detectChanges();
+    }
   }
   async iniciarPsicologia() {
     await this.router.navigate(['/menu/saet-psicologia/',  this.nie ]);
@@ -121,6 +145,7 @@ export class EstudianteEvaluacionesComponent implements IMessageComponent {
   }
   // lenguaje y habla
   agendarLenguaje(){
+    console.log('tratando de agendar');
     this.lenguajeHablaAgendada = true;
     this.lenguajeHablaMessage = this.successMessage;
   }
@@ -133,8 +158,11 @@ export class EstudianteEvaluacionesComponent implements IMessageComponent {
   }
   // pedagogia
   agendarPedagogia() {
+    console.log('agendar psicologia')
     this.pedagogiaMessage = this.successMessage;
     this.pedagogiaAgendada = true;
+    this.updateTab('psicologia', true);
+
   }
   cancelarPedagogia() {
     this.pedagogiaAgendada = false;
@@ -145,14 +173,18 @@ export class EstudianteEvaluacionesComponent implements IMessageComponent {
   }
   // psicologia
   cancelarPsicologia() {
+    console.log('cancelar psicologia ');
     this.psicologiaAgendada = false;
     this.psicologyMessage = {
       ...this.successMessage,
       show: false
     }
+    this.updateTab('psicologia', true);
   }
   agendarPsicologia() {
+    console.log('agendar psicologia')
     this.psicologyMessage = this.successMessage
     this.psicologiaAgendada = true;
+    this.updateTab('psicologia', true);
   }
 }

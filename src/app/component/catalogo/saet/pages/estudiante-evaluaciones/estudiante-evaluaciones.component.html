@@ -17,31 +17,16 @@
 
 <div class="form-container">
   <div class="margin-top " style="width: 100%">
-    <app-saet-tab-agenda (onAgendar)="agendarPsicologia()"
-                         (onCancelar)="cancelarPsicologia()"
-                         [agendado]="psicologiaAgendada"
-                         (onIniciar)="iniciarPsicologia()"
-                         leyend="Evaluación psicologica"
-    />
-    <div class="margin-top">
-      <app-saet-tab-agenda (onAgendar)="agendarPedagogia()"
-                           (onCancelar)="cancelarPedagogia()"
-                           [agendado]="pedagogiaAgendada"
-                           (onIniciar)="iniciarPedagogia()"
-                           [readOnly]="readOnlyTab"
-                           leyend="Evaluación pedagogica"
+    <div *ngFor="let tab of agendaTabs; let i = index" [class.margin-top]="i !== 0" style="width: 100%">
+      <app-saet-tab-agenda
+        (onAgendar)="tab.onAgendar()"
+        (onCancelar)="tab.onCancelar()"
+        [agendado]="tab.agendado"
+        (onIniciar)="tab.onIniciar()"
+        [readOnly]="tab.readOnly"
+        [leyend]="tab.leyend"
       />
     </div>
-    <div class="margin-top">
-      <app-saet-tab-agenda (onAgendar)="agendarLenguaje()"
-                           (onCancelar)="cancelarLenguaje()"
-                           [agendado]="lenguajeHablaAgendada"
-                           (onIniciar)="iniciarLenguajeHabla()"
-                           [readOnly]="readOnlyTab"
-                           leyend="Evaluación Habla y lenguaje"
-                           />
-    </div>
-
   </div>
 </div>
 
