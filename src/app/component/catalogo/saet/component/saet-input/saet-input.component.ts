@@ -33,6 +33,7 @@ export class SaetInputComponent implements OnChanges{
 
   onInputChange(event: Event) {
     const input = event.target as HTMLInputElement;
+
     this.inputChange.emit({
       key: input.name,
       value: input.value

@@ -3,7 +3,7 @@
            (input)="onInputChange($event)"
            [disabled]="disabled"
              [(ngModel)]="value"
-
+           [attr.name]="name"
              pInputText style="width: 100%" />
     <ng-container *ngIf="inputArgs.icon !== undefined">
       <i class="pi pi-search"></i>

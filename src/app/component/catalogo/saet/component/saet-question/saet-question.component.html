@@ -3,6 +3,7 @@
     [testId]="testId"
     (inputChange)="onInputChange($event)"
     [value]="value"
+    [name]="idPregunta.toString()"
     [inputArgs]="abiertaComponentArgs" />
 </ng-container>
 <ng-container *ngIf="type === QuestionType.MULTIPLE_CON_RESPUESTA">
@@ -12,6 +13,7 @@
   <app-saet-input
     (inputChange)="onInputChange($event)"
     [value]="value"
+    [name]="idPregunta.toString()"
     [inputArgs]="abiertaComponentArgs" />
   <app-saet-radio [name]="idPregunta.toString()"
                   [selectedValue]="value"
@@ -32,7 +34,7 @@
   <app-saet-input
     (inputChange)="onInputChange($event)"
     [value]="value"
-    name
+    [name]="idPregunta.toString()"
     [inputArgs]="abiertaComponentArgs" />
   <app-saet-radio [name]="idPregunta.toString()"
                   [selectedValue]="value"

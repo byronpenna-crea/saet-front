@@ -164,6 +164,7 @@ export class EstudianteCaracterizacionIniciarComponent implements IMessageCompon
     localStorage.setItem('values', JSON.stringify(this.values));
   }
   onchange(keyValue:KeyValue) {
+    console.log('onchange triggered' , keyValue);
     this.values[keyValue.key] = keyValue.value;
     localStorage.setItem('values', JSON.stringify(this.values));
   }
