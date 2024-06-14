@@ -1,11 +1,13 @@
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {DOCUMENT} from "@angular/common";
 import {CatalogoServiceCor, StudentDetail} from "../../../../../services/catalogo/catalogo.service.cor";
 import {ActivatedRoute, Router} from "@angular/router";
-import {QuestionType} from "../../shared/component.config";
+import {IconComponent, QuestionType} from "../../shared/component.config";
 import {IMessageComponent, MessageType, UserMessage} from "../../interfaces/message-component.interface";
 import {userMessageInit} from "../../shared/messages.model";
 import {KeyValue} from "../../component/saet-input/saet-input.component";
+import {iQuestion} from "../../shared/survey";
+import {ConfirmationService} from "primeng/api";
 
 
 interface IinformationTab {
@@ -13,12 +15,6 @@ interface IinformationTab {
   values: string[],
   legend: string,
   isActive: boolean
-}
-interface iQuestion {
-  id_pregunta: number,
-  tipoPregunta: string,
-  pregunta: string,
-  opcion: { id_opcion: number, opcion: string }[]
 }
 interface iSurvey {
   titulo: string,
@@ -29,13 +25,21 @@ interface iSurvey {
   templateUrl: './estudiante-caracterizacion-iniciar.component.html',
   styleUrls: ['./estudiante-caracterizacion-iniciar.component.css']
 })
-export class EstudianteCaracterizacionIniciarComponent implements IMessageComponent{
+export class EstudianteCaracterizacionIniciarComponent implements IMessageComponent,OnInit{
+  @ViewChild('cd') confirmDialog: any;
   userMessage: UserMessage = userMessageInit;
 
   nie:string = "";
   studentInfo?: StudentDetail;
   corSurveys:iSurvey[] = [];
   editMode:boolean = false;
+
+  readOnlyEvaluaciones:boolean = true;
+  readOnlyPaei:boolean = true;
+
+  iconCompoment = IconComponent;
+
+
   generalInformation:IinformationTab = {
     isActive: false,
     legend: 'Datos personales del estudiante',
@@ -65,12 +69,21 @@ export class EstudianteCaracterizacionIniciarComponent implements IMessageCompon
     ],
     values: []
   }
-
+  ngOnInit() {
+    this.catalogoServiceCOR.getCaracterizacionPorNIE(this.nie).then((response) =>{
+      console.log('response in global header ', response);
+      if(response.id_caracterizacion !== 0){
+        this.readOnlyPaei = false;
+        this.readOnlyEvaluaciones = false;
+      }
+    })
+  }
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private catalogoServiceCOR: CatalogoServiceCor,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private confirmationService: ConfirmationService
   ){
     const storedValues = localStorage.getItem('values');
     console.log('stored values ', storedValues);
@@ -84,6 +97,8 @@ export class EstudianteCaracterizacionIniciarComponent implements IMessageCompon
         this.nie = nie;
       }
     });
+
+
     catalogoServiceCOR.getCORQuestions().then((result) => {
       this.corSurveys.push(...result.cuestionarios);
 
@@ -145,7 +160,53 @@ export class EstudianteCaracterizacionIniciarComponent implements IMessageCompon
   async retornarCaracterizacion() {
     await this.router.navigate(["menu/saet-caracterizacion-estudiante",this.nie]);
   }
-  save() {
+  async salir(){
+    this.confirmationService.confirm({
+      message: 'Al darle click en <b>Salir de edición sin guardar</b> perderá todo el progreso de edición realizado.',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        console.log('acept')
+      },
+      reject: () => {
+        console.log('reject')
+      }
+    });
+  }
+  async save() {
+    /*
+    const obj:ISaveCaracterizacion = {
+      id_caracterizacion: null,
+      id_estudiante_fk: 1,
+      id_especialista: 3,
+      id_docente_apoyo: 0,
+      id_modulo: 2,
+      respuestas: [
+        {
+          id_pregunta: 2,
+          opcion: [],
+          respuesta: "Esta es una prueba para crear una caracterizacion"
+        }
+      ],
+      grupoFamiliar: [
+        {
+          grupo_familiar_pk: null,
+          primer_nombre: "Maria",
+          segundo_nombre: "Imelda",
+          tercer_nombre: "",
+          primer_apellido: "Ruiz",
+          segundo_apellido: "Huezo",
+          tercer_apellido: "",
+          edad: 60,
+          parentesco: "Abuela",
+          nivel_educativo: "Basica",
+          ocupacion: "Vendedora informal"
+        }
+      ]
+    }
+    const response = await this.catalogoServiceCOR.saveCaracterizacion(obj);
+    console.log('response ', response);
+    */
+
     this.userMessage = {
       showMessage: true,
       message: "¡Los datos han sido guardados exitosamente!",
@@ -154,6 +215,12 @@ export class EstudianteCaracterizacionIniciarComponent implements IMessageCompon
     }
   }
 
+  async rejectConfirmDialog() {
+    await this.router.navigate(["menu/saet-caracterizacion-estudiante",this.nie]);
+  }
+  acceptConfirmDialog() {
+    this.confirmationService.close();
+  }
   getName(name:string): string {
     return this.convertString(name);
   }

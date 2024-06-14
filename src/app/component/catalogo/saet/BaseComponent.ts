@@ -1,4 +1,4 @@
-import {Inject, Injectable} from "@angular/core";
+import {Inject, Injectable, OnInit} from "@angular/core";
 import {CatalogoServiceCor, StudentDetail, StudentInfoResponse} from "../../../services/catalogo/catalogo.service.cor";
 import {DOCUMENT} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -7,9 +7,23 @@ interface informationTabBody {
  values: string[]
 }
 @Injectable()
-export class BaseComponent {
+export class BaseComponent implements OnInit{
   nie: string = '';
   studentInfo?: StudentDetail;
+
+
+  readOnlyEvaluaciones:boolean = true;
+  readOnlyPaei:boolean = true;
+  ngOnInit() {
+    this.catalogoServiceCOR.getCaracterizacionPorNIE(this.nie).then((response) =>{
+      console.log('response in global header ', response);
+      if(response.id_caracterizacion !== 0){
+        this.readOnlyPaei = false;
+        this.readOnlyEvaluaciones = false;
+      }
+    })
+  }
+
   constructor(
     @Inject(DOCUMENT) protected document: Document,
     protected catalogoServiceCOR: CatalogoServiceCor,

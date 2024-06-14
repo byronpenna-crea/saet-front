@@ -84,6 +84,9 @@ import {CheckboxModule} from "primeng/checkbox";
 import { SaetRadioComponent } from './component/catalogo/saet/component/saet-radio/saet-radio.component';
 import { SaetCheckboxComponent } from './component/catalogo/saet/component/saet-checkbox/saet-checkbox.component';
 import { SaetTabAgendaComponent } from './component/catalogo/saet/component/saet-tab-agenda/saet-tab-agenda.component';
+import {ConfirmDialogModule} from "primeng/confirmdialog";
+import {ConfirmationService} from "primeng/api";
+import { SaetConfirmComponent } from './component/catalogo/saet/component/saet-confirm/saet-confirm.component';
 
 
 @NgModule({
@@ -129,7 +132,8 @@ import { SaetTabAgendaComponent } from './component/catalogo/saet/component/saet
     SaetUnderlinedTitleComponent,
     SaetRadioComponent,
     SaetCheckboxComponent,
-    SaetTabAgendaComponent
+    SaetTabAgendaComponent,
+    SaetConfirmComponent
 
   ],
   imports: [
@@ -171,10 +175,12 @@ import { SaetTabAgendaComponent } from './component/catalogo/saet/component/saet
     ChartModule,
     FileUploadModule,
     FieldsetModule,
-    CheckboxModule
+    CheckboxModule,
+    ConfirmDialogModule
   ],
   providers: [
     SeguridadService,
+    ConfirmationService,
     {
       provide: LocationStrategy,
       useClass: HashLocationStrategy

@@ -22,7 +22,7 @@
       >
         <ng-container *ngFor="let pregunta of corSurvey.preguntas">
           <app-tab-item
-            [label]="pregunta.pregunta"
+            [label]="pregunta.pregunta ?? ''"
           >
             <app-saet-question [type]="getQuestionType(pregunta.tipoPregunta)"
                                [name]="getName(pregunta.pregunta)"

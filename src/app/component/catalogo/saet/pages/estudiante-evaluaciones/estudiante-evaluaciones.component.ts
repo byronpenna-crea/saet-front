@@ -4,6 +4,7 @@ import {DOCUMENT} from "@angular/common";
 import {CatalogoServiceCor, StudentDetail} from "../../../../../services/catalogo/catalogo.service.cor";
 import {ActivatedRoute, Router} from "@angular/router";
 import {userMessageInit} from "../../shared/messages.model";
+import {BaseComponent} from "../../BaseComponent";
 
 interface IUserMessage  {
   show: boolean,
@@ -24,10 +25,10 @@ interface TabInput {
   templateUrl: './estudiante-evaluaciones.component.html',
   styleUrls: ['./estudiante-evaluaciones.component.css']
 })
-export class EstudianteEvaluacionesComponent implements IMessageComponent {
+export class EstudianteEvaluacionesComponent extends BaseComponent implements IMessageComponent {
   userMessage: UserMessage = userMessageInit;
-  nie:string = "";
-  studentInfo?: StudentDetail;
+  //nie:string = "";
+  //studentInfo?: StudentDetail;
   psicologiaAgendada:boolean = false;
   pedagogiaAgendada:boolean = false;
   lenguajeHablaAgendada:boolean = false;
@@ -55,12 +56,13 @@ export class EstudianteEvaluacionesComponent implements IMessageComponent {
   };
   especialidad:string = "";
   constructor(
-    @Inject(DOCUMENT) private document: Document,
-    private catalogoServiceCOR: CatalogoServiceCor,
-    private route: ActivatedRoute,
+    @Inject(DOCUMENT)  document: Document,
+    catalogoServiceCOR: CatalogoServiceCor,
+    route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
-    protected router: Router
+    router: Router
   ){
+    super(document, catalogoServiceCOR, route, router);
     this.route.paramMap.subscribe(params => {
       const nie = params.get('nie');
       if (nie) {

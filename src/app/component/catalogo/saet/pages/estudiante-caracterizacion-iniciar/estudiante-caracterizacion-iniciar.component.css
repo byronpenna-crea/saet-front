@@ -46,3 +46,8 @@
 .button-container a {
   text-decoration: none;
 }
+:host ::ng-deep .p-dialog-header{
+  background: #00498D;
+  color: white;
+  font-weight: bold;
+}

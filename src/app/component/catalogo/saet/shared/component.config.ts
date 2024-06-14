@@ -6,7 +6,8 @@ export enum IconComponent {
   PRINTER,
   SEARCH,
   CLOSE,
-  LEFT_ARROW
+  LEFT_ARROW,
+  SAVE
 }
 export enum QuestionType {
   ABIERTA="abierta",
@@ -37,7 +38,8 @@ export const getIconClass = (icon:IconComponent | null) => {
       return "pi pi-times";
     case IconComponent.LEFT_ARROW:
       return "pi pi-arrow-left";
-
+    case IconComponent.SAVE:
+      return "pi pi-save";
   }
   return "";
 }

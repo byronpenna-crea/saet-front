@@ -2,6 +2,8 @@
   [nie]="nie"
   [nombreCompleto]="studentInfo?.nombreCompleto ?? ''"
   selectedTab="Caracterizacion"
+  [readOnlyEvaluaciones]="readOnlyEvaluaciones"
+  [readOnlyPaei]="readOnlyPaei"
   [breadcrumb]="[
     { href: '#/menu/saet-buscar', text: 'Buscar estudiante' },
     { href: '#/menu/saet-buscar/'+nie, text: nie },
@@ -10,11 +12,23 @@
   ]"
 
 />
-<app-saet-mensaje-usuario
-  [show]="userMessage.showMessage"
-  [message]="userMessage.message"
-  [title]="userMessage.titleMessage"
+
+<app-saet-confirm
+  acceptButtonText="Continuar editando"
+  cancelButtonText="Salir sin guardar"
+  title="¡Estás a punto de salir del modo de edición!"
+  (onAccept)="acceptConfirmDialog()"
+  (onReject)="rejectConfirmDialog()"
+  [acceptIcon]="iconCompoment.SAVE"
+  [rejectIcon]="iconCompoment.CLOSE"
 />
+<div class="form-container">
+  <app-saet-mensaje-usuario
+    [show]="userMessage.showMessage"
+    [message]="userMessage.message"
+    [title]="userMessage.titleMessage"
+  />
+</div>
 <div class="form-container">
   <ng-container *ngFor="let corSurvey of corSurveys" >
     <div style="margin-top: 5%">
@@ -45,11 +59,11 @@
       class="actionsButton"
     >
       <app-saet-button
-
+        (onClick)="salir()"
         [buttonArgs]="{text: 'Salir',buttonStyle: 1,buttonIcon: 6 }" />
+
       <app-saet-button
         (onClick)="save()"
-
         [buttonArgs]="{text: 'Guardar',buttonStyle: 1 }" />
     </div>
     <div
