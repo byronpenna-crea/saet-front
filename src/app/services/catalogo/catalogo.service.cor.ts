@@ -66,13 +66,13 @@ export interface ISaveCaracterizacion {
 })
 export class CatalogoServiceCor {
   private API_SERVER_URL = `${environment.API_SERVER_URL}`;//v2
-  private API_SERVER_COR = `${this.API_SERVER_URL}/caracterizacion/cor/preguntas`;
-  private API_SERVER_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/pedagogia/preguntas`;
-  private API_SERVER_LENGUAJE_HABLA_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/lenguaje_habla/preguntas`;
-  private API_SERVER_PSICOLOGIA_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/psicologia/preguntas`;
-  private API_SERVER_PEDAGOGIA_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/pedagogia/preguntas`;
+  private API_SERVER_COR = `${this.API_SERVER_URL}caracterizacion/cor/preguntas`;
+  private API_SERVER_QUESTIONS = `${this.API_SERVER_URL}evaluacion/cor/pedagogia/preguntas`;
+  private API_SERVER_LENGUAJE_HABLA_QUESTIONS = `${this.API_SERVER_URL}evaluacion/cor/lenguaje_habla/preguntas`;
+  private API_SERVER_PSICOLOGIA_QUESTIONS = `${this.API_SERVER_URL}evaluacion/cor/psicologia/preguntas`;
+  private API_SERVER_PEDAGOGIA_QUESTIONS = `${this.API_SERVER_URL}evaluacion/cor/pedagogia/preguntas`;
 
-  private API_SERVER_ESTUDIANTE = `${this.API_SERVER_URL}/tempEstudiantesSigesv2/buscarEstudiantePorNIE?nie=[NIE]`
+  private API_SERVER_ESTUDIANTE = `${this.API_SERVER_URL}tempEstudiantesSigesv2/buscarEstudiantePorNIE?nie=[NIE]`
   constructor(private httpClient: HttpClient, private router: Router, private cookieService: CookieService) {
 
   }
@@ -109,7 +109,7 @@ export class CatalogoServiceCor {
   }
 
   public saveCaracterizacion(caracterizacion: ISaveCaracterizacion) {
-    const url = `${this.API_SERVER_URL}/caracterizacion/cor`;
+    const url = `${this.API_SERVER_URL}caracterizacion/cor`;
 
     return new Promise((resolve, reject) => {
       fetch(url, {
@@ -133,7 +133,7 @@ export class CatalogoServiceCor {
 
   public getCaracterizacionPorNIE(nie:string): Promise<IGetCaracterizacion>{
     //
-    const url = `${this.API_SERVER_URL}/caracterizacion/cor/${nie}`;
+    const url = `${this.API_SERVER_URL}caracterizacion/cor/${nie}`;
     return new Promise((resolve, reject) => {
       fetch(url, {
         method: 'GET',
