@@ -1,5 +1,10 @@
 import {Inject, Injectable, OnInit} from "@angular/core";
-import {CatalogoServiceCor, StudentDetail, StudentInfoResponse} from "../../../services/catalogo/catalogo.service.cor";
+import {
+  CatalogoServiceCor,
+  IGetCaracterizacion,
+  StudentDetail,
+  StudentInfoResponse
+} from "../../../services/catalogo/catalogo.service.cor";
 import {DOCUMENT} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
 
@@ -11,17 +16,16 @@ export class BaseComponent implements OnInit{
   nie: string = '';
   studentInfo?: StudentDetail;
 
-
+  caracterizacion: IGetCaracterizacion | undefined;
   readOnlyEvaluaciones:boolean = true;
   readOnlyPaei:boolean = true;
-  ngOnInit() {
-    this.catalogoServiceCOR.getCaracterizacionPorNIE(this.nie).then((response) =>{
-      console.log('response in global header ', response);
-      if(response.id_caracterizacion !== 0){
-        this.readOnlyPaei = false;
-        this.readOnlyEvaluaciones = false;
-      }
-    })
+  async ngOnInit() {
+    const response = await this.catalogoServiceCOR.getCaracterizacionPorNIE(this.nie);
+    this.caracterizacion = response;
+    if(response.id_caracterizacion !== 0){
+      this.readOnlyPaei = false;
+      this.readOnlyEvaluaciones = false;
+    }
   }
 
   constructor(

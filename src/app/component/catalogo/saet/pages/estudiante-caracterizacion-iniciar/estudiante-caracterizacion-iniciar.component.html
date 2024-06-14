@@ -78,6 +78,7 @@
         <app-saet-button
           [buttonArgs]="{text: 'Editar',buttonStyle: 1 }" />
         <app-saet-button
+          (onClick)="generatePDF()"
           [buttonArgs]="{text: 'Generar PDF',buttonStyle: 1 }" />
       </div>
     </div>

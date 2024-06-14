@@ -8,6 +8,10 @@ import {userMessageInit} from "../../shared/messages.model";
 import {KeyValue} from "../../component/saet-input/saet-input.component";
 import {iQuestion} from "../../shared/survey";
 import {ConfirmationService} from "primeng/api";
+import {BaseComponent} from "../../BaseComponent";
+
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 
 interface IinformationTab {
@@ -25,17 +29,19 @@ interface iSurvey {
   templateUrl: './estudiante-caracterizacion-iniciar.component.html',
   styleUrls: ['./estudiante-caracterizacion-iniciar.component.css']
 })
-export class EstudianteCaracterizacionIniciarComponent implements IMessageComponent,OnInit{
+export class EstudianteCaracterizacionIniciarComponent
+  extends BaseComponent
+  implements IMessageComponent,OnInit{
   @ViewChild('cd') confirmDialog: any;
   userMessage: UserMessage = userMessageInit;
 
-  nie:string = "";
-  studentInfo?: StudentDetail;
+  //nie:string = "";
+  //studentInfo?: StudentDetail;
   corSurveys:iSurvey[] = [];
   editMode:boolean = false;
 
-  readOnlyEvaluaciones:boolean = true;
-  readOnlyPaei:boolean = true;
+  //readOnlyEvaluaciones:boolean = true;
+  //readOnlyPaei:boolean = true;
 
   iconCompoment = IconComponent;
 
@@ -69,22 +75,22 @@ export class EstudianteCaracterizacionIniciarComponent implements IMessageCompon
     ],
     values: []
   }
-  ngOnInit() {
-    this.catalogoServiceCOR.getCaracterizacionPorNIE(this.nie).then((response) =>{
-      console.log('response in global header ', response);
-      if(response.id_caracterizacion !== 0){
-        this.readOnlyPaei = false;
-        this.readOnlyEvaluaciones = false;
-      }
-    })
+
+  override async ngOnInit() {
+    await super.ngOnInit();
+    console.log('caracterizacion ', this.caracterizacion);
+    if(this.caracterizacion?.id_caracterizacion !== undefined && this.caracterizacion?.id_caracterizacion !== 0){
+      this.editMode = true;
+    }
   }
   constructor(
-    @Inject(DOCUMENT) private document: Document,
-    private catalogoServiceCOR: CatalogoServiceCor,
-    private route: ActivatedRoute,
-    private router: Router,
+    @Inject(DOCUMENT)  document: Document,
+    catalogoServiceCOR: CatalogoServiceCor,
+    route: ActivatedRoute,
+    router: Router,
     private confirmationService: ConfirmationService
   ){
+    super(document, catalogoServiceCOR, route, router);
     const storedValues = localStorage.getItem('values');
     console.log('stored values ', storedValues);
     if (storedValues) {
@@ -156,6 +162,29 @@ export class EstudianteCaracterizacionIniciarComponent implements IMessageCompon
     result = result.replace(/\s+/g, '_');
 
     return result;
+  }
+
+  generatePDF() {
+
+    const doc = new jsPDF();
+
+    console.log("caracterizacion en pdf ", this.caracterizacion?.respuestas);
+    const respuestas = this.caracterizacion?.respuestas.map((respuesta:iQuestion) => [
+      respuesta.id_pregunta.toString(),
+      respuesta.pregunta,
+      respuesta.respuesta ?? ''
+    ]) ?? [];
+    console.log('repsuestas ', respuestas);
+    doc.text('Caracterización de estudiante', 10, 10);
+    autoTable(doc, {
+      head: [['ID Pregunta', 'Pregunta', 'Respuesta']],
+      body: [
+        ...respuestas.map((respuesta) => respuesta),
+      ],
+      startY: 30,
+    });
+    doc.save('student-info.pdf');
+
   }
   async retornarCaracterizacion() {
     await this.router.navigate(["menu/saet-caracterizacion-estudiante",this.nie]);

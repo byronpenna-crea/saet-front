@@ -3,7 +3,8 @@ import {HttpClient} from "@angular/common/http";
 import {Router} from "@angular/router";
 import {CookieService} from "ngx-cookie-service";
 import {Injectable} from "@angular/core";
-import {iSurvey, SurveyResponse} from "../../component/catalogo/saet/shared/survey";
+import {iQuestion, iQuestionSave, iSurvey, SurveyResponse} from "../../component/catalogo/saet/shared/survey";
+
 export interface StudentDetail {
   nie: string;
   nui: string;
@@ -35,60 +36,43 @@ export interface StudentInfoResponse {
   }
 
 }
-
-/*
-{
-  "estudiante": {
-  "nie": 20217333,
-    "nui": "7855589",
-    "nombreCompleto": "BRYAN JEFFERSON MARTINEZ RAMOS",
-    "fechaNacimiento": "2024-05-09",
-    "direccion": "COLONIA LA ESPERANZA POLIGONO C Casa #7",
-    "telefono": [
-    "78995462",
-    "76812559"
-  ],
-    "correo": "20217333@clases.edu.sv"
-},
-
-
-  "centroEducativo": {
-  "nombre": "COMPLEJO EDUCATIVO \"PROFESPR MARTIN ROMERO \"",
-    "codigo": "10470",
-    "direccion": "CARRETERA PANAMERICANA SALIDA A CHALCHUAPA",
-    "ultimoGradoCursado": null,
-    "gradoActual": "Quinto grado",
-    "seccion": "C",
-    "docenteOrientador": "Ana Rosa Herrera",
-    "correoOrientador": "anarosa@gmail.com",
-    "telefonoOrientador": [
-    "78478514"
-  ]
-},
-
-  "responsables": [
-  {
-    "nombreCompleto": "Alexander Ernesto Marroquin",
-    "dui": "0554889-1",
-    "nit": "0554889-1",
-    "direccion": "Colonia hermita 1",
-    "telefono": "78952145"
-  }
-]
-}*/
-
+export interface IGetCaracterizacion {
+  id_caracterizacion: number,
+  respuestas:iQuestion[]
+}
+export interface ISaveCaracterizacion {
+  id_caracterizacion: number | null,
+  id_estudiante_fk: number,
+  id_especialista: number,
+  id_docente_apoyo: number,
+  id_modulo: number,
+  respuestas: iQuestionSave[],
+  grupoFamiliar: {
+    grupo_familiar_pk: number | null,
+    primer_nombre: string,
+    segundo_nombre: string,
+    tercer_nombre: string,
+    primer_apellido: string,
+    segundo_apellido: string,
+    tercer_apellido: string,
+    edad: number,
+    parentesco: string,
+    nivel_educativo: string,
+    ocupacion: string
+  }[]
+}
 @Injectable({
   providedIn: 'root'
 })
 export class CatalogoServiceCor {
   private API_SERVER_URL = `${environment.API_SERVER_URL}`;//v2
-  private API_SERVER_COR = `${this.API_SERVER_URL}caracterizacion/cor/preguntas`;
-  private API_SERVER_QUESTIONS = `${this.API_SERVER_URL}evaluacion/cor/pedagogia/preguntas`;
-  private API_SERVER_LENGUAJE_HABLA_QUESTIONS = `${this.API_SERVER_URL}evaluacion/cor/lenguaje_habla/preguntas`;
-  private API_SERVER_PSICOLOGIA_QUESTIONS = `${this.API_SERVER_URL}evaluacion/cor/psicologia/preguntas`;
-  private API_SERVER_PEDAGOGIA_QUESTIONS = `${this.API_SERVER_URL}evaluacion/cor/lenguaje_habla/preguntas`;
+  private API_SERVER_COR = `${this.API_SERVER_URL}/caracterizacion/cor/preguntas`;
+  private API_SERVER_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/pedagogia/preguntas`;
+  private API_SERVER_LENGUAJE_HABLA_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/lenguaje_habla/preguntas`;
+  private API_SERVER_PSICOLOGIA_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/psicologia/preguntas`;
+  private API_SERVER_PEDAGOGIA_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/pedagogia/preguntas`;
 
-  private API_SERVER_ESTUDIANTE = `${this.API_SERVER_URL}tempEstudiantesSigesv2/buscarEstudiantePorNIE?nie=[NIE]`
+  private API_SERVER_ESTUDIANTE = `${this.API_SERVER_URL}/tempEstudiantesSigesv2/buscarEstudiantePorNIE?nie=[NIE]`
   constructor(private httpClient: HttpClient, private router: Router, private cookieService: CookieService) {
 
   }
@@ -123,6 +107,52 @@ export class CatalogoServiceCor {
     }
 
   }
+
+  public saveCaracterizacion(caracterizacion: ISaveCaracterizacion) {
+    const url = `${this.API_SERVER_URL}/caracterizacion/cor`;
+
+    return new Promise((resolve, reject) => {
+      fetch(url, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${this.token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(caracterizacion)
+      }).then(response => {
+        if (response.ok) {
+          resolve(response.json());
+        } else {
+          reject(new Error('No se pudo obtener los datos'));
+        }
+      }).catch(error => {
+        reject(new Error('Hubo un error al obtener los datos: ' + error.message));
+      })
+    });
+  }
+
+  public getCaracterizacionPorNIE(nie:string): Promise<IGetCaracterizacion>{
+    //
+    const url = `${this.API_SERVER_URL}/caracterizacion/cor/${nie}`;
+    return new Promise((resolve, reject) => {
+      fetch(url, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${this.token}`,
+          'Content-Type': 'application/json'
+        }
+      }).then(response => {
+        if (response.ok) {
+          resolve(response.json());
+        } else {
+          reject(new Error('No se pudo obtener los datos'));
+        }
+      }).catch(error => {
+        reject(new Error('Hubo un error al obtener los datos: ' + error.message));
+      })
+    });
+  }
+
   public getSurveyQuestions(url: string): Promise<SurveyResponse> {
     return new Promise((resolve, reject) => {
       fetch(url, {
@@ -148,6 +178,9 @@ export class CatalogoServiceCor {
   }
   public getLenguajeHablaQuestions(): Promise<SurveyResponse> {
     return this.getSurveyQuestions(this.API_SERVER_LENGUAJE_HABLA_QUESTIONS);
+  }
+  public getPedagogiaQuestions(): Promise<SurveyResponse> {
+    return this.getSurveyQuestions(this.API_SERVER_PEDAGOGIA_QUESTIONS);
   }
   public getCORQuestions(): Promise<SurveyResponse> {
     return this.getSurveyQuestions(this.API_SERVER_COR);

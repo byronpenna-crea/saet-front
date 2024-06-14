@@ -33,7 +33,7 @@
     "file-saver": "^2.0.5",
     "html-to-image": "^1.11.11",
     "jspdf": "^2.5.1",
-    "jspdf-autotable": "^3.5.29",
+    "jspdf-autotable": "^3.8.2",
     "mousetrap": "^1.6.5",
     "ngx-cookie-service": "^15.0.0",
     "number-to-words": "^1.2.4",
