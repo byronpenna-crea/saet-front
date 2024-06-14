@@ -4,16 +4,17 @@ import {CatalogoServiceCor, StudentDetail} from "../../../../../services/catalog
 import {ActivatedRoute, Router} from "@angular/router";
 import {IMessageComponent, UserMessage} from "../../interfaces/message-component.interface";
 import {userMessageInit} from "../../shared/messages.model";
+import {BaseComponent} from "../../BaseComponent";
 
 @Component({
   selector: 'app-estudiante-caracterizacion',
   templateUrl: './estudiante-caracterizacion.component.html',
   styleUrls: ['./estudiante-caracterizacion.component.css']
 })
-export class EstudianteCaracterizacionComponent implements IMessageComponent {
+export class EstudianteCaracterizacionComponent extends BaseComponent implements IMessageComponent {
   userMessage: UserMessage = userMessageInit;
-  nie:string = "";
-  studentInfo?: StudentDetail;
+  //nie:string = "";
+  //studentInfo?: StudentDetail;
   nombreUsuario:string = "";
   especialidad: string = "";
   readonlyInput:boolean = true;
@@ -23,11 +24,12 @@ export class EstudianteCaracterizacionComponent implements IMessageComponent {
     }
   }
   constructor(
-    @Inject(DOCUMENT) private document: Document,
-    private catalogoServiceCOR: CatalogoServiceCor,
-    private route: ActivatedRoute,
-    private router: Router
+    @Inject(DOCUMENT) document: Document,
+    catalogoServiceCOR: CatalogoServiceCor,
+    route: ActivatedRoute,
+    router: Router
   ){
+    super(document, catalogoServiceCOR, route, router);
     this.route.paramMap.subscribe(params => {
       const nie = params.get('nie');
       if (nie) {
