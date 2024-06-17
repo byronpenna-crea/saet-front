@@ -160,10 +160,9 @@ export class EstudianteEvaluacionesComponent extends BaseComponent implements IM
   }
   // pedagogia
   agendarPedagogia() {
-    console.log('agendar psicologia')
     this.pedagogiaMessage = this.successMessage;
     this.pedagogiaAgendada = true;
-    this.updateTab('psicologia', true);
+    this.updateTab('pedagogia', true);
 
   }
   cancelarPedagogia() {
