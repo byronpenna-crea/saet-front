@@ -78,7 +78,6 @@ export class EstudianteCaracterizacionIniciarComponent
 
   override async ngOnInit() {
     await super.ngOnInit();
-    console.log('caracterizacion ', this.caracterizacion);
     if(this.caracterizacion?.id_caracterizacion !== undefined && this.caracterizacion?.id_caracterizacion !== 0){
       this.editMode = true;
     }
@@ -92,7 +91,6 @@ export class EstudianteCaracterizacionIniciarComponent
   ){
     super(document, catalogoServiceCOR, route, router);
     const storedValues = localStorage.getItem('values');
-    console.log('stored values ', storedValues);
     if (storedValues) {
       this.values = JSON.parse(storedValues);
     }

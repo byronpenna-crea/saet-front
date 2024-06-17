@@ -13,16 +13,25 @@ import {userMessageInit} from "../../shared/messages.model";
 })
 export class EstudianteCuestionarioPsicologiaComponent extends QuestionsComponent implements IMessageComponent {
   userMessage: UserMessage = userMessageInit;
+
+  editMode:boolean = false;
+
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceCOR: CatalogoServiceCor,
     route: ActivatedRoute,
     router: Router
   ){
-    super(document, catalogoServiceCOR, route, router);
+
+    super(document, catalogoServiceCOR, route, router, "psicologia_values");
+
+
     catalogoServiceCOR.getPsicologiaQuestions().then((result) => {
       this.corSurveys.push(...result.cuestionarios);
+      console.log('cor surveys ', this.corSurveys);
     });
+
+
   }
 
   message: string = "";

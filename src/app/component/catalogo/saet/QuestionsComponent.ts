@@ -10,13 +10,21 @@ import {KeyValue} from "./component/saet-input/saet-input.component";
 @Injectable()
 export class QuestionsComponent extends BaseComponent {
   corSurveys:iSurvey[] = [];
+  values: { [key: string]: string } = {};
+  valuesKey:string = "";
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceCOR: CatalogoServiceCor,
     route: ActivatedRoute,
-    router: Router
+    router: Router,
+    @Inject(DOCUMENT) _valuesKey:string
   ){
     super(document, catalogoServiceCOR, route, router);
+    this.valuesKey = _valuesKey;
+    const storedValues = localStorage.getItem(_valuesKey);
+    if (storedValues) {
+      this.values = JSON.parse(storedValues);
+    }
   }
   QuestionType = QuestionType;
   getQuestionType(type: string): QuestionType {
@@ -44,7 +52,14 @@ export class QuestionsComponent extends BaseComponent {
     return this.convertString(name)
   }
   getOptions(options: { id_opcion: number, opcion: string }[]): KeyValue[] {
-    console.log('get opcion', options);
     return options.map( (option) => ({key: option.id_opcion ? option.id_opcion.toString(): "", value: option.opcion}) as KeyValue );
+  }
+
+  onchangeQuestions(keyValue:KeyValue) {
+    this.values[keyValue.key] = keyValue.value;
+    localStorage.setItem(this.valuesKey, JSON.stringify(this.values));
+  }
+  salir() {
+    console.log('salir ', this.values);
   }
 }

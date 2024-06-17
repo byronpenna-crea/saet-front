@@ -38,7 +38,7 @@ export class SaetGlobalHeaderComponent implements OnInit{
       { name: 'datosGenerales', url: `#/menu/saet-datos-estudiante/${this.nie}`, text: 'DATOS GENERALES', readOnly: false },
       { name: 'Caracterizacion', url: `#/menu/saet-caracterizacion-estudiante/${this.nie}`, text: 'CARACTERIZACIÓN', readOnly: false },
       { name: 'evaluaciones', url: `#/menu/saet-evaluaciones/${this.nie}`, text: 'EVALUACIONES', readOnly: this._readOnlyEvaluaciones },
-      { name: 'paei', url: '/paei', text: 'PAEI', readOnly: this._readOnlyPaei }
+      { name: 'paei', url: `#/menu/saet-paei/${this.nie}`, text: 'PAEI', readOnly: this._readOnlyPaei }
     ];
   }
 

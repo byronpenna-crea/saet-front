@@ -87,6 +87,7 @@ import { SaetTabAgendaComponent } from './component/catalogo/saet/component/saet
 import {ConfirmDialogModule} from "primeng/confirmdialog";
 import {ConfirmationService} from "primeng/api";
 import { SaetConfirmComponent } from './component/catalogo/saet/component/saet-confirm/saet-confirm.component';
+import { EstudiantePaeiComponent } from './component/catalogo/saet/pages/estudiante-paei/estudiante-paei.component';
 
 
 @NgModule({
@@ -133,7 +134,8 @@ import { SaetConfirmComponent } from './component/catalogo/saet/component/saet-c
     SaetRadioComponent,
     SaetCheckboxComponent,
     SaetTabAgendaComponent,
-    SaetConfirmComponent
+    SaetConfirmComponent,
+    EstudiantePaeiComponent
 
   ],
   imports: [

@@ -2,6 +2,8 @@
   [nie]="nie"
   [nombreCompleto]="studentInfo?.nombreCompleto ?? ''"
   selectedTab=""
+  [readOnlyEvaluaciones]="readOnlyEvaluaciones"
+  [readOnlyPaei]="readOnlyPaei"
 />
 <app-saet-mensaje-usuario
   [show]="userMessage.showMessage"
@@ -18,12 +20,30 @@
           <app-tab-item
             [label]="pregunta.pregunta"
           >
-            <app-saet-question [type]="getQuestionType(pregunta.tipoPregunta)"
-                               [name]="getName(pregunta.pregunta)"
-                               [options]="getOptions(pregunta.opcion)" />
+            <app-saet-question
+              (onChange)="onchangeQuestions($event)"
+              [type]="getQuestionType(pregunta.tipoPregunta)"
+              [idPregunta]="pregunta.id_pregunta"
+              [value]="values[pregunta.id_pregunta.toString()]"
+              [testId]="pregunta.id_pregunta.toString()"
+              [name]="getName(pregunta.pregunta)"
+              [options]="getOptions(pregunta.opcion)" />
           </app-tab-item>
         </ng-container>
       </app-tabs>
     </div>
   </ng-container>
+  <div
+    *ngIf="editMode"
+    class="actionsButton"
+  >
+    <app-saet-button
+      [buttonArgs]="{text: 'Regresar a la caracterización',buttonStyle: 1,buttonIcon: 7 }" />
+    <div class="right-buttons">
+      <app-saet-button
+        [buttonArgs]="{text: 'Editar',buttonStyle: 1 }" />
+      <app-saet-button
+        [buttonArgs]="{text: 'Generar PDF',buttonStyle: 1 }" />
+    </div>
+  </div>
 </div>

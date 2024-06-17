@@ -22,9 +22,9 @@ export class EstudianteCuestionarioLenguajeComponent extends QuestionsComponent 
     @Inject(DOCUMENT) document: Document,
     catalogoServiceCOR: CatalogoServiceCor,
     route: ActivatedRoute,
-    router: Router
+    router: Router,
   ){
-    super(document, catalogoServiceCOR, route, router);
+    super(document, catalogoServiceCOR, route, router, "lenguaje_values");
     catalogoServiceCOR.getLenguajeHablaQuestions().then((result) => {
       this.corSurveys.push(...result.cuestionarios);
     });

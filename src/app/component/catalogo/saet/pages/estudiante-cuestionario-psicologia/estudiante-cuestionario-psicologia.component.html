@@ -8,6 +8,8 @@
   { href: '#/menu/saet-datos-estudiante/'+nie, text: 'Evaluaciones' },
   { href: '', text: 'Perfil psicológico' }
   ]"
+  [readOnlyEvaluaciones]="readOnlyEvaluaciones"
+  [readOnlyPaei]="readOnlyPaei"
 />
 <app-saet-mensaje-usuario
   [show]="userMessage.showMessage"
@@ -20,16 +22,79 @@
       <app-tabs
         [legend]="corSurvey.titulo"
       >
-        <ng-container *ngFor="let pregunta of corSurvey.preguntas">
-          <app-tab-item
-            [label]="pregunta.pregunta ?? ''"
-          >
-            <app-saet-question [type]="getQuestionType(pregunta.tipoPregunta)"
-                               [name]="getName(pregunta.pregunta)"
-                               [options]="getOptions(pregunta.opcion)" />
-          </app-tab-item>
-        </ng-container>
+        <div *ngIf="corSurvey.titulo !== 'Desarrollo de habilidades básicas de higiene personal y del entorno familiar'">
+          <ng-container *ngFor="let pregunta of corSurvey.preguntas">
+            <app-tab-item
+              [label]="pregunta.pregunta ?? ''"
+            >
+              <app-saet-question
+                (onChange)="onchangeQuestions($event)"
+                [type]="getQuestionType(pregunta.tipoPregunta)"
+                [idPregunta]="pregunta.id_pregunta"
+                [value]="values[pregunta.id_pregunta.toString()]"
+                [testId]="pregunta.id_pregunta.toString()"
+                [name]="getName(pregunta.pregunta)"
+                [options]="getOptions(pregunta.opcion)" />
+            </app-tab-item>
+          </ng-container>
+        </div>
+        <div *ngIf="corSurvey.titulo === 'Desarrollo de habilidades básicas de higiene personal y del entorno familiar'">
+          <table style="width: 100%">
+            <thead>
+              <td>Indicador</td>
+              <td>Respuesta</td>
+              <td>Observaciones</td>
+            </thead>
+            <tbody>
+              <ng-container *ngFor="let pregunta of corSurvey.preguntas">
+                <tr>
+                  <td>
+                    {{pregunta.pregunta}}
+                  </td>
+                  <td>
+                    <app-saet-radio
+                      [name]="'radio_'+pregunta.id_pregunta.toString()"
+                      [options]="getOptions(pregunta.opcion)"
+                    />
+                  </td>
+                  <td>
+                    <app-saet-input
+                        [name]="'input_'+pregunta.id_pregunta.toString()"
+                        [inputArgs]="{text: ''}"
+                       />
+                  </td>
+                </tr>
+              </ng-container>
+            </tbody>
+          </table>
+        </div>
       </app-tabs>
     </div>
   </ng-container>
+
+  <div
+    *ngIf="!editMode"
+    class="actionsButton"
+  >
+    <app-saet-button
+      (onClick)="salir()"
+      [buttonArgs]="{text: 'Salir',buttonStyle: 1,buttonIcon: 6 }" />
+
+    <app-saet-button
+      [buttonArgs]="{text: 'Guardar',buttonStyle: 1 }" />
+  </div>
+
+  <div
+    *ngIf="editMode"
+    class="actionsButton"
+  >
+    <app-saet-button
+      [buttonArgs]="{text: 'Regresar a la caracterización',buttonStyle: 1,buttonIcon: 7 }" />
+    <div class="right-buttons">
+      <app-saet-button
+        [buttonArgs]="{text: 'Editar',buttonStyle: 1 }" />
+      <app-saet-button
+        [buttonArgs]="{text: 'Generar PDF',buttonStyle: 1 }" />
+    </div>
+  </div>
 </div>

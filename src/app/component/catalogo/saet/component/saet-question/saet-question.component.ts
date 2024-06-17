@@ -11,6 +11,7 @@ import {Router} from "@angular/router";
 
 export class SaetQuestionComponent {
   @Input() type:QuestionType = QuestionType.ABIERTA;
+  @Input() tableMode:boolean = false;
   @Input() options:KeyValue[] = [];
   @Input() name:string="";
   @Input() testId:string="";

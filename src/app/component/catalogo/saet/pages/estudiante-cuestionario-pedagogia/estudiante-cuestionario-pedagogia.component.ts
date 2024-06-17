@@ -17,14 +17,14 @@ export class EstudianteCuestionarioPedagogiaComponent extends QuestionsComponent
     titleMessage: '',
     type: MessageType.SUCCESS
   }
-
+  editMode:boolean = false;
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceCOR: CatalogoServiceCor,
     route: ActivatedRoute,
     router: Router
   ){
-    super(document, catalogoServiceCOR, route, router);
+    super(document, catalogoServiceCOR, route, router,"pedagogia_values");
     catalogoServiceCOR.getLenguajeHablaQuestions().then((result) => {
       this.corSurveys.push(...result.cuestionarios);
     });
