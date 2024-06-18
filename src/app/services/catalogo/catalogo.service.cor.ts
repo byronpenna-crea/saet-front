@@ -13,6 +13,7 @@ export interface StudentDetail {
   direccion: string;
   telefono: string[];
   correo: string;
+  id_est_pk: number;
 }
 export interface StudentInfoResponse {
   estudiante: StudentDetail,
@@ -39,6 +40,15 @@ export interface StudentInfoResponse {
 export interface IGetCaracterizacion {
   id_caracterizacion: number,
   respuestas:iQuestion[]
+}
+export interface ISaveQuestionary {
+  id_evaluacion: number | null,
+  id_estudiante_fk: number,
+  id_especialista: number,
+  id_tipo_evaluacion: number,
+  fecha: string,
+  hora: string,
+  respuestas: iQuestionSave[]
 }
 export interface ISaveCaracterizacion {
   id_caracterizacion: number | null,
@@ -107,28 +117,39 @@ export class CatalogoServiceCor {
     }
 
   }
+  private async postRequest<T,U>(url: string, data: T): Promise<U> {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${this.token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    });
+
+    if (!response.ok) {
+      throw new Error('No se pudo obtener los datos');
+    }
+
+    return response.json();
+  }
+
+  public savePsicologia(cuestionarioPsicologia:ISaveQuestionary){
+    const url = `${this.API_SERVER_URL}evaluacion/cor/psicologia/`;
+    return this.postRequest<ISaveQuestionary,ISaveQuestionary>(url, cuestionarioPsicologia);
+  }
+  public savePedagogia (cuestionarioPedagogia:ISaveQuestionary){
+    const url = `${this.API_SERVER_URL}evaluacion/cor/pedagogia/`;
+    return this.postRequest<ISaveQuestionary,ISaveQuestionary>(url, cuestionarioPedagogia);
+  }
+  public saveLenguaje(cuestionarioLenguaje:ISaveQuestionary){
+    const url = `${this.API_SERVER_URL}evaluacion/cor/lenguaje_habla/`;
+    return this.postRequest<ISaveQuestionary,ISaveQuestionary>(url, cuestionarioLenguaje);
+  }
 
   public saveCaracterizacion(caracterizacion: ISaveCaracterizacion) {
     const url = `${this.API_SERVER_URL}caracterizacion/cor`;
-
-    return new Promise((resolve, reject) => {
-      fetch(url, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${this.token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(caracterizacion)
-      }).then(response => {
-        if (response.ok) {
-          resolve(response.json());
-        } else {
-          reject(new Error('No se pudo obtener los datos'));
-        }
-      }).catch(error => {
-        reject(new Error('Hubo un error al obtener los datos: ' + error.message));
-      })
-    });
+    return this.postRequest<ISaveCaracterizacion,ISaveCaracterizacion>(url, caracterizacion);
   }
 
   public getCaracterizacionPorNIE(nie:string): Promise<IGetCaracterizacion>{
