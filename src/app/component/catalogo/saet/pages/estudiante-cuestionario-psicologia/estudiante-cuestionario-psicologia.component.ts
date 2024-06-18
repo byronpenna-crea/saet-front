@@ -2,7 +2,7 @@ import {Component, Inject} from '@angular/core';
 import {QuestionsComponent} from "../../QuestionsComponent";
 import {IMessageComponent, UserMessage} from "../../interfaces/message-component.interface";
 import {DOCUMENT} from "@angular/common";
-import {CatalogoServiceCor} from "../../../../../services/catalogo/catalogo.service.cor";
+import {CatalogoServiceCor, ISavePsicologia} from "../../../../../services/catalogo/catalogo.service.cor";
 import {ActivatedRoute, Router} from "@angular/router";
 import {userMessageInit} from "../../shared/messages.model";
 import {TIPO_EVALUACION} from "../../shared/evaluaciones";
@@ -39,18 +39,27 @@ export class EstudianteCuestionarioPsicologiaComponent extends QuestionsComponen
 
   save(){
     const now = new Date();
-    const fecha = now.toLocaleDateString();
-    const hora = now.toLocaleTimeString();
+    const day = String(now.getDate()).padStart(2, '0');
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const year = now.getFullYear();
+    const fecha = `${day}/${month}/${year}`;
+
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const hora = `${hours}:${minutes}`;
+
     const respuestas = this.getAnswerObject(this.values);
-    const objToSave = {
+    const objToSave:ISavePsicologia = {
       id_evaluacion: null,
-      id_estudiante_fk: this.studentInfo?.id_est_pk,
+      id_estudiante_fk: this.studentInfo?.id_est_pk ?? 0,
       id_especialista: 3,
       id_tipo_evaluacion: TIPO_EVALUACION.psicologo_perfil,
       fecha: fecha,
       hora: hora,
       respuestas: respuestas
     };
+    const x = this.catalogoServiceCOR.savePsicologia(objToSave);
+    console.log(x);
     console.log("to save ",objToSave);
   }
   message: string = "";
