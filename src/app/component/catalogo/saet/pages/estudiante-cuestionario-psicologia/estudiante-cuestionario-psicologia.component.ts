@@ -5,6 +5,9 @@ import {DOCUMENT} from "@angular/common";
 import {CatalogoServiceCor} from "../../../../../services/catalogo/catalogo.service.cor";
 import {ActivatedRoute, Router} from "@angular/router";
 import {userMessageInit} from "../../shared/messages.model";
+import {TIPO_EVALUACION} from "../../shared/evaluaciones";
+
+
 
 @Component({
   selector: 'app-estudiante-cuestionario-psicologia',
@@ -34,6 +37,22 @@ export class EstudianteCuestionarioPsicologiaComponent extends QuestionsComponen
 
   }
 
+  save(){
+    const now = new Date();
+    const fecha = now.toLocaleDateString();
+    const hora = now.toLocaleTimeString();
+    const respuestas = this.getAnswerObject(this.values);
+    const objToSave = {
+      id_evaluacion: null,
+      id_estudiante_fk: this.studentInfo?.id_est_pk,
+      id_especialista: 3,
+      id_tipo_evaluacion: TIPO_EVALUACION.psicologo_perfil,
+      fecha: fecha,
+      hora: hora,
+      respuestas: respuestas
+    };
+    console.log("to save ",objToSave);
+  }
   message: string = "";
   showMessage: boolean = false;
   titleMessage: string = "";

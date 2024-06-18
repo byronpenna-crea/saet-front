@@ -7,10 +7,26 @@ import {QuestionType} from "./shared/component.config";
 import {iSurvey} from "./shared/survey";
 import {KeyValue} from "./component/saet-input/saet-input.component";
 
+
+export interface IValuesForm {
+  [key: string]: string;
+}
+
+export interface IAnswerOption {
+  id_opcion: number;
+  opcion: string;
+}
+
+export interface IQuestionaryAnswer {
+  id_pregunta: number;
+  opcion: IAnswerOption[];
+  respuesta: string;
+}
 @Injectable()
 export class QuestionsComponent extends BaseComponent {
   corSurveys:iSurvey[] = [];
-  values: { [key: string]: string } = {};
+
+  values: IValuesForm = {};
   valuesKey:string = "";
   constructor(
     @Inject(DOCUMENT) document: Document,
@@ -56,9 +72,45 @@ export class QuestionsComponent extends BaseComponent {
   }
 
   onchangeQuestions(keyValue:KeyValue) {
+    console.log('onchange ', keyValue);
     this.values[keyValue.key] = keyValue.value;
     localStorage.setItem(this.valuesKey, JSON.stringify(this.values));
   }
+  getAnswerObject(data: IValuesForm): IQuestionaryAnswer[] {
+    const result: IQuestionaryAnswer[] = [];
+
+    const keys = Object.keys(data);
+
+    const groupedData = keys.reduce<Record<string, { radio?: string; input?: string }>>((acc, key) => {
+      const [type, id] = key.split('_');
+      if (!acc[id]) {
+        acc[id] = {};
+      }
+      if (type === 'radio' || type === 'input') {
+        acc[id][type] = data[key];
+      }
+      return acc;
+    }, {});
+
+    for (const id in groupedData) {
+      if (groupedData.hasOwnProperty(id)) {
+        const item: IQuestionaryAnswer = {
+          id_pregunta: parseInt(id, 10),
+          opcion: [
+            {
+              id_opcion: parseInt(id, 10),
+              opcion: groupedData[id].radio || ""
+            }
+          ],
+          respuesta: groupedData[id].input || "Esta es una prueba para crear evaluacion psicologica"
+        };
+        result.push(item);
+      }
+    }
+
+    return result;
+  }
+
   salir() {
     console.log('salir ', this.values);
   }

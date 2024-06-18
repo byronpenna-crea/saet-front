@@ -53,7 +53,9 @@
                   </td>
                   <td>
                     <app-saet-radio
+                      (radioChange)="onchangeQuestions($event)"
                       [name]="'radio_'+pregunta.id_pregunta.toString()"
+                      [selectedValue]="values['radio_'+pregunta.id_pregunta.toString()]"
                       [options]="getOptions(pregunta.opcion)"
                     />
                   </td>
@@ -61,6 +63,8 @@
                     <app-saet-input
                         [name]="'input_'+pregunta.id_pregunta.toString()"
                         [inputArgs]="{text: ''}"
+                        [value]="values['input_'+pregunta.id_pregunta.toString()]"
+                        (inputChange)="onchangeQuestions($event)"
                        />
                   </td>
                 </tr>
@@ -81,6 +85,7 @@
       [buttonArgs]="{text: 'Salir',buttonStyle: 1,buttonIcon: 6 }" />
 
     <app-saet-button
+      (onClick)="save()"
       [buttonArgs]="{text: 'Guardar',buttonStyle: 1 }" />
   </div>
 
