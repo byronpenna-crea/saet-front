@@ -1,20 +1,39 @@
 <app-saet-global-header
   [nie]="nie"
   [nombreCompleto]="studentInfo?.nombreCompleto ?? ''"
-  selectedTab="eva"
+  selectedTab="evaluaciones"
+  [breadcrumb]="[
+   { href: '#/menu/saet-buscar', text: 'Buscar estudiante' },
+  { href: '#/menu/saet-buscar/'+nie, text: nie },
+  { href: '#/menu/saet-datos-estudiante/'+nie, text: 'Evaluaciones' },
+  { href: '', text: 'Perfil habla y lenguaje' }
+  ]"
+  [readOnlyEvaluaciones]="readOnlyEvaluaciones"
+  [readOnlyPaei]="readOnlyPaei"
 />
 <app-saet-mensaje-usuario
   [show]="userMessage.showMessage"
   [message]="userMessage.message"
   [title]="userMessage.titleMessage"
 />
+<app-saet-confirm
+  acceptButtonText="Continuar editando"
+  cancelButtonText="Salir sin guardar"
+  title="¡Estás a punto de salir del modo de edición!"
+  (onAccept)="continuarEditando()"
+  (onReject)="aceptarSalir()"
+  [acceptIcon]="iconCompoment.SAVE"
+  [rejectIcon]="iconCompoment.CLOSE"
+/>
+
 <div class="form-container">
   <ng-container *ngFor="let corSurvey of corSurveys" >
     <div style="margin-top: 5%">
       <app-tabs
         [legend]="corSurvey.titulo"
       >
-        <ng-container *ngFor="let pregunta of corSurvey.preguntas">
+        <div *ngIf="!cuestionariosTableMode.includes(corSurvey.id_cuestionario)">
+          <ng-container *ngFor="let pregunta of corSurvey.preguntas">
           <app-tab-item
             [label]="pregunta.pregunta"
           >
@@ -28,6 +47,10 @@
               [options]="getOptions(pregunta.opcion)" />
           </app-tab-item>
         </ng-container>
+        </div>
+        <div *ngIf="cuestionariosTableMode.includes(corSurvey.id_cuestionario)">
+          table mode
+        </div>
       </app-tabs>
     </div>
   </ng-container>

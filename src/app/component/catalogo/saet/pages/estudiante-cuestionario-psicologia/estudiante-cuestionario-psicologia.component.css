@@ -46,3 +46,21 @@
 .button-container a {
   text-decoration: none;
 }
+
+
+/***/
+.styled-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.styled-table th, .styled-table td {
+  border: 1px solid #dddddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.styled-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}

@@ -4,6 +4,7 @@ import {DOCUMENT} from "@angular/common";
 import {CatalogoServiceCor, StudentDetail} from "../../../../../services/catalogo/catalogo.service.cor";
 import {ActivatedRoute, Router} from "@angular/router";
 import {QuestionsComponent} from "../../QuestionsComponent";
+import {ConfirmationService} from "primeng/api";
 
 @Component({
   selector: 'app-estudiante-cuestionario-lenguaje',
@@ -17,14 +18,15 @@ export class EstudianteCuestionarioLenguajeComponent extends QuestionsComponent 
     titleMessage: '',
     type: MessageType.SUCCESS
   }
-
+  cuestionariosTableMode: number[] = [];
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceCOR: CatalogoServiceCor,
     route: ActivatedRoute,
     router: Router,
+    confirmationService: ConfirmationService
   ){
-    super(document, catalogoServiceCOR, route, router, "lenguaje_values");
+    super(document, catalogoServiceCOR, route, router, confirmationService,"lenguaje_values");
     catalogoServiceCOR.getLenguajeHablaQuestions().then((result) => {
       this.corSurveys.push(...result.cuestionarios);
     });

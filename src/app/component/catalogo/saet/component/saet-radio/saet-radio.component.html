@@ -1,8 +1,11 @@
-
-<div *ngFor="let option of options">
-  <label>
-    <input type="radio" [name]="name" [value]="option.value"
-           [checked]="option.value === selectedValue"
-           (change)="onRadioChange($event)" [disabled]="disabled"> {{ option.value }}
-  </label>
+<div style="display: flex; flex-direction: row">
+  <div *ngFor="let option of options">
+    <div style="display: flex; margin-right: 15px;">
+      <label>
+        <input type="radio" [name]="name" [value]="option.value"
+               [checked]="option.value === selectedValue"
+               (change)="onRadioChange($event)" [disabled]="disabled"> {{ option.value }}
+      </label>
+    </div>
+  </div>
 </div>

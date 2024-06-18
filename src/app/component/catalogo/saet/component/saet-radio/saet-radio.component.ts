@@ -15,9 +15,6 @@ export class SaetRadioComponent {
 
   onRadioChange(event: Event) {
     const input = event.target as HTMLInputElement;
-    console.log('options', this.options);
-    console.log('input ', input);
-    console.log('selected before ', this.selectedValue);
     this.selectedValue = input.value;
     this.radioChange.emit({
       key: input.name,

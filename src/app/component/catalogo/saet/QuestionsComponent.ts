@@ -3,9 +3,11 @@ import {CatalogoServiceCor, StudentDetail} from "../../../services/catalogo/cata
 import {DOCUMENT} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
 import {BaseComponent} from "./BaseComponent";
-import {QuestionType} from "./shared/component.config";
+import {IconComponent, QuestionType} from "./shared/component.config";
 import {iSurvey} from "./shared/survey";
 import {KeyValue} from "./component/saet-input/saet-input.component";
+import {TIPO_EVALUACION} from "./shared/evaluaciones";
+import {ConfirmationService} from "primeng/api";
 
 
 export interface IValuesForm {
@@ -28,11 +30,15 @@ export class QuestionsComponent extends BaseComponent {
 
   values: IValuesForm = {};
   valuesKey:string = "";
+  showActionButtons:boolean = false;
+
+  iconCompoment = IconComponent;
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceCOR: CatalogoServiceCor,
     route: ActivatedRoute,
     router: Router,
+    private confirmationService: ConfirmationService,
     @Inject(DOCUMENT) _valuesKey:string
   ){
     super(document, catalogoServiceCOR, route, router);
@@ -76,6 +82,27 @@ export class QuestionsComponent extends BaseComponent {
     this.values[keyValue.key] = keyValue.value;
     localStorage.setItem(this.valuesKey, JSON.stringify(this.values));
   }
+  getQuestionaryObject() {
+    const now = new Date();
+    const day = String(now.getDate()).padStart(2, '0');
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const year = now.getFullYear();
+    const fecha = `${day}/${month}/${year}`;
+
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const hora = `${hours}:${minutes}`;
+
+    return {
+      id_evaluacion: null,
+      id_estudiante_fk: this.studentInfo?.id_est_pk ?? 0,
+      id_especialista: 3,
+      id_tipo_evaluacion: TIPO_EVALUACION.psicologo_perfil,
+      fecha: fecha,
+      hora: hora,
+      respuestas: this.getAnswerObject(this.values)
+    };
+  }
   getAnswerObject(data: IValuesForm): IQuestionaryAnswer[] {
     const result: IQuestionaryAnswer[] = [];
 
@@ -111,7 +138,17 @@ export class QuestionsComponent extends BaseComponent {
     return result;
   }
 
+
+  async aceptarSalir() {
+    await this.router.navigate(["menu/saet-evaluaciones",this.nie]);
+  }
+  async continuarEditando() {
+    this.confirmationService.close();
+  }
   salir() {
-    console.log('salir ', this.values);
+    this.confirmationService.confirm({
+      message: 'Al darle click en <b>Salir de edición sin guardar</b> perderá todo el progreso de edición realizado.',
+      icon: 'pi pi-exclamation-triangle'
+    });
   }
 }

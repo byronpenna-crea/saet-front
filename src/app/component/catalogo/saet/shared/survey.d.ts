@@ -11,6 +11,7 @@ export interface iQuestionSave {
   respuesta: string
 }
 export interface iSurvey {
+  id_cuestionario: number,
   titulo: string,
   preguntas: iQuestion[]
 }
