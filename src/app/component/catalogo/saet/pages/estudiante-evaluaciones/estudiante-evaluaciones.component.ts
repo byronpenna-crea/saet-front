@@ -84,8 +84,6 @@ export class EstudianteEvaluacionesComponent extends BaseComponent implements IM
 
     this.agendaTabs = this.agendaTabs.sort((a, b) => (a.name === this.especialidad ? -1 : 1));
     this.agendaTabs[0].readOnly = false;
-    console.log('agenda tabs ', this.agendaTabs);
-    console.log('especialidad ', this.especialidad);
   }
 
   getTabs(name:string = "") {
@@ -128,7 +126,6 @@ export class EstudianteEvaluacionesComponent extends BaseComponent implements IM
     const index = this.agendaTabs.findIndex(tab => tab.name === name);
     if (index !== -1) {
       const tab = this.getTabs(this.agendaTabs[index].name)[0];
-      console.log('tab to set', tab);
       if(tab){
         this.agendaTabs[index] = tab;
         this.agendaTabs[index].readOnly = false;
@@ -147,9 +144,10 @@ export class EstudianteEvaluacionesComponent extends BaseComponent implements IM
   }
   // lenguaje y habla
   agendarLenguaje(){
-    console.log('tratando de agendar');
+
     this.lenguajeHablaAgendada = true;
     this.lenguajeHablaMessage = this.successMessage;
+    this.updateTab('lenguaje', true);
   }
   cancelarLenguaje(){
     this.lenguajeHablaAgendada = false;
@@ -174,7 +172,7 @@ export class EstudianteEvaluacionesComponent extends BaseComponent implements IM
   }
   // psicologia
   cancelarPsicologia() {
-    console.log('cancelar psicologia ');
+
     this.psicologiaAgendada = false;
     this.psicologyMessage = {
       ...this.successMessage,
@@ -183,7 +181,7 @@ export class EstudianteEvaluacionesComponent extends BaseComponent implements IM
     this.updateTab('psicologia', true);
   }
   agendarPsicologia() {
-    console.log('agendar psicologia')
+
     this.psicologyMessage = this.successMessage
     this.psicologiaAgendada = true;
     this.updateTab('psicologia', true);

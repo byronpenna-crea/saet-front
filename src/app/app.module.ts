@@ -88,6 +88,7 @@ import {ConfirmDialogModule} from "primeng/confirmdialog";
 import {ConfirmationService} from "primeng/api";
 import { SaetConfirmComponent } from './component/catalogo/saet/component/saet-confirm/saet-confirm.component';
 import { EstudiantePaeiComponent } from './component/catalogo/saet/pages/estudiante-paei/estudiante-paei.component';
+import { SaetCuestionarioTablaComponent } from './component/catalogo/saet/component/saet-cuestionario-tabla/saet-cuestionario-tabla.component';
 
 
 @NgModule({
@@ -135,7 +136,8 @@ import { EstudiantePaeiComponent } from './component/catalogo/saet/pages/estudia
     SaetCheckboxComponent,
     SaetTabAgendaComponent,
     SaetConfirmComponent,
-    EstudiantePaeiComponent
+    EstudiantePaeiComponent,
+    SaetCuestionarioTablaComponent
 
   ],
   imports: [
@@ -178,7 +180,8 @@ import { EstudiantePaeiComponent } from './component/catalogo/saet/pages/estudia
     FileUploadModule,
     FieldsetModule,
     CheckboxModule,
-    ConfirmDialogModule
+    ConfirmDialogModule,
+
   ],
   providers: [
     SeguridadService,

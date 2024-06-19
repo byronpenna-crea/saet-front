@@ -1,3 +1,18 @@
+.actionsButton {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.right-buttons {
+  display: flex;
+  gap: 10px;
+}
+.button-container {
+  display: flex;
+  gap: 10px;
+  border-radius: 0px;
+}
+
 .margin-top{
   margin-top: 2%;
 }
@@ -16,5 +31,21 @@
   width: 90%;
   margin: 3% auto 0;
   margin-bottom: 1%;
+  font-weight: bold;
+}
+/***/
+.styled-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.styled-table th, .styled-table td {
+  border: 1px solid #dddddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.styled-table th {
+  background-color: #f2f2f2;
   font-weight: bold;
 }

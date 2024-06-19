@@ -21,7 +21,7 @@ import {ConfirmationService} from "primeng/api";
 export class EstudianteCuestionarioPsicologiaComponent extends QuestionsComponent implements IMessageComponent {
   userMessage: UserMessage = userMessageInit;
 
-  editMode:boolean = false;
+
   cuestionariosTableMode: number[] = [
     7,10,11,12,13
   ]
@@ -56,21 +56,7 @@ export class EstudianteCuestionarioPsicologiaComponent extends QuestionsComponen
 
 
   }
-  responseToValues(response: IEvaluacionResponse): IValuesForm  {
-    const values: IValuesForm = {};
 
-    response.respuestas.forEach(respuesta => {
-      const radioKey = `radio_${respuesta.id_pregunta}`;
-      const inputKey = `input_${respuesta.id_pregunta}`;
-
-      if (respuesta.opcion.length > 0) {
-        values[radioKey] = respuesta.opcion[0].opcion;
-      }
-      values[inputKey] = respuesta.respuesta;
-    });
-
-    return values;
-  }
   save(){
     const objToSave:ISaveQuestionary = this.getQuestionaryObject();
     const x = this.catalogoServiceCOR.savePsicologia(objToSave);

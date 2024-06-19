@@ -1,5 +1,5 @@
 import {Inject, Injectable} from "@angular/core";
-import {CatalogoServiceCor, StudentDetail} from "../../../services/catalogo/catalogo.service.cor";
+import {CatalogoServiceCor, IEvaluacionResponse, StudentDetail} from "../../../services/catalogo/catalogo.service.cor";
 import {DOCUMENT} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
 import {BaseComponent} from "./BaseComponent";
@@ -18,7 +18,11 @@ export interface IAnswerOption {
   id_opcion: number;
   opcion: string;
 }
-
+export enum FormMode {
+  CREATE,
+  VIEW,
+  EDIT
+}
 export interface IQuestionaryAnswer {
   id_pregunta: number;
   opcion: IAnswerOption[];
@@ -31,7 +35,9 @@ export class QuestionsComponent extends BaseComponent {
   values: IValuesForm = {};
   valuesKey:string = "";
   showActionButtons:boolean = false;
+  editMode:boolean = false;
 
+  formMode:FormMode = FormMode.CREATE;
   iconCompoment = IconComponent;
   constructor(
     @Inject(DOCUMENT) document: Document,
@@ -43,7 +49,24 @@ export class QuestionsComponent extends BaseComponent {
   ){
     const _valuesKey = `${especialidadTarget}_values`;
     super(document, catalogoServiceCOR, route, router);
-
+    this.route.paramMap.subscribe(params => {
+      const mode = params.get('mode');
+      console.log('mode --- ', mode);
+      switch (mode){
+        case null:
+          this.formMode = FormMode.CREATE;
+          break;
+        case 'view':
+          this.formMode = FormMode.VIEW;
+          break;
+        case 'edit':
+          this.formMode = FormMode.EDIT;
+          break;
+        default:
+          router.navigate(["menu/saet-evaluaciones",this.nie]);
+          break;
+      }
+    });
     const especialidad = localStorage.getItem('especialidad');
     if(especialidad !== especialidadTarget){
       router.navigate(["menu/saet-evaluaciones",this.nie]);
@@ -83,7 +106,21 @@ export class QuestionsComponent extends BaseComponent {
   getOptions(options: { id_opcion: number, opcion: string }[]): KeyValue[] {
     return options.map( (option) => ({key: option.id_opcion ? option.id_opcion.toString(): "", value: option.opcion}) as KeyValue );
   }
+  responseToValues(response: IEvaluacionResponse): IValuesForm  {
+    const values: IValuesForm = {};
 
+    response.respuestas.forEach(respuesta => {
+      const radioKey = `radio_${respuesta.id_pregunta}`;
+      const inputKey = `input_${respuesta.id_pregunta}`;
+
+      if (respuesta.opcion.length > 0) {
+        values[radioKey] = respuesta.opcion[0].opcion;
+      }
+      values[inputKey] = respuesta.respuesta;
+    });
+
+    return values;
+  }
   onchangeQuestions(keyValue:KeyValue) {
     console.log('onchange ', keyValue);
     this.values[keyValue.key] = keyValue.value;

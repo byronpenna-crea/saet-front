@@ -18,8 +18,6 @@ export class EstudianteCuestionarioPedagogiaComponent extends QuestionsComponent
     titleMessage: '',
     type: MessageType.SUCCESS
   }
-  editMode:boolean = false;
-
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceCOR: CatalogoServiceCor,

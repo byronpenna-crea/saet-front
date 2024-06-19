@@ -5,6 +5,7 @@ import {CatalogoServiceCor, StudentDetail} from "../../../../../services/catalog
 import {ActivatedRoute, Router} from "@angular/router";
 import {QuestionsComponent} from "../../QuestionsComponent";
 import {ConfirmationService} from "primeng/api";
+import {TIPO_EVALUACION} from "../../shared/evaluaciones";
 
 @Component({
   selector: 'app-estudiante-cuestionario-lenguaje',
@@ -18,7 +19,9 @@ export class EstudianteCuestionarioLenguajeComponent extends QuestionsComponent 
     titleMessage: '',
     type: MessageType.SUCCESS
   }
-  cuestionariosTableMode: number[] = [];
+  cuestionariosTableMode: number[] = [
+    16
+  ];
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceCOR: CatalogoServiceCor,
@@ -28,9 +31,28 @@ export class EstudianteCuestionarioLenguajeComponent extends QuestionsComponent 
   ){
     const especialidadTarget:string = "lenguaje";
     super(document, catalogoServiceCOR, route, router, confirmationService,especialidadTarget);
+
+
     catalogoServiceCOR.getLenguajeHablaQuestions().then((result) => {
+      this.showActionButtons = true;
       this.corSurveys.push(...result.cuestionarios);
     });
-  }
 
+    this.catalogoServiceCOR.getTipoDeEvaluacion(this.nie,TIPO_EVALUACION.logopeda_perfil).then((response) => {
+
+      console.log('Evaluacion here ', response);
+      console.log('values here ', this.values);
+      console.log('transformed response ',this.responseToValues(response));
+
+      this.values = {
+        ...this.values,
+        ...this.responseToValues(response)
+      }
+      console.log('this values ... ', this.values);
+    });
+
+  }
+  save(){
+
+  }
 }

@@ -461,7 +461,7 @@ const httpOptions = {
                 id_persona: 12345,
                 primer_nombre: 'Primer',
                 primer_apellido: 'Apellido',
-                especialidad: 'lenguaje y habla'
+                especialidad: 'lenguaje'
               }
             } :
             {};

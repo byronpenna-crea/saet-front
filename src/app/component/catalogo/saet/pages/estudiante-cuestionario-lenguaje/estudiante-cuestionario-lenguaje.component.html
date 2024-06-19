@@ -49,9 +49,82 @@
         </ng-container>
         </div>
         <div *ngIf="cuestionariosTableMode.includes(corSurvey.id_cuestionario)">
-          table mode
+          <table class="styled-table">
+            <thead>
+            <tr>
+              <th>Indicador</th>
+              <th>Respuesta</th>
+              <th>Observaciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <ng-container *ngFor="let pregunta of corSurvey.preguntas">
+              <tr>
+                <td>
+                  {{pregunta.pregunta}}
+                </td>
+                <ng-container *ngIf="pregunta.opcion.length > 0; else inputOnly">
+                  <td>
+                    <app-saet-radio
+                      (radioChange)="onchangeQuestions($event)"
+                      [name]="'radio_'+pregunta.id_pregunta.toString()"
+                      [selectedValue]="values['radio_'+pregunta.id_pregunta.toString()]"
+                      [options]="getOptions(pregunta.opcion)"
+                    />
+                  </td>
+                  <td>
+                    <app-saet-input
+                      [name]="'input_'+pregunta.id_pregunta.toString()"
+                      [inputArgs]="{text: ''}"
+                      [value]="values['input_'+pregunta.id_pregunta.toString()]"
+                      (inputChange)="onchangeQuestions($event)"
+                    />
+                  </td>
+                </ng-container>
+                <ng-template #inputOnly>
+                  <td colspan="2">
+                    <app-saet-input
+                      [name]="'input_'+pregunta.id_pregunta.toString()"
+                      [inputArgs]="{text: ''}"
+                      [value]="values['input_'+pregunta.id_pregunta.toString()]"
+                      (inputChange)="onchangeQuestions($event)"
+                    />
+                  </td>
+                </ng-template>
+              </tr>
+            </ng-container>
+            </tbody>
+          </table>
         </div>
       </app-tabs>
     </div>
   </ng-container>
+  <div *ngIf="showActionButtons" style="margin-top: 30px;">
+    <div
+      *ngIf="!editMode"
+      class="actionsButton"
+    >
+      <app-saet-button
+        (onClick)="salir()"
+        [buttonArgs]="{text: 'Salir',buttonStyle: 1,buttonIcon: 6 }" />
+
+      <app-saet-button
+        (onClick)="save()"
+        [buttonArgs]="{text: 'Guardar',buttonStyle: 1 }" />
+    </div>
+
+    <div
+      *ngIf="editMode"
+      class="actionsButton"
+    >
+      <app-saet-button
+        [buttonArgs]="{text: 'Regresar a la caracterización',buttonStyle: 1,buttonIcon: 7 }" />
+      <div class="right-buttons">
+        <app-saet-button
+          [buttonArgs]="{text: 'Editar',buttonStyle: 1 }" />
+        <app-saet-button
+          [buttonArgs]="{text: 'Generar PDF',buttonStyle: 1 }" />
+      </div>
+    </div>
+  </div>
 </div>

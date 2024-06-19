@@ -60,10 +60,18 @@ const routes: Routes = [
       { path: 'saet-caracterizacion-estudiante/:nie', component: EstudianteCaracterizacionComponent },
       { path: 'saet-pdf/:name', component: EstudiantePdfComponent },
       { path: 'saet-caracterizacion-iniciar/:nie', component: EstudianteCaracterizacionIniciarComponent },
+
       { path: 'saet-lenguaje-habla/:nie', component: EstudianteCuestionarioLenguajeComponent },
+      { path: 'saet-lenguaje-habla/:nie/:mode', component: EstudianteCuestionarioLenguajeComponent },
+
       { path: 'saet-informe', component: EstudianteInformeTrimestralComponent },
+
       { path: 'saet-psicologia/:nie', component: EstudianteCuestionarioPsicologiaComponent },
+      { path: 'saet-psicologia/:nie/:mode', component: EstudianteCuestionarioPsicologiaComponent },
+
       { path: 'saet-pedagogia/:nie', component: EstudianteCuestionarioPedagogiaComponent },
+      { path: 'saet-pedagogia/:nie/:mode', component: EstudianteCuestionarioPedagogiaComponent },
+
       { path: 'saet-evaluaciones/:nie', component: EstudianteEvaluacionesComponent },
       { path: 'saet-paei/:nie', component: EstudiantePaeiComponent },
       { path: 'persona', component: PersonaComponent, canActivate: [UserGuardGuard] },
