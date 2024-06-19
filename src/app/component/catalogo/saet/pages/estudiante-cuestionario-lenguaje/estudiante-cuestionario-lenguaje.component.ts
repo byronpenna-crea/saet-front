@@ -39,7 +39,7 @@ export class EstudianteCuestionarioLenguajeComponent extends QuestionsComponent 
     });
 
     this.catalogoServiceCOR.getTipoDeEvaluacion(this.nie,TIPO_EVALUACION.logopeda_perfil).then((response) => {
-
+      this.handleMode(response.id_evaluacion,'menu/saet-lenguaje-habla',this.formMode);
       console.log('Evaluacion here ', response);
       console.log('values here ', this.values);
       console.log('transformed response ',this.responseToValues(response));

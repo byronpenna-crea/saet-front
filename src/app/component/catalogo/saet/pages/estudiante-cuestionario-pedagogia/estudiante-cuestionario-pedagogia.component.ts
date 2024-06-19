@@ -5,6 +5,7 @@ import {DOCUMENT} from "@angular/common";
 import {CatalogoServiceCor} from "../../../../../services/catalogo/catalogo.service.cor";
 import {ActivatedRoute, Router} from "@angular/router";
 import {ConfirmationService} from "primeng/api";
+import {TIPO_EVALUACION} from "../../shared/evaluaciones";
 
 @Component({
   selector: 'app-estudiante-cuestionario-pedagogia',
@@ -27,8 +28,16 @@ export class EstudianteCuestionarioPedagogiaComponent extends QuestionsComponent
   ){
     const especialidadTarget:string = "pedagogia";
     super(document, catalogoServiceCOR, route, router,confirmationService,especialidadTarget);
+
+    this.catalogoServiceCOR.getTipoDeEvaluacion(this.nie,TIPO_EVALUACION.logopeda_perfil).then((response) => {
+      this.handleMode(response.id_evaluacion,'menu/saet-pedagogia',this.formMode);
+    })
+
     catalogoServiceCOR.getLenguajeHablaQuestions().then((result) => {
       this.corSurveys.push(...result.cuestionarios);
     });
+  }
+  save() {
+
   }
 }

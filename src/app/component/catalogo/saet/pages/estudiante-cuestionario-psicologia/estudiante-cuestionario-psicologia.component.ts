@@ -1,16 +1,12 @@
 import {Component, Inject} from '@angular/core';
-import {FormMode, IValuesForm, QuestionsComponent} from "../../QuestionsComponent";
+import {FormMode, QuestionsComponent} from "../../QuestionsComponent";
 import {IMessageComponent, UserMessage} from "../../interfaces/message-component.interface";
 import {DOCUMENT} from "@angular/common";
-import {
-  CatalogoServiceCor, IEvaluacionResponse,
-  ISaveQuestionary
-} from "../../../../../services/catalogo/catalogo.service.cor";
+import {CatalogoServiceCor, ISaveQuestionary} from "../../../../../services/catalogo/catalogo.service.cor";
 import {ActivatedRoute, Router} from "@angular/router";
 import {userMessageInit} from "../../shared/messages.model";
 import {TIPO_EVALUACION} from "../../shared/evaluaciones";
 import {ConfirmationService} from "primeng/api";
-
 
 
 @Component({
@@ -21,7 +17,7 @@ import {ConfirmationService} from "primeng/api";
 export class EstudianteCuestionarioPsicologiaComponent extends QuestionsComponent implements IMessageComponent {
   userMessage: UserMessage = userMessageInit;
 
-  formModeEnum = FormMode;
+
   cuestionariosTableMode: number[] = [
     7,10,11,12,13
   ]
@@ -36,6 +32,8 @@ export class EstudianteCuestionarioPsicologiaComponent extends QuestionsComponen
     super(document, catalogoServiceCOR, route, router, confirmationService, especialidadTarget);
 
     this.catalogoServiceCOR.getTipoDeEvaluacion(this.nie,TIPO_EVALUACION.psicologo_perfil).then((response) => {
+
+      this.handleMode(response.id_evaluacion,'menu/saet-psicologia',this.formMode);
 
       console.log('Evaluacion here ', response);
       console.log('values here ', this.values);
@@ -62,6 +60,17 @@ export class EstudianteCuestionarioPsicologiaComponent extends QuestionsComponen
     const x = this.catalogoServiceCOR.savePsicologia(objToSave);
     console.log('response --------------',x);
     console.log("to save ",objToSave);
+  }
+
+  override salirEditMode():string {
+    const url = super.salirEditMode();
+    this.catalogoServiceCOR.getTipoDeEvaluacion(this.nie,TIPO_EVALUACION.psicologo_perfil).then((response) => {
+      this.values = {
+        ...this.responseToValues(response)
+      }
+    });
+    this.router.navigateByUrl(url);
+    return "";
   }
   message: string = "";
   showMessage: boolean = false;

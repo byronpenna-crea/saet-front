@@ -3,6 +3,7 @@
     [testId]="testId"
     (inputChange)="onInputChange($event)"
     [value]="value"
+    [disabled]="readonly"
     [name]="idPregunta.toString()"
     [inputArgs]="abiertaComponentArgs" />
 </ng-container>
@@ -13,6 +14,7 @@
   <app-saet-input
     (inputChange)="onInputChange($event)"
     [value]="value"
+    [disabled]="readonly"
     [name]="idPregunta.toString()"
     [inputArgs]="abiertaComponentArgs" />
   <app-saet-radio [name]="idPregunta.toString()"
@@ -35,6 +37,7 @@
     (inputChange)="onInputChange($event)"
     [value]="value"
     [name]="idPregunta.toString()"
+    [disabled]="readonly"
     [inputArgs]="abiertaComponentArgs" />
   <app-saet-radio [name]="idPregunta.toString()"
                   [selectedValue]="value"

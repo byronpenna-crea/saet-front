@@ -36,9 +36,10 @@ export class QuestionsComponent extends BaseComponent {
   valuesKey:string = "";
   showActionButtons:boolean = false;
   editMode:boolean = false;
-
+  formModeEnum = FormMode;
   formMode:FormMode = FormMode.CREATE;
   iconCompoment = IconComponent;
+  targetEspecialidad:string = "";
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceCOR: CatalogoServiceCor,
@@ -47,11 +48,12 @@ export class QuestionsComponent extends BaseComponent {
     private confirmationService: ConfirmationService,
     @Inject(DOCUMENT) especialidadTarget:string
   ){
+
     const _valuesKey = `${especialidadTarget}_values`;
     super(document, catalogoServiceCOR, route, router);
+    this.targetEspecialidad = especialidadTarget;
     this.route.paramMap.subscribe(params => {
       const mode = params.get('mode');
-      console.log('mode --- ', mode);
       switch (mode){
         case null:
           this.formMode = FormMode.CREATE;
@@ -72,10 +74,20 @@ export class QuestionsComponent extends BaseComponent {
       router.navigate(["menu/saet-evaluaciones",this.nie]);
     }
 
-    this.valuesKey = _valuesKey;
-    const storedValues = localStorage.getItem(_valuesKey);
-    if (storedValues) {
-      this.values = JSON.parse(storedValues);
+    this.updateStoredValues(_valuesKey);
+
+  }
+  updateStoredValues(_valuesKey:string){
+    if(
+      this.formMode === FormMode.EDIT ||
+      this.formMode === FormMode.CREATE
+    ){
+      console.log('here ', _valuesKey);
+      this.valuesKey = _valuesKey;
+      const storedValues = localStorage.getItem(_valuesKey);
+      if (storedValues) {
+        this.values = JSON.parse(storedValues);
+      }
     }
   }
   QuestionType = QuestionType;
@@ -105,6 +117,24 @@ export class QuestionsComponent extends BaseComponent {
   }
   getOptions(options: { id_opcion: number, opcion: string }[]): KeyValue[] {
     return options.map( (option) => ({key: option.id_opcion ? option.id_opcion.toString(): "", value: option.opcion}) as KeyValue );
+  }
+
+  handleMode(idEvaluacion: number, url: string, formMode:FormMode, ) {
+    if(formMode === FormMode.CREATE &&
+      idEvaluacion !== 0
+    ){
+      this.router.navigate([url,this.nie,'view']);
+    }
+    if(formMode === FormMode.VIEW &&
+      idEvaluacion === 0
+    ){
+      this.router.navigate([url,this.nie]);
+    }
+    if(this.formMode === FormMode.EDIT &&
+      idEvaluacion === 0
+    ){
+      this.router.navigate([url,this.nie]);
+    }
   }
   responseToValues(response: IEvaluacionResponse): IValuesForm  {
     const values: IValuesForm = {};
@@ -188,6 +218,19 @@ export class QuestionsComponent extends BaseComponent {
   }
   async continuarEditando() {
     this.confirmationService.close();
+  }
+  entrarEditMode(){
+    const currentUrl = this.router.url;
+    const newUrl = currentUrl.replace('/view', '/edit');
+    this.formMode = FormMode.EDIT;
+    this.updateStoredValues(`${this.targetEspecialidad}_values`);
+    this.router.navigateByUrl(newUrl);
+  }
+  salirEditMode():string {
+    const currentUrl = this.router.url;
+    const newUrl = currentUrl.replace('/edit', '/view');
+    this.updateStoredValues(`${this.targetEspecialidad}_values`);
+    return newUrl;
   }
   salir() {
     this.confirmationService.confirm({
