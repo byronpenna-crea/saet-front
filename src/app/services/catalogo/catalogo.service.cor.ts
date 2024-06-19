@@ -81,13 +81,13 @@ export interface ISaveCaracterizacion {
 })
 export class CatalogoServiceCor {
   private API_SERVER_URL = `${environment.API_SERVER_URL}`;//v2
-  private API_SERVER_COR = `${this.API_SERVER_URL}/caracterizacion/cor/preguntas`;
-  private API_SERVER_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/pedagogia/preguntas`;
-  private API_SERVER_LENGUAJE_HABLA_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/lenguaje_habla/preguntas`;
-  private API_SERVER_PSICOLOGIA_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/psicologia/preguntas`;
-  private API_SERVER_PEDAGOGIA_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/pedagogia/preguntas`;
+  private API_SERVER_COR = `${this.API_SERVER_URL}caracterizacion/cor/preguntas`;
+  private API_SERVER_QUESTIONS = `${this.API_SERVER_URL}evaluacion/cor/pedagogia/preguntas`;
+  private API_SERVER_LENGUAJE_HABLA_QUESTIONS = `${this.API_SERVER_URL}evaluacion/cor/lenguaje_habla/preguntas`;
+  private API_SERVER_PSICOLOGIA_QUESTIONS = `${this.API_SERVER_URL}evaluacion/cor/psicologia/preguntas`;
+  private API_SERVER_PEDAGOGIA_QUESTIONS = `${this.API_SERVER_URL}evaluacion/cor/pedagogia/preguntas`;
 
-  private API_SERVER_ESTUDIANTE = `${this.API_SERVER_URL}/tempEstudiantesSigesv2/buscarEstudiantePorNIE?nie=[NIE]`
+  private API_SERVER_ESTUDIANTE = `${this.API_SERVER_URL}tempEstudiantesSigesv2/buscarEstudiantePorNIE?nie=[NIE]`
   constructor(private httpClient: HttpClient, private router: Router, private cookieService: CookieService) {
 
   }
@@ -140,26 +140,26 @@ export class CatalogoServiceCor {
   }
 
   public savePsicologia(cuestionarioPsicologia:ISaveQuestionary){
-    const url = `${this.API_SERVER_URL}/evaluacion/cor/psicologia/`;
+    const url = `${this.API_SERVER_URL}evaluacion/cor/psicologia/`;
     return this.postRequest<ISaveQuestionary,ISaveQuestionary>(url, cuestionarioPsicologia);
   }
   public savePedagogia (cuestionarioPedagogia:ISaveQuestionary){
-    const url = `${this.API_SERVER_URL}/evaluacion/cor/pedagogia/`;
+    const url = `${this.API_SERVER_URL}evaluacion/cor/pedagogia/`;
     return this.postRequest<ISaveQuestionary,ISaveQuestionary>(url, cuestionarioPedagogia);
   }
   public saveLenguaje(cuestionarioLenguaje:ISaveQuestionary){
-    const url = `${this.API_SERVER_URL}/evaluacion/cor/lenguaje_habla/`;
+    const url = `${this.API_SERVER_URL}evaluacion/cor/lenguaje_habla/`;
     return this.postRequest<ISaveQuestionary,ISaveQuestionary>(url, cuestionarioLenguaje);
   }
 
   public saveCaracterizacion(caracterizacion: ISaveCaracterizacion) {
-    const url = `${this.API_SERVER_URL}/caracterizacion/cor`;
+    const url = `${this.API_SERVER_URL}caracterizacion/cor`;
     return this.postRequest<ISaveCaracterizacion,ISaveCaracterizacion>(url, caracterizacion);
   }
 
   public getCaracterizacionPorNIE(nie:string): Promise<IGetCaracterizacion>{
     //
-    const url = `${this.API_SERVER_URL}/caracterizacion/cor/${nie}`;
+    const url = `${this.API_SERVER_URL}caracterizacion/cor/${nie}`;
     return new Promise((resolve, reject) => {
       fetch(url, {
         method: 'GET',
@@ -179,7 +179,7 @@ export class CatalogoServiceCor {
     });
   }
   public getTipoDeEvaluacion(nie: string,tipoEvaluacion: TIPO_EVALUACION): Promise<IEvaluacionResponse> {
-    const url = `${this.API_SERVER_URL}/evaluacion/cor/${nie}?idTipoEvaluacion=${tipoEvaluacion}`;
+    const url = `${this.API_SERVER_URL}evaluacion/cor/${nie}?idTipoEvaluacion=${tipoEvaluacion}`;
 
     return new Promise((resolve, reject) => {
       fetch(url, {
