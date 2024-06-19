@@ -2,28 +2,34 @@
   display: flex;
   flex-direction: column;
   padding: 10px;
-  width: 100%;
+  width: 96.5%;
   margin-top: 1%;
 }
 
 ::ng-deep .button-container-group {
   display: flex;
-  gap: 10px;
+  gap: 30px;
   border-radius: 0px;
   border-bottom: solid 1px #00498D;
-  padding-left: 20px;
+  padding-left: 50px;
 }
 
-::ng-deep .tabButton, .tabSeletectedButton {
-  border-radius: 0px;
+::ng-deep .tabButton,
+.tabSeletectedButton {
+  border-radius: 3px 3px 0px 0px;
   background: white;
   border: solid 1px #00498D;
   color: #00498D;
+  text-decoration: none;
+  width: 196px;
+  height: 46px;
 }
 
 ::ng-deep .tabSeletectedButton {
   background: #00498D;
   color: white;
+  text-align: center;
+
 }
 
 ::ng-deep .form-container .button-container a {

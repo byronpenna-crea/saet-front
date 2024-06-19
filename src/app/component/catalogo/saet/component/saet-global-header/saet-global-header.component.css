@@ -3,7 +3,13 @@
   gap: 10px;
   border-radius: 0px;
 }
-.margin-top{
+
+.form-container a {
+  padding: 0px 0px 0px 43px;
+  text-align: right;
+}
+
+.margin-top {
   margin-top: 2%;
 }
 
@@ -15,7 +21,8 @@
   margin: 3% auto 0;
   margin-top: 1%;
 }
-.titlePage{
+
+.titlePage {
   display: flex;
   flex-direction: column;
   padding: 10px;
@@ -24,7 +31,8 @@
   margin-bottom: 1%;
   font-weight: bold;
 }
-.global-header-read-only{
+
+.global-header-read-only {
   background: gray;
   color: lightgray;
 }

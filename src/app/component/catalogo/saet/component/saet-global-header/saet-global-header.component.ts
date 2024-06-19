@@ -1,6 +1,6 @@
-import {Component, Inject, Input, OnInit} from '@angular/core';
-import {CatalogoServiceCor} from "../../../../../services/catalogo/catalogo.service.cor";
-import {DOCUMENT} from "@angular/common";
+import { Component, Inject, Input, OnInit } from '@angular/core';
+import { CatalogoServiceCor } from "../../../../../services/catalogo/catalogo.service.cor";
+import { DOCUMENT } from "@angular/common";
 
 interface BreadcrumbItem {
   href: string;
@@ -11,11 +11,11 @@ interface BreadcrumbItem {
   templateUrl: './saet-global-header.component.html',
   styleUrls: ['./saet-global-header.component.css']
 })
-export class SaetGlobalHeaderComponent implements OnInit{
-  @Input() nie:string = "";
+export class SaetGlobalHeaderComponent implements OnInit {
+  @Input() nie: string = "";
   @Input() nombreCompleto: string = "";
   @Input() selectedTab: string = '';
-  tabMenu: { url: string, text: string, name:string, readOnly: boolean}[] = [];
+  tabMenu: { url: string, text: string, name: string, readOnly: boolean }[] = [];
   @Input() breadcrumb: BreadcrumbItem[] = [];
 
   @Input() _readOnlyEvaluaciones: boolean = true;
@@ -35,9 +35,9 @@ export class SaetGlobalHeaderComponent implements OnInit{
 
   generateTabs() {
     this.tabMenu = [
-      { name: 'datosGenerales', url: `#/menu/saet-datos-estudiante/${this.nie}`, text: 'DATOS GENERALES', readOnly: false },
-      { name: 'Caracterizacion', url: `#/menu/saet-caracterizacion-estudiante/${this.nie}`, text: 'CARACTERIZACIÓN', readOnly: false },
-      { name: 'evaluaciones', url: `#/menu/saet-evaluaciones/${this.nie}`, text: 'EVALUACIONES', readOnly: this._readOnlyEvaluaciones },
+      { name: 'datosGenerales', url: `#/menu/saet-datos-estudiante/${this.nie}`, text: 'Datos generales', readOnly: false },
+      { name: 'Caracterizacion', url: `#/menu/saet-caracterizacion-estudiante/${this.nie}`, text: 'Caracterización', readOnly: false },
+      { name: 'evaluaciones', url: `#/menu/saet-evaluaciones/${this.nie}`, text: 'Evaluaciones', readOnly: this._readOnlyEvaluaciones },
       { name: 'paei', url: `#/menu/saet-paei/${this.nie}`, text: 'PAEI', readOnly: this._readOnlyPaei }
     ];
   }
@@ -49,7 +49,7 @@ export class SaetGlobalHeaderComponent implements OnInit{
   isSelected(name: string): boolean {
     return this.selectedTab === name;
   }
-  handleClick(event: MouseEvent, url: string, readOnly:boolean) {
+  handleClick(event: MouseEvent, url: string, readOnly: boolean) {
 
     if (readOnly || url === '' || url === '#') {
       event.preventDefault();

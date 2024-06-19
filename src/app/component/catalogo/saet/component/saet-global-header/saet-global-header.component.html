@@ -3,7 +3,7 @@
   <div>
     <ng-container *ngFor="let item of breadcrumb; let isLast = last">
       <a *ngIf="item.href !== ''" [href]="item.href">{{ item.text }}</a>
-      <span style="color: #00498D" *ngIf="item.href === ''" >{{ item.text }}</span>
+      <span style="color: #00498D" *ngIf="item.href === ''">{{ item.text }}</span>
       <span *ngIf="!isLast"> / </span>
     </ng-container>
     <!--
@@ -20,20 +20,13 @@
   </div>
 </div>
 <div class="form-container">
-  <app-saet-student-name-header
-    [name]="nombreCompleto"
-  />
+  <app-saet-student-name-header [name]="nombreCompleto" />
 </div>
 <div class="form-container">
   <app-saet-tab-buttons>
-    <a
-      *ngFor="let tab of tabMenu"
-      type="button"
-      class="p-button p-component tabButton"
+    <a *ngFor="let tab of tabMenu" type="button" class="p-button p-component tabButton"
       [ngClass]="{'tabSeletectedButton': isSelected(tab.name), 'global-header-read-only': tab.readOnly}"
-      [href]="tab.readOnly ? null : tab.url"
-      (click)="handleClick($event, tab.url, tab.readOnly)"
-    >
+      [href]="tab.readOnly ? null : tab.url" (click)="handleClick($event, tab.url, tab.readOnly)">
       {{ tab.text }}
     </a>
   </app-saet-tab-buttons>
