@@ -90,7 +90,7 @@
 
   <div *ngIf="showActionButtons" style="margin-top: 30px;">
     <div
-      *ngIf="!editMode"
+      *ngIf="formMode === formModeEnum.CREATE"
       class="actionsButton"
     >
       <app-saet-button
@@ -103,7 +103,7 @@
     </div>
 
     <div
-      *ngIf="editMode"
+      *ngIf="formMode === formModeEnum.VIEW"
       class="actionsButton"
     >
       <app-saet-button

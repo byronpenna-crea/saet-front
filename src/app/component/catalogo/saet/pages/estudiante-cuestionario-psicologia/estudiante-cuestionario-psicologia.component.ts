@@ -1,5 +1,5 @@
 import {Component, Inject} from '@angular/core';
-import {IValuesForm, QuestionsComponent} from "../../QuestionsComponent";
+import {FormMode, IValuesForm, QuestionsComponent} from "../../QuestionsComponent";
 import {IMessageComponent, UserMessage} from "../../interfaces/message-component.interface";
 import {DOCUMENT} from "@angular/common";
 import {
@@ -21,7 +21,7 @@ import {ConfirmationService} from "primeng/api";
 export class EstudianteCuestionarioPsicologiaComponent extends QuestionsComponent implements IMessageComponent {
   userMessage: UserMessage = userMessageInit;
 
-
+  formModeEnum = FormMode;
   cuestionariosTableMode: number[] = [
     7,10,11,12,13
   ]
