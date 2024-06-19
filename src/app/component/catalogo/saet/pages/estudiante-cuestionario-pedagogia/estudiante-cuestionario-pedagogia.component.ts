@@ -19,6 +19,7 @@ export class EstudianteCuestionarioPedagogiaComponent extends QuestionsComponent
     type: MessageType.SUCCESS
   }
   editMode:boolean = false;
+
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceCOR: CatalogoServiceCor,
@@ -26,7 +27,8 @@ export class EstudianteCuestionarioPedagogiaComponent extends QuestionsComponent
     router: Router,
     confirmationService: ConfirmationService
   ){
-    super(document, catalogoServiceCOR, route, router,confirmationService,"pedagogia_values");
+    const especialidadTarget:string = "pedagogia";
+    super(document, catalogoServiceCOR, route, router,confirmationService,especialidadTarget);
     catalogoServiceCOR.getLenguajeHablaQuestions().then((result) => {
       this.corSurveys.push(...result.cuestionarios);
     });

@@ -1,9 +1,9 @@
 import {Component, Inject} from '@angular/core';
-import {QuestionsComponent} from "../../QuestionsComponent";
+import {IValuesForm, QuestionsComponent} from "../../QuestionsComponent";
 import {IMessageComponent, UserMessage} from "../../interfaces/message-component.interface";
 import {DOCUMENT} from "@angular/common";
 import {
-  CatalogoServiceCor,
+  CatalogoServiceCor, IEvaluacionResponse,
   ISaveQuestionary
 } from "../../../../../services/catalogo/catalogo.service.cor";
 import {ActivatedRoute, Router} from "@angular/router";
@@ -32,8 +32,21 @@ export class EstudianteCuestionarioPsicologiaComponent extends QuestionsComponen
     router: Router,
     confirmationService: ConfirmationService
   ){
+    const especialidadTarget:string = "psicologia";
+    super(document, catalogoServiceCOR, route, router, confirmationService, especialidadTarget);
 
-    super(document, catalogoServiceCOR, route, router, confirmationService, "psicologia_values");
+    this.catalogoServiceCOR.getTipoDeEvaluacion(this.nie,TIPO_EVALUACION.psicologo_perfil).then((response) => {
+
+      console.log('Evaluacion here ', response);
+      console.log('values here ', this.values);
+      console.log('transformed response ',this.responseToValues(response));
+
+      this.values = {
+        ...this.values,
+        ...this.responseToValues(response)
+      }
+      console.log('this values ... ', this.values);
+    });
 
 
     catalogoServiceCOR.getPsicologiaQuestions().then((result) => {
@@ -43,7 +56,21 @@ export class EstudianteCuestionarioPsicologiaComponent extends QuestionsComponen
 
 
   }
+  responseToValues(response: IEvaluacionResponse): IValuesForm  {
+    const values: IValuesForm = {};
 
+    response.respuestas.forEach(respuesta => {
+      const radioKey = `radio_${respuesta.id_pregunta}`;
+      const inputKey = `input_${respuesta.id_pregunta}`;
+
+      if (respuesta.opcion.length > 0) {
+        values[radioKey] = respuesta.opcion[0].opcion;
+      }
+      values[inputKey] = respuesta.respuesta;
+    });
+
+    return values;
+  }
   save(){
     const objToSave:ISaveQuestionary = this.getQuestionaryObject();
     const x = this.catalogoServiceCOR.savePsicologia(objToSave);

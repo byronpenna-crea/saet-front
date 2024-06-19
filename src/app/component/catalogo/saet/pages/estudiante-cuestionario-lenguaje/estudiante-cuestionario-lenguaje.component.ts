@@ -26,7 +26,8 @@ export class EstudianteCuestionarioLenguajeComponent extends QuestionsComponent 
     router: Router,
     confirmationService: ConfirmationService
   ){
-    super(document, catalogoServiceCOR, route, router, confirmationService,"lenguaje_values");
+    const especialidadTarget:string = "lenguaje";
+    super(document, catalogoServiceCOR, route, router, confirmationService,especialidadTarget);
     catalogoServiceCOR.getLenguajeHablaQuestions().then((result) => {
       this.corSurveys.push(...result.cuestionarios);
     });

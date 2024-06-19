@@ -97,7 +97,7 @@ export class EstudianteEvaluacionesComponent extends BaseComponent implements IM
         onAgendar: this.agendarLenguaje.bind(this),
         onCancelar: this.cancelarLenguaje.bind(this),
         onIniciar: this.iniciarLenguajeHabla.bind(this),
-        name: "lenguaje y habla"
+        name: "lenguaje"
       },
       {
         leyend: 'Evaluación psicologica',

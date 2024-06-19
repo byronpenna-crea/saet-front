@@ -39,9 +39,16 @@ export class QuestionsComponent extends BaseComponent {
     route: ActivatedRoute,
     router: Router,
     private confirmationService: ConfirmationService,
-    @Inject(DOCUMENT) _valuesKey:string
+    @Inject(DOCUMENT) especialidadTarget:string
   ){
+    const _valuesKey = `${especialidadTarget}_values`;
     super(document, catalogoServiceCOR, route, router);
+
+    const especialidad = localStorage.getItem('especialidad');
+    if(especialidad !== especialidadTarget){
+      router.navigate(["menu/saet-evaluaciones",this.nie]);
+    }
+
     this.valuesKey = _valuesKey;
     const storedValues = localStorage.getItem(_valuesKey);
     if (storedValues) {
