@@ -1,57 +1,30 @@
 <ng-container *ngIf="type === QuestionType.ABIERTA">
-  <app-saet-input
-    [testId]="testId"
-    (inputChange)="onInputChange($event)"
-    [value]="value"
-    [disabled]="readonly"
-    [name]="idPregunta.toString()"
-    [inputArgs]="abiertaComponentArgs" />
+  <app-saet-input [testId]="testId" (inputChange)="onInputChange($event)" [value]="value" [disabled]="readonly"
+    [name]="idPregunta.toString()" [inputArgs]="abiertaComponentArgs" />
 </ng-container>
 <ng-container *ngIf="type === QuestionType.MULTIPLE_CON_RESPUESTA">
   MULTIPLE_CON_RESPUESTA
 </ng-container>
 <ng-container *ngIf="type === QuestionType.OPCION_UNICA_CON_RESPUESTA">
-  <app-saet-input
-    (inputChange)="onInputChange($event)"
-    [value]="value"
-    [disabled]="readonly"
-    [name]="idPregunta.toString()"
-    [inputArgs]="abiertaComponentArgs" />
-  <app-saet-radio [name]="idPregunta.toString()"
-                  [selectedValue]="value"
-                  [options]="options"
-                  (radioChange)="onInputChange($event)"
-  />
+  <app-saet-input (inputChange)="onInputChange($event)" [value]="value" [disabled]="readonly"
+    [name]="idPregunta.toString()" [inputArgs]="abiertaComponentArgs" />
+  <app-saet-radio [name]="idPregunta.toString()" [selectedValue]="value" [options]="options"
+    (radioChange)="onInputChange($event)" />
 </ng-container>
 
 
 <ng-container *ngIf="type === QuestionType.OPCION_UNICA">
-  <app-saet-radio [name]="idPregunta.toString()"
-                  [selectedValue]="value"
-                  [options]="options"
-                  (radioChange)="onInputChange($event)"
-  />
+  <app-saet-radio [name]="idPregunta.toString()" [selectedValue]="value" [options]="options"
+    (radioChange)="onInputChange($event)" />
 </ng-container>
 <ng-container *ngIf="type === QuestionType.ABIERTA_CON_RESPUESTA">
-  <app-saet-input
-    (inputChange)="onInputChange($event)"
-    [value]="value"
-    [name]="idPregunta.toString()"
-    [disabled]="readonly"
-    [inputArgs]="abiertaComponentArgs" />
-  <app-saet-radio [name]="idPregunta.toString()"
-                  [selectedValue]="value"
-                  [options]="options"
-                  (radioChange)="onInputChange($event)"
-  />
+  <app-saet-input (inputChange)="onInputChange($event)" [value]="value" [name]="idPregunta.toString()"
+    [disabled]="readonly" [inputArgs]="abiertaComponentArgs" />
+  <app-saet-radio [name]="idPregunta.toString()" [selectedValue]="value" [options]="options"
+    (radioChange)="onInputChange($event)" />
 </ng-container>
 <ng-container *ngIf="type === QuestionType.OPCION_MULTIPLE">
-  <app-saet-checkbox
-    [name]="idPregunta.toString()"
-    [options]="options"
-    [selectedValues]="value ? value.split(','): []"
-    (checkboxChange)="onCheckBoxChange($event)"
-    [disabled]="false">
+  <app-saet-checkbox [name]="idPregunta.toString()" [options]="options" [selectedValues]="value ? value.split(','): []"
+    (checkboxChange)="onCheckBoxChange($event)" [disabled]="false">
   </app-saet-checkbox>
 </ng-container>
-

@@ -1,5 +1,5 @@
-import {Component, EventEmitter, Input, OnChanges, Output, SimpleChanges} from '@angular/core';
-import {getIconClass, IconComponent} from "../../shared/component.config";
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { getIconClass, IconComponent } from "../../shared/component.config";
 
 
 export enum ButtonStyle {
@@ -18,11 +18,11 @@ export interface SaetButtonArgs {
   styleUrls: ['./saet-button.component.css']
 })
 
-export class SaetButtonComponent implements OnChanges{
+export class SaetButtonComponent implements OnChanges {
   /*@Input() text:string = "";
   @Input() buttonStyle?:ButtonStyle = ButtonStyle.WHITE;
   @Input() buttonIcon?:ButtonIcon | null = null;*/
-  @Input() testId:string = "";
+  @Input() testId: string = "";
   @Input() buttonArgs: SaetButtonArgs = {
     buttonIcon: null,
     buttonStyle: ButtonStyle.WHITE,

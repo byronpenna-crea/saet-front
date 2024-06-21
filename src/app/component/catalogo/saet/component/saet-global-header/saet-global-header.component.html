@@ -1,5 +1,4 @@
 <div class="titlePage">
-  <h2>Buscar estudiante</h2>
   <div>
     <ng-container *ngFor="let item of breadcrumb; let isLast = last">
       <a *ngIf="item.href !== ''" [href]="item.href">{{ item.text }}</a>
@@ -18,6 +17,8 @@
 
     -->
   </div>
+  <h2>Buscar estudiante</h2>
+
 </div>
 <div class="form-container">
   <app-saet-student-name-header [name]="nombreCompleto" />

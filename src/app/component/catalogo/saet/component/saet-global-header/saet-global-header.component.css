@@ -6,7 +6,6 @@
 
 .form-container a {
   padding: 0px 0px 0px 43px;
-  text-align: right;
 }
 
 .margin-top {
@@ -27,7 +26,7 @@
   flex-direction: column;
   padding: 10px;
   width: 90%;
-  margin: 3% auto 0;
+  margin: 2% auto 0;
   margin-bottom: 1%;
   font-weight: bold;
 }
@@ -35,4 +34,8 @@
 .global-header-read-only {
   background: gray;
   color: lightgray;
+}
+
+.titlePage h2 {
+  padding-top: 20px;
 }

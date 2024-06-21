@@ -5,28 +5,17 @@
 </div>
 <div class="form-container">
   <p class="title">Escribe el NIE del estudiante.</p>
-  <app-saet-input
-    testId="input-nie"
-    [inputArgs]="{text: inputNIE}"
-    [value]="inputNIE"
-    [disabled]="showTable"
-    (inputChange)="onInputChange($event)"
-  />
+  <app-saet-input testId="input-nie" [inputArgs]="{text: inputNIE}" [value]="inputNIE" [disabled]="showTable"
+    (inputChange)="onInputChange($event)" />
   <div class="button-container">
 
-    <app-saet-button
-      testId="btn-buscar"
-      [disabled]="showTable"
-      [buttonArgs]="searchButton" (click)="toggleTable()" />
-    <span
-      data-testId="btn-clean"
-      class="clear-text"
-      (click)="cleanInput()"
-    >limpiar búsqueda</span>
+    <app-saet-button testId="btn-buscar" [disabled]="showTable"
+      [buttonArgs]="{text: 'Buscar', buttonStyle: 1,buttonIcon: 5}" (click)="toggleTable()" />
+    <button data-testId="btn-clean" class="clear-text" (click)="cleanInput()">limpiar búsqueda</button>
 
   </div>
   <div *ngIf="showTable">
-    <app-saet-underlined-title >
+    <app-saet-underlined-title>
       <div style="display: flex; flex-direction: row">
         <div style="font-weight: bold; width: 300px">
           Resultado(s):
@@ -38,104 +27,78 @@
     </app-saet-underlined-title>
   </div>
 
-  <app-saet-mensaje-usuario
-    [show]="userMessage.showMessage"
-    [message]="userMessage.message"
-    [title]="userMessage.titleMessage"
-    [messageType]="userMessage.type"
-  />
+  <app-saet-mensaje-usuario [show]="userMessage.showMessage" [message]="userMessage.message"
+    [title]="userMessage.titleMessage" [messageType]="userMessage.type" />
   <div *ngIf="showTable" class="table-container">
-    <app-tabs
-      legend="Estudiante"
-    >
+    <app-tabs legend="Estudiante">
       <div class="mb-2">
-        <app-tab-item label="NIE" >
-          <app-saet-input
-            testId="input-nie"
-            [disabled]="1 == 1"
-            [value]="studentInfo?.nie ?? ''"
-            [inputArgs]="{text: studentInfo?.nie}"
-          />
+        <app-tab-item label="NIE">
+          <app-saet-input testId="input-nie" [disabled]="1 == 1" [value]="studentInfo?.nie ?? ''"
+            [inputArgs]="{text: studentInfo?.nie}" />
         </app-tab-item>
       </div>
       <div class="mt-2">
-        <app-tab-item label="NUI" >
-          <app-saet-input
-            testId="input-nui"
-            [disabled]="1 == 1"
-            [value]="studentInfo?.nui ?? ''"
+        <app-tab-item label="NUI">
+          <app-saet-input testId="input-nui" [disabled]="1 == 1" [value]="studentInfo?.nui ?? ''"
             [inputArgs]="{text: studentInfo?.nui}" />
         </app-tab-item>
       </div>
 
       <div class="mt-2">
-        <app-tab-item label="Nombre completo:" >
-          <app-saet-input
-            testId="input-nombrecompleto"
-            [disabled]="1 == 1"
-            [value]="studentInfo?.nombreCompleto ?? ''"
-            [inputArgs]="{text: studentInfo?.nombreCompleto}"           />
+        <app-tab-item label="Nombre completo:">
+          <app-saet-input testId="input-nombrecompleto" [disabled]="1 == 1" [value]="studentInfo?.nombreCompleto ?? ''"
+            [inputArgs]="{text: studentInfo?.nombreCompleto}" />
         </app-tab-item>
       </div>
 
       <div class="mt-2">
-        <app-tab-item label="Centro Educativo:" >
-          <app-saet-input
-            testId="input-centroeducativo"
-            [disabled]="1 == 1"
-            [value]="centroEducativo"
+        <app-tab-item label="Centro Educativo:">
+          <app-saet-input testId="input-centroeducativo" [disabled]="1 == 1" [value]="centroEducativo"
             [inputArgs]="{text: centroEducativo}" />
         </app-tab-item>
       </div>
 
       <div class="mb-2 mt-2">
         .
-        <app-saet-underlined-title >
+        <app-saet-underlined-title>
 
         </app-saet-underlined-title>
       </div>
 
-      <p-table
-      data-testid="table-information"
-      [columns]="flowColumns"
-      [value]="flowData">
-      <ng-template pTemplate="header" let-columns>
-        <tr>
-          <th *ngFor="let col of columns">
-            {{ col.header }}
-          </th>
-        </tr>
-      </ng-template>
-      <ng-template pTemplate="body" let-rowData>
-        <tr>
-          <td>
-            {{ rowData["col1"] }}
-          </td>
-          <td>
-            {{ rowData["col2"] }}
-          </td>
-          <td>
-            <div *ngIf="rowData['col3'] === ''">
+      <p-table data-testid="table-information" [columns]="flowColumns" [value]="flowData">
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th *ngFor="let col of columns">
+              {{ col.header }}
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData>
+          <tr>
+            <td>
+              {{ rowData["col1"] }}
+            </td>
+            <td>
+              {{ rowData["col2"] }}
+            </td>
+            <td>
+              <div *ngIf="rowData['col3'] === ''">
                 Sin especificar
-            </div>
-            <div *ngIf="rowData['col3'] !== ''">
-              <app-saet-button
-                (onClick)="goToReferencia(rowData['col3'])"
-                testId="btn-ver-referencia"
-                [buttonArgs]="{buttonIcon: 0,buttonStyle: 0, text: 'Ver referencia'}">
+              </div>
+              <div *ngIf="rowData['col3'] !== ''">
+                <app-saet-button (onClick)="goToReferencia(rowData['col3'])" testId="btn-ver-referencia"
+                  [buttonArgs]="{buttonIcon: 0,buttonStyle: 0, text: 'Ver referencia'}">
 
-              </app-saet-button>
-            </div>
-          </td>
-          <td>
-            <app-saet-button
-              (onClick)="goTo(rowData['href'])"
-              testId="btn-ver-detalle"
-              [buttonArgs]="{buttonIcon: 0,buttonStyle: 0, text: 'Ver detalle'}"></app-saet-button>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
+                </app-saet-button>
+              </div>
+            </td>
+            <td>
+              <app-saet-button (onClick)="goTo(rowData['href'])" testId="btn-ver-detalle"
+                [buttonArgs]="{buttonIcon: 0,buttonStyle: 0, text: 'Ver detalle'}"></app-saet-button>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
     </app-tabs>
   </div>
 
