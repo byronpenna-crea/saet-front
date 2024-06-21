@@ -1,12 +1,15 @@
-.mt-2{
+.mt-2 {
   margin-top: 35px;
 }
-.mb-2{
+
+.mb-2 {
   margin-bottom: 35px;
 }
-.container-rich{
+
+.container-rich {
   padding-left: 105px;
 }
+
 .form-container {
   display: flex;
   flex-direction: column;
@@ -15,20 +18,24 @@
   margin: 3% auto 0;
   margin-top: 1%;
 }
-.divInforme{
+
+.divInforme {
   border-bottom: solid 1px black;
   margin-bottom: 150px;
   margin-top: 50px;
 }
+
 .divInforme a {
   text-decoration: none;
   padding-bottom: 10px;
 }
-.selectedOption{
+
+.selectedOption {
   font-weight: bold;
   border-bottom: solid 3px black;
 }
-.titlePage{
+
+.titlePage {
   display: flex;
   flex-direction: column;
   padding: 10px;
@@ -50,18 +57,29 @@ app-saet-input {
 
 .button-container {
   display: flex;
-  align-items: baseline;
+  direction: row;
   justify-content: flex-end;
   gap: 10px;
   margin-top: 3%;
 }
-.table-container{
+
+.table-container {
   margin-top: 5%;
 }
+
 app-saet-button {
   min-width: 80px;
 }
+
 .clear-text {
-  cursor: pointer; /* Hace que el texto parezca clickable */
-  user-select: none; /* Evita que el texto pueda ser seleccionado */
+  cursor: pointer;
+  /* Hace que el texto parezca clickable */
+  user-select: none;
+  /* Evita que el texto pueda ser seleccionado */
+  text-decoration: underline;
+  color: #00498D;
+  height: 47px;
+  width: 147px;
+  background-color: white;
+  border-style: none;
 }
