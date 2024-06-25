@@ -21,6 +21,13 @@ export class EstudianteCuestionarioPsicologiaComponent extends QuestionsComponen
   cuestionariosTableMode: number[] = [
     7,10,11,12,13
   ]
+  override async ngOnInit() {
+    await super.ngOnInit();
+    if(this.readOnlyEvaluaciones){
+      this.router.navigate(['/menu/saet-caracterizacion-estudiante',this.nie]);
+    }
+  }
+
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceCOR: CatalogoServiceCor,
