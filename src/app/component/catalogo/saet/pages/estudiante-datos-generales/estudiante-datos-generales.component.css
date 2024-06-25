@@ -44,3 +44,11 @@
 .button-container a {
   text-decoration: none;
 }
+
+@media screen and (max-width:1920px) {
+
+  .form-container {
+    width: 77%;
+    margin-left: 8%;
+  }
+}

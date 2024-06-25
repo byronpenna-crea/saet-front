@@ -59,3 +59,11 @@
   text-decoration: underline;
   color: #00498D;
 }
+
+@media screen and (max-width:1920px) {
+
+  .form-container {
+    width: 77%;
+    margin-left: 8%;
+  }
+}

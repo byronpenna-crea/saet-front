@@ -1,68 +1,51 @@
-<app-saet-tab
-  [readOnly]="readOnly"
-  [leyend]=leyend>
+<app-saet-tab [readOnly]="readOnly" [leyend]=leyend>
   <p-tabView>
     <p-tabPanel header="Perfil">
-          <div *ngIf="!agendado">
-            <div class="flex wrap margin-top">
-              <div class="first-column">
-                <label class="first-item">Fecha de evaluación:</label>
-                <div class="second-item">
-                  <p-calendar
-                    [disabled]="readOnly"
-                    [showIcon]="true"
-                    dateFormat="dd/mm/yy">
-                  </p-calendar>
-                </div>
+      <div *ngIf="!agendado">
+        <div class="flex wrap margin-top">
+          <div class="first-column">
+            <label class="first-item">Fecha de evaluación:</label>
+            <div class="second-item">
+              <p-calendar [disabled]="readOnly" [showIcon]="true" dateFormat="dd/mm/yy">
+              </p-calendar>
+            </div>
 
-              </div>
-              <div class="second-column">
+          </div>
+          <div class="second-column">
 
-                <label class="first-item">Hora de evaluación:</label>
-                <div class="second-item">
-                  <p-calendar
-                    inputId="calendar-timeonly"
-                    [timeOnly]="true" />
-                </div>
-              </div>
+            <label class="first-item">Hora de evaluación:</label>
+            <div class="second-item-time">
+              <p-calendar inputId="calendar-timeonly" [timeOnly]="true" />
             </div>
           </div>
+        </div>
+      </div>
 
-          <div *ngIf="agendado">
-            Especialista responsable de agendar
-            <app-saet-input />
-          </div>
+      <div *ngIf="agendado">
+        Especialista responsable de agendar
+        <app-saet-input />
+      </div>
 
-          <div *ngIf="!agendado">
-            <div class="actionsButton">
-              <div></div>
-              <div class="right-buttons">
-                <app-saet-button
-                  (onClick)="agendar()"
-                  [disabled]="readOnly"
-                  [buttonArgs]="{buttonIcon: 1,buttonStyle: 0, text: 'Agendar perfil'}"
-                />
-              </div>
-            </div>
+      <div *ngIf="!agendado">
+        <div class="actionsButton">
+          <div></div>
+          <div class="right-buttons">
+            <app-saet-button (onClick)="agendar()" [disabled]="readOnly"
+              [buttonArgs]="{buttonIcon: 1,buttonStyle: 0, text: 'Agendar perfil'}" />
           </div>
-          <div *ngIf="agendado">
-            <div class="actionsButton">
-              <div></div>
-              <div class="right-buttons">
-                    <span
-                      data-testId="btn-clean"
-                      class="link-text"
-                      (click)="cancelar()"
-                    >Cancelar agenda</span>
+        </div>
+      </div>
+      <div *ngIf="agendado">
+        <div class="actionsButton">
+          <div></div>
+          <div class="right-buttons">
+            <span data-testId="btn-clean" class="link-text" (click)="cancelar()">Cancelar agenda</span>
 
-                <app-saet-button
-                  enab
-                  (onClick)="iniciar()"
-                  [buttonArgs]="{buttonIcon: 1,buttonStyle: 0, text: 'Iniciar evaluación'}"
-                />
-              </div>
-            </div>
+            <app-saet-button enab (onClick)="iniciar()"
+              [buttonArgs]="{buttonIcon: 1,buttonStyle: 0, text: 'Iniciar evaluación'}" />
           </div>
+        </div>
+      </div>
     </p-tabPanel>
     <p-tabPanel header="Agendar">
       Agendar
