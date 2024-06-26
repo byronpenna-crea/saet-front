@@ -81,9 +81,28 @@ export class EstudianteCaracterizacionIniciarComponent
 
   override async ngOnInit() {
     await super.ngOnInit();
-    if(this.caracterizacion?.id_caracterizacion === undefined || this.caracterizacion?.id_caracterizacion === 0){
-      await this.router.navigate(["menu/saet-caracterizacion-estudiante",this.nie]);
+
+    const url = '/menu/saet-caracterizacion-iniciar';
+    console.log('form mode is ', this.formMode);
+    console.log('id caracterizacion here', this.caracterizacion?.id_caracterizacion);
+    const idCaracterizacion:number = this.caracterizacion?.id_caracterizacion ?? 0;
+    if(
+      this.formMode === FormMode.CREATE &&
+      idCaracterizacion !== 0
+    ){
+      this.router.navigate([url,this.nie,'view']);
     }
+    if(this.formMode === FormMode.VIEW &&
+      idCaracterizacion === 0
+    ){
+      this.router.navigate([url,this.nie]);
+    }
+    if(this.formMode === FormMode.EDIT &&
+      idCaracterizacion === 0
+    ){
+      this.router.navigate([url,this.nie]);
+    }
+
   }
   formMode:FormMode = FormMode.CREATE;
   constructor(
@@ -125,22 +144,7 @@ export class EstudianteCaracterizacionIniciarComponent
           break;
       }
 
-      const url = '/menu/saet-caracterizacion-iniciar';
-      if(this.formMode === FormMode.CREATE &&
-        this.caracterizacion?.id_caracterizacion !== 0
-      ){
-        this.router.navigate([url,this.nie,'view']);
-      }
-      if(this.formMode === FormMode.VIEW &&
-        this.caracterizacion?.id_caracterizacion === 0
-      ){
-        this.router.navigate([url,this.nie]);
-      }
-      if(this.formMode === FormMode.EDIT &&
-        this.caracterizacion?.id_caracterizacion === 0
-      ){
-        this.router.navigate([url,this.nie]);
-      }
+
     });
 
 
