@@ -177,40 +177,7 @@ export class QuestionsComponent extends BaseComponent {
       respuestas: this.getAnswerObject(this.values)
     };
   }
-  getAnswerObject(data: IValuesForm): IQuestionaryAnswer[] {
-    const result: IQuestionaryAnswer[] = [];
 
-    const keys = Object.keys(data);
-
-    const groupedData = keys.reduce<Record<string, { radio?: string; input?: string }>>((acc, key) => {
-      const [type, id] = key.split('_');
-      if (!acc[id]) {
-        acc[id] = {};
-      }
-      if (type === 'radio' || type === 'input') {
-        acc[id][type] = data[key];
-      }
-      return acc;
-    }, {});
-
-    for (const id in groupedData) {
-      if (groupedData.hasOwnProperty(id)) {
-        const item: IQuestionaryAnswer = {
-          id_pregunta: parseInt(id, 10),
-          opcion: [
-            {
-              id_opcion: parseInt(id, 10),
-              opcion: groupedData[id].radio || ""
-            }
-          ],
-          respuesta: groupedData[id].input || "Esta es una prueba para crear evaluacion psicologica"
-        };
-        result.push(item);
-      }
-    }
-
-    return result;
-  }
 
 
   async aceptarSalir() {

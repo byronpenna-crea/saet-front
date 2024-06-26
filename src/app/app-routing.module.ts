@@ -58,8 +58,13 @@ const routes: Routes = [
 
       { path: 'saet-datos-estudiante/:nie', component: EstudianteDatosGeneralesComponent },
       { path: 'saet-caracterizacion-estudiante/:nie', component: EstudianteCaracterizacionComponent },
+
+
       { path: 'saet-pdf/:name', component: EstudiantePdfComponent },
+
+
       { path: 'saet-caracterizacion-iniciar/:nie', component: EstudianteCaracterizacionIniciarComponent },
+      { path: 'saet-caracterizacion-iniciar/:nie/:mode', component: EstudianteCaracterizacionIniciarComponent },
 
       { path: 'saet-lenguaje-habla/:nie', component: EstudianteCuestionarioLenguajeComponent },
       { path: 'saet-lenguaje-habla/:nie/:mode', component: EstudianteCuestionarioLenguajeComponent },
