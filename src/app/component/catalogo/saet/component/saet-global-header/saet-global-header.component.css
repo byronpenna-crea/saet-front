@@ -39,3 +39,9 @@
 .titlePage h2 {
   padding-top: 20px;
 }
+
+@media screen and (max-width: 500px) {
+  .form-container a {
+    padding: 0px 0px 0px 70px;
+  }
+}

@@ -74,7 +74,24 @@
     display: flex;
     flex-direction: column;
     padding: 10px;
-    width: 95.5%;
+    width: 89%;
     margin-top: 1%;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  ::ng-deep .button-container-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-radius: 0px;
+    border-bottom: solid 0.5px #00498D;
+    padding-left: 25px;
+  }
+
+  ::ng-deep .tabButton,
+  .tabSeletectedButton {
+    width: 280px;
+    height: 46px;
   }
 }

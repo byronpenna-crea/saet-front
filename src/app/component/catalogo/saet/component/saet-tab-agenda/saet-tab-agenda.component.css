@@ -87,3 +87,21 @@
     width: 295px;
   }
 }
+
+@media screen and (max-width:500px) {
+  .first-column {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .second-column {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  ::ng-deep .second-item-time .p-calendar {
+    width: 200px;
+  }
+}
