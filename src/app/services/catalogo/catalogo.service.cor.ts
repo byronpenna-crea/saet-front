@@ -81,13 +81,13 @@ export interface ISaveCaracterizacion {
 })
 export class CatalogoServiceCor {
   private API_SERVER_URL = `${environment.API_SERVER_URL}`;//v2
-  private API_SERVER_COR = `${this.API_SERVER_URL}caracterizacion/cor/preguntas`;
-  private API_SERVER_QUESTIONS = `${this.API_SERVER_URL}evaluacion/cor/pedagogia/preguntas`;
-  private API_SERVER_LENGUAJE_HABLA_QUESTIONS = `${this.API_SERVER_URL}evaluacion/cor/lenguaje_habla/preguntas`;
-  private API_SERVER_PSICOLOGIA_QUESTIONS = `${this.API_SERVER_URL}evaluacion/cor/psicologia/preguntas`;
-  private API_SERVER_PEDAGOGIA_QUESTIONS = `${this.API_SERVER_URL}evaluacion/cor/pedagogia/preguntas`;
+  private API_SERVER_COR = `${this.API_SERVER_URL}/caracterizacion/cor/preguntas`;
+  private API_SERVER_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/pedagogia/preguntas`;
+  private API_SERVER_LENGUAJE_HABLA_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/lenguaje_habla/preguntas`;
+  private API_SERVER_PSICOLOGIA_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/psicologia/preguntas`;
+  private API_SERVER_PEDAGOGIA_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/pedagogia/preguntas`;
 
-  private API_SERVER_ESTUDIANTE = `${this.API_SERVER_URL}tempEstudiantesSigesv2/buscarEstudiantePorNIE?nie=[NIE]`
+  private API_SERVER_ESTUDIANTE = `${this.API_SERVER_URL}/tempEstudiantesSigesv2/buscarEstudiantePorNIE?nie=[NIE]`
   constructor(private httpClient: HttpClient, private router: Router, private cookieService: CookieService) {
 
   }
@@ -122,44 +122,70 @@ export class CatalogoServiceCor {
     }
 
   }
-  private async postRequest<T,U>(url: string, data: T): Promise<U> {
-    const response = await fetch(url, {
-      method: 'POST',
+  private async doFetch<T>(url: string ,data:T,method:string='POST')
+  {
+    return await fetch(url, {
+      method: method,
       headers: {
         'Authorization': `Bearer ${this.token}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(data)
     });
+  }
+  private async putRequest<T,U>(url: string, data: T): Promise<U> {
+    const response = await this.doFetch<T>(url,data,'PUT');
 
     if (!response.ok) {
-      throw new Error('No se pudo obtener los datos');
+      throw new Error(await response.json());
     }
 
     return response.json();
   }
+  private async postRequest<T,U>(url: string, data: T): Promise<U> {
+    const response = await this.doFetch<T>(url,data);
+    if (!response.ok) {
+      throw new Error(JSON.stringify( await response.json()));
+    }
 
+    return response.json();
+  }
+  // save
   public savePsicologia(cuestionarioPsicologia:ISaveQuestionary){
-    const url = `${this.API_SERVER_URL}evaluacion/cor/psicologia/`;
+    const url = `${this.API_SERVER_URL}/evaluacion/cor/psicologia/`;
     return this.postRequest<ISaveQuestionary,ISaveQuestionary>(url, cuestionarioPsicologia);
   }
   public savePedagogia (cuestionarioPedagogia:ISaveQuestionary){
-    const url = `${this.API_SERVER_URL}evaluacion/cor/pedagogia/`;
+    const url = `${this.API_SERVER_URL}/evaluacion/cor/pedagogia/`;
     return this.postRequest<ISaveQuestionary,ISaveQuestionary>(url, cuestionarioPedagogia);
   }
   public saveLenguaje(cuestionarioLenguaje:ISaveQuestionary){
-    const url = `${this.API_SERVER_URL}evaluacion/cor/lenguaje_habla/`;
+    const url = `${this.API_SERVER_URL}/evaluacion/cor/lenguaje_habla/`;
     return this.postRequest<ISaveQuestionary,ISaveQuestionary>(url, cuestionarioLenguaje);
   }
-
   public saveCaracterizacion(caracterizacion: ISaveCaracterizacion) {
-    const url = `${this.API_SERVER_URL}caracterizacion/cor`;
+    const url = `${this.API_SERVER_URL}/caracterizacion/cor`;
     return this.postRequest<ISaveCaracterizacion,ISaveCaracterizacion>(url, caracterizacion);
   }
+  // update
+  evaluacionURL:string = `${this.API_SERVER_URL}/evaluacion/cor/`;
+  public updatePsicologia(cuestionarioPsicologia:ISaveQuestionary){
+    const tipo = TIPO_EVALUACION.psicologo_perfil;
+    return this.postRequest<ISaveQuestionary,ISaveQuestionary>(this.evaluacionURL, cuestionarioPsicologia);
+  }
+  public updatePedagogia() {
 
+  }
+  public updateLenguaje(){
+
+  }
+  public updateCaracterizacion(){
+
+  }
+  // get
   public getCaracterizacionPorNIE(nie:string): Promise<IGetCaracterizacion>{
     //
-    const url = `${this.API_SERVER_URL}caracterizacion/cor/${nie}`;
+    const url = `${this.API_SERVER_URL}/caracterizacion/cor/${nie}`;
     return new Promise((resolve, reject) => {
       fetch(url, {
         method: 'GET',
@@ -179,7 +205,7 @@ export class CatalogoServiceCor {
     });
   }
   public getTipoDeEvaluacion(nie: string,tipoEvaluacion: TIPO_EVALUACION): Promise<IEvaluacionResponse> {
-    const url = `${this.API_SERVER_URL}evaluacion/cor/${nie}?idTipoEvaluacion=${tipoEvaluacion}`;
+    const url = `${this.API_SERVER_URL}/evaluacion/cor/${nie}?idTipoEvaluacion=${tipoEvaluacion}`;
 
     return new Promise((resolve, reject) => {
       fetch(url, {
@@ -192,13 +218,20 @@ export class CatalogoServiceCor {
         if (response.ok) {
           resolve(response.json());
         } else {
-          reject(new Error('No se pudo obtener los datos'));
+          response.json().then((errorData) => {
+            reject(new Error('No se pudo obtener los datos',errorData));
+          }).catch(jsonError => {
+            reject(new Error('Error al procesar la respuesta de error: ' , jsonError.message));
+          });
+
         }
       }).catch(error => {
         reject(new Error('Hubo un error al obtener los datos: ' + error.message));
       })
     });
   }
+
+  //get questions
   public getSurveyQuestions(url: string): Promise<SurveyResponse> {
     return new Promise((resolve, reject) => {
       fetch(url, {
@@ -218,7 +251,6 @@ export class CatalogoServiceCor {
       })
     });
   }
-
   public getPsicologiaQuestions(): Promise<SurveyResponse> {
     return this.getSurveyQuestions(this.API_SERVER_PSICOLOGIA_QUESTIONS);
   }
@@ -234,4 +266,5 @@ export class CatalogoServiceCor {
   public getQuestions(): Promise<SurveyResponse> {
     return this.getSurveyQuestions(this.API_SERVER_QUESTIONS);
   }
+
 }

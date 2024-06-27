@@ -1,14 +1,17 @@
 <app-saet-tab [readOnly]="readOnly" [leyend]=leyend>
   <p-tabView>
-    <p-tabPanel header="Perfil">
-      <div *ngIf="!agendado">
-        <div class="flex wrap margin-top">
-          <div class="first-column">
-            <label class="first-item">Fecha de evaluación:</label>
-            <div class="second-item">
-              <p-calendar [disabled]="readOnly" [showIcon]="true" dateFormat="dd/mm/yy">
-              </p-calendar>
-            </div>
+    <p-tabPanel header="Agendar perfil">
+          <div *ngIf="!agendado">
+            <div class="flex wrap margin-top">
+              <div class="first-column">
+                <label class="first-item">Fecha de evaluación:</label>
+                <div class="second-item">
+                  <p-calendar
+                    [disabled]="readOnly"
+                    [showIcon]="true"
+                    dateFormat="dd/mm/yy">
+                  </p-calendar>
+                </div>
 
           </div>
           <div class="second-column">
@@ -47,7 +50,7 @@
         </div>
       </div>
     </p-tabPanel>
-    <p-tabPanel header="Agendar">
+    <p-tabPanel header="Agendar evaluación">
       Agendar
     </p-tabPanel>
   </p-tabView>

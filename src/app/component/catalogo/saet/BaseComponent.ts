@@ -7,6 +7,7 @@ import {
 } from "../../../services/catalogo/catalogo.service.cor";
 import {DOCUMENT} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
+import {FormMode, IQuestionaryAnswer, IValuesForm} from "./QuestionsComponent";
 
 interface informationTabBody {
  values: string[]
@@ -27,7 +28,58 @@ export class BaseComponent implements OnInit{
       this.readOnlyEvaluaciones = false;
     }
   }
+  getAnswerObject(data: IValuesForm): IQuestionaryAnswer[] {
+    const result: IQuestionaryAnswer[] = [];
 
+    const keys = Object.keys(data);
+
+    const groupedData = keys.reduce<Record<string, { radio?: string; input?: string }>>((acc, key) => {
+      const [type, id] = key.split('_');
+      if (!acc[id]) {
+        acc[id] = {};
+      }
+      if (type === 'radio' || type === 'input') {
+        acc[id][type] = data[key];
+      }
+      return acc;
+    }, {});
+
+    for (const id in groupedData) {
+      if (groupedData.hasOwnProperty(id)) {
+        const idPregunta = parseInt(id, 10);
+        !isNaN(idPregunta) && result.push(
+          {
+            id_pregunta: idPregunta,
+            opcion: [
+              {
+                id_opcion: parseInt(id, 10),
+                opcion: groupedData[id].radio || ""
+              }
+            ],
+            respuesta: groupedData[id].input || ""
+          }
+        );
+      }
+    }
+
+    return result;
+  }
+  /*getFormModeFromString(formModeString:string | null) {
+    switch (formModeString){
+      case null:
+        return FormMode.CREATE;
+        break;
+      case 'view':
+        return FormMode.VIEW;
+        break;
+      case 'edit':
+        return FormMode.EDIT;
+        break;
+      default:
+        return undefined;
+        break;
+    }
+  }*/
   constructor(
     @Inject(DOCUMENT) protected document: Document,
     protected catalogoServiceCOR: CatalogoServiceCor,

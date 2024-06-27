@@ -1,6 +1,6 @@
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {DOCUMENT} from "@angular/common";
-import {CatalogoServiceCor, StudentDetail} from "../../../../../services/catalogo/catalogo.service.cor";
+import {CatalogoServiceCor, ISaveCaracterizacion} from "../../../../../services/catalogo/catalogo.service.cor";
 import {ActivatedRoute, Router} from "@angular/router";
 import {IconComponent, QuestionType} from "../../shared/component.config";
 import {IMessageComponent, MessageType, UserMessage} from "../../interfaces/message-component.interface";
@@ -12,6 +12,7 @@ import {BaseComponent} from "../../BaseComponent";
 
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import {FormMode} from "../../QuestionsComponent";
 
 
 interface IinformationTab {
@@ -33,13 +34,15 @@ export class EstudianteCaracterizacionIniciarComponent
   extends BaseComponent
   implements IMessageComponent,OnInit{
   @ViewChild('cd') confirmDialog: any;
+
+
   userMessage: UserMessage = userMessageInit;
 
   //nie:string = "";
   //studentInfo?: StudentDetail;
   corSurveys:iSurvey[] = [];
   editMode:boolean = false;
-
+  formModeEnum = FormMode;
   //readOnlyEvaluaciones:boolean = true;
   //readOnlyPaei:boolean = true;
 
@@ -78,10 +81,30 @@ export class EstudianteCaracterizacionIniciarComponent
 
   override async ngOnInit() {
     await super.ngOnInit();
-    if(this.caracterizacion?.id_caracterizacion !== undefined && this.caracterizacion?.id_caracterizacion !== 0){
-      this.editMode = true;
+
+    const url = '/menu/saet-caracterizacion-iniciar';
+    console.log('form mode is ', this.formMode);
+    console.log('id caracterizacion here', this.caracterizacion?.id_caracterizacion);
+    const idCaracterizacion:number = this.caracterizacion?.id_caracterizacion ?? 0;
+    if(
+      this.formMode === FormMode.CREATE &&
+      idCaracterizacion !== 0
+    ){
+      this.router.navigate([url,this.nie,'view']);
     }
+    if(this.formMode === FormMode.VIEW &&
+      idCaracterizacion === 0
+    ){
+      this.router.navigate([url,this.nie]);
+    }
+    if(this.formMode === FormMode.EDIT &&
+      idCaracterizacion === 0
+    ){
+      this.router.navigate([url,this.nie]);
+    }
+
   }
+  formMode:FormMode = FormMode.CREATE;
   constructor(
     @Inject(DOCUMENT)  document: Document,
     catalogoServiceCOR: CatalogoServiceCor,
@@ -90,6 +113,8 @@ export class EstudianteCaracterizacionIniciarComponent
     private confirmationService: ConfirmationService
   ){
     super(document, catalogoServiceCOR, route, router);
+
+
     const storedValues = localStorage.getItem('values');
     if (storedValues) {
       this.values = JSON.parse(storedValues);
@@ -97,15 +122,34 @@ export class EstudianteCaracterizacionIniciarComponent
 
     this.route.paramMap.subscribe(params => {
       const nie = params.get('nie');
+      const formMode = params.get('mode');
       if (nie) {
         this.nie = nie;
       }
+      /*if(formMode){
+        this.formMode = this.getFormModeFromString(formMode) ?? FormMode.CREATE;
+      }*/
+      switch (formMode){
+        case null:
+          this.formMode = FormMode.CREATE;
+          break;
+        case 'view':
+          this.formMode = FormMode.VIEW;
+          break;
+        case 'edit':
+          this.formMode = FormMode.EDIT;
+          break;
+        default:
+          router.navigate(["menu/saet-evaluaciones",this.nie]);
+          break;
+      }
+
+
     });
 
 
     catalogoServiceCOR.getCORQuestions().then((result) => {
       this.corSurveys.push(...result.cuestionarios);
-
     });
     catalogoServiceCOR.getStudentInfo(this.nie).then((result) => {
       this.studentInfo = result.estudiante;
@@ -136,6 +180,26 @@ export class EstudianteCaracterizacionIniciarComponent
       };
     })
 
+    /*console.log('here');
+    const url = '/menu/saet-caracterizacion-iniciar';
+
+    if(this.formMode === FormMode.CREATE &&
+      this.caracterizacion?.id_caracterizacion !== 0
+    ){
+      this.router.navigate([url,this.nie,'view']);
+    }
+
+    if(this.formMode === FormMode.VIEW &&
+      this.caracterizacion?.id_caracterizacion === 0
+    ){
+      this.router.navigate([url,this.nie]);
+    }
+    if(this.formMode === FormMode.EDIT &&
+      this.caracterizacion?.id_caracterizacion === 0
+    ){
+      this.router.navigate([url,this.nie]);
+    }
+    */
   }
 
   QuestionType = QuestionType;
@@ -200,20 +264,13 @@ export class EstudianteCaracterizacionIniciarComponent
     });
   }
   async save() {
-    /*
     const obj:ISaveCaracterizacion = {
       id_caracterizacion: null,
       id_estudiante_fk: 1,
       id_especialista: 3,
       id_docente_apoyo: 0,
       id_modulo: 2,
-      respuestas: [
-        {
-          id_pregunta: 2,
-          opcion: [],
-          respuesta: "Esta es una prueba para crear una caracterizacion"
-        }
-      ],
+      respuestas: this.getAnswerObject(this.values),
       grupoFamiliar: [
         {
           grupo_familiar_pk: null,
@@ -230,16 +287,29 @@ export class EstudianteCaracterizacionIniciarComponent
         }
       ]
     }
-    const response = await this.catalogoServiceCOR.saveCaracterizacion(obj);
-    console.log('response ', response);
-    */
+    console.log('save object ----- ', obj);
+    console.log('values ', this.values);
 
-    this.userMessage = {
-      showMessage: true,
-      message: "¡Los datos han sido guardados exitosamente!",
-      titleMessage: "Datos guardados",
-      type: MessageType.SUCCESS
+    try{
+      const response = await this.catalogoServiceCOR.saveCaracterizacion(obj);
+      console.log('response ', response);
+      this.userMessage = {
+        showMessage: true,
+        message: "¡Los datos han sido guardados exitosamente!",
+        titleMessage: "Datos guardados",
+        type: MessageType.SUCCESS
+      }
+    }catch (e) {
+      const error = e as Error;
+      console.log('error ', error);
+      /*this.userMessage = {
+        showMessage: true,
+        message: e.message,
+        titleMessage: "Datos guardados",
+        type: MessageType.SUCCESS
+      }*/
     }
+
   }
 
   async rejectConfirmDialog() {

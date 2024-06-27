@@ -6,3 +6,7 @@ export enum TIPO_EVALUACION {
   logopeda_perfil=5,
   logopeda_agenda=6
 }
+export enum SAET_MODULE{
+  DAI=1,
+  COR=2
+}
