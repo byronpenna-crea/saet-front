@@ -104,4 +104,9 @@
   ::ng-deep .second-item-time .p-calendar {
     width: 200px;
   }
+
+  .actionsButton {
+    padding-right: 65px;
+    padding-top: 10px;
+  }
 }

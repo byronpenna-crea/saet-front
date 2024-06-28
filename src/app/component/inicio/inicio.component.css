@@ -172,9 +172,6 @@
 @media screen and (min-width: 500px) and (max-width: 979px) {
 
   /* Estilos para pantallas pequeñas */
-  .welcome-message {
-    font-size: 20px;
-  }
 }
 
 /* Media Query para pantallas de tamaño extra pequeño (hasta 767px),mi cel HUAWEI JKM-LX3 */
