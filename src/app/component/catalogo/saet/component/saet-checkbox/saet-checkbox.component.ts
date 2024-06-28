@@ -15,7 +15,7 @@ export class SaetCheckboxComponent {
 
   onCheckboxChange(event: Event) {
     const input = event.target as HTMLInputElement;
-    console.log('input ', input);
+
     if (input.checked) {
       this.selectedValues.push(input.value);
     } else {
@@ -24,6 +24,9 @@ export class SaetCheckboxComponent {
         this.selectedValues.splice(index, 1);
       }
     }
+    console.log('input ', input);
+    console.log('selected values here ', this.selectedValues);
+    console.log('options ', this.options);
     this.checkboxChange.emit(this.selectedValues.map(value => ({ key: this.name, value }))
     );
 
