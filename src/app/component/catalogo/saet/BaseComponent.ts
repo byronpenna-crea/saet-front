@@ -60,7 +60,7 @@ export class BaseComponent implements OnInit{
             respuesta: groupedData[id].input || ""
           }
         );
-        console.log('grouped data here', groupedData);
+        console.log('grouped data here', groupedData[id]);
         if (groupedData[id].input) {
           result[result.length - 1].opcion = [];
         }

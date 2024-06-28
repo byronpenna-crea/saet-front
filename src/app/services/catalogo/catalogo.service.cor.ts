@@ -55,6 +55,23 @@ export interface ISaveQuestionary {
   hora: string,
   respuestas: iQuestionSave[]
 }
+export interface IUpdateCaracterizacion {
+  id_caracterizacion: number | null,
+  respuestas: iQuestionSave[],
+  grupoFamiliar: {
+    grupo_familiar_pk: number | null,
+    primer_nombre: string,
+    segundo_nombre: string,
+    tercer_nombre: string,
+    primer_apellido: string,
+    segundo_apellido: string,
+    tercer_apellido: string,
+    edad: number,
+    parentesco: string,
+    nivel_educativo: string,
+    ocupacion: string
+  }[]
+}
 export interface ISaveCaracterizacion {
   id_caracterizacion: number | null,
   id_estudiante_fk: number,
@@ -179,8 +196,15 @@ export class CatalogoServiceCor {
   public updateLenguaje(){
 
   }
-  public updateCaracterizacion(){
-
+  public updateCaracterizacion(caracterizacion: ISaveCaracterizacion) {
+    const url = `${this.API_SERVER_URL}/caracterizacion/cor/preguntas`;
+    return this.putRequest<IUpdateCaracterizacion,IUpdateCaracterizacion>(url,
+      {
+        id_caracterizacion: caracterizacion?.id_caracterizacion ?? 0,
+        respuestas: caracterizacion.respuestas,
+        grupoFamiliar: []
+      }
+      );
   }
   // get
   public getCaracterizacionPorNIE(nie:string): Promise<IGetCaracterizacion>{
