@@ -18,6 +18,7 @@ export class SaetQuestionComponent {
   @Output() onChange = new EventEmitter<KeyValue>();
   @Output() checkboxChange = new EventEmitter<KeyValue[]>();
   @Input() value: string = "";
+  @Input() values: { [key: string]: string } = {};
   @Input() idPregunta: number = 0;
   @Input() readonly: boolean = false;
   constructor(private router: Router) {

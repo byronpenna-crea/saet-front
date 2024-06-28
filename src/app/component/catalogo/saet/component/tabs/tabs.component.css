@@ -8,4 +8,14 @@
 }*/
 :host ::ng-deep p-fieldset.fieldset-inactive .p-fieldset {
   background-color: #FAFAFA;
+  width: 100%
+}
+:host ::ng-deep .fieldset-auto-width {
+  display: inline-block;
+  width:100%;
+}
+:host ::ng-deep fieldset {
+  display: inline-block;
+  width: 100%;
+  min-width:10px;
 }

@@ -6,6 +6,10 @@
   flex-wrap: wrap;
 }
 
+.fieldset-auto-width {
+  display: inline-block;
+}
+
 .actionsButton {
   display: flex;
   justify-content: space-between;

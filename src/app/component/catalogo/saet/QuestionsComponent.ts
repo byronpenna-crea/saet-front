@@ -119,7 +119,7 @@ export class QuestionsComponent extends BaseComponent {
     return options.map( (option) => ({key: option.id_opcion ? option.id_opcion.toString(): "", value: option.opcion}) as KeyValue );
   }
 
-  handleMode(idEvaluacion: number, url: string, formMode:FormMode, ) {
+  handleMode(idEvaluacion: number, url: string, formMode:FormMode ) {
     if(formMode === FormMode.CREATE &&
       idEvaluacion !== 0
     ){

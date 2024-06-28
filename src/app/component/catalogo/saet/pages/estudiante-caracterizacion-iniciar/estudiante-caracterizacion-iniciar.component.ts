@@ -12,7 +12,10 @@ import {BaseComponent} from "../../BaseComponent";
 
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import {FormMode} from "../../QuestionsComponent";
+import {FormMode, IQuestionaryAnswer} from "../../QuestionsComponent";
+import {handleMode} from "../../shared/forms";
+import {ButtonStyle} from "../../component/saet-button/saet-button.component";
+import {SAET_MODULE} from "../../shared/evaluaciones";
 
 
 interface IinformationTab {
@@ -47,7 +50,7 @@ export class EstudianteCaracterizacionIniciarComponent
   //readOnlyPaei:boolean = true;
 
   iconCompoment = IconComponent;
-
+  btnStyle = ButtonStyle;
 
   generalInformation:IinformationTab = {
     isActive: false,
@@ -81,28 +84,10 @@ export class EstudianteCaracterizacionIniciarComponent
 
   override async ngOnInit() {
     await super.ngOnInit();
-
     const url = '/menu/saet-caracterizacion-iniciar';
-    console.log('form mode is ', this.formMode);
-    console.log('id caracterizacion here', this.caracterizacion?.id_caracterizacion);
+    console.log('caracterizacion on init', this.caracterizacion);
     const idCaracterizacion:number = this.caracterizacion?.id_caracterizacion ?? 0;
-    if(
-      this.formMode === FormMode.CREATE &&
-      idCaracterizacion !== 0
-    ){
-      this.router.navigate([url,this.nie,'view']);
-    }
-    if(this.formMode === FormMode.VIEW &&
-      idCaracterizacion === 0
-    ){
-      this.router.navigate([url,this.nie]);
-    }
-    if(this.formMode === FormMode.EDIT &&
-      idCaracterizacion === 0
-    ){
-      this.router.navigate([url,this.nie]);
-    }
-
+    handleMode(idCaracterizacion,url,this.formMode,this.nie,this.router);
   }
   formMode:FormMode = FormMode.CREATE;
   constructor(
@@ -149,6 +134,7 @@ export class EstudianteCaracterizacionIniciarComponent
 
 
     catalogoServiceCOR.getCORQuestions().then((result) => {
+
       this.corSurveys.push(...result.cuestionarios);
     });
     catalogoServiceCOR.getStudentInfo(this.nie).then((result) => {
@@ -251,6 +237,14 @@ export class EstudianteCaracterizacionIniciarComponent
   async retornarCaracterizacion() {
     await this.router.navigate(["menu/saet-caracterizacion-estudiante",this.nie]);
   }
+  async entrarEditMode(){
+    console.log('entrar edit mode caracterizacion ');
+    const currentUrl = this.router.url;
+    const newUrl = currentUrl.replace('/view', '/edit');
+    this.formMode = FormMode.EDIT;
+    //this.updateStoredValues(`${this.targetEspecialidad}_values`);
+    this.router.navigateByUrl(newUrl);
+  }
   async salir(){
     this.confirmationService.confirm({
       message: 'Al darle click en <b>Salir de edición sin guardar</b> perderá todo el progreso de edición realizado.',
@@ -263,51 +257,98 @@ export class EstudianteCaracterizacionIniciarComponent
       }
     });
   }
-  async save() {
-    const obj:ISaveCaracterizacion = {
-      id_caracterizacion: null,
-      id_estudiante_fk: 1,
+  validarPreguntas(respuestas:IQuestionaryAnswer[], cuestionarios:iSurvey[]) {
+    let idsValidos = new Set();
+    cuestionarios.forEach(cuestionario => {
+      cuestionario.preguntas.forEach(pregunta => {
+        idsValidos.add(pregunta.id_pregunta);
+      });
+    });
+    console.log('validar preguntas', idsValidos);
+    const respuestasValidas = respuestas.filter(respuesta => {
+      return idsValidos.has(respuesta.id_pregunta);
+    });
+    return respuestasValidas;
+  }
+
+  async update(){
+    const objToUpdate = {};
+    const respuestas = this.getAnswerObject(this.values);
+    const objToSave:ISaveCaracterizacion = {
+      id_caracterizacion: this.caracterizacion?.id_caracterizacion ?? 0,
+      id_estudiante_fk: this.studentInfo?.id_est_pk ?? 0,
       id_especialista: 3,
       id_docente_apoyo: 0,
-      id_modulo: 2,
-      respuestas: this.getAnswerObject(this.values),
-      grupoFamiliar: [
-        {
-          grupo_familiar_pk: null,
-          primer_nombre: "Maria",
-          segundo_nombre: "Imelda",
-          tercer_nombre: "",
-          primer_apellido: "Ruiz",
-          segundo_apellido: "Huezo",
-          tercer_apellido: "",
-          edad: 60,
-          parentesco: "Abuela",
-          nivel_educativo: "Basica",
-          ocupacion: "Vendedora informal"
-        }
-      ]
-    }
-    console.log('save object ----- ', obj);
-    console.log('values ', this.values);
-
+      id_modulo: SAET_MODULE.COR,
+      respuestas: this.validarPreguntas(respuestas,this.corSurveys),
+      grupoFamiliar: []
+    };
+    console.log('objToSave', objToSave);
     try{
-      const response = await this.catalogoServiceCOR.saveCaracterizacion(obj);
-      console.log('response ', response);
+      const resp = this.catalogoServiceCOR.updateCaracterizacion(objToSave);
+      console.log('resp',await resp);
+    }catch (e) {
+      console.log('error e', e);
+      const error = e as Error;
+      const errorDetails = JSON.parse(error.message);
+
       this.userMessage = {
         showMessage: true,
-        message: "¡Los datos han sido guardados exitosamente!",
-        titleMessage: "Datos guardados",
-        type: MessageType.SUCCESS
+        message: errorDetails.message,
+        titleMessage: "Error",
+        type: MessageType.DANGER
       }
-    }catch (e) {
-      const error = e as Error;
-      console.log('error ', error);
-      /*this.userMessage = {
+    }
+
+
+
+  }
+  async save() {
+    const respuestas = this.getAnswerObject(this.values);
+    const objToSave:ISaveCaracterizacion = {
+      id_caracterizacion: null,
+      id_estudiante_fk: this.studentInfo?.id_est_pk ?? 0,
+      id_especialista: 3,
+      id_docente_apoyo: 0,
+      id_modulo: SAET_MODULE.COR,
+      respuestas: this.validarPreguntas(respuestas,this.corSurveys),
+      grupoFamiliar: []
+    };
+    if(objToSave.respuestas.length === 0){
+      this.userMessage = {
         showMessage: true,
-        message: e.message,
-        titleMessage: "Datos guardados",
-        type: MessageType.SUCCESS
-      }*/
+        message: "¡Debes llenar aunque sea una pregunta para guardar!",
+        titleMessage: "Atención",
+        type: MessageType.WARNING
+      }
+      return;
+    }
+
+    try{
+      const response = await this.catalogoServiceCOR.saveCaracterizacion(objToSave);
+      console.log('response ', response);
+      if(response.id_caracterizacion !== 0){
+        this.userMessage = {
+          showMessage: true,
+          message: "¡Los datos han sido guardados exitosamente!",
+          titleMessage: "Datos guardados",
+          type: MessageType.SUCCESS
+        }
+        const url = '/menu/saet-caracterizacion-iniciar';
+        handleMode(response.id_caracterizacion ?? 0,url,this.formMode,this.nie,this.router);
+      }
+      console.log('try ');
+    }catch (e) {
+      console.log('error e', e);
+      const error = e as Error;
+      const errorDetails = JSON.parse(error.message);
+
+      this.userMessage = {
+        showMessage: true,
+        message: errorDetails.message,
+        titleMessage: "Error",
+        type: MessageType.DANGER
+      }
     }
 
   }

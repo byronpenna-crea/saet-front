@@ -27,6 +27,7 @@
     [show]="userMessage.showMessage"
     [message]="userMessage.message"
     [title]="userMessage.titleMessage"
+    [messageType]="userMessage.type"
   />
 </div>
 <div class="form-container">
@@ -44,6 +45,7 @@
               [type]="getQuestionType(pregunta.tipoPregunta)"
               [idPregunta]="pregunta.id_pregunta"
               [value]="values[pregunta.id_pregunta.toString()]"
+              [values]="values"
               [testId]="pregunta.id_pregunta.toString()"
               [name]="getName(pregunta.pregunta)"
               [options]="getOptions(pregunta.opcion)"
@@ -76,16 +78,33 @@
     >
       <app-saet-button
         (onClick)="retornarCaracterizacion()"
-
-        [buttonArgs]="{text: 'Regresar a la caracterización',buttonStyle: 1,buttonIcon: 7 }" />
+        [buttonArgs]="{text: 'Regresar a la caracterización',buttonStyle: 1,buttonIcon: iconCompoment.LEFT_ARROW }" />
       <div class="right-buttons">
         <app-saet-button
-          [buttonArgs]="{text: 'Editar',buttonStyle: 1 }" />
+          (onClick)="update()"
+          [buttonArgs]="{text: 'update',buttonStyle: btnStyle.BLUE }" />
         <app-saet-button
           (onClick)="generatePDF()"
           [buttonArgs]="{text: 'Generar PDF',buttonStyle: 1 }" />
       </div>
     </div>
+
+    <div
+      *ngIf="formMode === formModeEnum.VIEW"
+      class="actionsButton"
+    >
+      <app-saet-button
+        (click)="salir()"
+        [buttonArgs]="{text: 'Regresar a la caracterización',buttonStyle: 1,buttonIcon: 7 }" />
+      <div class="right-buttons">
+        <app-saet-button
+          (onClick)="entrarEditMode()"
+          [buttonArgs]="{text: 'Editar',buttonStyle: 1 }" />
+        <app-saet-button
+          [buttonArgs]="{text: 'Generar PDF',buttonStyle: 1 }" />
+      </div>
+    </div>
+
   </div>
 </div>
 

@@ -14,7 +14,7 @@ export enum QuestionType {
   MULTIPLE_CON_RESPUESTA = "opcion_multiple_con_respuesta",
   OPCION_UNICA_CON_RESPUESTA = "opcion_unica_con_respuesta",
   OPCION_UNICA = "opcion_unica",
-  ABIERTA_CON_RESPUESTA = "abierta_con_respuesta",
+  ABIERTA_CON_RESPUESTA_INTERNA = "abierta_con_respuesta_interna",
   OPCION_MULTIPLE = "opcion_multiple",
 }
 export const getIconClass = (icon:IconComponent | null) => {

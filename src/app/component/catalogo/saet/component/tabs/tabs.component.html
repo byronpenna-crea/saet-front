@@ -1,7 +1,8 @@
 <p-fieldset [legend]="legend"
             [ngClass]="{'fieldset-inactive': !isActive}"
+            class="fieldset-auto-width"
 >
-
+  xxx
   <ng-container *ngFor="let item of tabRow">
     <app-tab-item
       [label]="item.label"

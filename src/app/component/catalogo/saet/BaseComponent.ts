@@ -32,7 +32,7 @@ export class BaseComponent implements OnInit{
     const result: IQuestionaryAnswer[] = [];
 
     const keys = Object.keys(data);
-
+    console.log('keys', keys);
     const groupedData = keys.reduce<Record<string, { radio?: string; input?: string }>>((acc, key) => {
       const [type, id] = key.split('_');
       if (!acc[id]) {
@@ -43,6 +43,7 @@ export class BaseComponent implements OnInit{
       }
       return acc;
     }, {});
+    console.log('grouped data ', groupedData);
 
     for (const id in groupedData) {
       if (groupedData.hasOwnProperty(id)) {
@@ -59,6 +60,10 @@ export class BaseComponent implements OnInit{
             respuesta: groupedData[id].input || ""
           }
         );
+        console.log('grouped data here', groupedData);
+        if (groupedData[id].input) {
+          result[result.length - 1].opcion = [];
+        }
       }
     }
 
