@@ -1,1 +1,80 @@
-<p>estudiante-paei works!</p>
+<app-saet-global-header [nie]="nie" [nombreCompleto]="studentInfo?.nombreCompleto ?? ''" selectedTab="paei"
+                        [readOnlyEvaluaciones]="readOnlyEvaluaciones" [readOnlyPaei]="readOnlyPaei" [breadcrumb]="[
+    { href: '#/menu/saet-buscar', text: 'Buscar estudiante' },
+    { href: '#/menu/saet-buscar/'+nie, text: nie },
+    { href: '', text: 'Caracterización' }
+  ]" />
+<app-saet-mensaje-usuario [show]="userMessage.showMessage" [message]="userMessage.message"
+                          [title]="userMessage.titleMessage" />
+<div class="form-container">
+  <app-saet-tab  leyend="Responsables de PAEI">
+    <app-tab-item label="Especialista Responsable de reportar PAEI: ">
+      <app-saet-input
+        [disabled]="true"
+        value="Francisca Eunice López Orellana" />
+    </app-tab-item>
+    <app-tab-item >
+      05035096-8 | Especialista en psicologia - COR
+    </app-tab-item>
+    <app-saet-underlined-title />
+
+    <div>
+      <app-tab-item label="Especialista en Psicología:">
+        <app-saet-input
+          [disabled]="true"
+          value="Francisca Eunice López Orellana"
+
+        />
+      </app-tab-item>
+
+      <app-tab-item>
+        05035096-8 | Especialista en psicologia - COR
+      </app-tab-item>
+    </div>
+
+    <div>
+      <app-tab-item label="Especialista en Pedagogía:">
+        <app-saet-input
+          [disabled]="true"
+          value="Rosa Emilia García Pérez"
+        />
+      </app-tab-item>
+      <app-tab-item>
+        05035096-8 | Especialista en pedagogía - COR
+      </app-tab-item>
+    </div>
+
+    <div>
+      <app-tab-item label="Especialista en Habla y lenguaje:">
+        <app-saet-input
+          [disabled]="true"
+          value="Edgardo José Gómez Peraza"
+        />
+      </app-tab-item>
+      <app-tab-item>
+        05035096-8 | Especialista en habla y lenguaje - COR
+      </app-tab-item>
+    </div>
+
+    <div>
+      <app-tab-item label="Coordinador(a):">
+        <app-saet-input
+          [disabled]="true"
+          value="Indefinido"
+        />
+      </app-tab-item>
+    </div>
+
+    <app-saet-button
+    [buttonArgs]="{
+    buttonIcon: buttonIcon.PLUS,
+    buttonStyle: buttonStyle.WHITE,
+    text: 'Ver PAEI'
+    }"
+    />
+  </app-saet-tab>
+
+  <app-saet-tab  leyend="Estado de validación y seguimiento de PAEI">
+
+  </app-saet-tab>
+</div>

@@ -88,6 +88,10 @@ export class EstudianteCaracterizacionIniciarComponent
     console.log('caracterizacion on init', this.caracterizacion);
     const idCaracterizacion:number = this.caracterizacion?.id_caracterizacion ?? 0;
     handleMode(idCaracterizacion,url,this.formMode,this.nie,this.router);
+
+    console.log('caracterizacion in init', this.caracterizacion);
+    console.log('values in init ', this.values);
+
   }
   formMode:FormMode = FormMode.CREATE;
   constructor(
@@ -98,6 +102,7 @@ export class EstudianteCaracterizacionIniciarComponent
     private confirmationService: ConfirmationService
   ){
     super(document, catalogoServiceCOR, route, router);
+
 
 
     const storedValues = localStorage.getItem('values');
@@ -166,26 +171,6 @@ export class EstudianteCaracterizacionIniciarComponent
       };
     })
 
-    /*console.log('here');
-    const url = '/menu/saet-caracterizacion-iniciar';
-
-    if(this.formMode === FormMode.CREATE &&
-      this.caracterizacion?.id_caracterizacion !== 0
-    ){
-      this.router.navigate([url,this.nie,'view']);
-    }
-
-    if(this.formMode === FormMode.VIEW &&
-      this.caracterizacion?.id_caracterizacion === 0
-    ){
-      this.router.navigate([url,this.nie]);
-    }
-    if(this.formMode === FormMode.EDIT &&
-      this.caracterizacion?.id_caracterizacion === 0
-    ){
-      this.router.navigate([url,this.nie]);
-    }
-    */
   }
 
   QuestionType = QuestionType;
@@ -216,13 +201,12 @@ export class EstudianteCaracterizacionIniciarComponent
 
     const doc = new jsPDF();
 
-    console.log("caracterizacion en pdf ", this.caracterizacion?.respuestas);
     const respuestas = this.caracterizacion?.respuestas.map((respuesta:iQuestion) => [
       respuesta.id_pregunta.toString(),
       respuesta.pregunta,
       respuesta.respuesta ?? ''
     ]) ?? [];
-    console.log('repsuestas ', respuestas);
+
     doc.text('Caracterización de estudiante', 10, 10);
     autoTable(doc, {
       head: [['ID Pregunta', 'Pregunta', 'Respuesta']],
@@ -365,7 +349,11 @@ export class EstudianteCaracterizacionIniciarComponent
   values: { [key: string]: string } = {};
   onCheckboxChange(keyValues:KeyValue[]){
     const selectedValues = keyValues.map(e => e.value);
+    console.log('key values ', keyValues);
+    console.log('selected values ', selectedValues.toString());
+    console.log('checkbox change ', this.values);
     this.values[keyValues[0].key] = selectedValues.toString();
+
     localStorage.setItem('values', JSON.stringify(this.values));
   }
   onchange(keyValue:KeyValue) {

@@ -46,13 +46,16 @@ export interface IEvaluacionResponse{
   id_evaluacion: number,
   respuestas: iQuestionSave[]
 }
-export interface ISaveQuestionary {
-  id_evaluacion: number | null,
+export interface IQuestionaryHeader{
+
   id_estudiante_fk: number,
   id_especialista: number,
   id_tipo_evaluacion: number,
   fecha: string,
   hora: string,
+}
+export interface ISaveQuestionary extends IQuestionaryHeader {
+  id_evaluacion: number | null,
   respuestas: iQuestionSave[]
 }
 export interface IUpdateCaracterizacion {
@@ -166,6 +169,11 @@ export class CatalogoServiceCor {
     }
 
     return response.json();
+  }
+  // agendar
+  public agendarPsicologia(obj:IQuestionaryHeader){
+    const url = `${this.API_SERVER_URL}/evaluacion/cor/psicologia/`;
+    return this.postRequest<IQuestionaryHeader,IQuestionaryHeader>(url, obj);
   }
   // save
   public savePsicologia(cuestionarioPsicologia:ISaveQuestionary){

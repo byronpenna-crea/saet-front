@@ -33,7 +33,7 @@ export class BaseComponent implements OnInit{
 
     const keys = Object.keys(data);
     console.log('keys', keys);
-    const groupedData = keys.reduce<Record<string, { radio?: string; input?: string }>>((acc, key) => {
+    const groupedData = keys.reduce<Record<string, { radio?: string; input?: string; check?:string }>>((acc, key) => {
       const [type, id] = key.split('_');
       if (!acc[id]) {
         acc[id] = {};
@@ -48,22 +48,22 @@ export class BaseComponent implements OnInit{
     for (const id in groupedData) {
       if (groupedData.hasOwnProperty(id)) {
         const idPregunta = parseInt(id, 10);
+
         !isNaN(idPregunta) && result.push(
           {
             id_pregunta: idPregunta,
-            opcion: [
+            opcion:
+              !!groupedData[id].radio || !!groupedData[id].check ?
+              [
               {
                 id_opcion: parseInt(id, 10),
                 opcion: groupedData[id].radio || ""
               }
-            ],
+            ] : [],
             respuesta: groupedData[id].input || ""
           }
         );
-        console.log('grouped data here', groupedData[id]);
-        if (groupedData[id].input) {
-          result[result.length - 1].opcion = [];
-        }
+        console.log('grouped data here', !!groupedData[id].radio || !!groupedData[id].check);
       }
     }
 

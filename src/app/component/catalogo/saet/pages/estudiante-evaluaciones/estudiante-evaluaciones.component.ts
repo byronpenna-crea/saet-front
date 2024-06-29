@@ -1,7 +1,11 @@
 import {ChangeDetectorRef, Component, Inject} from '@angular/core';
 import {IMessageComponent, UserMessage} from "../../interfaces/message-component.interface";
 import {DOCUMENT} from "@angular/common";
-import {CatalogoServiceCor, StudentDetail} from "../../../../../services/catalogo/catalogo.service.cor";
+import {
+  CatalogoServiceCor,
+  IQuestionaryHeader, ISaveQuestionary,
+  StudentDetail
+} from "../../../../../services/catalogo/catalogo.service.cor";
 import {ActivatedRoute, Router} from "@angular/router";
 import {userMessageInit} from "../../shared/messages.model";
 import {BaseComponent} from "../../BaseComponent";
@@ -185,5 +189,15 @@ export class EstudianteEvaluacionesComponent extends BaseComponent implements IM
     this.psicologyMessage = this.successMessage
     this.psicologiaAgendada = true;
     this.updateTab('psicologia', true);
+    const obj:ISaveQuestionary = {
+      id_estudiante_fk: 1,
+      id_especialista: 3,
+      id_tipo_evaluacion: 1,
+      fecha: "12/12/2023",
+      hora: "12:40",
+      id_evaluacion: null,
+      respuestas:[]
+    }
+    this.catalogoServiceCOR.savePsicologia(obj)
   }
 }
