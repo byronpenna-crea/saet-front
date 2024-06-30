@@ -12,7 +12,7 @@ import {BaseComponent} from "../../BaseComponent";
 
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import {FormMode, IQuestionaryAnswer} from "../../QuestionsComponent";
+import {FormMode, IQuestionaryAnswer, IValuesForm} from "../../QuestionsComponent";
 import {handleMode} from "../../shared/forms";
 import {ButtonStyle} from "../../component/saet-button/saet-button.component";
 import {SAET_MODULE} from "../../shared/evaluaciones";
@@ -81,17 +81,30 @@ export class EstudianteCaracterizacionIniciarComponent
     ],
     values: []
   }
+  respuestasToValues(respuestas:iQuestion[]) {
+    const values: IValuesForm = {};
+    respuestas.forEach(respuesta => {
+      const radioKey = `radio_${respuesta.id_pregunta}`;
+      const inputKey = `input_${respuesta.id_pregunta}`;
 
+      if (respuesta.opcion.length > 0) {
+        values[radioKey] = respuesta.opcion[0].opcion;
+      }
+      values[inputKey] = respuesta.respuesta ?? '';
+    });
+    return values;
+  }
   override async ngOnInit() {
     await super.ngOnInit();
     const url = '/menu/saet-caracterizacion-iniciar';
-    console.log('caracterizacion on init', this.caracterizacion);
+
     const idCaracterizacion:number = this.caracterizacion?.id_caracterizacion ?? 0;
     handleMode(idCaracterizacion,url,this.formMode,this.nie,this.router);
 
-    console.log('caracterizacion in init', this.caracterizacion);
-    console.log('values in init ', this.values);
-
+    this.values = {
+      ...this.values,
+      ...this.respuestasToValues(this.caracterizacion?.respuestas ?? [])
+    }
   }
   formMode:FormMode = FormMode.CREATE;
   constructor(
@@ -102,7 +115,6 @@ export class EstudianteCaracterizacionIniciarComponent
     private confirmationService: ConfirmationService
   ){
     super(document, catalogoServiceCOR, route, router);
-
 
 
     const storedValues = localStorage.getItem('values');
@@ -139,7 +151,6 @@ export class EstudianteCaracterizacionIniciarComponent
 
 
     catalogoServiceCOR.getCORQuestions().then((result) => {
-
       this.corSurveys.push(...result.cuestionarios);
     });
     catalogoServiceCOR.getStudentInfo(this.nie).then((result) => {

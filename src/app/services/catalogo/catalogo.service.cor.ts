@@ -1,5 +1,5 @@
 import {environment} from "../../environments/environment";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpErrorResponse} from "@angular/common/http";
 import {Router} from "@angular/router";
 import {CookieService} from "ngx-cookie-service";
 import {Injectable} from "@angular/core";
@@ -114,47 +114,53 @@ export class CatalogoServiceCor {
 
 
   token: string | null = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIwNDIzMjYzOTUiLCJleHAiOjE3MTQ4NjA5NjgsInVzdV9jb2RpZ28iOiIwNDIzMjYzOTUifQ.3FaRNEQHzr5kwxYCjRA8iigf9ttoYN3UrpBdEBa7_GbpAQyroMWBxb2PWWYnKWowyeZq8AL3ViT4lmrQ-HWjQQ"; //this.cookieService.get('token');
-  public getStudentInfo(NIE:string): Promise<StudentInfoResponse> {
-    try{
-      return new Promise((resolve, reject) => {
-        fetch(this.API_SERVER_ESTUDIANTE.replace('[NIE]', NIE), {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${this.token}`,
-            'Content-Type': 'application/json'
-          }
-        }).then(response => {
-          if (response.ok) {
-            resolve(response.json());
-          } else {
-            throw new Error('No se pudo obtener los datos');
-          }
-        }).catch(error => {
-          reject(new Error(error.message));
-        })
-      })
-    }catch (err: unknown) {
-      console.log("catch error");
-      if (err instanceof Error) {
-        throw new Error('error no controlado' + err.message);
-      }
-      throw new Error('error no controlado');
-    }
+  public async getStudentInfo(NIE: string): Promise<StudentInfoResponse> {
+    const url = this.API_SERVER_ESTUDIANTE.replace('[NIE]', NIE);
+    console.log('url ', url);
+    try {
+      const response = await this.doRequest<undefined>(url, undefined, 'GET');
+      console.log('response get ', response);
 
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(JSON.stringify(errorResponse));
+      }
+
+      return response.json();
+    } catch (e: unknown) {
+      const error = e as Error;
+      const errorDetails = JSON.parse(error.message);
+      throw new Error(errorDetails.message);
+    }
   }
-  private async doFetch<T>(url: string ,data:T,method:string='POST')
-  {
-    return await fetch(url, {
+  private async doRequest<T>(url: string, data?: T, method: string = 'POST'): Promise<Response> {
+    let fetchObject: RequestInit = {
       method: method,
       headers: {
         'Authorization': `Bearer ${this.token}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(data)
-    });
+      body: data !== undefined ? JSON.stringify(data) : undefined
+    };
+
+    // Remove the body property if it's undefined
+    if (fetchObject.body === undefined) {
+      delete fetchObject.body;
+    }
+
+    const response = await fetch(url, fetchObject);
+
+    // Check if the response is not successful (status 200-299)
+    if (!response.ok) {
+
+      throw new Error(JSON.stringify(await response.json()));
+    }
+
+    return response;
+
   }
   private async putRequest<T,U>(url: string, data: T): Promise<U> {
-    const response = await this.doFetch<T>(url,data,'PUT');
+    const response = await this.doRequest<T>(url,data,'PUT');
 
     if (!response.ok) {
       throw new Error(await response.json());
@@ -163,7 +169,7 @@ export class CatalogoServiceCor {
     return response.json();
   }
   private async postRequest<T,U>(url: string, data: T): Promise<U> {
-    const response = await this.doFetch<T>(url,data);
+    const response = await this.doRequest<T>(url,data);
     if (!response.ok) {
       throw new Error(JSON.stringify( await response.json()));
     }
@@ -215,10 +221,23 @@ export class CatalogoServiceCor {
       );
   }
   // get
-  public getCaracterizacionPorNIE(nie:string): Promise<IGetCaracterizacion>{
+  public async getCaracterizacionPorNIE(nie:string): Promise<IGetCaracterizacion>{
     //
     const url = `${this.API_SERVER_URL}/caracterizacion/cor/${nie}`;
-    return new Promise((resolve, reject) => {
+    try{
+      const response = await this.doRequest<undefined>(url, undefined, 'GET');
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(JSON.stringify(errorResponse));
+      }
+      return response.json();
+    } catch (e: unknown) {
+      const error = e as Error;
+      const errorDetails = JSON.parse(error.message);
+      throw new Error(errorDetails.message);
+    }
+
+    /*return new Promise((resolve, reject) => {
       fetch(url, {
         method: 'GET',
         headers: {
@@ -234,12 +253,26 @@ export class CatalogoServiceCor {
       }).catch(error => {
         reject(new Error('Hubo un error al obtener los datos: ' + error.message));
       })
-    });
+    });*/
   }
-  public getTipoDeEvaluacion(nie: string,tipoEvaluacion: TIPO_EVALUACION): Promise<IEvaluacionResponse> {
+  public async getTipoDeEvaluacion(nie: string,tipoEvaluacion: TIPO_EVALUACION): Promise<IEvaluacionResponse> {
     const url = `${this.API_SERVER_URL}/evaluacion/cor/${nie}?idTipoEvaluacion=${tipoEvaluacion}`;
+    try {
+      const response = await this.doRequest<undefined>(url, undefined, 'GET');
+      console.log('response get ', response);
 
-    return new Promise((resolve, reject) => {
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(JSON.stringify(errorResponse));
+      }
+
+      return response.json();
+    } catch (e: unknown) {
+      const error = e as Error;
+      const errorDetails = JSON.parse(error.message);
+      throw new Error(errorDetails.message);
+    }
+    /*return new Promise((resolve, reject) => {
       fetch(url, {
         method: 'GET',
         headers: {
@@ -260,12 +293,27 @@ export class CatalogoServiceCor {
       }).catch(error => {
         reject(new Error('Hubo un error al obtener los datos: ' + error.message));
       })
-    });
+    });*/
   }
 
   //get questions
-  public getSurveyQuestions(url: string): Promise<SurveyResponse> {
-    return new Promise((resolve, reject) => {
+  public async getSurveyQuestions(url: string): Promise<SurveyResponse> {
+    try {
+      const response = await this.doRequest<undefined>(url, undefined, 'GET');
+      console.log('response get ', response);
+
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(JSON.stringify(errorResponse));
+      }
+
+      return response.json();
+    } catch (e: unknown) {
+      const error = e as Error;
+      const errorDetails = JSON.parse(error.message);
+      throw new Error(errorDetails.message);
+    }
+    /*return new Promise((resolve, reject) => {
       fetch(url, {
         method: 'GET',
         headers: {
@@ -281,7 +329,7 @@ export class CatalogoServiceCor {
       }).catch(error => {
         reject(new Error('Hubo un error al obtener los datos: ' + error.message));
       })
-    });
+    });*/
   }
   public getPsicologiaQuestions(): Promise<SurveyResponse> {
     return this.getSurveyQuestions(this.API_SERVER_PSICOLOGIA_QUESTIONS);

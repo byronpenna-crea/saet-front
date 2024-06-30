@@ -70,7 +70,7 @@ export class BuscarEstudianteComponent
         this.centroEducativo = result.centroEducativo.nombre;
         this.showTable = true;
         this.inputNIE = result.estudiante.nie;
-        console.log('loeaded');
+
       }).catch((e) => {
         console.log('no existe NIE en url', e);
       })
@@ -152,15 +152,14 @@ export class BuscarEstudianteComponent
         /*this.showError = false;
         this.errorMessage = "";*/
         this.showTable = true;
-      } catch (error:any) {
-        console.log('error ', error);
+      } catch (e:unknown){
+        const error = e as Error;
+
         this.userMessage = {
           showMessage: true,
-          message: error,
+          message: error.message,
           type: MessageType.DANGER
         }
-
-
 
         this.showTable = false;
         console.error('error console', error);
