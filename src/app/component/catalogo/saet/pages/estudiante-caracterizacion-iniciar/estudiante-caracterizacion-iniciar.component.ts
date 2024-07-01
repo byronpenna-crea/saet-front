@@ -94,17 +94,47 @@ export class EstudianteCaracterizacionIniciarComponent
     });
     return values;
   }
+  init(){
+
+    this.route.paramMap.subscribe(params => {
+      const storedValues = localStorage.getItem('values');
+      if (storedValues) {
+        this.values = JSON.parse(storedValues);
+      }
+      const formMode = params.get('mode');
+      console.log('form mode on init', formMode);
+      switch (formMode){
+        case null:
+          this.formMode = FormMode.CREATE;
+          break;
+        case 'view':
+          this.formMode = FormMode.VIEW;
+          break;
+        case 'edit':
+          this.formMode = FormMode.EDIT;
+          break;
+      }
+      console.log('form mode updated ', this.formMode);
+      console.log('caracterizacion updated ', this.caracterizacion);
+      if(this.formMode === FormMode.VIEW){
+        this.values = this.respuestasToValues(this.caracterizacion?.respuestas ?? []);
+        console.log('here 1');
+        return;
+      }
+      this.values = {
+        ...this.values,
+        ...this.respuestasToValues(this.caracterizacion?.respuestas ?? [])
+      }
+      console.log('here 2',this.values);
+    })
+
+  }
   override async ngOnInit() {
     await super.ngOnInit();
     const url = '/menu/saet-caracterizacion-iniciar';
-
     const idCaracterizacion:number = this.caracterizacion?.id_caracterizacion ?? 0;
     handleMode(idCaracterizacion,url,this.formMode,this.nie,this.router);
-
-    this.values = {
-      ...this.values,
-      ...this.respuestasToValues(this.caracterizacion?.respuestas ?? [])
-    }
+    this.init();
   }
   formMode:FormMode = FormMode.CREATE;
   constructor(
@@ -115,8 +145,6 @@ export class EstudianteCaracterizacionIniciarComponent
     private confirmationService: ConfirmationService
   ){
     super(document, catalogoServiceCOR, route, router);
-
-
     const storedValues = localStorage.getItem('values');
     if (storedValues) {
       this.values = JSON.parse(storedValues);
@@ -125,12 +153,11 @@ export class EstudianteCaracterizacionIniciarComponent
     this.route.paramMap.subscribe(params => {
       const nie = params.get('nie');
       const formMode = params.get('mode');
+      console.log('form mode -----', formMode);
       if (nie) {
         this.nie = nie;
       }
-      /*if(formMode){
-        this.formMode = this.getFormModeFromString(formMode) ?? FormMode.CREATE;
-      }*/
+
       switch (formMode){
         case null:
           this.formMode = FormMode.CREATE;
@@ -145,10 +172,7 @@ export class EstudianteCaracterizacionIniciarComponent
           router.navigate(["menu/saet-evaluaciones",this.nie]);
           break;
       }
-
-
     });
-
 
     catalogoServiceCOR.getCORQuestions().then((result) => {
       this.corSurveys.push(...result.cuestionarios);
@@ -180,8 +204,8 @@ export class EstudianteCaracterizacionIniciarComponent
           result.centroEducativo.telefonoOrientador[0]
         ]
       };
-    })
-
+    });
+    this.init();
   }
 
   QuestionType = QuestionType;
@@ -233,7 +257,7 @@ export class EstudianteCaracterizacionIniciarComponent
     await this.router.navigate(["menu/saet-caracterizacion-estudiante",this.nie]);
   }
   async entrarEditMode(){
-    console.log('entrar edit mode caracterizacion ');
+
     const currentUrl = this.router.url;
     const newUrl = currentUrl.replace('/view', '/edit');
     this.formMode = FormMode.EDIT;
@@ -259,7 +283,7 @@ export class EstudianteCaracterizacionIniciarComponent
         idsValidos.add(pregunta.id_pregunta);
       });
     });
-    console.log('validar preguntas', idsValidos);
+
     const respuestasValidas = respuestas.filter(respuesta => {
       return idsValidos.has(respuesta.id_pregunta);
     });

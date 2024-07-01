@@ -30,7 +30,10 @@
       <div style="flex: 1; text-align: left; padding-right: 10px;">
       </div>
       <div style="flex: 2; text-align: right;" class="btn-iniciar-caracterizacion">
-        <app-saet-button [buttonArgs]="{buttonStyle: 0,buttonIcon: 1, text: 'Iniciar caracterización' }"
+        {{caracterizacion?.id_caracterizacion}}
+        <app-saet-button [buttonArgs]="{buttonStyle: 0,
+        buttonIcon: (caracterizacion !== undefined && caracterizacion.id_caracterizacion !== 0) ? buttonIcon.EYE : buttonIcon.PLUS,
+        text: (caracterizacion !== undefined && caracterizacion.id_caracterizacion !== 0) ? 'Ver caracterización ': 'Iniciar caracterización' }"
           (onClick)="goTo('/menu/saet-caracterizacion-iniciar')" />
       </div>
     </div>

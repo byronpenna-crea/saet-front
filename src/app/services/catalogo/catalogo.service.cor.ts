@@ -204,12 +204,15 @@ export class CatalogoServiceCor {
     const tipo = TIPO_EVALUACION.psicologo_perfil;
     return this.postRequest<ISaveQuestionary,ISaveQuestionary>(this.evaluacionURL, cuestionarioPsicologia);
   }
-  public updatePedagogia() {
-
+  public updatePedagogia(cuestionarioPedagogia:ISaveQuestionary) {
+    const tipo = TIPO_EVALUACION.pedagogo_perfil;
+    return this.postRequest<ISaveQuestionary,ISaveQuestionary>(this.evaluacionURL, cuestionarioPedagogia);
   }
-  public updateLenguaje(){
-
+  public updateLenguaje(cuestionarioLenguaje:ISaveQuestionary){
+    const tipo = TIPO_EVALUACION.logopeda_perfil;
+    return this.postRequest<ISaveQuestionary,ISaveQuestionary>(this.evaluacionURL, cuestionarioLenguaje);
   }
+
   public updateCaracterizacion(caracterizacion: ISaveCaracterizacion) {
     const url = `${this.API_SERVER_URL}/caracterizacion/cor/preguntas`;
     return this.putRequest<IUpdateCaracterizacion,IUpdateCaracterizacion>(url,
@@ -255,11 +258,11 @@ export class CatalogoServiceCor {
       })
     });*/
   }
+
   public async getTipoDeEvaluacion(nie: string,tipoEvaluacion: TIPO_EVALUACION): Promise<IEvaluacionResponse> {
     const url = `${this.API_SERVER_URL}/evaluacion/cor/${nie}?idTipoEvaluacion=${tipoEvaluacion}`;
     try {
       const response = await this.doRequest<undefined>(url, undefined, 'GET');
-      console.log('response get ', response);
 
       if (!response.ok) {
         const errorResponse = await response.json();
@@ -295,7 +298,24 @@ export class CatalogoServiceCor {
       })
     });*/
   }
+  public async getPAEIQuestions() {
+    try {
+      const url = `${this.API_SERVER_URL}/paei/preguntas`;
+      const response = await this.doRequest<undefined>(url, undefined, 'GET');
+      console.log('response get ', response);
 
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(JSON.stringify(errorResponse));
+      }
+
+      return response.json();
+    } catch (e: unknown) {
+      const error = e as Error;
+      const errorDetails = JSON.parse(error.message);
+      throw new Error(errorDetails.message);
+    }
+  }
   //get questions
   public async getSurveyQuestions(url: string): Promise<SurveyResponse> {
     try {
@@ -313,23 +333,6 @@ export class CatalogoServiceCor {
       const errorDetails = JSON.parse(error.message);
       throw new Error(errorDetails.message);
     }
-    /*return new Promise((resolve, reject) => {
-      fetch(url, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${this.token}`,
-          'Content-Type': 'application/json'
-        }
-      }).then(response => {
-        if (response.ok) {
-          resolve(response.json());
-        } else {
-          reject(new Error('No se pudo obtener los datos'));
-        }
-      }).catch(error => {
-        reject(new Error('Hubo un error al obtener los datos: ' + error.message));
-      })
-    });*/
   }
   public getPsicologiaQuestions(): Promise<SurveyResponse> {
     return this.getSurveyQuestions(this.API_SERVER_PSICOLOGIA_QUESTIONS);

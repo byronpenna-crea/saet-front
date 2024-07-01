@@ -10,6 +10,7 @@ import {IMessageComponent, UserMessage} from "../../interfaces/message-component
 import {userMessageInit} from "../../shared/messages.model";
 import {BaseComponent} from "../../BaseComponent";
 import {SAET_MODULE} from "../../shared/evaluaciones";
+import {IconComponent} from "../../shared/component.config";
 
 @Component({
   selector: 'app-estudiante-caracterizacion',
@@ -23,6 +24,7 @@ export class EstudianteCaracterizacionComponent extends BaseComponent implements
   nombreUsuario:string = "";
   especialidad: string = "";
   readonlyInput:boolean = true;
+  buttonIcon = IconComponent;
   async iniciarCaracterizacion(){
     const objSaveCaracterizacion:ISaveCaracterizacion = {
       id_caracterizacion: null,
@@ -76,6 +78,7 @@ export class EstudianteCaracterizacionComponent extends BaseComponent implements
     await super.ngOnInit();
     console.log('caracterizacion load ', this.caracterizacion);
   }
+
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceCOR: CatalogoServiceCor,
@@ -95,7 +98,7 @@ export class EstudianteCaracterizacionComponent extends BaseComponent implements
 
     catalogoServiceCOR.getStudentInfo(this.nie).then((result) => {
       this.studentInfo = result.estudiante;
-    })
+    });
 
   }
 

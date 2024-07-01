@@ -89,6 +89,7 @@ import {ConfirmationService} from "primeng/api";
 import { SaetConfirmComponent } from './component/catalogo/saet/component/saet-confirm/saet-confirm.component';
 import { EstudiantePaeiComponent } from './component/catalogo/saet/pages/estudiante-paei/estudiante-paei.component';
 import { SaetCuestionarioTablaComponent } from './component/catalogo/saet/component/saet-cuestionario-tabla/saet-cuestionario-tabla.component';
+import { EstudianteDetallePaeiComponent } from './component/catalogo/saet/pages/estudiante-detalle-paei/estudiante-detalle-paei.component';
 
 
 @NgModule({
@@ -137,7 +138,8 @@ import { SaetCuestionarioTablaComponent } from './component/catalogo/saet/compon
     SaetTabAgendaComponent,
     SaetConfirmComponent,
     EstudiantePaeiComponent,
-    SaetCuestionarioTablaComponent
+    SaetCuestionarioTablaComponent,
+    EstudianteDetallePaeiComponent
 
   ],
   imports: [

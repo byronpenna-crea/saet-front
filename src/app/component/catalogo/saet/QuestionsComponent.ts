@@ -70,9 +70,16 @@ export class QuestionsComponent extends BaseComponent {
       }
     });
     const especialidad = localStorage.getItem('especialidad');
-    if(especialidad !== especialidadTarget){
-      router.navigate(["menu/saet-evaluaciones",this.nie]);
+    if(
+      especialidadTarget === 'psicologia' ||
+      especialidadTarget === 'pedagogia' ||
+      especialidadTarget === 'lenguaje'
+    ){
+      if(especialidad !== especialidadTarget){
+        router.navigate(["menu/saet-evaluaciones",this.nie]);
+      }
     }
+
 
     this.updateStoredValues(_valuesKey);
 
@@ -82,7 +89,6 @@ export class QuestionsComponent extends BaseComponent {
       this.formMode === FormMode.EDIT ||
       this.formMode === FormMode.CREATE
     ){
-      console.log('here ', _valuesKey);
       this.valuesKey = _valuesKey;
       const storedValues = localStorage.getItem(_valuesKey);
       if (storedValues) {

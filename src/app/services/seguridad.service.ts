@@ -440,15 +440,27 @@ const httpOptions = {
         primer_apellido: 'Lopez',
         especialidad: 'psicologia'
       }
-      } : usu_codigo === "usuario_pedagogia" && usu_password === "pass_pedagogia" ?
+      } :
+          usu_codigo === "usuario_psicologia2" && usu_password === "pass__psicologia2" ?{
+              body: {
+                token: 'token_simulado',
+                nombre: 'Byron Aldair Peña Portillo',
+                dui: '00000000-0',
+                id_persona: 12345,
+                primer_nombre: 'Rosa',
+                primer_apellido: 'García',
+                especialidad: 'pedagogia'
+              }
+          } :
+          usu_codigo === "usuario_pedagogia" && usu_password === "pass_pedagogia" ?
           {
             body: {
               token: 'token_simulado',
-              nombre: 'Pedagogo',
-              dui: '00000000-0',
+              nombre: 'Rosa Emilia García Pérez',
+              dui: '03546699-1',
               id_persona: 12345,
-              primer_nombre: 'Primer',
-              primer_apellido: 'Apellido',
+              primer_nombre: 'Rosa',
+              primer_apellido: 'García',
               especialidad: 'pedagogia'
             }
           }
@@ -456,11 +468,11 @@ const httpOptions = {
             {
               body: {
                 token: 'token_simulado',
-                nombre: 'Lenguaje y habla',
+                nombre: 'Edgardo José Gómez Peraza',
                 dui: '00000000-0',
                 id_persona: 12345,
-                primer_nombre: 'Primer',
-                primer_apellido: 'Apellido',
+                primer_nombre: 'Edgardo',
+                primer_apellido: 'Gómez',
                 especialidad: 'lenguaje'
               }
             } :

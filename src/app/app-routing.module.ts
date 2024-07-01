@@ -26,6 +26,7 @@ import {EstudianteCuestionarioPedagogiaComponent} from "./component/catalogo/sae
 import {EstudiantePdfComponent} from "./component/catalogo/saet/pages/estudiante-pdf/estudiante-pdf.component";
 import {EstudianteInformeTrimestralComponent} from "./component/catalogo/saet/pages/estudiante-informe-trimestral/estudiante-informe-trimestral.component";
 import {EstudiantePaeiComponent} from "./component/catalogo/saet/pages/estudiante-paei/estudiante-paei.component";
+import {EstudianteDetallePaeiComponent} from "./component/catalogo/saet/pages/estudiante-detalle-paei/estudiante-detalle-paei.component";
 /*
 const routes: Routes = [
 
@@ -79,6 +80,7 @@ const routes: Routes = [
 
       { path: 'saet-evaluaciones/:nie', component: EstudianteEvaluacionesComponent },
       { path: 'saet-paei/:nie', component: EstudiantePaeiComponent },
+      { path: 'saet-paei-detalle/:nie', component: EstudianteDetallePaeiComponent },
       { path: 'persona', component: PersonaComponent, canActivate: [UserGuardGuard] },
       { path: 'categorias', component: CategoriaComponent, canActivate: [UserGuardGuard] },
       { path: 'sub_categorias', component: SubCategoriaComponent, canActivate: [UserGuardGuard] },

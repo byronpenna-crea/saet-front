@@ -2,7 +2,7 @@
                         [readOnlyEvaluaciones]="readOnlyEvaluaciones" [readOnlyPaei]="readOnlyPaei" [breadcrumb]="[
     { href: '#/menu/saet-buscar', text: 'Buscar estudiante' },
     { href: '#/menu/saet-buscar/'+nie, text: nie },
-    { href: '', text: 'Caracterización' }
+    { href: '', text: 'PAEI' }
   ]" />
 <app-saet-mensaje-usuario [show]="userMessage.showMessage" [message]="userMessage.message"
                           [title]="userMessage.titleMessage" />
@@ -71,10 +71,43 @@
     buttonStyle: buttonStyle.WHITE,
     text: 'Ver PAEI'
     }"
+    (onClick)="btnVerPaei()"
     />
   </app-saet-tab>
 
-  <app-saet-tab  leyend="Estado de validación y seguimiento de PAEI">
+  <div class="margin-top">
+    <app-saet-tab  leyend="Estado de validación y seguimiento de PAEI">
+      <p-tabView>
+        <p-tabPanel header="Estado de validación">
+          <p-table data-testid="table-information" [columns]="estadoValidacionColumns" [value]="rowData">
+            <ng-template pTemplate="header" let-columns>
+              <tr>
+                <th *ngFor="let col of columns">
+                  {{ col.header }}
+                </th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData>
+              <tr>
+                <td>
+                  {{ rowData["col1"] }}
+                </td>
+                <td>
+                  {{ rowData["col2"] }}
+                </td>
+                <td>
+                  {{ rowData["col3"] }}
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </p-tabPanel>
+        <p-tabPanel header="Seguimiento">
 
-  </app-saet-tab>
+        </p-tabPanel>
+      </p-tabView>
+
+    </app-saet-tab>
+  </div>
+
 </div>

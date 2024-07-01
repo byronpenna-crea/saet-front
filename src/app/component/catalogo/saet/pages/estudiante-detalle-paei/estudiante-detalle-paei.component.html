@@ -1,0 +1,73 @@
+<app-saet-global-header [nie]="nie" [nombreCompleto]="studentInfo?.nombreCompleto ?? ''" selectedTab="paei"
+                        [readOnlyEvaluaciones]="readOnlyEvaluaciones" [readOnlyPaei]="readOnlyPaei" [breadcrumb]="[
+    { href: '#/menu/saet-buscar', text: 'Buscar estudiante' },
+    { href: '#/menu/saet-buscar/'+nie, text: nie },
+    { href: '#/menu/saet-paei/'+nie, text: 'PAEI' },
+    { href: '', text: 'Edición' }
+  ]" />
+
+
+<div class="form-container">
+  <ng-container *ngFor="let corSurvey of corSurveys" >
+    <div style="margin-top: 5%">
+      <app-tabs
+        [legend]="corSurvey.titulo"
+      >
+        <div *ngIf="!cuestionariosTableMode.includes(corSurvey.id_cuestionario)">
+          <ng-container *ngFor="let pregunta of corSurvey.preguntas">
+            <app-tab-item
+              [label]="pregunta.pregunta ?? ''"
+            >
+              <app-saet-question
+                (onChange)="onchangeQuestions($event)"
+                [type]="getQuestionType(pregunta.tipoPregunta)"
+                [idPregunta]="pregunta.id_pregunta"
+                [value]="values[pregunta.id_pregunta.toString()]"
+                [testId]="pregunta.id_pregunta.toString()"
+                [name]="getName(pregunta.pregunta)"
+                [options]="getOptions(pregunta.opcion)" />
+            </app-tab-item>
+          </ng-container>
+        </div>
+        <div *ngIf="cuestionariosTableMode.includes(corSurvey.id_cuestionario)">
+          <table class="styled-table">
+            <thead>
+            <tr>
+              <th>Indicador</th>
+              <th>Respuesta</th>
+              <th>Observaciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <ng-container *ngFor="let pregunta of corSurvey.preguntas">
+              <tr>
+                <td>
+                  {{pregunta.pregunta}}
+                </td>
+                <td>
+                  <app-saet-radio
+                    (radioChange)="onchangeQuestions($event)"
+                    [name]="'radio_'+pregunta.id_pregunta.toString()"
+                    [disabled]="formMode === formModeEnum.VIEW"
+                    [selectedValue]="values['radio_'+pregunta.id_pregunta.toString()]"
+                    [options]="getOptions(pregunta.opcion)"
+                  />
+                </td>
+                <td>
+                  <app-saet-input
+                    [name]="'input_'+pregunta.id_pregunta.toString()"
+                    [disabled]="formMode === formModeEnum.VIEW"
+                    [inputArgs]="{text: ''}"
+                    [value]="values['input_'+pregunta.id_pregunta.toString()]"
+                    (inputChange)="onchangeQuestions($event)"
+                  />
+                </td>
+              </tr>
+            </ng-container>
+            </tbody>
+          </table>
+        </div>
+      </app-tabs>
+    </div>
+  </ng-container>
+</div>
