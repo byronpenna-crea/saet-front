@@ -21,6 +21,7 @@ interface TabInput {
   readOnly: boolean;
   leyend: string;
   name: string;
+  especialistaAgendado: string;
   onIniciar: () => void;
   onAgendar: () => void;
   onCancelar: () => void;
@@ -35,6 +36,7 @@ export class EstudianteEvaluacionesComponent extends BaseComponent implements IM
   //nie:string = "";
   //studentInfo?: StudentDetail;
   psicologiaAgendada:boolean = false;
+  psicologiaEspecilistaAgendado:string = "Byron Aldair Peña";
   pedagogiaAgendada:boolean = false;
   lenguajeHablaAgendada:boolean = false;
   readOnlyTab:boolean = true;
@@ -91,7 +93,10 @@ export class EstudianteEvaluacionesComponent extends BaseComponent implements IM
 
     const enumEspecialidad:TIPO_EVALUACION = this.getTipoEvaluacionFromString(this.especialidad);
     this.catalogoServiceCOR.getTipoDeEvaluacion(this.nie,enumEspecialidad).then((response) => {
-      console.log('response xxxxx+++', response);
+      if(response.id_evaluacion !== 0){
+        this.psicologiaEspecilistaAgendado = response.especialista_responsable;
+        this.updateTab(this.especialidad,true)
+      }
     }).catch((ex:ResponseError) =>
     {
       console.log('error ex', ex.status);
@@ -126,6 +131,7 @@ export class EstudianteEvaluacionesComponent extends BaseComponent implements IM
         onAgendar: this.agendarLenguaje.bind(this),
         onCancelar: this.cancelarLenguaje.bind(this),
         onIniciar: this.iniciarLenguajeHabla.bind(this),
+        especialistaAgendado: "",
         name: "lenguaje"
       },
       {
@@ -135,6 +141,7 @@ export class EstudianteEvaluacionesComponent extends BaseComponent implements IM
         onAgendar: this.agendarPsicologia.bind(this),
         onCancelar: this.cancelarPsicologia.bind(this),
         onIniciar: this.iniciarPsicologia.bind(this),
+        especialistaAgendado: this.psicologiaEspecilistaAgendado,
         name: "psicologia"
       },
       {
@@ -144,6 +151,7 @@ export class EstudianteEvaluacionesComponent extends BaseComponent implements IM
         onAgendar: this.agendarPedagogia.bind(this),
         onCancelar: this.cancelarPedagogia.bind(this),
         onIniciar: this.iniciarPedagogia.bind(this),
+        especialistaAgendado: "",
         name: "pedagogia"
       }
     ];
@@ -154,6 +162,16 @@ export class EstudianteEvaluacionesComponent extends BaseComponent implements IM
     return  tab !== undefined ? [tab] : [];
   }
   updateTab(name: string, agendado: boolean) {
+    if(name === 'psicologia'){
+      this.psicologiaAgendada = agendado;
+    }
+    if(name === 'lenguaje'){
+      this.lenguajeHablaAgendada = agendado;
+    }
+    if(name === 'pedagogia'){
+      this.pedagogiaAgendada = agendado;
+    }
+
     const index = this.agendaTabs.findIndex(tab => tab.name === name);
     if (index !== -1) {
       const tab = this.getTabs(this.agendaTabs[index].name)[0];

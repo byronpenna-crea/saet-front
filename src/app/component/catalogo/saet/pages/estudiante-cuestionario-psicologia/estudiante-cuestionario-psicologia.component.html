@@ -41,9 +41,13 @@
                 [type]="getQuestionType(pregunta.tipoPregunta)"
                 [idPregunta]="pregunta.id_pregunta"
                 [value]="values[pregunta.id_pregunta.toString()]"
+                [values]="values"
                 [testId]="pregunta.id_pregunta.toString()"
                 [name]="getName(pregunta.pregunta)"
-                [options]="getOptions(pregunta.opcion)" />
+                [options]="getOptions(pregunta.opcion)"
+                (checkboxChange)="onCheckboxChange($event)"
+                [readonly]="formMode === formModeEnum.VIEW"
+              />
             </app-tab-item>
           </ng-container>
         </div>

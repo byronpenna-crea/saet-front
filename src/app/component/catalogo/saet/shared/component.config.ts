@@ -16,6 +16,12 @@ export enum QuestionType {
   OPCION_UNICA = "opcion_unica",
   ABIERTA_CON_RESPUESTA_INTERNA = "abierta_con_respuesta_interna",
   OPCION_MULTIPLE = "opcion_multiple",
+  DATE="date",
+  TIME="time",
+  DATE_TIME="date_time",
+  OPCION_UNICA_CON_RESPUESTA_EXTENSA="opcion_unica_con_respuesta_extensa",
+  ABIERTA_SIN_FORMATO="opcion_unica_con_respuesta_extensa",
+  ABIERTA_CON_FORMATO="abierta_con_formato"
 }
 export const getIconClass = (icon:IconComponent | null) => {
   if(icon === null){

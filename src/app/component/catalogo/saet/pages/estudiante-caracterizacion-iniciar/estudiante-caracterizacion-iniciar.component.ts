@@ -384,11 +384,7 @@ export class EstudianteCaracterizacionIniciarComponent
   values: { [key: string]: string } = {};
   onCheckboxChange(keyValues:KeyValue[]){
     const selectedValues = keyValues.map(e => e.value);
-    console.log('key values ', keyValues);
-    console.log('selected values ', selectedValues.toString());
-    console.log('checkbox change ', this.values);
     this.values[keyValues[0].key] = selectedValues.toString();
-
     localStorage.setItem('values', JSON.stringify(this.values));
   }
   onchange(keyValue:KeyValue) {

@@ -12,6 +12,7 @@ export class SaetTabAgendaComponent {
   @Input() agendado: boolean = false;
   @Input() readOnly: boolean = false;
   @Input() leyend:string = "";
+  @Input() especialistaAgendado:string = "";
   @Output() onIniciar = new EventEmitter<void>();
   @Output() onAgendar = new EventEmitter<void>();
   @Output() onCancelar = new EventEmitter<void>();

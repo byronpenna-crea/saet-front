@@ -4,7 +4,10 @@
            [disabled]="disabled"
              [(ngModel)]="value"
            [attr.name]="name"
-             pInputText style="width: 100%" />
+             pInputText style="width: 100%"
+           [attr.data-testid]="testId"
+
+    />
     <ng-container *ngIf="inputArgs.icon !== undefined">
       <i class="pi pi-search"></i>
     </ng-container>

@@ -7,6 +7,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {userMessageInit} from "../../shared/messages.model";
 import {TIPO_EVALUACION} from "../../shared/evaluaciones";
 import {ConfirmationService} from "primeng/api";
+import {KeyValue} from "../../component/saet-input/saet-input.component";
 
 
 @Component({
@@ -29,7 +30,7 @@ export class EstudianteCuestionarioPsicologiaComponent extends QuestionsComponen
       await this.router.navigate(['/menu/saet-caracterizacion-estudiante',this.nie]);
     }
   }
-
+  idEvaluacion:number = 0;
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceCOR: CatalogoServiceCor,
@@ -41,7 +42,7 @@ export class EstudianteCuestionarioPsicologiaComponent extends QuestionsComponen
     super(document, catalogoServiceCOR, route, router, confirmationService, especialidadTarget);
 
     this.catalogoServiceCOR.getTipoDeEvaluacion(this.nie,TIPO_EVALUACION.psicologo_perfil).then((response) => {
-
+      this.idEvaluacion = response.id_evaluacion;
       this.handleMode(response.id_evaluacion,'menu/saet-psicologia',this.formMode);
 
       console.log('Evaluacion here ', response);
@@ -65,10 +66,15 @@ export class EstudianteCuestionarioPsicologiaComponent extends QuestionsComponen
 
 
   }
-
+  onCheckboxChange(keyValues:KeyValue[]){
+    const selectedValues = keyValues.map(e => e.value);
+    this.values[keyValues[0].key] = selectedValues.toString();
+    localStorage.setItem('values', JSON.stringify(this.values));
+  }
   save(){
     const objToSave:ISaveQuestionary = this.getQuestionaryObject();
-    const x = this.catalogoServiceCOR.savePsicologia(objToSave);
+    objToSave.id_evaluacion = this.idEvaluacion;
+    const x = this.catalogoServiceCOR.updatePsicologia(objToSave);
     console.log('response --------------',x);
     console.log("to save ",objToSave);
   }

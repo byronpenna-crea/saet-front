@@ -21,8 +21,14 @@
     [disabled]="readonly"
     (radioChange)="onInputChange($event)" />
 </ng-container>
-
-
+<ng-container *ngIf="type === QuestionType.ABIERTA_SIN_FORMATO">
+  <textarea pInputTextarea></textarea>
+</ng-container>
+<ng-container *ngIf="type === QuestionType.ABIERTA_CON_FORMATO">
+  <app-richtext
+  (inputChange)="onInputChange($event)"
+  />
+</ng-container>
 <ng-container *ngIf="type === QuestionType.OPCION_UNICA">
   <app-saet-radio
     [name]="'radio_'+idPregunta.toString()"

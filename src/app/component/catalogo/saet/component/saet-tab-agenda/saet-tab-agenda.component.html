@@ -25,7 +25,9 @@
 
       <div *ngIf="agendado">
         Especialista responsable de agendar
-        <app-saet-input />
+        <app-saet-input
+        [value]="especialistaAgendado"
+        />
       </div>
 
       <div *ngIf="!agendado">

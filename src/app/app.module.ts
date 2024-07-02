@@ -90,6 +90,7 @@ import { SaetConfirmComponent } from './component/catalogo/saet/component/saet-c
 import { EstudiantePaeiComponent } from './component/catalogo/saet/pages/estudiante-paei/estudiante-paei.component';
 import { SaetCuestionarioTablaComponent } from './component/catalogo/saet/component/saet-cuestionario-tabla/saet-cuestionario-tabla.component';
 import { EstudianteDetallePaeiComponent } from './component/catalogo/saet/pages/estudiante-detalle-paei/estudiante-detalle-paei.component';
+import {InputTextareaModule} from "primeng/inputtextarea";
 
 
 @NgModule({
@@ -164,6 +165,7 @@ import { EstudianteDetallePaeiComponent } from './component/catalogo/saet/pages/
     DialogModule,
     FormsModule,
     InputTextModule,
+    InputTextareaModule,
     PanelMenuModule,
     ReactiveFormsModule,
     MessagesModule,

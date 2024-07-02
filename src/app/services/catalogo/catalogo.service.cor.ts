@@ -45,6 +45,7 @@ export interface IGetCaracterizacion {
 }
 export interface IEvaluacionResponse{
   id_evaluacion: number,
+  especialista_responsable: string,
   respuestas: iQuestionSave[]
 }
 export interface IQuestionaryHeader{
@@ -139,9 +140,8 @@ export class CatalogoServiceCor {
 
       return response.json();
     } catch (e: unknown) {
-      const error = e as Error;
-      const errorDetails = JSON.parse(error.message);
-      throw new Error(errorDetails.message);
+      const error = e as ResponseError;
+      throw error;
     }
   }
   private async doRequest<T>(url: string, data?: T, method: string = 'POST'): Promise<Response> {
@@ -214,7 +214,7 @@ export class CatalogoServiceCor {
   evaluacionURL:string = `${this.API_SERVER_URL}/evaluacion/cor/`;
   public updatePsicologia(cuestionarioPsicologia:ISaveQuestionary){
     const tipo = TIPO_EVALUACION.psicologo_perfil;
-    return this.postRequest<ISaveQuestionary,ISaveQuestionary>(this.evaluacionURL, cuestionarioPsicologia);
+    return this.putRequest<ISaveQuestionary,ISaveQuestionary>(this.evaluacionURL, cuestionarioPsicologia);
   }
   public updatePedagogia(cuestionarioPedagogia:ISaveQuestionary) {
     const tipo = TIPO_EVALUACION.pedagogo_perfil;

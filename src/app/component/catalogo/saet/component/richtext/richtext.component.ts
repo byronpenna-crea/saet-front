@@ -1,4 +1,5 @@
-import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, SimpleChanges, EventEmitter, Output} from '@angular/core';
+import {KeyValue} from "../saet-input/saet-input.component";
 
 @Component({
   selector: 'app-richtext',
@@ -7,10 +8,25 @@ import {Component, Input, OnChanges, SimpleChanges} from '@angular/core';
 })
 export class RichtextComponent implements OnChanges{
   @Input() text: string = "";
+  @Output() inputChange = new EventEmitter<KeyValue>();
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes["text"]) {
       console.log('Text has changed:', changes["text"].currentValue);
+      this.emitInputChange(changes["text"].currentValue);
     }
+  }
+
+  onInputChange(event: any) {
+    const newValue = event.htmlValue;
+    this.text = newValue;
+    this.emitInputChange(newValue);
+  }
+
+  private emitInputChange(newValue: string) {
+    this.inputChange.emit({
+      key: 'text',
+      value: newValue
+    });
   }
 }
