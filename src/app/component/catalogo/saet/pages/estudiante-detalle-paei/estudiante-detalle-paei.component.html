@@ -21,11 +21,14 @@
               <app-saet-question
                 (onChange)="onchangeQuestions($event)"
                 [type]="getQuestionType(pregunta.tipoPregunta)"
-                      [idPregunta]="pregunta.id_pregunta"
+                [idPregunta]="pregunta.id_pregunta"
                 [value]="values[pregunta.id_pregunta.toString()]"
+                [values]="values"
                 [testId]="pregunta.id_pregunta.toString()"
                 [name]="getName(pregunta.pregunta)"
-                [options]="getOptions(pregunta.opcion)" />
+                [options]="getOptions(pregunta.opcion)"
+                [readonly]="formMode === formModeEnum.VIEW"
+              />
             </app-tab-item>
           </ng-container>
         </div>

@@ -6,26 +6,22 @@ import {KeyValue} from "../saet-input/saet-input.component";
   templateUrl: './richtext.component.html',
   styleUrls: ['./richtext.component.css']
 })
-export class RichtextComponent implements OnChanges{
+export class RichtextComponent{
   @Input() text: string = "";
+  @Input() name: string = "";
+  @Input() value: string = "";
   @Output() inputChange = new EventEmitter<KeyValue>();
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes["text"]) {
-      console.log('Text has changed:', changes["text"].currentValue);
-      this.emitInputChange(changes["text"].currentValue);
-    }
-  }
 
-  onInputChange(event: any) {
+  onInputChange(event: any,name:string) {
     const newValue = event.htmlValue;
     this.text = newValue;
-    this.emitInputChange(newValue);
+    this.emitInputChange(newValue,name);
   }
 
-  private emitInputChange(newValue: string) {
+  private emitInputChange(newValue: string, key:string) {
     this.inputChange.emit({
-      key: 'text',
+      key: key,
       value: newValue
     });
   }

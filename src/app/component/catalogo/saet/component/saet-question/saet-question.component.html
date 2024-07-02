@@ -1,5 +1,14 @@
+<ng-container *ngIf="type === QuestionType.ABIERTA_CON_FORMATO">
+  <app-richtext
+    (inputChange)="onInputChange($event)"
+    [value]="values['textarea_'+idPregunta.toString()]"
+    [name]="'textarea_'+idPregunta.toString()"
+  />
+</ng-container>
 <ng-container *ngIf="type === QuestionType.ABIERTA">
-  <app-saet-input [testId]="testId" (inputChange)="onInputChange($event)"
+  <app-saet-input
+    [testId]="testId"
+    (inputChange)="onInputChange($event)"
     [value]="values['input_'+idPregunta.toString()]"
     [disabled]="readonly"
     [name]="'input_'+idPregunta.toString()"
@@ -24,11 +33,7 @@
 <ng-container *ngIf="type === QuestionType.ABIERTA_SIN_FORMATO">
   <textarea pInputTextarea></textarea>
 </ng-container>
-<ng-container *ngIf="type === QuestionType.ABIERTA_CON_FORMATO">
-  <app-richtext
-  (inputChange)="onInputChange($event)"
-  />
-</ng-container>
+
 <ng-container *ngIf="type === QuestionType.OPCION_UNICA">
   <app-saet-radio
     [name]="'radio_'+idPregunta.toString()"

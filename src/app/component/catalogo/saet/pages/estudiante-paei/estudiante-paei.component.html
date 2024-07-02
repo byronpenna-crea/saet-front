@@ -22,13 +22,13 @@
       <app-tab-item label="Especialista en Psicología:">
         <app-saet-input
           [disabled]="true"
-          value="Francisca Eunice López Orellana"
+          [value]="nombreEspecialista[tipoEvaluacion.psicologo_perfil]?.nombre ?? ''"
 
         />
       </app-tab-item>
 
       <app-tab-item>
-        05035096-8 | Especialista en psicologia - COR
+        {{nombreEspecialista[tipoEvaluacion.psicologo_perfil]?.dui}} | Especialista en psicologia - COR
       </app-tab-item>
     </div>
 
@@ -36,11 +36,11 @@
       <app-tab-item label="Especialista en Pedagogía:">
         <app-saet-input
           [disabled]="true"
-          value="Rosa Emilia García Pérez"
+          [value]="nombreEspecialista[tipoEvaluacion.pedagogo_perfil]?.nombre ?? ''"
         />
       </app-tab-item>
       <app-tab-item>
-        05035096-8 | Especialista en pedagogía - COR
+        {{nombreEspecialista[tipoEvaluacion.pedagogo_perfil]?.dui}} | Especialista en pedagogía - COR
       </app-tab-item>
     </div>
 
@@ -48,11 +48,11 @@
       <app-tab-item label="Especialista en Habla y lenguaje:">
         <app-saet-input
           [disabled]="true"
-          value="Edgardo José Gómez Peraza"
+          [value]="nombreEspecialista[tipoEvaluacion.logopeda_perfil]?.nombre ?? ''"
         />
       </app-tab-item>
       <app-tab-item>
-        05035096-8 | Especialista en habla y lenguaje - COR
+        {{nombreEspecialista[tipoEvaluacion.logopeda_perfil]?.dui}} | Especialista en habla y lenguaje - COR
       </app-tab-item>
     </div>
 
