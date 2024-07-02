@@ -21,12 +21,18 @@ export class BaseComponent implements OnInit{
   readOnlyEvaluaciones:boolean = true;
   readOnlyPaei:boolean = true;
   async ngOnInit() {
-    const response = await this.catalogoServiceCOR.getCaracterizacionPorNIE(this.nie);
-    this.caracterizacion = response;
-    if(response.id_caracterizacion !== 0){
-      this.readOnlyPaei = false;
-      this.readOnlyEvaluaciones = false;
+    try{
+      const response = await this.catalogoServiceCOR.getCaracterizacionPorNIE(this.nie);
+      this.caracterizacion = response;
+      if(response.id_caracterizacion !== 0){
+        this.readOnlyPaei = false;
+        this.readOnlyEvaluaciones = false;
+      }
+    }catch (ex){
+      console.log('error ex base ', ex);
     }
+
+
   }
   getAnswerObject(data: IValuesForm): IQuestionaryAnswer[] {
     const result: IQuestionaryAnswer[] = [];

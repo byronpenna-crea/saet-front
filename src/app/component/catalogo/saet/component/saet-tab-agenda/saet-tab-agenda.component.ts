@@ -1,5 +1,7 @@
 import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {MessageType, UserMessage} from "../../interfaces/message-component.interface";
+import {ButtonStyle} from "../saet-button/saet-button.component";
+import {IconComponent} from "../../shared/component.config";
 
 @Component({
   selector: 'app-saet-tab-agenda',
@@ -20,6 +22,10 @@ export class SaetTabAgendaComponent {
     message: "",
     type: MessageType.SUCCESS
   };
+
+  buttonStyle = ButtonStyle;
+  buttonIcon = IconComponent;
+
   agendar() {
     if(!this.readOnly){
       this.onAgendar.emit();

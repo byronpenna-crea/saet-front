@@ -12,16 +12,15 @@
                     dateFormat="dd/mm/yy">
                   </p-calendar>
                 </div>
-
           </div>
-          <div class="second-column">
+              <div class="second-column">
 
             <label class="first-item">Hora de evaluación:</label>
             <div class="second-item-time">
               <p-calendar inputId="calendar-timeonly" [timeOnly]="true" />
             </div>
           </div>
-        </div>
+          </div>
       </div>
 
       <div *ngIf="agendado">
@@ -43,7 +42,6 @@
           <div></div>
           <div class="right-buttons">
             <span data-testId="btn-clean" class="link-text" (click)="cancelar()">Cancelar agenda</span>
-
             <app-saet-button enab (onClick)="iniciar()"
               [buttonArgs]="{buttonIcon: 1,buttonStyle: 0, text: 'Iniciar evaluación'}" />
           </div>
@@ -51,7 +49,78 @@
       </div>
     </p-tabPanel>
     <p-tabPanel header="Agendar evaluación">
-      Agendar
+      <div>
+        <app-tab-item
+          label="Especialista responsable de agendar:"
+        >
+          <app-saet-input
+            value="Francisca Eunice López Orellana"
+            [disabled]="true"
+          />
+        </app-tab-item>
+        <app-tab-item
+          label=""
+        >
+          02546679-0 | Especialista en psicologia - COR
+        </app-tab-item>
+      </div>
+
+      <div>
+        <app-tab-item
+          label="Especialista responsable de realizar evaluación:"
+        >
+          <app-saet-input
+            value="Francisca Eunice López Orellana"
+            [disabled]="true"
+          />
+        </app-tab-item>
+        <app-tab-item
+          label=""
+        >
+          02546679-0 | Especialista en psicologia - COR
+        </app-tab-item>
+      </div>
+
+      <app-saet-underlined-title />
+
+      <div class="flex wrap margin-top">
+
+        <div class="first-column">
+          <label class="first-item">Fecha de evaluación:</label>
+          <div class="second-item">
+            <p-calendar
+              [disabled]="readOnly"
+              [showIcon]="true"
+              dateFormat="dd/mm/yy">
+            </p-calendar>
+          </div>
+        </div>
+        <div class="second-column">
+          <label class="first-item">Hora de evaluación:</label>
+          <div class="second-item-time">
+            <p-calendar inputId="calendar-timeonly" [timeOnly]="true" />
+          </div>
+        </div>
+
+      </div>
+
+      <div>
+        <app-saet-button
+        [buttonArgs]="{
+          buttonIcon: buttonIcon.PLUS,
+          buttonStyle: buttonStyle.WHITE,
+          text: 'Agregar otra evaluación'
+        }"
+
+        />
+        <app-saet-button
+        [buttonArgs]="{
+          buttonIcon: buttonIcon.EYE,
+          buttonStyle: buttonStyle.WHITE,
+          text: 'Ver evaluación'
+        }"
+        />
+      </div>
     </p-tabPanel>
   </p-tabView>
 </app-saet-tab>

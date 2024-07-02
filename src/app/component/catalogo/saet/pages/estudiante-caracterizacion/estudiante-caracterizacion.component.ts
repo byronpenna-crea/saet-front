@@ -77,6 +77,11 @@ export class EstudianteCaracterizacionComponent extends BaseComponent implements
   override async ngOnInit() {
     await super.ngOnInit();
     console.log('caracterizacion load ', this.caracterizacion);
+    if(
+      this.caracterizacion &&
+      this.caracterizacion?.id_caracterizacion !== 0){
+      this.nombreUsuario = this.caracterizacion.especialista_responsable;
+    }
   }
 
   constructor(

@@ -48,7 +48,7 @@ export class QuestionsComponent extends BaseComponent {
     private confirmationService: ConfirmationService,
     @Inject(DOCUMENT) especialidadTarget:string
   ){
-
+    console.log('constructor question ');
     const _valuesKey = `${especialidadTarget}_values`;
     super(document, catalogoServiceCOR, route, router);
     this.targetEspecialidad = especialidadTarget;
@@ -75,6 +75,9 @@ export class QuestionsComponent extends BaseComponent {
       especialidadTarget === 'pedagogia' ||
       especialidadTarget === 'lenguaje'
     ){
+      console.log('here', especialidadTarget);
+      console.log('here', especialidad);
+      console.log('---------------------------');
       if(especialidad !== especialidadTarget){
         router.navigate(["menu/saet-evaluaciones",this.nie]);
       }

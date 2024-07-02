@@ -435,21 +435,21 @@ const httpOptions = {
         token: 'token_simulado',
         nombre: 'Francisca Eunice Lopez Orellana',
         dui: '05012569-0',
-        id_persona: 12345,
+        id_persona: 3,
         primer_nombre: 'Francisca',
         primer_apellido: 'Lopez',
         especialidad: 'psicologia'
       }
       } :
-          usu_codigo === "usuario_psicologia2" && usu_password === "pass__psicologia2" ?{
+          usu_codigo === "usuario_psicologia2" && usu_password === "pass_psicologia2" ?{
               body: {
                 token: 'token_simulado',
                 nombre: 'Byron Aldair Peña Portillo',
                 dui: '00000000-0',
-                id_persona: 12345,
+                id_persona: 4,
                 primer_nombre: 'Rosa',
                 primer_apellido: 'García',
-                especialidad: 'pedagogia'
+                especialidad: 'psicologia'
               }
           } :
           usu_codigo === "usuario_pedagogia" && usu_password === "pass_pedagogia" ?
@@ -458,7 +458,7 @@ const httpOptions = {
               token: 'token_simulado',
               nombre: 'Rosa Emilia García Pérez',
               dui: '03546699-1',
-              id_persona: 12345,
+              id_persona: 5,
               primer_nombre: 'Rosa',
               primer_apellido: 'García',
               especialidad: 'pedagogia'
@@ -470,7 +470,7 @@ const httpOptions = {
                 token: 'token_simulado',
                 nombre: 'Edgardo José Gómez Peraza',
                 dui: '00000000-0',
-                id_persona: 12345,
+                id_persona: 6,
                 primer_nombre: 'Edgardo',
                 primer_apellido: 'Gómez',
                 especialidad: 'lenguaje'

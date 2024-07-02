@@ -23,8 +23,10 @@ export class EstudianteCuestionarioPsicologiaComponent extends QuestionsComponen
   ]
   override async ngOnInit() {
     await super.ngOnInit();
+    console.log('init')
     if(this.readOnlyEvaluaciones){
-      this.router.navigate(['/menu/saet-caracterizacion-estudiante',this.nie]);
+      console.log('redirect ');
+      await this.router.navigate(['/menu/saet-caracterizacion-estudiante',this.nie]);
     }
   }
 
@@ -51,6 +53,8 @@ export class EstudianteCuestionarioPsicologiaComponent extends QuestionsComponen
         ...this.responseToValues(response)
       }
       console.log('this values ... ', this.values);
+    }).catch((ex) => {
+      console.log('ex here', ex);
     });
 
 

@@ -21,7 +21,7 @@
               <app-saet-question
                 (onChange)="onchangeQuestions($event)"
                 [type]="getQuestionType(pregunta.tipoPregunta)"
-                [idPregunta]="pregunta.id_pregunta"
+                      [idPregunta]="pregunta.id_pregunta"
                 [value]="values[pregunta.id_pregunta.toString()]"
                 [testId]="pregunta.id_pregunta.toString()"
                 [name]="getName(pregunta.pregunta)"

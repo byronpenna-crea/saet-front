@@ -40,6 +40,7 @@ export interface StudentInfoResponse {
 }
 export interface IGetCaracterizacion {
   id_caracterizacion: number,
+  especialista_responsable: string,
   respuestas:iQuestion[]
 }
 export interface IEvaluacionResponse{
@@ -96,9 +97,19 @@ export interface ISaveCaracterizacion {
     ocupacion: string
   }[]
 }
+export class ResponseError extends Error {
+  status: number;
+
+  constructor(status: number, message: string) {
+    super(message);
+    this.status = status;
+    this.name = this.constructor.name;
+  }
+}
 @Injectable({
   providedIn: 'root'
 })
+
 export class CatalogoServiceCor {
   private API_SERVER_URL = `${environment.API_SERVER_URL}`;//v2
   private API_SERVER_COR = `${this.API_SERVER_URL}/caracterizacion/cor/preguntas`;
@@ -152,8 +163,8 @@ export class CatalogoServiceCor {
 
     // Check if the response is not successful (status 200-299)
     if (!response.ok) {
-
-      throw new Error(JSON.stringify(await response.json()));
+      const errorResponse = await response.json();
+      throw new ResponseError(response.status, errorResponse.message);
     }
 
     return response;
@@ -183,6 +194,7 @@ export class CatalogoServiceCor {
   }
   // save
   public savePsicologia(cuestionarioPsicologia:ISaveQuestionary){
+    console.log('save here post request');
     const url = `${this.API_SERVER_URL}/evaluacion/cor/psicologia/`;
     return this.postRequest<ISaveQuestionary,ISaveQuestionary>(url, cuestionarioPsicologia);
   }
@@ -266,14 +278,13 @@ export class CatalogoServiceCor {
 
       if (!response.ok) {
         const errorResponse = await response.json();
-        throw new Error(JSON.stringify(errorResponse));
+        throw new ResponseError(response.status, errorResponse.message);
       }
 
       return response.json();
     } catch (e: unknown) {
-      const error = e as Error;
-      const errorDetails = JSON.parse(error.message);
-      throw new Error(errorDetails.message);
+      const error = e as ResponseError;
+      throw error;
     }
     /*return new Promise((resolve, reject) => {
       fetch(url, {

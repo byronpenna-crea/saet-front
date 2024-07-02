@@ -1,6 +1,8 @@
 import {FormMode} from "../QuestionsComponent";
 import {Router} from "@angular/router";
 
+
+
 export const handleMode = (idEvaluacion: number, url: string,
                            formMode:FormMode, nie:string,
                            router:Router

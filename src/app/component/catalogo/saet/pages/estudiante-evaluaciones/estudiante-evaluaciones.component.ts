@@ -3,12 +3,13 @@ import {IMessageComponent, UserMessage} from "../../interfaces/message-component
 import {DOCUMENT} from "@angular/common";
 import {
   CatalogoServiceCor,
-  IQuestionaryHeader, ISaveQuestionary,
-  StudentDetail
+  ISaveQuestionary,
+  ResponseError
 } from "../../../../../services/catalogo/catalogo.service.cor";
 import {ActivatedRoute, Router} from "@angular/router";
 import {userMessageInit} from "../../shared/messages.model";
 import {BaseComponent} from "../../BaseComponent";
+import {TIPO_EVALUACION} from "../../shared/evaluaciones";
 
 interface IUserMessage  {
   show: boolean,
@@ -85,11 +86,37 @@ export class EstudianteEvaluacionesComponent extends BaseComponent implements IM
       this.agendaTabs = tabs ;
     }
 
-
     this.agendaTabs = this.agendaTabs.sort((a, b) => (a.name === this.especialidad ? -1 : 1));
     this.agendaTabs[0].readOnly = false;
-  }
 
+    const enumEspecialidad:TIPO_EVALUACION = this.getTipoEvaluacionFromString(this.especialidad);
+    this.catalogoServiceCOR.getTipoDeEvaluacion(this.nie,enumEspecialidad).then((response) => {
+      console.log('response xxxxx+++', response);
+    }).catch((ex:ResponseError) =>
+    {
+      console.log('error ex', ex.status);
+    })
+
+  }
+  getTipoEvaluacionFromString(especialidad:string){
+    switch (especialidad){
+      case 'pedagogia':
+      {
+        return TIPO_EVALUACION.pedagogo_perfil;
+      }
+      case 'psicologia':
+      {
+        return TIPO_EVALUACION.psicologo_perfil;
+      }
+      case 'lenguaje':
+      {
+        return TIPO_EVALUACION.logopeda_perfil;
+      }
+      default: {
+        return TIPO_EVALUACION.psicologo_perfil;
+      }
+    }
+  }
   getTabs(name:string = "") {
     const tabs = [
       {
@@ -185,7 +212,7 @@ export class EstudianteEvaluacionesComponent extends BaseComponent implements IM
     this.updateTab('psicologia', true);
   }
   agendarPsicologia() {
-
+    console.log('agendar psicologia');
     this.psicologyMessage = this.successMessage
     this.psicologiaAgendada = true;
     this.updateTab('psicologia', true);
