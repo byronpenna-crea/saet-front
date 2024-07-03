@@ -1,7 +1,7 @@
 import {Inject, Injectable, OnInit} from "@angular/core";
 import {
   CatalogoServiceCor,
-  IGetCaracterizacion,
+  IGetCaracterizacion, ResponseError,
   StudentDetail,
   StudentInfoResponse
 } from "../../../services/catalogo/catalogo.service.cor";
@@ -29,7 +29,19 @@ export class BaseComponent implements OnInit{
         this.readOnlyEvaluaciones = false;
       }
     }catch (ex){
-      console.log('error ex base ', ex);
+      const error = ex as ResponseError;
+      console.log();
+      if(
+        error.status === 404 &&
+        (
+          this.router.url.includes('/menu/saet-evaluaciones/')
+          || this.router.url.includes('/menu/saet-paei-detalle/')
+          || this.router.url.includes('/menu/saet-paei/')
+        )
+      ){
+        await this.router.navigate(['/menu/saet-caracterizacion-estudiante',this.nie]);
+      }
+      console.log('error ex base ', error.status);
     }
 
 

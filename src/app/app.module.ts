@@ -91,6 +91,7 @@ import { EstudiantePaeiComponent } from './component/catalogo/saet/pages/estudia
 import { SaetCuestionarioTablaComponent } from './component/catalogo/saet/component/saet-cuestionario-tabla/saet-cuestionario-tabla.component';
 import { EstudianteDetallePaeiComponent } from './component/catalogo/saet/pages/estudiante-detalle-paei/estudiante-detalle-paei.component';
 import {InputTextareaModule} from "primeng/inputtextarea";
+import { EstudianteEvaluacionAgendaComponent } from './component/catalogo/saet/pages/estudiante-evaluacion-agenda/estudiante-evaluacion-agenda.component';
 
 
 @NgModule({
@@ -140,7 +141,8 @@ import {InputTextareaModule} from "primeng/inputtextarea";
     SaetConfirmComponent,
     EstudiantePaeiComponent,
     SaetCuestionarioTablaComponent,
-    EstudianteDetallePaeiComponent
+    EstudianteDetallePaeiComponent,
+    EstudianteEvaluacionAgendaComponent
 
   ],
   imports: [

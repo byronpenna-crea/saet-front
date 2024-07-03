@@ -26,7 +26,6 @@ export class EstudianteCuestionarioPsicologiaComponent extends QuestionsComponen
     await super.ngOnInit();
     console.log('init')
     if(this.readOnlyEvaluaciones){
-      console.log('redirect ');
       await this.router.navigate(['/menu/saet-caracterizacion-estudiante',this.nie]);
     }
   }
@@ -75,8 +74,6 @@ export class EstudianteCuestionarioPsicologiaComponent extends QuestionsComponen
     const objToSave:ISaveQuestionary = this.getQuestionaryObject();
     objToSave.id_evaluacion = this.idEvaluacion;
     const x = this.catalogoServiceCOR.updatePsicologia(objToSave);
-    console.log('response --------------',x);
-    console.log("to save ",objToSave);
   }
 
   override salirEditMode():string {

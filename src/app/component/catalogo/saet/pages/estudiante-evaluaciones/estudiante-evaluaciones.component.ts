@@ -79,6 +79,8 @@ export class EstudianteEvaluacionesComponent extends BaseComponent implements IM
 
     catalogoServiceCOR.getStudentInfo(this.nie).then((result) => {
       this.studentInfo = result.estudiante;
+    }).catch((ex) => {
+      console.log('error on getStudentInfo', ex);
     })
 
     this.especialidad = localStorage.getItem('especialidad') ?? "";

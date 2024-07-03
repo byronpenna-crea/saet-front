@@ -27,6 +27,7 @@ export class TabsComponent implements OnChanges{
   @Input() label:string[] = [];
   @Input() value:string[] = [];
   @Input() legend:string = "";
+  @Input() testId:string = "";
   @Input() background:string = "red";
   @Input() isActive:Boolean = true;
 

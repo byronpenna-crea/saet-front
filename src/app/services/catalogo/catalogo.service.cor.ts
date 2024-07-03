@@ -118,7 +118,7 @@ export class CatalogoServiceCor {
   private API_SERVER_LENGUAJE_HABLA_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/lenguaje_habla/preguntas`;
   private API_SERVER_PSICOLOGIA_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/psicologia/preguntas`;
   private API_SERVER_PEDAGOGIA_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/pedagogia/preguntas`;
-
+  private API_SERVER_AGENDA_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/preguntas/reporte`
   private API_SERVER_ESTUDIANTE = `${this.API_SERVER_URL}/tempEstudiantesSigesv2/buscarEstudiantePorNIE?nie=[NIE]`
   constructor(private httpClient: HttpClient, private router: Router, private cookieService: CookieService) {
 
@@ -174,7 +174,8 @@ export class CatalogoServiceCor {
     const response = await this.doRequest<T>(url,data,'PUT');
 
     if (!response.ok) {
-      throw new Error(await response.json());
+      const errorResponse = await response.json();
+      throw new ResponseError(response.status, errorResponse.message);
     }
 
     return response.json();
@@ -247,9 +248,8 @@ export class CatalogoServiceCor {
       }
       return response.json();
     } catch (e: unknown) {
-      const error = e as Error;
-      const errorDetails = JSON.parse(error.message);
-      throw new Error(errorDetails.message);
+      const error = e as ResponseError;
+      throw error;
     }
 
     /*return new Promise((resolve, reject) => {
@@ -344,6 +344,10 @@ export class CatalogoServiceCor {
       const errorDetails = JSON.parse(error.message);
       throw new Error(errorDetails.message);
     }
+  }
+  public getAgendaQuestions(): Promise<SurveyResponse> {
+    //API_SERVER_AGENDA_QUESTIONS
+    return this.getSurveyQuestions(this.API_SERVER_AGENDA_QUESTIONS);
   }
   public getPsicologiaQuestions(): Promise<SurveyResponse> {
     return this.getSurveyQuestions(this.API_SERVER_PSICOLOGIA_QUESTIONS);

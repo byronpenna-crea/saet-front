@@ -14,10 +14,12 @@
 <div class="form-container">
 
   <div class="margin-top">
-    <app-tabs [label]="generalInformation.labels"
-    [legend]="generalInformation.legend"
-              [value]="generalInformation.values"
-              [isActive]="generalInformation.isActive"
+    <app-tabs
+      [label]="generalInformation.labels"
+      [legend]="generalInformation.legend"
+      [value]="generalInformation.values"
+      [isActive]="generalInformation.isActive"
+      testId="general-tab-info"
     ></app-tabs>
   </div>
   <div class="margin-top">
