@@ -92,7 +92,10 @@ import { SaetCuestionarioTablaComponent } from './component/catalogo/saet/compon
 import { EstudianteDetallePaeiComponent } from './component/catalogo/saet/pages/estudiante-detalle-paei/estudiante-detalle-paei.component';
 import {InputTextareaModule} from "primeng/inputtextarea";
 import { EstudianteEvaluacionAgendaComponent } from './component/catalogo/saet/pages/estudiante-evaluacion-agenda/estudiante-evaluacion-agenda.component';
-
+import { EstudianteGraficasComponent } from './component/catalogo/saet/pages/estudiante-graficas/estudiante-graficas.component';
+import {NgxChartsModule} from "@swimlane/ngx-charts";
+import { SaetGraficaPastelComponent } from './component/catalogo/saet/component/saet-grafica-pastel/saet-grafica-pastel.component';
+import { SaetGraficaBarrasComponent } from './component/catalogo/saet/component/saet-grafica-barras/saet-grafica-barras.component';
 
 @NgModule({
   declarations: [
@@ -142,7 +145,10 @@ import { EstudianteEvaluacionAgendaComponent } from './component/catalogo/saet/p
     EstudiantePaeiComponent,
     SaetCuestionarioTablaComponent,
     EstudianteDetallePaeiComponent,
-    EstudianteEvaluacionAgendaComponent
+    EstudianteEvaluacionAgendaComponent,
+    EstudianteGraficasComponent,
+    SaetGraficaPastelComponent,
+    SaetGraficaBarrasComponent
 
   ],
   imports: [
@@ -187,7 +193,8 @@ import { EstudianteEvaluacionAgendaComponent } from './component/catalogo/saet/p
     FieldsetModule,
     CheckboxModule,
     ConfirmDialogModule,
-
+    NgxChartsModule,
+    BrowserAnimationsModule
   ],
   providers: [
     SeguridadService,

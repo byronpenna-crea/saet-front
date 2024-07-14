@@ -28,6 +28,7 @@ import {EstudianteInformeTrimestralComponent} from "./component/catalogo/saet/pa
 import {EstudiantePaeiComponent} from "./component/catalogo/saet/pages/estudiante-paei/estudiante-paei.component";
 import {EstudianteDetallePaeiComponent} from "./component/catalogo/saet/pages/estudiante-detalle-paei/estudiante-detalle-paei.component";
 import {EstudianteEvaluacionAgendaComponent} from "./component/catalogo/saet/pages/estudiante-evaluacion-agenda/estudiante-evaluacion-agenda.component";
+import {EstudianteGraficasComponent} from "./component/catalogo/saet/pages/estudiante-graficas/estudiante-graficas.component";
 /*
 const routes: Routes = [
 
@@ -81,6 +82,8 @@ const routes: Routes = [
 
       { path: 'saet-evaluaciones/:nie', component: EstudianteEvaluacionesComponent },
       { path: 'saet-evaluacion-agenda/:nie', component: EstudianteEvaluacionAgendaComponent },
+      { path: 'saet-graficas', component: EstudianteGraficasComponent },
+
 
       { path: 'saet-paei/:nie', component: EstudiantePaeiComponent },
       { path: 'saet-paei-detalle/:nie', component: EstudianteDetallePaeiComponent },

@@ -25,6 +25,9 @@
     ],
     "types": ["mousetrap", "cypress", "@types"]
   },
+  "include": [
+    "d3-custom-typings.d.ts"
+  ],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
