@@ -1,6 +1,9 @@
 import {Component} from '@angular/core';
 import {ScaleType} from "@swimlane/ngx-charts";
-
+export enum Direction {
+  VERTICAL=0,
+  LANDSCAPE=1
+}
 interface DataItem {
   name: string;
   value: number;
@@ -25,7 +28,8 @@ export class SaetGraficaBarrasComponent {
   showYAxisLabel: boolean = true;
   yAxisLabel: string = '';
   barPadding: number = 20;
-
+  direction = Direction;
+  mode:Direction = Direction.VERTICAL;
   colorScheme: string = '#5AA454';
   schemeTye:ScaleType = ScaleType.Ordinal;
   constructor() {
