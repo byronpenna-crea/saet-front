@@ -1,4 +1,3 @@
-import {SaetGraficaPastelComponent} from "../../saet-grafica-pastel/saet-grafica-pastel.component";
 import {moduleMetadata, Story} from "@storybook/angular";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {NgxChartsModule} from "@swimlane/ngx-charts";
