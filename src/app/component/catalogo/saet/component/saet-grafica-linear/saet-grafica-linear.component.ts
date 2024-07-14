@@ -1,52 +1,22 @@
 import { Component } from '@angular/core';
 
+interface Series {
+  name: string;
+  value: number;
+}
+
+interface Multi {
+  name: string;
+  series: Series[];
+}
+
 @Component({
   selector: 'app-saet-grafica-linear',
   templateUrl: './saet-grafica-linear.component.html',
   styleUrls: ['./saet-grafica-linear.component.css']
 })
 export class SaetGraficaLinearComponent {
-  multi: any[] = [
-    {
-      "name": "Germany",
-      "series": [
-        {
-          "name": "2010",
-          "value": 7300000
-        },
-        {
-          "name": "2011",
-          "value": 8940000
-        }
-      ]
-    },
-    {
-      "name": "USA",
-      "series": [
-        {
-          "name": "2010",
-          "value": 7870000
-        },
-        {
-          "name": "2011",
-          "value": 8270000
-        }
-      ]
-    },
-    {
-      "name": "France",
-      "series": [
-        {
-          "name": "2010",
-          "value": 5000002
-        },
-        {
-          "name": "2011",
-          "value": 5800000
-        }
-      ]
-    }
-  ];
+  multi: Multi[] = [];
 
   view: [number,number] = [700, 300];
 
@@ -58,8 +28,8 @@ export class SaetGraficaLinearComponent {
   yAxis: boolean = true;
   showYAxisLabel: boolean = true;
   showXAxisLabel: boolean = true;
-  xAxisLabel: string = 'Year';
-  yAxisLabel: string = 'Population';
+  xAxisLabel: string = '';
+  yAxisLabel: string = '';
   timeline: boolean = true;
 
   colorScheme = {
