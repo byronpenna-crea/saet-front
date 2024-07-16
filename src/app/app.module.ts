@@ -96,6 +96,7 @@ import { EstudianteGraficasComponent } from './component/catalogo/saet/pages/est
 import {NgxChartsModule} from "@swimlane/ngx-charts";
 import { SaetGraficaPastelComponent } from './component/catalogo/saet/component/saet-grafica-pastel/saet-grafica-pastel.component';
 import { SaetGraficaBarrasComponent } from './component/catalogo/saet/component/saet-grafica-barras/saet-grafica-barras.component';
+import { SaetGraficaLinearComponent } from './component/catalogo/saet/component/saet-grafica-linear/saet-grafica-linear.component';
 
 @NgModule({
   declarations: [
@@ -148,7 +149,8 @@ import { SaetGraficaBarrasComponent } from './component/catalogo/saet/component/
     EstudianteEvaluacionAgendaComponent,
     EstudianteGraficasComponent,
     SaetGraficaPastelComponent,
-    SaetGraficaBarrasComponent
+    SaetGraficaBarrasComponent,
+    SaetGraficaLinearComponent
 
   ],
   imports: [

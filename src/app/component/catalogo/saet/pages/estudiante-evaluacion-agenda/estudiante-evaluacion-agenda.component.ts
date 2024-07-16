@@ -47,6 +47,7 @@ export class EstudianteEvaluacionAgendaComponent extends QuestionsComponent impl
       this.showActionButtons = true;
       this.corSurveys.push(...result.cuestionarios);
     })
+
   }
 
   save(){

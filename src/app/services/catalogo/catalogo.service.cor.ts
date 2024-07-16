@@ -63,6 +63,7 @@ export interface ISaveQuestionary extends IQuestionaryHeader {
 export interface IUpdateCaracterizacion {
   id_caracterizacion: number | null,
   respuestas: iQuestionSave[],
+  id_especialista: number,
   grupoFamiliar: {
     grupo_familiar_pk: number | null,
     primer_nombre: string,
@@ -194,16 +195,16 @@ export class CatalogoServiceCor {
     return this.postRequest<IQuestionaryHeader,IQuestionaryHeader>(url, obj);
   }
   // save
-  public savePsicologia(cuestionarioPsicologia:ISaveQuestionary){
+  public async savePsicologia(cuestionarioPsicologia:ISaveQuestionary){
     console.log('save here post request');
     const url = `${this.API_SERVER_URL}/evaluacion/cor/psicologia/`;
     return this.postRequest<ISaveQuestionary,ISaveQuestionary>(url, cuestionarioPsicologia);
   }
-  public savePedagogia (cuestionarioPedagogia:ISaveQuestionary){
+  public async savePedagogia (cuestionarioPedagogia:ISaveQuestionary){
     const url = `${this.API_SERVER_URL}/evaluacion/cor/pedagogia/`;
     return this.postRequest<ISaveQuestionary,ISaveQuestionary>(url, cuestionarioPedagogia);
   }
-  public saveLenguaje(cuestionarioLenguaje:ISaveQuestionary){
+  public async saveLenguaje(cuestionarioLenguaje:ISaveQuestionary){
     const url = `${this.API_SERVER_URL}/evaluacion/cor/lenguaje_habla/`;
     return this.postRequest<ISaveQuestionary,ISaveQuestionary>(url, cuestionarioLenguaje);
   }
@@ -231,6 +232,7 @@ export class CatalogoServiceCor {
     return this.putRequest<IUpdateCaracterizacion,IUpdateCaracterizacion>(url,
       {
         id_caracterizacion: caracterizacion?.id_caracterizacion ?? 0,
+        id_especialista: caracterizacion.id_especialista,
         respuestas: caracterizacion.respuestas,
         grupoFamiliar: []
       }
@@ -286,28 +288,24 @@ export class CatalogoServiceCor {
       const error = e as ResponseError;
       throw error;
     }
-    /*return new Promise((resolve, reject) => {
-      fetch(url, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${this.token}`,
-          'Content-Type': 'application/json'
-        }
-      }).then(response => {
-        if (response.ok) {
-          resolve(response.json());
-        } else {
-          response.json().then((errorData) => {
-            reject(new Error('No se pudo obtener los datos',errorData));
-          }).catch(jsonError => {
-            reject(new Error('Error al procesar la respuesta de error: ' , jsonError.message));
-          });
+  }
+  public async getCorEspecialistas(nie:string): Promise<{
+    id_especialista: number;
+    nombre_completo: string;
+    especialidad: string;
+    dui: string;}[]>  {
 
-        }
-      }).catch(error => {
-        reject(new Error('Hubo un error al obtener los datos: ' + error.message));
-      })
-    });*/
+    const url = `${this.API_SERVER_URL}/evaluacion/cor/especialistas/${nie}`;
+    const response = await this.doRequest<undefined>(url, undefined, 'GET');
+    console.log('response get ', response);
+
+    if (!response.ok) {
+      const errorResponse = await response.json();
+      throw new ResponseError(response.status, errorResponse.message);
+    }
+
+    return response.json();
+
   }
   public async getPAEIQuestions() {
     try {

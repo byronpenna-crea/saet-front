@@ -25,7 +25,7 @@
         <div *ngIf="!cuestionariosTableMode.includes(corSurvey.id_cuestionario)">
           <ng-container *ngFor="let pregunta of corSurvey.preguntas">
             <app-tab-item
-              [label]="pregunta.pregunta ?? ''"
+              [label]="pregunta.pregunta"
             >
               <app-saet-question
                 (onChange)="onchangeQuestions($event)"

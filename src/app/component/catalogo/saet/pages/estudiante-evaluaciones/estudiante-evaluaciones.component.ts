@@ -62,6 +62,10 @@ export class EstudianteEvaluacionesComponent extends BaseComponent implements IM
     message: ""
   };
   especialidad:string = "";
+  idPersona:number = 0;
+
+  especialidades = ["Psicologia", "lenguaje", "Pedagogía"];
+
   constructor(
     @Inject(DOCUMENT)  document: Document,
     catalogoServiceCOR: CatalogoServiceCor,
@@ -85,6 +89,9 @@ export class EstudianteEvaluacionesComponent extends BaseComponent implements IM
 
     this.especialidad = localStorage.getItem('especialidad') ?? "";
 
+    const idPersonaStr = localStorage.getItem('id_persona') ?? '0';
+    this.idPersona = isNaN(parseInt(idPersonaStr, 10)) ? 0 : parseInt(idPersonaStr, 10);
+
     const tabs = this.getTabs();
     if(tabs !== undefined){
       this.agendaTabs = tabs ;
@@ -94,6 +101,7 @@ export class EstudianteEvaluacionesComponent extends BaseComponent implements IM
     this.agendaTabs[0].readOnly = false;
 
     const enumEspecialidad:TIPO_EVALUACION = this.getTipoEvaluacionFromString(this.especialidad);
+
     this.catalogoServiceCOR.getTipoDeEvaluacion(this.nie,enumEspecialidad).then((response) => {
       if(response.id_evaluacion !== 0){
         this.psicologiaEspecilistaAgendado = response.especialista_responsable;
@@ -102,6 +110,23 @@ export class EstudianteEvaluacionesComponent extends BaseComponent implements IM
     }).catch((ex:ResponseError) =>
     {
       console.log('error ex', ex.status);
+    });
+
+    catalogoServiceCOR.getCorEspecialistas(this.nie).then((response) => {
+      console.log('response especialistas ', response);
+      response.forEach( (especialista) => {
+        if (this.especialidades.includes(especialista.especialidad)) {
+          if(especialista.especialidad === "Psicologia"){
+            this.psicologiaAgendada = true;
+            this.updateTab('psicologia', true);
+          }
+          if(especialista.especialidad === 'Pedagogía'){
+            this.pedagogiaAgendada = true;
+            this.updateTab('pedagogia', true);
+          }
+        }
+      })
+
     })
 
   }
@@ -208,11 +233,26 @@ export class EstudianteEvaluacionesComponent extends BaseComponent implements IM
     }
   }
   // pedagogia
-  agendarPedagogia() {
-    this.pedagogiaMessage = this.successMessage;
-    this.pedagogiaAgendada = true;
-    this.updateTab('pedagogia', true);
-
+  async agendarPedagogia() {
+    if(this.studentInfo?.id_est_pk === undefined){
+      console.error('estudiante no encontrado');
+      return;
+    }
+    const obj:ISaveQuestionary = {
+      id_estudiante_fk: this.studentInfo?.id_est_pk,
+      id_especialista: this.idPersona,
+      id_tipo_evaluacion: TIPO_EVALUACION.pedagogo_perfil,
+      fecha: "12/12/2023",
+      hora: "12:40",
+      id_evaluacion: null,
+      respuestas:[]
+    }
+    const respuesta = await this.catalogoServiceCOR.savePedagogia(obj);
+    if(respuesta.id_evaluacion !== 0){
+      this.pedagogiaMessage = this.successMessage;
+      this.pedagogiaAgendada = true;
+      this.updateTab('pedagogia', true);
+    }
   }
   cancelarPedagogia() {
     this.pedagogiaAgendada = false;
@@ -223,7 +263,6 @@ export class EstudianteEvaluacionesComponent extends BaseComponent implements IM
   }
   // psicologia
   cancelarPsicologia() {
-
     this.psicologiaAgendada = false;
     this.psicologyMessage = {
       ...this.successMessage,
@@ -231,20 +270,25 @@ export class EstudianteEvaluacionesComponent extends BaseComponent implements IM
     }
     this.updateTab('psicologia', true);
   }
-  agendarPsicologia() {
-    console.log('agendar psicologia');
-    this.psicologyMessage = this.successMessage
-    this.psicologiaAgendada = true;
-    this.updateTab('psicologia', true);
+  async agendarPsicologia() {
+    if(this.studentInfo?.id_est_pk === undefined){
+      console.error('estudiante no encontrado');
+      return;
+    }
     const obj:ISaveQuestionary = {
-      id_estudiante_fk: 1,
-      id_especialista: 3,
-      id_tipo_evaluacion: 1,
+      id_estudiante_fk: this.studentInfo?.id_est_pk,
+      id_especialista: this.idPersona,
+      id_tipo_evaluacion: TIPO_EVALUACION.psicologo_perfil,
       fecha: "12/12/2023",
       hora: "12:40",
       id_evaluacion: null,
       respuestas:[]
     }
-    this.catalogoServiceCOR.savePsicologia(obj)
+    const respuesta = await this.catalogoServiceCOR.savePsicologia(obj);
+    if(respuesta.id_evaluacion !== 0){
+      this.psicologyMessage = this.successMessage
+      this.psicologiaAgendada = true;
+      this.updateTab('psicologia', true);
+    }
   }
 }
