@@ -1,7 +1,7 @@
 export enum MessageType {
   SUCCESS,
   DANGER,
-  WARNING
+  WARNING,
 }
 export interface UserMessage {
   showMessage: boolean;

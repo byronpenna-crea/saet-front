@@ -8,9 +8,8 @@ describe('RichtextComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RichtextComponent ]
-    })
-    .compileComponents();
+      declarations: [RichtextComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(RichtextComponent);
     component = fixture.componentInstance;

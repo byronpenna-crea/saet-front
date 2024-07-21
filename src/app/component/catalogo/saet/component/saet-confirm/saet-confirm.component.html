@@ -1,17 +1,28 @@
 <p-confirmDialog #cd>
-  <ng-template pTemplate="header" >
-    <h3>{{title}}</h3>
+  <ng-template pTemplate="header">
+    <h3 data-testId="h-header-modal">{{ title }}</h3>
   </ng-template>
 
   <ng-template pTemplate="footer">
     <app-saet-button
-      [buttonArgs]="{text: cancelButtonText, buttonStyle: 1, buttonIcon: rejectIcon}"
-      (onClick)="reject()">
+      testId="btnReject"
+      [buttonArgs]="{
+        text: cancelButtonText,
+        buttonStyle: btnStyle.BLUE,
+        buttonIcon: rejectIcon
+      }"
+      (onClick)="reject()"
+    >
     </app-saet-button>
     <app-saet-button
-      [buttonArgs]="{text: acceptButtonText, buttonStyle: 1, buttonIcon: acceptIcon}"
-            (onClick)="accept()">
+      testId="btnAccept"
+      [buttonArgs]="{
+        text: acceptButtonText,
+        buttonStyle: btnStyle.BLUE,
+        buttonIcon: acceptIcon
+      }"
+      (onClick)="accept()"
+    >
     </app-saet-button>
   </ng-template>
 </p-confirmDialog>
-

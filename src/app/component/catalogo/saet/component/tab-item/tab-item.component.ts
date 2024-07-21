@@ -1,12 +1,12 @@
-import {Component, Input} from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-tab-item',
   templateUrl: './tab-item.component.html',
-  styleUrls: ['./tab-item.component.css']
+  styleUrls: ['./tab-item.component.css'],
 })
 export class TabItemComponent {
-  @Input() label:string = "";
-  @Input() text:string = "";
-  @Input() marginTop:string = "15px";
+  @Input() label: string = '';
+  @Input() text: string = '';
+  @Input() marginTop: string = '15px';
 }

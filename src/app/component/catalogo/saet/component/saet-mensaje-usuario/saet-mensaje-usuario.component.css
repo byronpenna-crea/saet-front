@@ -3,7 +3,6 @@
   flex-direction: column;
   padding: 10px;
   margin-top: 1%;
-
 }
 .container {
   display: flex;
@@ -12,21 +11,21 @@
   border-radius: 0px;
   align-items: center;
 }
-.bodyMessage{
+.bodyMessage {
   display: flex;
-  flex-direction: column
+  flex-direction: column;
 }
-.title{
+.title {
   font-weight: bold;
 }
 
 .bg-green {
-  background: #DFEDC9;
+  background: #dfedc9;
 }
 
 .bg-red {
-  background-color: #EDC9C9;
+  background-color: #edc9c9;
 }
 .bg-yellow {
-  background-color: #F2F2C9;
+  background-color: #f2f2c9;
 }

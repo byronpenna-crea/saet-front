@@ -1,10 +1,13 @@
-<div [ngStyle]="{'margin-top': marginTop, 'display': 'flex'}" class="container-flex">
-  <div style="flex: 4; text-align: left; padding-right: 10px;">
-    {{label}}
+<div
+  [ngStyle]="{ 'margin-top': marginTop, display: 'flex' }"
+  class="container-flex"
+>
+  <div style="flex: 4; text-align: left; padding-right: 10px">
+    {{ label }}
   </div>
-  <div style="flex: 6; text-align: left;">
+  <div style="flex: 6; text-align: left">
     <ng-container *ngIf="text !== undefined">
-      {{text}}
+      {{ text }}
     </ng-container>
     <ng-container *ngIf="text === ''">
       <ng-content></ng-content>

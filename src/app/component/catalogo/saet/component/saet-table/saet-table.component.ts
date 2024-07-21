@@ -8,13 +8,12 @@ export interface TableColumn<T> {
 @Component({
   selector: 'app-saet-table',
   templateUrl: './saet-table.component.html',
-  styleUrls: ['./saet-table.component.css']
+  styleUrls: ['./saet-table.component.css'],
 })
 export class SaetTableComponent<T> implements OnInit {
   @Input() data: T[] = [];
   @Input() columns: TableColumn<T>[] = [];
-  @Input() testId: string = "";
+  @Input() testId: string = '';
   @Input() useChildren?: boolean = false;
-  ngOnInit() {
-  }
+  ngOnInit() {}
 }

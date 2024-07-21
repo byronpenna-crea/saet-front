@@ -1,14 +1,21 @@
-import {Component, Input, OnChanges, Output, SimpleChanges, EventEmitter} from '@angular/core';
-import {IconComponent} from "../../shared/component.config";
+import {
+  Component,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+  EventEmitter,
+} from '@angular/core';
+import { IconComponent } from '../../shared/component.config';
 
-export enum IconDirection{
+export enum IconDirection {
   RIGHT,
-  LEFT
+  LEFT,
 }
 export interface SaetInputArgs {
   text?: string;
-  iconDirection?:IconDirection;
-  icon?: IconComponent
+  iconDirection?: IconDirection;
+  icon?: IconComponent;
 }
 export interface KeyValue {
   key: string;
@@ -17,33 +24,31 @@ export interface KeyValue {
 @Component({
   selector: 'app-saet-input',
   templateUrl: './saet-input.component.html',
-  styleUrls: ['./saet-input.component.css']
+  styleUrls: ['./saet-input.component.css'],
 })
-export class SaetInputComponent implements OnChanges{
+export class SaetInputComponent implements OnChanges {
   @Output() inputChange = new EventEmitter<KeyValue>();
-  @Input() testId:string = "";
-  @Input() value:string = "";
-  @Input() name:string = "";
+  @Input() testId: string = '';
+  @Input() value: string = '';
+  @Input() name: string = '';
   @Input() inputArgs: SaetInputArgs = {
     iconDirection: IconDirection.RIGHT,
-    icon: undefined
-  }
-  @Input() disabled:boolean = false;
-  spanClases: string = "";
+    icon: undefined,
+  };
+  @Input() disabled: boolean = false;
+  spanClases: string = '';
 
   onInputChange(event: Event) {
     const input = event.target as HTMLInputElement;
 
     this.inputChange.emit({
       key: input.name,
-      value: input.value
+      value: input.value,
     });
   }
   ngOnChanges(changes: SimpleChanges) {
     this.updateSpan();
   }
 
-
-  private updateSpan() {
-  }
+  private updateSpan() {}
 }

@@ -1,18 +1,20 @@
-import {moduleMetadata, Story} from "@storybook/angular";
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {NgxChartsModule} from "@swimlane/ngx-charts";
-import {SaetGraficaLinearComponent} from "../saet-grafica-linear.component";
+import { moduleMetadata, Story } from '@storybook/angular';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { SaetGraficaLinearComponent } from '../saet-grafica-linear.component';
 
 export default {
-  title: "Grafica linear",
+  title: 'Grafica linear',
   component: SaetGraficaLinearComponent,
   decorators: [
     moduleMetadata({
       imports: [BrowserAnimationsModule, NgxChartsModule],
     }),
-  ]
-}
-const Template: Story<SaetGraficaLinearComponent> = (args: SaetGraficaLinearComponent) => ({
+  ],
+};
+const Template: Story<SaetGraficaLinearComponent> = (
+  args: SaetGraficaLinearComponent
+) => ({
   component: SaetGraficaLinearComponent,
   props: args,
 });
@@ -34,9 +36,9 @@ Default.args = {
         { name: 'SEP', value: 55 },
         { name: 'OCT', value: 70 },
         { name: 'NOV', value: 75 },
-        { name: 'DIC', value: 80 }
-      ]
-    }
+        { name: 'DIC', value: 80 },
+      ],
+    },
   ],
   view: [700, 400],
 };

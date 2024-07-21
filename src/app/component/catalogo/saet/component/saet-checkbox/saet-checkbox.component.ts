@@ -1,14 +1,14 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
-import {KeyValue} from "../saet-input/saet-input.component";
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { KeyValue } from '../saet-input/saet-input.component';
 
 @Component({
   selector: 'app-saet-checkbox',
   templateUrl: './saet-checkbox.component.html',
-  styleUrls: ['./saet-checkbox.component.css']
+  styleUrls: ['./saet-checkbox.component.css'],
 })
 export class SaetCheckboxComponent {
   @Output() checkboxChange = new EventEmitter<KeyValue[]>();
-  @Input() name: string = "";
+  @Input() name: string = '';
   @Input() options: KeyValue[] = [];
   @Input() selectedValues: string[] = [];
   @Input() disabled: boolean = false;
@@ -27,9 +27,10 @@ export class SaetCheckboxComponent {
     console.log('input ', input);
     console.log('selected values here ', this.selectedValues);
     console.log('options ', this.options);
-    this.checkboxChange.emit(this.selectedValues.length ?
-      this.selectedValues.map(value => ({ key: this.name, value })) : [{key: this.name, value: ""}]
+    this.checkboxChange.emit(
+      this.selectedValues.length
+        ? this.selectedValues.map(value => ({ key: this.name, value }))
+        : [{ key: this.name, value: '' }]
     );
-
   }
 }

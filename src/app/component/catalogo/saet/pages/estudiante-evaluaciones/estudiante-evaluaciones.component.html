@@ -6,10 +6,9 @@
   [readOnlyPaei]="readOnlyPaei"
   [breadcrumb]="[
     { href: '#/menu/saet-buscar', text: 'Buscar estudiante' },
-    { href: '#/menu/saet-buscar/'+nie, text: nie },
+    { href: '#/menu/saet-buscar/' + nie, text: nie },
     { href: '', text: 'Evaluaciones' }
   ]"
-
 />
 <app-saet-mensaje-usuario
   [show]="userMessage.showMessage"
@@ -18,8 +17,12 @@
 />
 
 <div class="form-container">
-  <div class="margin-top " style="width: 100%">
-    <div *ngFor="let tab of agendaTabs; let i = index" [class.margin-top]="i !== 0" style="width: 100%">
+  <div class="margin-top" style="width: 100%">
+    <div
+      *ngFor="let tab of agendaTabs; let i = index"
+      [class.margin-top]="i !== 0"
+      style="width: 100%"
+    >
       <app-saet-tab-agenda
         (onAgendar)="tab.onAgendar()"
         (onCancelar)="tab.onCancelar()"
@@ -32,4 +35,3 @@
     </div>
   </div>
 </div>
-

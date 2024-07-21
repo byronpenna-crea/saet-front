@@ -8,11 +8,12 @@ describe('EstudianteCuestionarioPsicologiaComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EstudianteCuestionarioPsicologiaComponent ]
-    })
-    .compileComponents();
+      declarations: [EstudianteCuestionarioPsicologiaComponent],
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(EstudianteCuestionarioPsicologiaComponent);
+    fixture = TestBed.createComponent(
+      EstudianteCuestionarioPsicologiaComponent
+    );
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

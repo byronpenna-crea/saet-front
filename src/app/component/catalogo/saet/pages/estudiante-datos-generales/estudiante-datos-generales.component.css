@@ -12,12 +12,12 @@
 .tabSeletectedButton {
   border-radius: 0px;
   background: white;
-  border: solid 1px #00498D;
-  color: #00498D;
+  border: solid 1px #00498d;
+  color: #00498d;
 }
 
 .tabSeletectedButton {
-  background: #00498D;
+  background: #00498d;
   color: white;
 }
 
@@ -40,13 +40,11 @@
   font-weight: bold;
 }
 
-
 .button-container a {
   text-decoration: none;
 }
 
-@media screen and (max-width:1920px) {
-
+@media screen and (max-width: 1920px) {
   .form-container {
     width: 77%;
     margin-left: 8%;

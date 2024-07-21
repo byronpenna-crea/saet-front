@@ -22,7 +22,7 @@
 }
 
 .divInforme a {
-  text-decoration: none
+  text-decoration: none;
 }
 
 .titlePage {
@@ -44,10 +44,9 @@ app-saet-input {
   width: 100%;
 }
 
-
 .button-container {
   display: flex;
-  direction: row;
+  flex-direction: row;
   justify-content: flex-end;
   gap: 10px;
   margin-top: 3%;
@@ -65,7 +64,7 @@ app-saet-button {
   cursor: pointer;
   user-select: none;
   text-decoration: underline;
-  color: #00498D;
+  color: #00498d;
   height: 47px;
   width: 147px;
   background-color: white;

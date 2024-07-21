@@ -1,11 +1,11 @@
-import {Component, Input} from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-saet-tab',
   templateUrl: './saet-tab.component.html',
-  styleUrls: ['./saet-tab.component.css']
+  styleUrls: ['./saet-tab.component.css'],
 })
 export class SaetTabComponent {
-  @Input() leyend:string = "";
+  @Input() leyend: string = '';
   @Input() readOnly: boolean = false;
 }

@@ -8,9 +8,8 @@ describe('SaetGraficaPastelComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SaetGraficaPastelComponent ]
-    })
-    .compileComponents();
+      declarations: [SaetGraficaPastelComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(SaetGraficaPastelComponent);
     component = fixture.componentInstance;

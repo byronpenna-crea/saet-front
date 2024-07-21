@@ -1,11 +1,11 @@
-import {AfterViewInit, Component} from '@angular/core';
+import { AfterViewInit, Component } from '@angular/core';
 import * as pdfjsLib from 'pdfjs-dist';
-import {ActivatedRoute} from "@angular/router";
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-estudiante-pdf',
   templateUrl: './estudiante-pdf.component.html',
-  styleUrls: ['./estudiante-pdf.component.css']
+  styleUrls: ['./estudiante-pdf.component.css'],
 })
 export class EstudiantePdfComponent implements AfterViewInit {
   pdfSrc: string | undefined;
@@ -30,7 +30,9 @@ export class EstudiantePdfComponent implements AfterViewInit {
 
   async renderPdf(url: string) {
     console.log('render pdf ');
-    const canvas: HTMLCanvasElement | null = document.getElementById('pdf-canvas') as HTMLCanvasElement;
+    const canvas: HTMLCanvasElement | null = document.getElementById(
+      'pdf-canvas'
+    ) as HTMLCanvasElement;
     if (!canvas) {
       console.error('Failed to find canvas element');
       return;
@@ -57,7 +59,7 @@ export class EstudiantePdfComponent implements AfterViewInit {
 
       const renderContext = {
         canvasContext: context,
-        viewport: viewport
+        viewport: viewport,
       };
       page.render(renderContext);
     } catch (error) {

@@ -1,8 +1,11 @@
-import {MessageType, UserMessage} from "../interfaces/message-component.interface";
+import {
+  MessageType,
+  UserMessage,
+} from '../interfaces/message-component.interface';
 
-export const userMessageInit:UserMessage = {
- message: '',
- titleMessage: '',
- showMessage: false,
- type: MessageType.SUCCESS
-}
+export const userMessageInit: UserMessage = {
+  message: '',
+  titleMessage: '',
+  showMessage: false,
+  type: MessageType.SUCCESS,
+};

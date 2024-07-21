@@ -1,16 +1,16 @@
-import {RichtextComponent} from "../richtext.component";
-import {Meta, moduleMetadata, Story} from "@storybook/angular";
-import {StorybookPrimeNgModule} from "../../../../../../storybook-config/storybook-prime-ng.module";
-import {StatusTableComponent} from "../../status-table/status-table.component";
+import { RichtextComponent } from '../richtext.component';
+import { Meta, moduleMetadata, Story } from '@storybook/angular';
+import { StorybookPrimeNgModule } from '../../../../../../storybook-config/storybook-prime-ng.module';
+import { StatusTableComponent } from '../../status-table/status-table.component';
 
 export default {
   title: 'Richtext',
   component: RichtextComponent,
-  decorators:[
+  decorators: [
     moduleMetadata({
-      imports: [StorybookPrimeNgModule]
-    })
-  ]
+      imports: [StorybookPrimeNgModule],
+    }),
+  ],
 } as Meta;
 const Template: Story<RichtextComponent> = (args: RichtextComponent) => ({
   component: RichtextComponent,
@@ -19,5 +19,5 @@ const Template: Story<RichtextComponent> = (args: RichtextComponent) => ({
 
 export const Primary = Template.bind({});
 Primary.args = {
-  text: "textooooo "
-}
+  text: 'textooooo ',
+};

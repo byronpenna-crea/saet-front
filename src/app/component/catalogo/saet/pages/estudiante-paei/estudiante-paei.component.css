@@ -9,7 +9,7 @@
 .margin-top {
   margin-top: 2%;
 }
-@media screen and (max-width:1920px) {
+@media screen and (max-width: 1920px) {
   .form-container {
     width: 77%;
     margin-left: 8%;

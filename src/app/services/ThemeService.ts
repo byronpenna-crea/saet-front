@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ThemeService {
   private isDarkMode = false;
@@ -10,16 +10,19 @@ export class ThemeService {
   public isDarkMode$ = this.darkModeSubject.asObservable();
   selectedColor: string = '#3f51b5';
 
-  constructor(){
-    console.log("Estoy en Theme service en el constructor, el valor de isDarkMode es: "+this.isDarkMode);
+  constructor() {
+    console.log(
+      'Estoy en Theme service en el constructor, el valor de isDarkMode es: ' +
+        this.isDarkMode
+    );
     this.isDarkMode = !this.isDarkMode;
-
   }
 
-
-
   public toggleTheme() {
-    console.log("Estoy en Theme service en toggleTheme, el valor de isDarkMode es: "+this.isDarkMode);
+    console.log(
+      'Estoy en Theme service en toggleTheme, el valor de isDarkMode es: ' +
+        this.isDarkMode
+    );
     this.isDarkMode = !this.isDarkMode;
     this.darkModeSubject.next(this.isDarkMode);
   }
@@ -27,21 +30,4 @@ export class ThemeService {
   changeColor(color: string) {
     this.selectedColor = color;
   }
-
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

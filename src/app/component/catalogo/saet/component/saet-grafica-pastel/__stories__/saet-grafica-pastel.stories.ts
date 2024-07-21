@@ -1,19 +1,20 @@
-
-import {SaetGraficaPastelComponent} from "../saet-grafica-pastel.component";
-import {moduleMetadata, Story} from "@storybook/angular";
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {NgxChartsModule} from "@swimlane/ngx-charts";
+import { SaetGraficaPastelComponent } from '../saet-grafica-pastel.component';
+import { moduleMetadata, Story } from '@storybook/angular';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 export default {
-  title: "Grafica pastel",
+  title: 'Grafica pastel',
   component: SaetGraficaPastelComponent,
   decorators: [
     moduleMetadata({
       imports: [BrowserAnimationsModule, NgxChartsModule],
     }),
-  ]
-}
-const Template: Story<SaetGraficaPastelComponent> = (args: SaetGraficaPastelComponent) => ({
+  ],
+};
+const Template: Story<SaetGraficaPastelComponent> = (
+  args: SaetGraficaPastelComponent
+) => ({
   component: SaetGraficaPastelComponent,
   props: args,
 });
@@ -24,12 +25,12 @@ Default.args = {
   single: [
     { name: 'Estudiantes', value: 215 },
     { name: 'Padres', value: 72 },
-    { name: 'Docentes', value: 241 }
+    { name: 'Docentes', value: 241 },
   ],
 
   view: [700, 400],
   gradient: false,
-  showLegend: false
+  showLegend: false,
 };
 
 moreData.args = {
@@ -53,6 +54,5 @@ moreData.args = {
 
   view: [700, 400],
   gradient: false,
-  showLegend: false
+  showLegend: false,
 };
-

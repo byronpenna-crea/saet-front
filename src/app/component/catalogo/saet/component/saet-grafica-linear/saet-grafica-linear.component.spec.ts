@@ -8,9 +8,8 @@ describe('SaetGraficaLinearComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SaetGraficaLinearComponent ]
-    })
-    .compileComponents();
+      declarations: [SaetGraficaLinearComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(SaetGraficaLinearComponent);
     component = fixture.componentInstance;

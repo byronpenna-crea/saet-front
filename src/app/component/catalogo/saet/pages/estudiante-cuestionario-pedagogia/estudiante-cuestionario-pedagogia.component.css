@@ -21,8 +21,7 @@
   font-weight: bold;
 }
 
-@media screen and (max-width:1600px) {
-
+@media screen and (max-width: 1600px) {
   .form-container {
     width: 83%;
     margin-left: 8%;

@@ -1,14 +1,17 @@
-import {Inject, Injectable} from "@angular/core";
-import {CatalogoServiceCor, IEvaluacionResponse, StudentDetail} from "../../../services/catalogo/catalogo.service.cor";
-import {DOCUMENT} from "@angular/common";
-import {ActivatedRoute, Router} from "@angular/router";
-import {BaseComponent} from "./BaseComponent";
-import {IconComponent, QuestionType} from "./shared/component.config";
-import {iSurvey} from "./shared/survey";
-import {KeyValue} from "./component/saet-input/saet-input.component";
-import {TIPO_EVALUACION} from "./shared/evaluaciones";
-import {ConfirmationService} from "primeng/api";
-
+import { Inject, Injectable } from '@angular/core';
+import {
+  CatalogoServiceCor,
+  IEvaluacionResponse,
+  StudentDetail,
+} from '../../../services/catalogo/catalogo.service.cor';
+import { DOCUMENT } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
+import { BaseComponent } from './BaseComponent';
+import { IconComponent, QuestionType } from './shared/component.config';
+import { iSurvey } from './shared/survey';
+import { KeyValue } from './component/saet-input/saet-input.component';
+import { TIPO_EVALUACION } from './shared/evaluaciones';
+import { ConfirmationService } from 'primeng/api';
 
 export interface IValuesForm {
   [key: string]: string;
@@ -21,7 +24,7 @@ export interface IAnswerOption {
 export enum FormMode {
   CREATE,
   VIEW,
-  EDIT
+  EDIT,
 }
 export interface IQuestionaryAnswer {
   id_pregunta: number;
@@ -30,31 +33,31 @@ export interface IQuestionaryAnswer {
 }
 @Injectable()
 export class QuestionsComponent extends BaseComponent {
-  corSurveys:iSurvey[] = [];
+  corSurveys: iSurvey[] = [];
 
   values: IValuesForm = {};
-  valuesKey:string = "";
-  showActionButtons:boolean = false;
-  editMode:boolean = false;
+  valuesKey: string = '';
+  showActionButtons: boolean = false;
+  editMode: boolean = false;
   formModeEnum = FormMode;
-  formMode:FormMode = FormMode.CREATE;
+  formMode: FormMode = FormMode.CREATE;
   iconCompoment = IconComponent;
-  targetEspecialidad:string = "";
+  targetEspecialidad: string = '';
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceCOR: CatalogoServiceCor,
     route: ActivatedRoute,
     router: Router,
     private confirmationService: ConfirmationService,
-    @Inject(DOCUMENT) especialidadTarget:string
-  ){
+    @Inject(DOCUMENT) especialidadTarget: string
+  ) {
     console.log('constructor question ');
     const _valuesKey = `${especialidadTarget}_values`;
     super(document, catalogoServiceCOR, route, router);
     this.targetEspecialidad = especialidadTarget;
     this.route.paramMap.subscribe(params => {
       const mode = params.get('mode');
-      switch (mode){
+      switch (mode) {
         case null:
           this.formMode = FormMode.CREATE;
           break;
@@ -65,30 +68,25 @@ export class QuestionsComponent extends BaseComponent {
           this.formMode = FormMode.EDIT;
           break;
         default:
-          router.navigate(["menu/saet-evaluaciones",this.nie]);
+          router.navigate(['menu/saet-evaluaciones', this.nie]);
           break;
       }
     });
     const especialidad = localStorage.getItem('especialidad');
-    if(
+    if (
       especialidadTarget === 'psicologia' ||
       especialidadTarget === 'pedagogia' ||
       especialidadTarget === 'lenguaje'
-    ){
-      if(especialidad !== especialidadTarget){
-        router.navigate(["menu/saet-evaluaciones",this.nie]);
+    ) {
+      if (especialidad !== especialidadTarget) {
+        router.navigate(['menu/saet-evaluaciones', this.nie]);
       }
     }
 
-
     this.updateStoredValues(_valuesKey);
-
   }
-  updateStoredValues(_valuesKey:string){
-    if(
-      this.formMode === FormMode.EDIT ||
-      this.formMode === FormMode.CREATE
-    ){
+  updateStoredValues(_valuesKey: string) {
+    if (this.formMode === FormMode.EDIT || this.formMode === FormMode.CREATE) {
       this.valuesKey = _valuesKey;
       const storedValues = localStorage.getItem(_valuesKey);
       if (storedValues) {
@@ -103,13 +101,13 @@ export class QuestionsComponent extends BaseComponent {
   convertString(input: string): string {
     let result = input.toLowerCase();
     const accentsMap: { [key: string]: string } = {
-      'á': 'a',
-      'é': 'e',
-      'í': 'i',
-      'ó': 'o',
-      'ú': 'u',
-      'ü': 'u',
-      'ñ': 'n',
+      á: 'a',
+      é: 'e',
+      í: 'i',
+      ó: 'o',
+      ú: 'u',
+      ü: 'u',
+      ñ: 'n',
     };
 
     result = result.replace(/[áéíóúüñ]/g, match => accentsMap[match]);
@@ -118,31 +116,31 @@ export class QuestionsComponent extends BaseComponent {
 
     return result;
   }
-  getName(name:string): string {
-    return this.convertString(name)
+  getName(name: string): string {
+    return this.convertString(name);
   }
-  getOptions(options: { id_opcion: number, opcion: string }[]): KeyValue[] {
-    return options.map( (option) => ({key: option.id_opcion ? option.id_opcion.toString(): "", value: option.opcion}) as KeyValue );
+  getOptions(options: { id_opcion: number; opcion: string }[]): KeyValue[] {
+    return options.map(
+      option =>
+        ({
+          key: option.id_opcion ? option.id_opcion.toString() : '',
+          value: option.opcion,
+        }) as KeyValue
+    );
   }
 
-  handleMode(idEvaluacion: number, url: string, formMode:FormMode ) {
-    if(formMode === FormMode.CREATE &&
-      idEvaluacion !== 0
-    ){
-      this.router.navigate([url,this.nie,'view']);
+  handleMode(idEvaluacion: number, url: string, formMode: FormMode) {
+    if (formMode === FormMode.CREATE && idEvaluacion !== 0) {
+      this.router.navigate([url, this.nie, 'view']);
     }
-    if(formMode === FormMode.VIEW &&
-      idEvaluacion === 0
-    ){
-      this.router.navigate([url,this.nie]);
+    if (formMode === FormMode.VIEW && idEvaluacion === 0) {
+      this.router.navigate([url, this.nie]);
     }
-    if(this.formMode === FormMode.EDIT &&
-      idEvaluacion === 0
-    ){
-      this.router.navigate([url,this.nie]);
+    if (this.formMode === FormMode.EDIT && idEvaluacion === 0) {
+      this.router.navigate([url, this.nie]);
     }
   }
-  responseToValues(response: IEvaluacionResponse): IValuesForm  {
+  responseToValues(response: IEvaluacionResponse): IValuesForm {
     const values: IValuesForm = {};
 
     response.respuestas.forEach(respuesta => {
@@ -157,7 +155,7 @@ export class QuestionsComponent extends BaseComponent {
 
     return values;
   }
-  onchangeQuestions(keyValue:KeyValue) {
+  onchangeQuestions(keyValue: KeyValue) {
     console.log('onchange ', keyValue);
     this.values[keyValue.key] = keyValue.value;
     localStorage.setItem(this.valuesKey, JSON.stringify(this.values));
@@ -180,26 +178,24 @@ export class QuestionsComponent extends BaseComponent {
       id_tipo_evaluacion: TIPO_EVALUACION.psicologo_perfil,
       fecha: fecha,
       hora: hora,
-      respuestas: this.getAnswerObject(this.values)
+      respuestas: this.getAnswerObject(this.values),
     };
   }
 
-
-
   async aceptarSalir() {
-    await this.router.navigate(["menu/saet-evaluaciones",this.nie]);
+    await this.router.navigate(['menu/saet-evaluaciones', this.nie]);
   }
   async continuarEditando() {
     this.confirmationService.close();
   }
-  entrarEditMode(){
+  entrarEditMode() {
     const currentUrl = this.router.url;
     const newUrl = currentUrl.replace('/view', '/edit');
     this.formMode = FormMode.EDIT;
     this.updateStoredValues(`${this.targetEspecialidad}_values`);
     this.router.navigateByUrl(newUrl);
   }
-  salirEditMode():string {
+  salirEditMode(): string {
     const currentUrl = this.router.url;
     const newUrl = currentUrl.replace('/edit', '/view');
     this.updateStoredValues(`${this.targetEspecialidad}_values`);
@@ -207,8 +203,9 @@ export class QuestionsComponent extends BaseComponent {
   }
   salir() {
     this.confirmationService.confirm({
-      message: 'Al darle click en <b>Salir de edición sin guardar</b> perderá todo el progreso de edición realizado.',
-      icon: 'pi pi-exclamation-triangle'
+      message:
+        'Al darle click en <b>Salir de edición sin guardar</b> perderá todo el progreso de edición realizado.',
+      icon: 'pi pi-exclamation-triangle',
     });
   }
 }

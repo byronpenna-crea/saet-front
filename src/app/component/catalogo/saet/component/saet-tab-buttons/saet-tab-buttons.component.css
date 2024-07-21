@@ -10,7 +10,7 @@
   display: flex;
   gap: 30px;
   border-radius: 0px;
-  border-bottom: solid 1px #00498D;
+  border-bottom: solid 1px #00498d;
   padding-left: 50px;
 }
 
@@ -18,18 +18,17 @@
 .tabSeletectedButton {
   border-radius: 3px 3px 0px 0px;
   background: white;
-  border: solid 1px #00498D;
-  color: #00498D;
+  border: solid 1px #00498d;
+  color: #00498d;
   text-decoration: none;
   width: 196px;
   height: 46px;
 }
 
 ::ng-deep .tabSeletectedButton {
-  background: #00498D;
+  background: #00498d;
   color: white;
   text-align: center;
-
 }
 
 ::ng-deep .form-container .button-container a {
@@ -57,8 +56,7 @@
   MEDIA QUERIES FOR RESPONSIVE DESIGN
 */
 
-@media screen and (max-width:1920px) {
-
+@media screen and (max-width: 1920px) {
   ::ng-deep .saet-button-parent {
     display: flex;
     flex-direction: column;
@@ -68,8 +66,7 @@
   }
 }
 
-@media screen and (max-width:1600px) {
-
+@media screen and (max-width: 1600px) {
   ::ng-deep .saet-button-parent {
     display: flex;
     flex-direction: column;
@@ -85,7 +82,7 @@
     flex-direction: column;
     gap: 10px;
     border-radius: 0px;
-    border-bottom: solid 0.5px #00498D;
+    border-bottom: solid 0.5px #00498d;
     padding-left: 25px;
   }
 

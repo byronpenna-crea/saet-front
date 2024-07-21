@@ -11,15 +11,11 @@
   [title]="userMessage.titleMessage"
 />
 <div class="form-container">
-  <ng-container *ngFor="let corSurvey of corSurveys" >
+  <ng-container *ngFor="let corSurvey of corSurveys">
     <div style="margin-top: 5%">
-      <app-tabs
-        [legend]="corSurvey.titulo"
-      >
+      <app-tabs [legend]="corSurvey.titulo">
         <ng-container *ngFor="let pregunta of corSurvey.preguntas">
-          <app-tab-item
-            [label]="pregunta.pregunta"
-          >
+          <app-tab-item [label]="pregunta.pregunta">
             <app-saet-question
               (onChange)="onchangeQuestions($event)"
               [type]="getQuestionType(pregunta.tipoPregunta)"
@@ -27,52 +23,54 @@
               [value]="values[pregunta.id_pregunta.toString()]"
               [testId]="pregunta.id_pregunta.toString()"
               [name]="getName(pregunta.pregunta)"
-              [options]="getOptions(pregunta.opcion)" />
+              [options]="getOptions(pregunta.opcion)"
+            />
           </app-tab-item>
         </ng-container>
       </app-tabs>
     </div>
   </ng-container>
-  <div *ngIf="showActionButtons" style="margin-top: 30px;">
-    <div
-      *ngIf="formMode === formModeEnum.CREATE"
-      class="actionsButton"
-    >
+  <div *ngIf="showActionButtons" style="margin-top: 30px">
+    <div *ngIf="formMode === formModeEnum.CREATE" class="actionsButton">
       <app-saet-button
         (onClick)="salir()"
-        [buttonArgs]="{text: 'Salir',buttonStyle: 1,buttonIcon: 6 }" />
+        [buttonArgs]="{ text: 'Salir', buttonStyle: 1, buttonIcon: 6 }"
+      />
 
       <app-saet-button
         (onClick)="save()"
-        [buttonArgs]="{text: 'Guardar',buttonStyle: 1 }" />
+        [buttonArgs]="{ text: 'Guardar', buttonStyle: 1 }"
+      />
     </div>
-    <div
-      *ngIf="formMode === formModeEnum.EDIT"
-      class="actionsButton"
-    >
+    <div *ngIf="formMode === formModeEnum.EDIT" class="actionsButton">
       <app-saet-button
         (onClick)="salirEditMode()"
-        [buttonArgs]="{text: 'Salir',buttonStyle: 1,buttonIcon: 6 }" />
+        [buttonArgs]="{ text: 'Salir', buttonStyle: 1, buttonIcon: 6 }"
+      />
 
       <app-saet-button
         (onClick)="save()"
-        [buttonArgs]="{text: 'Actualizar registro',buttonStyle: 1 }" />
+        [buttonArgs]="{ text: 'Actualizar registro', buttonStyle: 1 }"
+      />
     </div>
-    <div
-      *ngIf="formMode === formModeEnum.VIEW"
-      class="actionsButton"
-    >
+    <div *ngIf="formMode === formModeEnum.VIEW" class="actionsButton">
       <app-saet-button
         (click)="salir()"
-        [buttonArgs]="{text: 'Regresar a la caracterización',buttonStyle: 1,buttonIcon: 7 }" />
+        [buttonArgs]="{
+          text: 'Regresar a la caracterización',
+          buttonStyle: 1,
+          buttonIcon: 7
+        }"
+      />
       <div class="right-buttons">
         <app-saet-button
           (onClick)="entrarEditMode()"
-          [buttonArgs]="{text: 'Editar',buttonStyle: 1 }" />
+          [buttonArgs]="{ text: 'Editar', buttonStyle: 1 }"
+        />
         <app-saet-button
-          [buttonArgs]="{text: 'Generar PDF',buttonStyle: 1 }" />
+          [buttonArgs]="{ text: 'Generar PDF', buttonStyle: 1 }"
+        />
       </div>
     </div>
   </div>
-
 </div>

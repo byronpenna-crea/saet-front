@@ -52,7 +52,7 @@
   cursor: pointer;
   user-select: none;
   text-decoration: underline;
-  color: #00498D;
+  color: #00498d;
 }
 
 ::ng-deep .second-item-time .p-calendar {
@@ -63,14 +63,14 @@
   /*background: #dee2e6;*/
 }
 
-@media screen and (max-width:1920px) {
+@media screen and (max-width: 1920px) {
   .actionsButton {
     padding-right: 7.7em;
     padding-top: 10px;
   }
 }
 
-@media screen and (max-width:1600px) {
+@media screen and (max-width: 1600px) {
   .actionsButton {
     padding-right: 2.5em;
     padding-top: 10px;
@@ -81,7 +81,7 @@
   }
 }
 
-@media (min-width:1000px) and (max-width: 1440px) {
+@media (min-width: 1000px) and (max-width: 1440px) {
   .actionsButton {
     padding-right: 0em;
     padding-top: 10px;
@@ -92,7 +92,7 @@
   }
 }
 
-@media screen and (max-width:500px) {
+@media screen and (max-width: 500px) {
   .first-column {
     display: flex;
     align-items: center;

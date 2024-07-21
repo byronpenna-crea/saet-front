@@ -1,14 +1,15 @@
 <span class="p-input-icon-right w-full">
-    <input type="text"
-           (input)="onInputChange($event)"
-           [disabled]="disabled"
-             [(ngModel)]="value"
-           [attr.name]="name"
-             pInputText style="width: 100%"
-           [attr.data-testid]="testId"
-
-    />
-    <ng-container *ngIf="inputArgs.icon !== undefined">
-      <i class="pi pi-search"></i>
-    </ng-container>
+  <input
+    type="text"
+    (input)="onInputChange($event)"
+    [disabled]="disabled"
+    [(ngModel)]="value"
+    [attr.name]="name"
+    pInputText
+    style="width: 100%"
+    [attr.data-testid]="testId"
+  />
+  <ng-container *ngIf="inputArgs.icon !== undefined">
+    <i class="pi pi-search"></i>
+  </ng-container>
 </span>

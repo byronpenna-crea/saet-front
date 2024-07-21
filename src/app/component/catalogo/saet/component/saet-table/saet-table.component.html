@@ -1,7 +1,4 @@
-
-<p-table
-  [attr.data-testid]="testId"
-  [columns]="columns" [value]="data">
+<p-table [attr.data-testid]="testId" [columns]="columns" [value]="data">
   <ng-template pTemplate="header" let-columns>
     <tr>
       <th *ngFor="let col of columns">

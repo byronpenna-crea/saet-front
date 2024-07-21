@@ -8,9 +8,8 @@ describe('SaetUnderlinedTitleComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SaetUnderlinedTitleComponent ]
-    })
-    .compileComponents();
+      declarations: [SaetUnderlinedTitleComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(SaetUnderlinedTitleComponent);
     component = fixture.componentInstance;

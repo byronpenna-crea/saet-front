@@ -3,27 +3,27 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import {MatToolbarModule} from '@angular/material/toolbar';
-import {MatIconModule} from '@angular/material/icon';
-import {MatButtonModule} from '@angular/material/button';
-import {MatSidenavModule} from '@angular/material/sidenav';
-import {MatListModule} from '@angular/material/list';
-import {MatCardModule} from '@angular/material/card';
-import {MatDividerModule} from '@angular/material/divider';
-import {MatGridListModule} from '@angular/material/grid-list';
-import { HttpClientModule} from '@angular/common/http';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { HttpClientModule } from '@angular/common/http';
 import { TableModule } from 'primeng/table';
-import {PanelModule} from 'primeng/panel';
+import { PanelModule } from 'primeng/panel';
 import { ToolbarModule } from 'primeng/toolbar';
-import { ButtonModule } from "primeng/button";
-import { SplitButtonModule } from "primeng/splitbutton"
-import {DialogModule} from 'primeng/dialog'
-import { FormsModule,ReactiveFormsModule } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
+import { SplitButtonModule } from 'primeng/splitbutton';
+import { DialogModule } from 'primeng/dialog';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
-import {PanelMenuModule} from 'primeng/panelmenu';
+import { PanelMenuModule } from 'primeng/panelmenu';
 import { PersonaComponent } from './component/seguridad/persona/persona.component';
-import {MessagesModule} from 'primeng/messages';
-import {MessageModule} from 'primeng/message';
+import { MessagesModule } from 'primeng/messages';
+import { MessageModule } from 'primeng/message';
 import { DropdownModule } from 'primeng/dropdown';
 import { CalendarModule } from 'primeng/calendar';
 import { RadioButtonModule } from 'primeng/radiobutton';
@@ -40,7 +40,7 @@ import { SubCategoriaComponent } from './component/catalogo/sub-categoria/sub-ca
 import { PlacaComponent } from './component/catalogo/placa/placa.component';
 import { TabViewModule } from 'primeng/tabview';
 import { HotkeyModule, HotkeyOptions } from 'angular2-hotkeys';
-import {SplitterModule} from 'primeng/splitter';
+import { SplitterModule } from 'primeng/splitter';
 import { InicioComponent } from './component/inicio/inicio.component';
 import { CardModule } from 'primeng/card';
 import { ReporteDocenteComponent } from './component/catalogo/reporte-docente/reporte-docente.component';
@@ -51,8 +51,8 @@ import { ReporteDesarrolloAprendizajeComponent } from './component/catalogo/repo
 import { ReporteActaResponsabilidadComponent } from './component/catalogo/reporte-acta-responsabilidad/reporte-acta-responsabilidad.component';
 import { FileUploadModule } from 'primeng/fileupload';
 import { AutenticaComponent } from './component/catalogo/autentica/autentica.component';
-import {SaetComponent} from "./component/catalogo/saet/saet.component";
-import {EditorModule} from 'primeng/editor';
+import { SaetComponent } from './component/catalogo/saet/saet.component';
+import { EditorModule } from 'primeng/editor';
 import { FieldsetModule } from 'primeng/fieldset';
 import { RichtextComponent } from './component/catalogo/saet/component/richtext/richtext.component';
 import { StatusTableComponent } from './component/catalogo/saet/component/status-table/status-table.component';
@@ -80,23 +80,24 @@ import { EstudianteNoValidoComponent } from './component/catalogo/saet/pages/est
 import { EstudiantePdfComponent } from './component/catalogo/saet/pages/estudiante-pdf/estudiante-pdf.component';
 import { EstudianteInformeTrimestralComponent } from './component/catalogo/saet/pages/estudiante-informe-trimestral/estudiante-informe-trimestral.component';
 import { SaetUnderlinedTitleComponent } from './component/catalogo/saet/component/saet-underlined-title/saet-underlined-title.component';
-import {CheckboxModule} from "primeng/checkbox";
+import { CheckboxModule } from 'primeng/checkbox';
 import { SaetRadioComponent } from './component/catalogo/saet/component/saet-radio/saet-radio.component';
 import { SaetCheckboxComponent } from './component/catalogo/saet/component/saet-checkbox/saet-checkbox.component';
 import { SaetTabAgendaComponent } from './component/catalogo/saet/component/saet-tab-agenda/saet-tab-agenda.component';
-import {ConfirmDialogModule} from "primeng/confirmdialog";
-import {ConfirmationService} from "primeng/api";
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 import { SaetConfirmComponent } from './component/catalogo/saet/component/saet-confirm/saet-confirm.component';
 import { EstudiantePaeiComponent } from './component/catalogo/saet/pages/estudiante-paei/estudiante-paei.component';
 import { SaetCuestionarioTablaComponent } from './component/catalogo/saet/component/saet-cuestionario-tabla/saet-cuestionario-tabla.component';
 import { EstudianteDetallePaeiComponent } from './component/catalogo/saet/pages/estudiante-detalle-paei/estudiante-detalle-paei.component';
-import {InputTextareaModule} from "primeng/inputtextarea";
+import { InputTextareaModule } from 'primeng/inputtextarea';
 import { EstudianteEvaluacionAgendaComponent } from './component/catalogo/saet/pages/estudiante-evaluacion-agenda/estudiante-evaluacion-agenda.component';
 import { EstudianteGraficasComponent } from './component/catalogo/saet/pages/estudiante-graficas/estudiante-graficas.component';
-import {NgxChartsModule} from "@swimlane/ngx-charts";
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { SaetGraficaPastelComponent } from './component/catalogo/saet/component/saet-grafica-pastel/saet-grafica-pastel.component';
 import { SaetGraficaBarrasComponent } from './component/catalogo/saet/component/saet-grafica-barras/saet-grafica-barras.component';
 import { SaetGraficaLinearComponent } from './component/catalogo/saet/component/saet-grafica-linear/saet-grafica-linear.component';
+import { EstudianteResetComponent } from './component/catalogo/saet/pages/estudiante-reset/estudiante-reset.component';
 
 @NgModule({
   declarations: [
@@ -150,8 +151,8 @@ import { SaetGraficaLinearComponent } from './component/catalogo/saet/component/
     EstudianteGraficasComponent,
     SaetGraficaPastelComponent,
     SaetGraficaBarrasComponent,
-    SaetGraficaLinearComponent
-
+    SaetGraficaLinearComponent,
+    EstudianteResetComponent,
   ],
   imports: [
     BrowserModule,
@@ -196,21 +197,21 @@ import { SaetGraficaLinearComponent } from './component/catalogo/saet/component/
     CheckboxModule,
     ConfirmDialogModule,
     NgxChartsModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
   ],
   providers: [
     SeguridadService,
     ConfirmationService,
     {
       provide: LocationStrategy,
-      useClass: HashLocationStrategy
+      useClass: HashLocationStrategy,
     },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptorInterceptor,
-      multi: true
-    }
+      multi: true,
+    },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

@@ -1,15 +1,11 @@
-<p-fieldset [legend]="legend"
-            [ngClass]="{'fieldset-inactive': !isActive}"
-            class="fieldset-auto-width"
-            [attr.data-testid]="testId"
-
+<p-fieldset
+  [legend]="legend"
+  [ngClass]="{ 'fieldset-inactive': !isActive }"
+  class="fieldset-auto-width"
+  [attr.data-testid]="testId"
 >
   <ng-container *ngFor="let item of tabRow">
-    <app-tab-item
-      [label]="item.label"
-      [text]="item.value"
-    >
-    </app-tab-item>
+    <app-tab-item [label]="item.label" [text]="item.value"> </app-tab-item>
   </ng-container>
 
   <ng-content></ng-content>

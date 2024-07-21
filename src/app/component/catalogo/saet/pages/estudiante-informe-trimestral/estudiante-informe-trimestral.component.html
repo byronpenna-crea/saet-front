@@ -7,25 +7,41 @@
 </div>
 <div class="form-container">
   <p class="title">Escribe el NIE del estudiante.</p>
-  <app-saet-input testId="input-nie" [inputArgs]="{text: inputNIE}" (inputChange)="onInputChange($event)" />
+  <app-saet-input
+    testId="input-nie"
+    [inputArgs]="{ text: inputNIE }"
+    [value]="inputNIE"
+    [disabled]="showTable"
+    (inputChange)="onInputChange($event)"
+  />
   <div class="button-container">
-    <app-saet-button testId="btn-buscar" [buttonArgs]="{text: 'Buscar', buttonStyle: 1,buttonIcon: 5}"
-      (click)="toggleTable()" />
-    <button data-testI-d="btn-clean" class="clear-text" (click)="cleanInput()">limpiar búsqueda</button>
+    <app-saet-button
+      testId="btn-buscar"
+      [buttonArgs]="{
+        text: 'Buscar',
+        buttonStyle: btnStyle.BLUE,
+        buttonIcon: btnIcon.SEARCH
+      }"
+      (click)="toggleTable()"
+      [disabled]="showTable"
+    />
+    <button data-testId="btn-clean" class="clear-text" (click)="cleanInput()">
+      limpiar búsqueda
+    </button>
   </div>
   <app-saet-underlined-title *ngIf="showTable">
     <div style="display: flex; flex-direction: row">
-      <div style="font-weight: bold; width: 300px">
-        Resultado(s):
-      </div>
-      <div>
-        {{cnResult}} elemento(s)
-      </div>
+      <div style="font-weight: bold; width: 300px">Resultado(s):</div>
+      <div>{{ cnResult }} elemento(s)</div>
     </div>
   </app-saet-underlined-title>
 
-  <app-saet-mensaje-usuario [show]="userMessage.showMessage" [message]="userMessage.message"
-    [title]="userMessage.titleMessage" [messageType]="userMessage.type" />
+  <app-saet-mensaje-usuario
+    [show]="userMessage.showMessage"
+    [message]="userMessage.message"
+    [title]="userMessage.titleMessage"
+    [messageType]="userMessage.type"
+  />
 </div>
 
 <div *ngIf="showTable" class="form-container">
@@ -34,8 +50,6 @@
       <app-saet-underlined-title>
         Informe trimestral de estudiantes atendidos en el COR
       </app-saet-underlined-title>
-
-
     </app-tabs>
   </div>
   <div class="mt-2">
@@ -44,15 +58,54 @@
         La descripción con base a los resultados de las pruebas aplicadas.
       </app-saet-underlined-title>
 
+      <div class="mt-2 mb-2 parent-rich">
+        <span
+          >Los problemas más comunes son dificultades de aprendizaje, de
+          escritura - lectura y matemática.</span
+        >
+        <div class="container-rich">
+          <app-richtext value="xxx" />
+        </div>
+      </div>
 
+      <app-saet-underlined-title></app-saet-underlined-title>
+      <div class="mt-2 mb-2 parent-rich">
+        <span
+          >Dificultades de memoria, atención, percepción, pensamiento de
+          integración social, hiperactividad.</span
+        >
+        <div class="container-rich">
+          <app-richtext />
+        </div>
+      </div>
 
+      <app-saet-underlined-title></app-saet-underlined-title>
+      <div class="mt-2 mb-2 parent-rich">
+        <span
+          >Dificultades de memoria, atención, percepción, Dificultades de
+          lenguaje receptivo, expresivo, dislalias entre otros.pensamiento de
+          integración social, hiperactividad.</span
+        >
+        <div class="container-rich">
+          <app-richtext text="xxx" />
+        </div>
+      </div>
+
+      <app-saet-underlined-title></app-saet-underlined-title>
+      <div class="mt-2 mb-2">
+        <span
+          >Dificultades de lenguaje receptivo, expresivo, dislalias entre
+          otros.</span
+        >
+        <div class="container-rich">
+          <app-richtext />
+        </div>
+      </div>
     </app-tabs>
   </div>
   <div class="mt-2">
     <app-tabs legend="3. Etapas del proceso: fortalezas y limitantes">
-      <app-saet-underlined-title>
-        Caracterización
-      </app-saet-underlined-title>
+      <app-saet-underlined-title> Caracterización </app-saet-underlined-title>
 
       <div class="mt-2 mb-2">
         <span>Fortalezas</span>
@@ -132,11 +185,31 @@
         </app-saet-underlined-title>
       </div>
       <div class="mt-2 mb-2">
-        <span>Limitantes</span>
+        <span>Otros aspectos relevantes.</span>
         <div class="container-rich">
           <app-richtext />
         </div>
       </div>
     </app-tabs>
+  </div>
+  <div class="actionsButton">
+    <app-saet-button
+      (click)="salir()"
+      [buttonArgs]="{
+        text: 'Salir',
+        buttonStyle: btnStyle.BLUE,
+        buttonIcon: btnIcon.CLOSE
+      }"
+    />
+    <div class="right-buttons">
+      <app-saet-button
+        (onClick)="guardar()"
+        [buttonArgs]="{
+          text: 'Guardar y continuar',
+          buttonStyle: btnStyle.BLUE,
+          buttonIcon: btnIcon.SAVE
+        }"
+      />
+    </div>
   </div>
 </div>

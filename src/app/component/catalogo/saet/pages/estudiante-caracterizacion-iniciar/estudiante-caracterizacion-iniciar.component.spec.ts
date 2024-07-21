@@ -8,11 +8,12 @@ describe('EstudianteCaracterizacionIniciarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EstudianteCaracterizacionIniciarComponent ]
-    })
-    .compileComponents();
+      declarations: [EstudianteCaracterizacionIniciarComponent],
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(EstudianteCaracterizacionIniciarComponent);
+    fixture = TestBed.createComponent(
+      EstudianteCaracterizacionIniciarComponent
+    );
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

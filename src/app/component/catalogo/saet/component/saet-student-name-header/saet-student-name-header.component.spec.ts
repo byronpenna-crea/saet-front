@@ -8,9 +8,8 @@ describe('SaetStudentNameHeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SaetStudentNameHeaderComponent ]
-    })
-    .compileComponents();
+      declarations: [SaetStudentNameHeaderComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(SaetStudentNameHeaderComponent);
     component = fixture.componentInstance;

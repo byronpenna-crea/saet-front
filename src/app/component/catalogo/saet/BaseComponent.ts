@@ -1,57 +1,65 @@
-import {Inject, Injectable, OnInit} from "@angular/core";
+import { Inject, Injectable, OnInit } from '@angular/core';
 import {
   CatalogoServiceCor,
-  IGetCaracterizacion, ResponseError,
+  IGetCaracterizacion,
+  ResponseError,
   StudentDetail,
-  StudentInfoResponse
-} from "../../../services/catalogo/catalogo.service.cor";
-import {DOCUMENT} from "@angular/common";
-import {ActivatedRoute, Router} from "@angular/router";
-import {FormMode, IQuestionaryAnswer, IValuesForm} from "./QuestionsComponent";
+  StudentInfoResponse,
+} from '../../../services/catalogo/catalogo.service.cor';
+import { DOCUMENT } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
+import {
+  FormMode,
+  IQuestionaryAnswer,
+  IValuesForm,
+} from './QuestionsComponent';
 
 interface informationTabBody {
- values: string[]
+  values: string[];
 }
 @Injectable()
-export class BaseComponent implements OnInit{
+export class BaseComponent implements OnInit {
   nie: string = '';
   studentInfo?: StudentDetail;
 
   caracterizacion: IGetCaracterizacion | undefined;
-  readOnlyEvaluaciones:boolean = true;
-  readOnlyPaei:boolean = true;
+  readOnlyEvaluaciones: boolean = true;
+  readOnlyPaei: boolean = true;
   async ngOnInit() {
-    try{
-      const response = await this.catalogoServiceCOR.getCaracterizacionPorNIE(this.nie);
+    try {
+      const response = await this.catalogoServiceCOR.getCaracterizacionPorNIE(
+        this.nie
+      );
       this.caracterizacion = response;
-      if(response.id_caracterizacion !== 0){
+      if (response.id_caracterizacion !== 0) {
         this.readOnlyPaei = false;
         this.readOnlyEvaluaciones = false;
       }
-    }catch (ex){
+    } catch (ex) {
       const error = ex as ResponseError;
       console.log();
-      if(
+      if (
         error.status === 404 &&
-        (
-          this.router.url.includes('/menu/saet-evaluaciones/')
-          || this.router.url.includes('/menu/saet-paei-detalle/')
-          || this.router.url.includes('/menu/saet-paei/')
-        )
-      ){
-        await this.router.navigate(['/menu/saet-caracterizacion-estudiante',this.nie]);
+        (this.router.url.includes('/menu/saet-evaluaciones/') ||
+          this.router.url.includes('/menu/saet-paei-detalle/') ||
+          this.router.url.includes('/menu/saet-paei/'))
+      ) {
+        await this.router.navigate([
+          '/menu/saet-caracterizacion-estudiante',
+          this.nie,
+        ]);
       }
       console.log('error ex base ', error.status);
     }
-
-
   }
   getAnswerObject(data: IValuesForm): IQuestionaryAnswer[] {
     const result: IQuestionaryAnswer[] = [];
 
     const keys = Object.keys(data);
     console.log('keys', keys);
-    const groupedData = keys.reduce<Record<string, { radio?: string; input?: string; check?:string }>>((acc, key) => {
+    const groupedData = keys.reduce<
+      Record<string, { radio?: string; input?: string; check?: string }>
+    >((acc, key) => {
       const [type, id] = key.split('_');
       if (!acc[id]) {
         acc[id] = {};
@@ -67,21 +75,24 @@ export class BaseComponent implements OnInit{
       if (groupedData.hasOwnProperty(id)) {
         const idPregunta = parseInt(id, 10);
 
-        !isNaN(idPregunta) && result.push(
-          {
+        !isNaN(idPregunta) &&
+          result.push({
             id_pregunta: idPregunta,
             opcion:
-              !!groupedData[id].radio || !!groupedData[id].check ?
-              [
-              {
-                id_opcion: parseInt(id, 10),
-                opcion: groupedData[id].radio || ""
-              }
-            ] : [],
-            respuesta: groupedData[id].input || ""
-          }
+              !!groupedData[id].radio || !!groupedData[id].check
+                ? [
+                    {
+                      id_opcion: parseInt(id, 10),
+                      opcion: groupedData[id].radio || '',
+                    },
+                  ]
+                : [],
+            respuesta: groupedData[id].input || '',
+          });
+        console.log(
+          'grouped data here',
+          !!groupedData[id].radio || !!groupedData[id].check
         );
-        console.log('grouped data here', !!groupedData[id].radio || !!groupedData[id].check);
       }
     }
 
@@ -118,27 +129,30 @@ export class BaseComponent implements OnInit{
     });
   }
   protected loadStudentInfo(): Promise<StudentInfoResponse> {
-    return this.catalogoServiceCOR.getStudentInfo(this.nie).then((result) => {
-      this.studentInfo = result.estudiante;
-      return result;
-    }).catch((e) => {
-      this.router.navigate(['menu/saet-buscar']);
-      throw e;
-    });
+    return this.catalogoServiceCOR
+      .getStudentInfo(this.nie)
+      .then(result => {
+        this.studentInfo = result.estudiante;
+        return result;
+      })
+      .catch(e => {
+        this.router.navigate(['menu/saet-buscar']);
+        throw e;
+      });
   }
 
   protected populateStudentInformation(studentResponse: StudentInfoResponse) {
-    const generalInformation:informationTabBody = {
+    const generalInformation: informationTabBody = {
       values: [
         studentResponse.estudiante.nombreCompleto,
         studentResponse.estudiante.nie,
         studentResponse.estudiante.fechaNacimiento,
         studentResponse.estudiante.direccion,
         studentResponse.estudiante.telefono[0],
-        studentResponse.estudiante.correo
-      ]
+        studentResponse.estudiante.correo,
+      ],
     };
-    const institutionalInfo:informationTabBody = {
+    const institutionalInfo: informationTabBody = {
       values: [
         studentResponse.centroEducativo.nombre,
         studentResponse.centroEducativo.codigo,
@@ -148,34 +162,36 @@ export class BaseComponent implements OnInit{
         studentResponse.centroEducativo.seccion,
         studentResponse.centroEducativo.docenteOrientador,
         studentResponse.centroEducativo.correoOrientador,
-        studentResponse.centroEducativo.telefonoOrientador[0]
-      ]
+        studentResponse.centroEducativo.telefonoOrientador[0],
+      ],
     };
-    const trustedAdultInfo:informationTabBody =
-      studentResponse.responsables !== undefined && studentResponse.responsables.nombre !== undefined && studentResponse.responsables.nombre !== "" ? {
-      values: [
-        studentResponse.responsables.nombre,
-        studentResponse.responsables.dui,
-        studentResponse.responsables.nit,
-        studentResponse.responsables.direccion,
-        studentResponse.responsables.telefono,
-      ]
-    } : {
-        values: [
-          "No disponible",
-          "No disponible",
-          "No disponible",
-          "No disponible",
-          "No disponible",
-        ]
-      };
-
+    const trustedAdultInfo: informationTabBody =
+      studentResponse.responsables !== undefined &&
+      studentResponse.responsables.nombre !== undefined &&
+      studentResponse.responsables.nombre !== ''
+        ? {
+            values: [
+              studentResponse.responsables.nombre,
+              studentResponse.responsables.dui,
+              studentResponse.responsables.nit,
+              studentResponse.responsables.direccion,
+              studentResponse.responsables.telefono,
+            ],
+          }
+        : {
+            values: [
+              'No disponible',
+              'No disponible',
+              'No disponible',
+              'No disponible',
+              'No disponible',
+            ],
+          };
 
     return {
       generalInformation,
       institutionalInfo,
-      trustedAdultInfo
-    }
+      trustedAdultInfo,
+    };
   }
-
 }

@@ -8,9 +8,8 @@ describe('SaetConfirmComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SaetConfirmComponent ]
-    })
-    .compileComponents();
+      declarations: [SaetConfirmComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(SaetConfirmComponent);
     component = fixture.componentInstance;

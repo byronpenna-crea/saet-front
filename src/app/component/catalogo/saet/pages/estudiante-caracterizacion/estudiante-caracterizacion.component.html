@@ -1,41 +1,66 @@
-<app-saet-global-header [nie]="nie" [nombreCompleto]="studentInfo?.nombreCompleto ?? ''" selectedTab="Caracterizacion"
-  [readOnlyEvaluaciones]="readOnlyEvaluaciones" [readOnlyPaei]="readOnlyPaei" [breadcrumb]="[
+<app-saet-global-header
+  [nie]="nie"
+  [nombreCompleto]="studentInfo?.nombreCompleto ?? ''"
+  selectedTab="Caracterizacion"
+  [readOnlyEvaluaciones]="readOnlyEvaluaciones"
+  [readOnlyPaei]="readOnlyPaei"
+  [breadcrumb]="[
     { href: '#/menu/saet-buscar', text: 'Buscar estudiante' },
-    { href: '#/menu/saet-buscar/'+nie, text: nie },
+    { href: '#/menu/saet-buscar/' + nie, text: nie },
     { href: '', text: 'Caracterización' }
-  ]" />
-<app-saet-mensaje-usuario [show]="userMessage.showMessage" [message]="userMessage.message"
-  [title]="userMessage.titleMessage" />
+  ]"
+/>
+<app-saet-mensaje-usuario
+  [show]="userMessage.showMessage"
+  [message]="userMessage.message"
+  [title]="userMessage.titleMessage"
+/>
 
 <div class="form-container">
   <p-fieldset legend="Caracterización">
-    <div className="margin-top" style="display: flex;" class="div-container-uno">
-      <div style="flex: 1; text-align: left; padding-right: 10px;">
+    <div className="margin-top" style="display: flex" class="div-container-uno">
+      <div style="flex: 1; text-align: left; padding-right: 10px">
         Especialista responsable de caracterización:
       </div>
-      <div style="flex: 2; text-align: left;">
+      <div style="flex: 2; text-align: left">
         <app-saet-input [value]="nombreUsuario" [disabled]="readonlyInput" />
       </div>
     </div>
 
-    <div className="margin-top" style="display: flex;" class="div-container-dos">
-      <div style="flex: 1; text-align: left; padding-right: 10px;" class="div-especialidad">
-      </div>
-      <div style="flex: 2; text-align: left;" class="especialidad">
-        {{especialidad}}
+    <div className="margin-top" style="display: flex" class="div-container-dos">
+      <div
+        style="flex: 1; text-align: left; padding-right: 10px"
+        class="div-especialidad"
+      ></div>
+      <div style="flex: 2; text-align: left" class="especialidad">
+        {{ especialidad }}
       </div>
     </div>
 
-    <div className="margin-top" style="display: flex;">
-      <div style="flex: 1; text-align: left; padding-right: 10px;">
-      </div>
-      <div style="flex: 2; text-align: right;" class="btn-iniciar-caracterizacion">
-        <app-saet-button [buttonArgs]="{buttonStyle: 0,
-        buttonIcon: (caracterizacion !== undefined && caracterizacion.id_caracterizacion !== 0) ? buttonIcon.EYE : buttonIcon.PLUS,
-        text: (caracterizacion !== undefined && caracterizacion.id_caracterizacion !== 0) ? 'Ver caracterización ': 'Iniciar caracterización' }"
-          (onClick)="goTo('/menu/saet-caracterizacion-iniciar')" />
+    <div className="margin-top" style="display: flex">
+      <div style="flex: 1; text-align: left; padding-right: 10px"></div>
+      <div
+        style="flex: 2; text-align: right"
+        class="btn-iniciar-caracterizacion"
+      >
+        <app-saet-button
+          testId="btn-iniciar-caracterizacion"
+          [buttonArgs]="{
+            buttonStyle: 0,
+            buttonIcon:
+              caracterizacion !== undefined &&
+              caracterizacion.id_caracterizacion !== 0
+                ? buttonIcon.EYE
+                : buttonIcon.PLUS,
+            text:
+              caracterizacion !== undefined &&
+              caracterizacion.id_caracterizacion !== 0
+                ? 'Ver caracterización '
+                : 'Iniciar caracterización'
+          }"
+          (onClick)="goTo('/menu/saet-caracterizacion-iniciar')"
+        />
       </div>
     </div>
   </p-fieldset>
-
 </div>

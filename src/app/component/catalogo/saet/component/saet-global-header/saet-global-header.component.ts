@@ -1,6 +1,6 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
-import { CatalogoServiceCor } from "../../../../../services/catalogo/catalogo.service.cor";
-import { DOCUMENT } from "@angular/common";
+import { CatalogoServiceCor } from '../../../../../services/catalogo/catalogo.service.cor';
+import { DOCUMENT } from '@angular/common';
 
 interface BreadcrumbItem {
   href: string;
@@ -9,16 +9,18 @@ interface BreadcrumbItem {
 @Component({
   selector: 'app-saet-global-header',
   templateUrl: './saet-global-header.component.html',
-  styleUrls: ['./saet-global-header.component.css']
+  styleUrls: ['./saet-global-header.component.css'],
 })
 export class SaetGlobalHeaderComponent implements OnInit {
-  @Input() nie: string = "";
-  @Input() nombreCompleto: string = "";
+  @Input() nie: string = '';
+  @Input() nombreCompleto: string = '';
   @Input() selectedTab: string = '';
   tabMenu: {
-    url: string, text: string,
-    name: string, readOnly: boolean,
-    testId?: string
+    url: string;
+    text: string;
+    name: string;
+    readOnly: boolean;
+    testId?: string;
   }[] = [];
   @Input() breadcrumb: BreadcrumbItem[] = [];
 
@@ -32,7 +34,6 @@ export class SaetGlobalHeaderComponent implements OnInit {
   }
   @Input()
   set readOnlyPaei(value: boolean) {
-
     this._readOnlyPaei = value;
     this.generateTabs();
   }
@@ -42,26 +43,31 @@ export class SaetGlobalHeaderComponent implements OnInit {
       {
         name: 'datosGenerales',
         url: `#/menu/saet-datos-estudiante/${this.nie}`,
-        text: 'Datos generales', readOnly: false, testId: 'tab-datos-generales'
+        text: 'Datos generales',
+        readOnly: false,
+        testId: 'tab-datos-generales',
       },
       {
         name: 'Caracterizacion',
         url: `#/menu/saet-caracterizacion-estudiante/${this.nie}`,
         text: 'Caracterización',
-        readOnly: false, testId: 'tab-caracterizacion'
+        readOnly: false,
+        testId: 'tab-caracterizacion',
       },
       {
         name: 'evaluaciones',
         url: `#/menu/saet-evaluaciones/${this.nie}`,
         text: 'Evaluaciones',
-        readOnly: this._readOnlyEvaluaciones, testId: 'tab-evaluaciones'
+        readOnly: this._readOnlyEvaluaciones,
+        testId: 'tab-evaluaciones',
       },
       {
         name: 'paei',
         url: `#/menu/saet-paei/${this.nie}`,
         text: 'PAEI',
-        readOnly: this._readOnlyPaei, testId: 'tab-paei'
-      }
+        readOnly: this._readOnlyPaei,
+        testId: 'tab-paei',
+      },
     ];
   }
 
@@ -73,7 +79,6 @@ export class SaetGlobalHeaderComponent implements OnInit {
     return this.selectedTab === name;
   }
   handleClick(event: MouseEvent, url: string, readOnly: boolean) {
-
     if (readOnly || url === '' || url === '#') {
       event.preventDefault();
     }

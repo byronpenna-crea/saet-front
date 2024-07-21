@@ -8,9 +8,8 @@ describe('SaetGlobalHeaderComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SaetGlobalHeaderComponent ]
-    })
-    .compileComponents();
+      declarations: [SaetGlobalHeaderComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(SaetGlobalHeaderComponent);
     component = fixture.componentInstance;

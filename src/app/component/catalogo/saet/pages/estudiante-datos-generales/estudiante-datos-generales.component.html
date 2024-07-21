@@ -6,13 +6,12 @@
   [readOnlyEvaluaciones]="readOnlyEvaluaciones"
   [breadcrumb]="[
     { href: '#/menu/saet-buscar', text: 'Buscar estudiante' },
-    { href: '#/menu/saet-buscar/'+nie, text: nie },
-    { href: '#/menu/saet-datos-estudiante/'+nie, text: 'Datos generales' }
+    { href: '#/menu/saet-buscar/' + nie, text: nie },
+    { href: '#/menu/saet-datos-estudiante/' + nie, text: 'Datos generales' }
   ]"
 />
 <app-saet-mensaje-usuario />
 <div class="form-container">
-
   <div class="margin-top">
     <app-tabs
       [label]="generalInformation.labels"
@@ -23,19 +22,20 @@
     ></app-tabs>
   </div>
   <div class="margin-top">
-    <app-tabs [label]="institutionalInfo.labels"
-              [legend]="institutionalInfo.legend"
-              [value]="institutionalInfo.values"
-              [isActive]="institutionalInfo.isActive"
+    <app-tabs
+      [label]="institutionalInfo.labels"
+      [legend]="institutionalInfo.legend"
+      [value]="institutionalInfo.values"
+      [isActive]="institutionalInfo.isActive"
     ></app-tabs>
   </div>
 
   <div class="margin-top">
-    <app-tabs [label]="trustedAdultInfo.labels"
-              [legend]="trustedAdultInfo.legend"
-              [value]="trustedAdultInfo.values"
-              [isActive]="trustedAdultInfo.isActive"
+    <app-tabs
+      [label]="trustedAdultInfo.labels"
+      [legend]="trustedAdultInfo.legend"
+      [value]="trustedAdultInfo.values"
+      [isActive]="trustedAdultInfo.isActive"
     ></app-tabs>
   </div>
 </div>
-

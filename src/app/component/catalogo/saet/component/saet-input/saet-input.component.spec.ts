@@ -8,9 +8,8 @@ describe('SaetInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SaetInputComponent ]
-    })
-    .compileComponents();
+      declarations: [SaetInputComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(SaetInputComponent);
     component = fixture.componentInstance;

@@ -1,10 +1,16 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
-import { getIconClass, IconComponent } from "../../shared/component.config";
-
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
+import { getIconClass, IconComponent } from '../../shared/component.config';
 
 export enum ButtonStyle {
   WHITE,
-  BLUE
+  BLUE,
 }
 
 export interface SaetButtonArgs {
@@ -15,18 +21,17 @@ export interface SaetButtonArgs {
 @Component({
   selector: 'app-saet-button',
   templateUrl: './saet-button.component.html',
-  styleUrls: ['./saet-button.component.css']
+  styleUrls: ['./saet-button.component.css'],
 })
-
 export class SaetButtonComponent implements OnChanges {
   /*@Input() text:string = "";
   @Input() buttonStyle?:ButtonStyle = ButtonStyle.WHITE;
   @Input() buttonIcon?:ButtonIcon | null = null;*/
-  @Input() testId: string = "";
+  @Input() testId: string = '';
   @Input() buttonArgs: SaetButtonArgs = {
     buttonIcon: null,
     buttonStyle: ButtonStyle.WHITE,
-    text: ""
+    text: '',
   };
   @Input() disabled: boolean = false;
   @Output() onClick: EventEmitter<Event> = new EventEmitter<Event>();
@@ -34,8 +39,8 @@ export class SaetButtonComponent implements OnChanges {
     this.onClick.emit(event);
   }
 
-  styleClasses: string = "";
-  iconClass: string = "";
+  styleClasses: string = '';
+  iconClass: string = '';
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['buttonArgs']) {
@@ -55,10 +60,10 @@ export class SaetButtonComponent implements OnChanges {
   private updateStyleClasses() {
     switch (this.buttonArgs.buttonStyle) {
       case ButtonStyle.WHITE:
-        this.styleClasses = "saet-button-white";
+        this.styleClasses = 'saet-button-white';
         break;
       case ButtonStyle.BLUE:
-        this.styleClasses = "saet-button-blue";
+        this.styleClasses = 'saet-button-blue';
         break;
     }
   }
