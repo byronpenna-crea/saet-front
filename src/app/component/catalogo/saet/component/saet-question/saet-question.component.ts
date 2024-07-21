@@ -20,9 +20,7 @@ export class SaetQuestionComponent {
   @Input() values: { [key: string]: string } = {};
   @Input() idPregunta: number = 0;
   @Input() readonly: boolean = false;
-  constructor() {
-
-  }
+  constructor() {}
   onCheckBoxChange(event: KeyValue[]) {
     this.checkboxChange.emit(event);
   }

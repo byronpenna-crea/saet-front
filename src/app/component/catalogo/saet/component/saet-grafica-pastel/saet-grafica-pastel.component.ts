@@ -7,11 +7,11 @@ interface DataItem {
 @Component({
   selector: 'app-saet-grafica-pastel',
   templateUrl: './saet-grafica-pastel.component.html',
-  styleUrls: ['./saet-grafica-pastel.component.css']
+  styleUrls: ['./saet-grafica-pastel.component.css'],
 })
 export class SaetGraficaPastelComponent {
   single: DataItem[] = [];
-  view: [number,number] = [700, 400];
+  view: [number, number] = [700, 400];
 
   // options
   gradient: boolean = true;
@@ -20,21 +20,20 @@ export class SaetGraficaPastelComponent {
   isDoughnut: boolean = true;
 
   colorScheme = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
+    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA'],
   };
 
-  constructor() {
-  }
+  constructor() {}
 
-  onSelect(data:any): void {
+  onSelect(data: any): void {
     console.log('Item clicked', JSON.parse(JSON.stringify(data)));
   }
 
-  onActivate(data:any): void {
+  onActivate(data: any): void {
     console.log('Activate', JSON.parse(JSON.stringify(data)));
   }
 
-  onDeactivate(data:any): void {
+  onDeactivate(data: any): void {
     console.log('Deactivate', JSON.parse(JSON.stringify(data)));
   }
 }
