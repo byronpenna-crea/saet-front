@@ -19,15 +19,10 @@
     "target": "ES2022",
     "module": "ES2022",
     "useDefineForClassFields": false,
-    "lib": [
-      "ES2022",
-      "dom"
-    ],
+    "lib": ["ES2022", "dom"],
     "types": ["mousetrap", "cypress", "@types"]
   },
-  "include": [
-    "d3-custom-typings.d.ts"
-  ],
+  "include": ["d3-custom-typings.d.ts"],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,

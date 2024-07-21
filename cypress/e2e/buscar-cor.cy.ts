@@ -1,9 +1,12 @@
 describe('llegar al modulo', () => {
   beforeEach(() => {
-    cy.viewport(1920,1920);
-  })
-  const validNie:string = '10696704';
-  function login(usuario:string, contrasena:string) {
+    cy.viewport(1920, 1920);
+  });
+  before(() => {
+    cy.slowDown(3000);
+  });
+  const validNie: string = '10696704';
+  function login(usuario: string, contrasena: string) {
     cy.log('------------------------------------------');
     cy.log('Paso: Login con credenciales de psicología');
     cy.login(usuario, contrasena);
@@ -17,7 +20,7 @@ describe('llegar al modulo', () => {
     cy.log('------------------------------------------');
   }
 
-  function buscarInformacionDeUsuario(nie:string) {
+  function buscarInformacionDeUsuario(nie: string) {
     cy.log('------------------------------------------');
     cy.log('Paso: buscar alumno valido');
     cy.get('[data-testid="input-nie"]').should('exist');
@@ -42,38 +45,25 @@ describe('llegar al modulo', () => {
     cy.log('------------------------------------------');
   }
 
-  /*it('Loguearse', () => {
-    cy.login('usuario_psicologia', 'pass_psicologia');
-  });
-
-  it('Ir al modulo', () => {
-    cy.login('usuario_psicologia', 'pass_psicologia');
-
-    cy.visit('http://192.168.1.12/#/menu/saet-buscar',{timeout: 100000});
-    cy.get('[data-testid="input-nie"]').should('exist');
-    cy.get('[data-testid="input-nie"]').type('1234'); //20217333
-    cy.get('[data-testid="btn-buscar"]').click();
-    cy.get('[data-testid="userMessage"]').contains('no encontrado');
-    cy.get('[data-testid="input-nie"]').clear().type('10696704');
-    cy.get('[data-testid="btn-buscar"]').click();
-    cy.get('[data-testid="table-information"]').should('exist');
-    cy.get('[data-testid="table-information"]').within(() => {
-      cy.get('[data-testid="btn-ver-detalle"]').first().click();
-    });
-  });*/
-
   it('Verificar que sin caracterizacion no se puede acceder a evaluaciones', () => {
     login('usuario_psicologia', 'pass_psicologia');
     navegarAMenuDeBusqueda();
     cy.log('----------------IR A DATOS GENERALES-------------------');
-    cy.visit(`http://192.168.1.12/#/menu/saet-datos-estudiante/${validNie}`,{timeout: 100000});
+    cy.visit(`http://192.168.1.12/#/menu/saet-datos-estudiante/${validNie}`, {
+      timeout: 100000,
+    });
+    cy.slowDown(5000);
     cy.log('verificar que el usuario cargue correctamente');
     cy.get('[data-testid="general-tab-info"]').should('exist');
     cy.get('[data-testid="general-tab-info"]').contains(validNie);
     cy.log('tratar de acceder a evaluaciones sin haber creado caracterizacion');
-    cy.visit(`http://192.168.1.12/#/menu/saet-evaluaciones/${validNie}`,{timeout: 100000});
+    cy.visit(`http://192.168.1.12/#/menu/saet-evaluaciones/${validNie}`, {
+      timeout: 100000,
+    });
     cy.log('Verificar redirección a la URL de datos del estudiante');
-    cy.url().should('include', `/menu/saet-datos-estudiante/${validNie}`);
-  })
-
-})
+    cy.url().should(
+      'include',
+      `/menu/saet-caracterizacion-estudiante/${validNie}`
+    );
+  });
+});
