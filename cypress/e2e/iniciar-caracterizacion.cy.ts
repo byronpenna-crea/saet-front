@@ -63,10 +63,8 @@ describe('llegar al modulo', () => {
     cy.log('Paso: la url debe seguir siendo la misma');
     cy.url().should('include', 'saet-caracterizacion-iniciar');
   });
-
   it('guardar caracterizacion', () => {
     const inputValue = 'persona que asiste';
-
     login('usuario_psicologia', 'pass_psicologia');
     navegarAMenuDeBusqueda();
     cy.log('Paso: clic a iniciar caracterizacion');
@@ -75,4 +73,5 @@ describe('llegar al modulo', () => {
     cy.get('[data-testid="input_1"]').type(inputValue);
     cy.log('Paso: click en el boton guardar');
   });
+
 });

@@ -9,7 +9,11 @@
     "test": "ng test",
     "lint": "ng lint",
     "storybook": "ng run mined_erp:storybook",
-    "build-storybook": "ng run mined_erp:build-storybook"
+    "build-storybook": "ng run mined_erp:build-storybook",
+    "prettier": "npx prettier --write \"src/app/component/catalogo/saet/**/*.ts\" \"src/app/services/catalogo/catalogo.service.cor.ts\""
+  },
+  "cypress-cucumber-preprocessor": {
+    "nonGlobalStepDefinitions": true
   },
   "private": true,
   "dependencies": {
@@ -24,6 +28,8 @@
     "@angular/platform-browser-dynamic": "^15.1.0",
     "@angular/router": "^15.1.0",
     "@auth0/angular-jwt": "^5.1.2",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.1",
+    "@cypress/webpack-preprocessor": "^6.0.2",
     "@fortawesome/fontawesome-free": "^6.3.0",
     "@swimlane/ngx-charts": "^20.5.0",
     "angular2-hotkeys": "^15.0.0",
@@ -60,8 +66,7 @@
     "@angular/cli": "^15.2.1",
     "@angular/compiler-cli": "^15.1.0",
     "@badeball/cypress-cucumber-preprocessor": "^20.0.5",
-    "@cucumber/cucumber": "^10.7.0",
-    "@cypress/webpack-preprocessor": "^6.0.1",
+    "@cucumber/cucumber": "^10.8.0",
     "@storybook/addon-essentials": "^7.6.17",
     "@storybook/addon-interactions": "^7.6.17",
     "@storybook/addon-links": "^7.6.17",
@@ -83,9 +88,10 @@
     "@webpack-cli/generators": "^3.0.1",
     "browserify": "^17.0.0",
     "cross-env": "^7.0.3",
-    "cypress": "^13.9.0",
+    "cypress": "^12.17.4",
     "cypress-slow-down": "^1.3.1",
     "dotenv": "^16.4.5",
+    "esbuild": "^0.23.0",
     "eslint": "^8.33.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",

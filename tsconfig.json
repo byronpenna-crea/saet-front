@@ -20,7 +20,7 @@
     "module": "ES2022",
     "useDefineForClassFields": false,
     "lib": ["ES2022", "dom"],
-    "types": ["mousetrap", "cypress", "@types"]
+    "types": ["mousetrap", "cypress", "@types", "@badeball/cypress-cucumber-preprocessor"]
   },
   "include": ["d3-custom-typings.d.ts"],
   "angularCompilerOptions": {

@@ -1,4 +1,5 @@
 const path = require('path');
+const createEsbuildPlugin = require('@badeball/cypress-cucumber-preprocessor/esbuild');
 
 module.exports = {
   resolve: {
@@ -10,7 +11,7 @@ module.exports = {
         test: /\.feature$/,
         use: [
           {
-            loader: '@badeball/cypress-cucumber-preprocessor/webpack',
+            loader: '@badeball/cypress-cucumber-preprocessor/loader',
           },
         ],
       },
