@@ -82,7 +82,7 @@ export class BaseComponent implements OnInit {
               !!groupedData[id].radio || !!groupedData[id].check
                 ? [
                     {
-                      id_opcion: parseInt(id, 10),
+                      id_opcion: parseInt(groupedData[id].radio ?? '0', 10),
                       opcion: groupedData[id].radio || '',
                     },
                   ]

@@ -92,13 +92,14 @@ export class EstudianteCaracterizacionIniciarComponent
     values: [],
   };
   respuestasToValues(respuestas: iQuestion[]) {
+    console.log('Respuestas ------ xx ------', respuestas);
     const values: IValuesForm = {};
     respuestas.forEach(respuesta => {
       const radioKey = `radio_${respuesta.id_pregunta}`;
       const inputKey = `input_${respuesta.id_pregunta}`;
 
       if (respuesta.opcion.length > 0) {
-        values[radioKey] = respuesta.opcion[0].opcion;
+        values[radioKey] = respuesta.opcion[0].opcion_pregunta_pk.toString();
       }
       values[inputKey] = respuesta.respuesta ?? '';
     });
@@ -313,6 +314,7 @@ export class EstudianteCaracterizacionIniciarComponent
       respuestas: this.validarPreguntas(respuestas, this.corSurveys),
       grupoFamiliar: [],
     };
+    console.log('values ', this.values);
     console.log('objToSave', objToSave);
     try {
       const resp = this.catalogoServiceCOR.updateCaracterizacion(objToSave);
@@ -350,6 +352,8 @@ export class EstudianteCaracterizacionIniciarComponent
       };
       return;
     }
+    console.log('values ', this.values);
+    console.log('obj to save', objToSave);
 
     try {
       const response =

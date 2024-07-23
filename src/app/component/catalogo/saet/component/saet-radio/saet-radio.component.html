@@ -5,8 +5,8 @@
         <input
           type="radio"
           [name]="name"
-          [value]="option.value"
-          [checked]="option.value === selectedValue"
+          [value]="option.key"
+          [checked]="option.key === selectedValue"
           (change)="onRadioChange($event)"
           [disabled]="disabled"
         />
