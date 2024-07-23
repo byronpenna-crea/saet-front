@@ -11,6 +11,13 @@ import {
 } from '../../component/catalogo/saet/shared/survey';
 import { TIPO_EVALUACION } from '../../component/catalogo/saet/shared/evaluaciones';
 
+export enum HttpMethod {
+  GET = 'GET',
+  POST = 'POST',
+  PUT = 'PUT',
+  DELETE = 'DELETE',
+  PATCH = 'PATCH',
+}
 export interface StudentDetail {
   nie: string;
   nui: string;
@@ -135,7 +142,11 @@ export class CatalogoServiceCor {
     const url = this.API_SERVER_ESTUDIANTE.replace('[NIE]', NIE);
     console.log('url ', url);
     try {
-      const response = await this.doRequest<undefined>(url, undefined, 'GET');
+      const response = await this.doRequest<undefined>(
+        url,
+        undefined,
+        HttpMethod.GET
+      );
       console.log('response get ', response);
 
       if (!response.ok) {
@@ -149,10 +160,11 @@ export class CatalogoServiceCor {
       throw error;
     }
   }
+
   private async doRequest<T>(
     url: string,
     data?: T,
-    method: string = 'POST'
+    method: HttpMethod = HttpMethod.POST
   ): Promise<Response> {
     let fetchObject: RequestInit = {
       method: method,
@@ -179,7 +191,7 @@ export class CatalogoServiceCor {
     return response;
   }
   private async putRequest<T, U>(url: string, data: T): Promise<U> {
-    const response = await this.doRequest<T>(url, data, 'PUT');
+    const response = await this.doRequest<T>(url, data, HttpMethod.PUT);
 
     if (!response.ok) {
       const errorResponse = await response.json();
@@ -274,7 +286,11 @@ export class CatalogoServiceCor {
     //
     const url = `${this.API_SERVER_URL}/caracterizacion/cor/${nie}`;
     try {
-      const response = await this.doRequest<undefined>(url, undefined, 'GET');
+      const response = await this.doRequest<undefined>(
+        url,
+        undefined,
+        HttpMethod.GET
+      );
       if (!response.ok) {
         const errorResponse = await response.json();
         throw new Error(JSON.stringify(errorResponse));
@@ -303,14 +319,42 @@ export class CatalogoServiceCor {
       })
     });*/
   }
-
+  // Temporaly method
+  public async reset(): Promise<{
+    status: number;
+    message: '';
+  }> {
+    const url = `${this.API_SERVER_URL}/reset/all`;
+    try {
+      const response = await this.doRequest<undefined>(
+        url,
+        undefined,
+        HttpMethod.DELETE
+      );
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new ResponseError(response.status, errorResponse.message);
+      }
+      return {
+        status: response.status,
+        message: '',
+      };
+    } catch (e: unknown) {
+      const error = e as ResponseError;
+      throw error;
+    }
+  }
   public async getTipoDeEvaluacion(
     nie: string,
     tipoEvaluacion: TIPO_EVALUACION
   ): Promise<IEvaluacionResponse> {
     const url = `${this.API_SERVER_URL}/evaluacion/cor/${nie}?idTipoEvaluacion=${tipoEvaluacion}`;
     try {
-      const response = await this.doRequest<undefined>(url, undefined, 'GET');
+      const response = await this.doRequest<undefined>(
+        url,
+        undefined,
+        HttpMethod.GET
+      );
 
       if (!response.ok) {
         const errorResponse = await response.json();
@@ -332,7 +376,11 @@ export class CatalogoServiceCor {
     }[]
   > {
     const url = `${this.API_SERVER_URL}/evaluacion/cor/especialistas/${nie}`;
-    const response = await this.doRequest<undefined>(url, undefined, 'GET');
+    const response = await this.doRequest<undefined>(
+      url,
+      undefined,
+      HttpMethod.GET
+    );
     console.log('response get ', response);
 
     if (!response.ok) {
@@ -345,7 +393,11 @@ export class CatalogoServiceCor {
   public async getPAEIQuestions() {
     try {
       const url = `${this.API_SERVER_URL}/paei/preguntas`;
-      const response = await this.doRequest<undefined>(url, undefined, 'GET');
+      const response = await this.doRequest<undefined>(
+        url,
+        undefined,
+        HttpMethod.GET
+      );
       console.log('response get ', response);
 
       if (!response.ok) {
@@ -363,7 +415,11 @@ export class CatalogoServiceCor {
   //get questions
   public async getSurveyQuestions(url: string): Promise<SurveyResponse> {
     try {
-      const response = await this.doRequest<undefined>(url, undefined, 'GET');
+      const response = await this.doRequest<undefined>(
+        url,
+        undefined,
+        HttpMethod.GET
+      );
       console.log('response get ', response);
 
       if (!response.ok) {
