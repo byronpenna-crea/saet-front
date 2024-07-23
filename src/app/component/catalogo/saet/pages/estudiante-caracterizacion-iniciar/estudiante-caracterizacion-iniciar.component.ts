@@ -92,7 +92,6 @@ export class EstudianteCaracterizacionIniciarComponent
     values: [],
   };
   respuestasToValues(respuestas: iQuestion[]) {
-    console.log('Respuestas ------ xx ------', respuestas);
     const values: IValuesForm = {};
     respuestas.forEach(respuesta => {
       const radioKey = `radio_${respuesta.id_pregunta}`;
@@ -107,7 +106,7 @@ export class EstudianteCaracterizacionIniciarComponent
   }
   init() {
     this.route.paramMap.subscribe(params => {
-      const storedValues = localStorage.getItem('values');
+      const storedValues = localStorage.getItem(`caracterizacion-${this.nie}`);
       if (storedValues) {
         this.values = JSON.parse(storedValues);
       }
@@ -406,12 +405,12 @@ export class EstudianteCaracterizacionIniciarComponent
   onCheckboxChange(keyValues: KeyValue[]) {
     const selectedValues = keyValues.map(e => e.value);
     this.values[keyValues[0].key] = selectedValues.toString();
-    localStorage.setItem('values', JSON.stringify(this.values));
+    localStorage.setItem(`caracterizacion-${this.nie}`, JSON.stringify(this.values));
   }
   onchange(keyValue: KeyValue) {
     console.log('onchange triggered', keyValue);
     this.values[keyValue.key] = keyValue.value;
-    localStorage.setItem('values', JSON.stringify(this.values));
+    localStorage.setItem(`caracterizacion-${this.nie}`, JSON.stringify(this.values));
   }
   getOptions(options: { id_opcion: number; opcion: string }[]): KeyValue[] {
     return options.map(

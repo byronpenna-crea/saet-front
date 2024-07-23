@@ -9,4 +9,5 @@ export class TabItemComponent {
   @Input() label: string = '';
   @Input() text: string = '';
   @Input() marginTop: string = '15px';
+  @Input() customClasses: string = '';
 }

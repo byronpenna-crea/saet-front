@@ -37,7 +37,7 @@
     <div style="margin-top: 5%">
       <app-tabs [legend]="corSurvey.titulo">
         <ng-container *ngFor="let pregunta of corSurvey.preguntas">
-          <app-tab-item [label]="pregunta.pregunta">
+          <app-tab-item marginTop="3%" [label]="pregunta.pregunta">
             <app-saet-question
               (onChange)="onchange($event)"
               [type]="getQuestionType(pregunta.tipoPregunta)"
