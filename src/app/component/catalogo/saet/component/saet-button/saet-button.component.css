@@ -1,11 +1,13 @@
 :host ::ng-deep .saet-button-blue .p-button {
   background: #00509c;
   border-radius: 0;
-  width: 147px;
+  min-width: 147px;
   text-align: left;
   padding-left: 35px;
 }
-
+:host ::ng-deep .w-full{
+  width: 100% !important;
+}
 :host ::ng-deep .saet-button-white .p-button {
   background: white;
   border-color: #7aa5cc;

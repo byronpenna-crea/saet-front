@@ -38,7 +38,7 @@ export class SaetButtonComponent implements OnChanges {
   handleClick(event: Event): void {
     this.onClick.emit(event);
   }
-
+  @Input() customClasses: string = '';
   styleClasses: string = '';
   iconClass: string = '';
 
@@ -49,6 +49,7 @@ export class SaetButtonComponent implements OnChanges {
 
       if (!prevConfig || prevConfig.buttonStyle !== currConfig.buttonStyle) {
         this.updateStyleClasses();
+        this.styleClasses += ` ${this.customClasses}`;
       }
 
       if (!prevConfig || prevConfig.buttonIcon !== currConfig.buttonIcon) {

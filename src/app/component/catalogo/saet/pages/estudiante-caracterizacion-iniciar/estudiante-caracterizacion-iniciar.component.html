@@ -78,22 +78,34 @@
       />
     </div>
     <div *ngIf="formMode === formModeEnum.EDIT" class="actionsButton">
-      <app-saet-button
-        (onClick)="retornarCaracterizacion()"
-        [buttonArgs]="{
-          text: 'Regresar a la caracterización',
-          buttonStyle: btnStyle.BLUE,
-          buttonIcon: iconCompoment.LEFT_ARROW
-        }"
-      />
+      <div style="width: 300px">
+        <app-saet-button
+          (onClick)="retornarCaracterizacion()"
+          [buttonArgs]="{
+            text: 'Regresar a la caracterización',
+            buttonStyle: btnStyle.BLUE,
+            buttonIcon: iconCompoment.LEFT_ARROW
+          }"
+          customClasses="w-full"
+        />
+      </div>
+
       <div class="right-buttons">
         <app-saet-button
           (onClick)="update()"
-          [buttonArgs]="{ text: 'update', buttonStyle: btnStyle.BLUE }"
+          [buttonArgs]="{
+            text: 'Actualizar',
+            buttonStyle: btnStyle.BLUE,
+            buttonIcon: iconCompoment.EDIT
+          }"
         />
         <app-saet-button
           (onClick)="generatePDF()"
-          [buttonArgs]="{ text: 'Generar PDF', buttonStyle: 1 }"
+          [buttonArgs]="{
+            text: 'Generar PDF',
+            buttonStyle: btnStyle.BLUE,
+            buttonIcon: iconCompoment.PRINTER
+          }"
         />
       </div>
     </div>
@@ -103,8 +115,8 @@
         (click)="salir()"
         [buttonArgs]="{
           text: 'Regresar a la caracterización',
-          buttonStyle: 1,
-          buttonIcon: 7
+          buttonStyle: btnStyle.BLUE,
+          buttonIcon: iconCompoment.LEFT_ARROW
         }"
       />
       <div class="right-buttons">
