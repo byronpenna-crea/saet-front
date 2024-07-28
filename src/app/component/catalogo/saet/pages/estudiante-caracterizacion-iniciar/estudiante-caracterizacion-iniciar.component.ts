@@ -405,12 +405,18 @@ export class EstudianteCaracterizacionIniciarComponent
   onCheckboxChange(keyValues: KeyValue[]) {
     const selectedValues = keyValues.map(e => e.value);
     this.values[keyValues[0].key] = selectedValues.toString();
-    localStorage.setItem(`caracterizacion-${this.nie}`, JSON.stringify(this.values));
+    localStorage.setItem(
+      `caracterizacion-${this.nie}`,
+      JSON.stringify(this.values)
+    );
   }
   onchange(keyValue: KeyValue) {
     console.log('onchange triggered', keyValue);
     this.values[keyValue.key] = keyValue.value;
-    localStorage.setItem(`caracterizacion-${this.nie}`, JSON.stringify(this.values));
+    localStorage.setItem(
+      `caracterizacion-${this.nie}`,
+      JSON.stringify(this.values)
+    );
   }
   getOptions(options: { id_opcion: number; opcion: string }[]): KeyValue[] {
     return options.map(

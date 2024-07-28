@@ -14,6 +14,8 @@ import { userMessageInit } from '../../shared/messages.model';
 import { TIPO_EVALUACION } from '../../shared/evaluaciones';
 import { ConfirmationService } from 'primeng/api';
 import { KeyValue } from '../../component/saet-input/saet-input.component';
+import { ButtonStyle } from '../../component/saet-button/saet-button.component';
+import { IconComponent } from '../../shared/component.config';
 
 @Component({
   selector: 'app-estudiante-cuestionario-psicologia',
@@ -25,7 +27,8 @@ export class EstudianteCuestionarioPsicologiaComponent
   implements IMessageComponent
 {
   userMessage: UserMessage = userMessageInit;
-
+  btnStyle = ButtonStyle;
+  btnIcon = IconComponent;
   cuestionariosTableMode: number[] = [7, 10, 11, 12, 13];
   override async ngOnInit() {
     await super.ngOnInit();
@@ -89,8 +92,10 @@ export class EstudianteCuestionarioPsicologiaComponent
     this.values[keyValues[0].key] = selectedValues.toString();
     localStorage.setItem('values', JSON.stringify(this.values));
   }
+
   save() {
     const objToSave: ISaveQuestionary = this.getQuestionaryObject();
+    console.log('obj to save', objToSave);
     objToSave.id_evaluacion = this.idEvaluacion;
     const x = this.catalogoServiceCOR.updatePsicologia(objToSave);
   }

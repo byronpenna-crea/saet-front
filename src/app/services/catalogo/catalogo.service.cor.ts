@@ -28,6 +28,11 @@ export interface StudentDetail {
   correo: string;
   id_est_pk: number;
 }
+export enum iEspecialidadEvaluacion {
+  PSICOLOGIA = 'psicologia',
+  PEDAGOGIA = 'pedagogia',
+  LENGUAJE = 'lenguaje',
+}
 export interface StudentInfoResponse {
   estudiante: StudentDetail;
   centroEducativo: {
@@ -213,7 +218,18 @@ export class CatalogoServiceCor {
     const url = `${this.API_SERVER_URL}/evaluacion/cor/psicologia/`;
     return this.postRequest<IQuestionaryHeader, IQuestionaryHeader>(url, obj);
   }
+
   // save
+  public async saveEvaluacion(
+    cuestionario: ISaveQuestionary,
+    especialidadEvaluacion: iEspecialidadEvaluacion
+  ) {
+    const url = `${this.API_SERVER_URL}/evaluacion/cor/${especialidadEvaluacion}/`;
+    return this.postRequest<ISaveQuestionary, ISaveQuestionary>(
+      url,
+      cuestionario
+    );
+  }
   public async savePsicologia(cuestionarioPsicologia: ISaveQuestionary) {
     console.log('save here post request');
     const url = `${this.API_SERVER_URL}/evaluacion/cor/psicologia/`;
@@ -390,6 +406,27 @@ export class CatalogoServiceCor {
 
     return response.json();
   }
+  public async deleteEvaluacionCor(evaluationId: string) {
+    const url = `${this.API_SERVER_URL}/evaluacion/cor/${evaluationId}`;
+    try {
+      const response = await this.doRequest<undefined>(
+        url,
+        undefined,
+        HttpMethod.DELETE
+      );
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new ResponseError(response.status, errorResponse.message);
+      }
+      return {
+        status: response.status,
+        message: '',
+      };
+    } catch (e: unknown) {
+      const error = e as ResponseError;
+      throw error;
+    }
+  }
   public async getPAEIQuestions() {
     try {
       const url = `${this.API_SERVER_URL}/paei/preguntas`;
@@ -433,6 +470,14 @@ export class CatalogoServiceCor {
       const errorDetails = JSON.parse(error.message);
       throw new Error(errorDetails.message);
     }
+  }
+  public getDaiFichaVisitasQuestions(): Promise<SurveyResponse> {
+    return this.getSurveyQuestions(
+      `${this.API_SERVER_URL}/dai/ficha_visita/preguntas`
+    );
+  }
+  public getPaiQuestions(): Promise<SurveyResponse> {
+    return this.getSurveyQuestions(`${this.API_SERVER_URL}/dai/pai/preguntas`);
   }
   public getAgendaQuestions(): Promise<SurveyResponse> {
     //API_SERVER_AGENDA_QUESTIONS

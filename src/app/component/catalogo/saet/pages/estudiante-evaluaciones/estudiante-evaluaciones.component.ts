@@ -1,11 +1,13 @@
 import { ChangeDetectorRef, Component, Inject } from '@angular/core';
 import {
   IMessageComponent,
+  MessageType,
   UserMessage,
 } from '../../interfaces/message-component.interface';
 import { DOCUMENT } from '@angular/common';
 import {
   CatalogoServiceCor,
+  iEspecialidadEvaluacion,
   ISaveQuestionary,
   ResponseError,
 } from '../../../../../services/catalogo/catalogo.service.cor';
@@ -13,6 +15,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { userMessageInit } from '../../shared/messages.model';
 import { BaseComponent } from '../../BaseComponent';
 import { TIPO_EVALUACION } from '../../shared/evaluaciones';
+import {
+  IAgendaEspecialista,
+  IAgendaParams,
+  IOnCancelarAgenda,
+} from '../../component/saet-tab-agenda/saet-tab-agenda.component';
 
 interface IUserMessage {
   show: boolean;
@@ -24,10 +31,16 @@ interface TabInput {
   readOnly: boolean;
   leyend: string;
   name: string;
-  especialistaAgendado: string;
+  especialistaAgendado: {
+    nombreCompleto: string;
+    dui: string;
+  };
+  especialidad: iEspecialidadEvaluacion;
+  evaluationId: number;
+  agendaId: number;
   onIniciar: () => void;
-  onAgendar: () => void;
-  onCancelar: () => void;
+  onAgendar: (event: IAgendaParams) => void;
+  onCancelarAgenda: (event: IOnCancelarAgenda) => void;
 }
 @Component({
   selector: 'app-estudiante-evaluaciones',
@@ -41,10 +54,36 @@ export class EstudianteEvaluacionesComponent
   userMessage: UserMessage = userMessageInit;
   //nie:string = "";
   //studentInfo?: StudentDetail;
-  psicologiaAgendada: boolean = false;
+
   psicologiaEspecilistaAgendado: string = '';
-  pedagogiaAgendada: boolean = false;
+  psicologiaEvaluationId: number = 0;
+  especialista: { [key in iEspecialidadEvaluacion]: IAgendaEspecialista } = {
+    [iEspecialidadEvaluacion.LENGUAJE]: {
+      dui: '',
+      nombreCompleto: '',
+    },
+    [iEspecialidadEvaluacion.PSICOLOGIA]: {
+      dui: '',
+      nombreCompleto: '',
+    },
+    [iEspecialidadEvaluacion.PEDAGOGIA]: {
+      dui: '',
+      nombreCompleto: '',
+    },
+  };
+  agendaId: { [key in iEspecialidadEvaluacion]: number } = {
+    [iEspecialidadEvaluacion.LENGUAJE]: 0,
+    [iEspecialidadEvaluacion.PEDAGOGIA]: 0,
+    [iEspecialidadEvaluacion.PSICOLOGIA]: 0,
+  };
+  agendado: { [key in iEspecialidadEvaluacion]: boolean } = {
+    [iEspecialidadEvaluacion.LENGUAJE]: false,
+    [iEspecialidadEvaluacion.PEDAGOGIA]: false,
+    [iEspecialidadEvaluacion.PSICOLOGIA]: false,
+  };
+
   lenguajeHablaAgendada: boolean = false;
+
   readOnlyTab: boolean = true;
   agendaTabs: TabInput[] = [];
   successMessage: IUserMessage = {
@@ -52,21 +91,7 @@ export class EstudianteEvaluacionesComponent
     message: '¡Los datos han sido guardados exitosamente!',
     title: 'Datos guardados',
   };
-  psicologyMessage: IUserMessage = {
-    show: false,
-    title: '',
-    message: '',
-  };
-  pedagogiaMessage: IUserMessage = {
-    show: false,
-    title: '',
-    message: '',
-  };
-  lenguajeHablaMessage: IUserMessage = {
-    show: false,
-    title: '',
-    message: '',
-  };
+
   especialidad: string = '';
   idPersona: number = 0;
 
@@ -80,6 +105,11 @@ export class EstudianteEvaluacionesComponent
     router: Router
   ) {
     super(document, catalogoServiceCOR, route, router);
+
+    Object.values(iEspecialidadEvaluacion).forEach(especialidad => {
+      this.agendado[especialidad] = false;
+    });
+
     this.route.paramMap.subscribe(params => {
       const nie = params.get('nie');
       if (nie) {
@@ -112,6 +142,14 @@ export class EstudianteEvaluacionesComponent
       a.name === this.especialidad ? -1 : 1
     );
     this.agendaTabs[0].readOnly = false;
+    const indexEspecialidad: iEspecialidadEvaluacion | undefined =
+      this.especialidad === 'psicologia'
+        ? iEspecialidadEvaluacion.PSICOLOGIA
+        : this.especialidad === 'lenguaje'
+          ? iEspecialidadEvaluacion.LENGUAJE
+          : this.especialidad === 'pedagogia'
+            ? iEspecialidadEvaluacion.PEDAGOGIA
+            : undefined;
 
     const enumEspecialidad: TIPO_EVALUACION = this.getTipoEvaluacionFromString(
       this.especialidad
@@ -120,9 +158,19 @@ export class EstudianteEvaluacionesComponent
     this.catalogoServiceCOR
       .getTipoDeEvaluacion(this.nie, enumEspecialidad)
       .then(response => {
+        console.log('evaluacion here ---- ', response);
+        console.log('enum especialidad ---- ', enumEspecialidad);
         if (response.id_evaluacion !== 0) {
           this.psicologiaEspecilistaAgendado =
             response.especialista_responsable;
+
+          if (indexEspecialidad) {
+            this.especialista[indexEspecialidad] = {
+              nombreCompleto: response.especialista_responsable,
+              dui: '',
+            };
+          }
+          this.psicologiaEvaluationId = response.id_evaluacion;
           this.updateTab(this.especialidad, true);
         }
       })
@@ -135,16 +183,26 @@ export class EstudianteEvaluacionesComponent
       response.forEach(especialista => {
         if (this.especialidades.includes(especialista.especialidad)) {
           if (especialista.especialidad === 'Psicologia') {
-            this.psicologiaAgendada = true;
+            this.agendado[iEspecialidadEvaluacion.PSICOLOGIA] = true;
             this.updateTab('psicologia', true);
           }
           if (especialista.especialidad === 'Pedagogía') {
-            this.pedagogiaAgendada = true;
+            this.agendado[iEspecialidadEvaluacion.PEDAGOGIA] = true;
             this.updateTab('pedagogia', true);
           }
         }
       });
     });
+  }
+  onMessage(event: {
+    title: string;
+    message: string;
+    messageType: MessageType;
+  }) {
+    this.userMessage.message = event.message;
+    this.userMessage.titleMessage = event.title;
+    this.userMessage.type = event.messageType;
+    this.userMessage.showMessage = true;
   }
   getTipoEvaluacionFromString(especialidad: string) {
     switch (especialidad) {
@@ -163,36 +221,48 @@ export class EstudianteEvaluacionesComponent
     }
   }
   getTabs(name: string = '') {
-    const tabs = [
+    const tabs: TabInput[] = [
       {
         leyend: 'Evaluación Habla y lenguaje',
         agendado: this.lenguajeHablaAgendada,
         readOnly: this.readOnlyTab,
         onAgendar: this.agendarLenguaje.bind(this),
-        onCancelar: this.cancelarLenguaje.bind(this),
+        onCancelarAgenda: this.cancelarLenguaje.bind(this),
+        evaluationId: this.psicologiaEvaluationId,
         onIniciar: this.iniciarLenguajeHabla.bind(this),
-        especialistaAgendado: '',
+        especialistaAgendado:
+          this.especialista[iEspecialidadEvaluacion.LENGUAJE],
+        agendaId: this.agendaId[iEspecialidadEvaluacion.LENGUAJE],
         name: 'lenguaje',
+        especialidad: iEspecialidadEvaluacion.LENGUAJE,
       },
       {
         leyend: 'Evaluación psicologica',
-        agendado: this.psicologiaAgendada,
+        agendado: this.agendado[iEspecialidadEvaluacion.PSICOLOGIA],
         readOnly: this.readOnlyTab,
-        onAgendar: this.agendarPsicologia.bind(this),
-        onCancelar: this.cancelarPsicologia.bind(this),
+        onAgendar: this.agendar.bind(this),
+        onCancelarAgenda: this.cancelar.bind(this),
+        evaluationId: this.psicologiaEvaluationId,
         onIniciar: this.iniciarPsicologia.bind(this),
-        especialistaAgendado: this.psicologiaEspecilistaAgendado,
+        especialistaAgendado:
+          this.especialista[iEspecialidadEvaluacion.PSICOLOGIA],
+        agendaId: this.agendaId[iEspecialidadEvaluacion.PSICOLOGIA],
         name: 'psicologia',
+        especialidad: iEspecialidadEvaluacion.PSICOLOGIA,
       },
       {
         leyend: 'Evaluación pedagogica',
-        agendado: this.pedagogiaAgendada,
+        agendado: this.agendado[iEspecialidadEvaluacion.PEDAGOGIA],
         readOnly: this.readOnlyTab,
         onAgendar: this.agendarPedagogia.bind(this),
-        onCancelar: this.cancelarPedagogia.bind(this),
+        onCancelarAgenda: this.cancelar.bind(this),
         onIniciar: this.iniciarPedagogia.bind(this),
-        especialistaAgendado: '',
+        especialistaAgendado:
+          this.especialista[iEspecialidadEvaluacion.PEDAGOGIA],
+        evaluationId: this.agendaId[iEspecialidadEvaluacion.PEDAGOGIA],
+        agendaId: this.agendaId[iEspecialidadEvaluacion.PEDAGOGIA],
         name: 'pedagogia',
+        especialidad: iEspecialidadEvaluacion.PEDAGOGIA,
       },
     ];
     if (name === '') {
@@ -203,13 +273,13 @@ export class EstudianteEvaluacionesComponent
   }
   updateTab(name: string, agendado: boolean) {
     if (name === 'psicologia') {
-      this.psicologiaAgendada = agendado;
+      this.agendado[iEspecialidadEvaluacion.PSICOLOGIA] = agendado;
     }
     if (name === 'lenguaje') {
       this.lenguajeHablaAgendada = agendado;
     }
     if (name === 'pedagogia') {
-      this.pedagogiaAgendada = agendado;
+      this.agendado[iEspecialidadEvaluacion.PEDAGOGIA] = agendado;
     }
 
     const index = this.agendaTabs.findIndex(tab => tab.name === name);
@@ -234,15 +304,11 @@ export class EstudianteEvaluacionesComponent
   // lenguaje y habla
   agendarLenguaje() {
     this.lenguajeHablaAgendada = true;
-    this.lenguajeHablaMessage = this.successMessage;
+
     this.updateTab('lenguaje', true);
   }
   cancelarLenguaje() {
     this.lenguajeHablaAgendada = false;
-    this.lenguajeHablaMessage = {
-      ...this.successMessage,
-      show: false,
-    };
   }
   // pedagogia
   async agendarPedagogia() {
@@ -261,46 +327,87 @@ export class EstudianteEvaluacionesComponent
     };
     const respuesta = await this.catalogoServiceCOR.savePedagogia(obj);
     if (respuesta.id_evaluacion !== 0) {
-      this.pedagogiaMessage = this.successMessage;
-      this.pedagogiaAgendada = true;
+      this.agendado[iEspecialidadEvaluacion.PEDAGOGIA] = true;
       this.updateTab('pedagogia', true);
     }
   }
-  cancelarPedagogia() {
+  /*cancelarPedagogia() {
     this.pedagogiaAgendada = false;
     this.pedagogiaMessage = {
       ...this.successMessage,
       show: false,
     };
-  }
+  }*/
   // psicologia
-  cancelarPsicologia() {
-    this.psicologiaAgendada = false;
-    this.psicologyMessage = {
-      ...this.successMessage,
-      show: false,
-    };
-    this.updateTab('psicologia', true);
+  async cancelar(event: IOnCancelarAgenda) {
+    if (event.evaluationId === 0) {
+      this.userMessage.showMessage = true;
+      this.userMessage.titleMessage = 'Atencion';
+      this.userMessage.message = 'No hay un id de evaluacion';
+    }
+    await this.catalogoServiceCOR.deleteEvaluacionCor(
+      event.evaluationId.toString()
+    );
+
+    this.agendado[iEspecialidadEvaluacion.PSICOLOGIA] = false;
+    this.updateTab(event.especialidad, false);
   }
-  async agendarPsicologia() {
+  formatDateToDDMMYYYY(date: Date) {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
+
+  formatTimeToHHMM(date: Date) {
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${hours}:${minutes}`;
+  }
+
+  async agendar(event: IAgendaParams) {
+    this.userMessage.showMessage = false;
     if (this.studentInfo?.id_est_pk === undefined) {
+      this.userMessage.titleMessage = '¡Atención!';
+      this.userMessage.message = 'Estudiante no encontrado';
+      this.userMessage.type = MessageType.DANGER;
       console.error('estudiante no encontrado');
       return;
     }
+    if (event.evaluationTime === null || event.evaluationDate === null) {
+      this.userMessage.showMessage = true;
+      this.userMessage.message = 'Debes llenar la fecha y hora para agendar';
+      this.userMessage.titleMessage = '¡Atención!';
+      return;
+    }
+    const timeToSave = this.formatTimeToHHMM(event.evaluationTime);
+    const dateToSave = this.formatDateToDDMMYYYY(event.evaluationDate);
+
     const obj: ISaveQuestionary = {
       id_estudiante_fk: this.studentInfo?.id_est_pk,
       id_especialista: this.idPersona,
-      id_tipo_evaluacion: TIPO_EVALUACION.psicologo_perfil,
-      fecha: '12/12/2023',
-      hora: '12:40',
+      id_tipo_evaluacion: event.tipoEvaluacion,
+      fecha: dateToSave,
+      hora: timeToSave,
       id_evaluacion: null,
       respuestas: [],
     };
-    const respuesta = await this.catalogoServiceCOR.savePsicologia(obj);
-    if (respuesta.id_evaluacion !== 0) {
-      this.psicologyMessage = this.successMessage;
-      this.psicologiaAgendada = true;
-      this.updateTab('psicologia', true);
+    console.log('obj ', obj);
+    if (event.especialidad === undefined) {
+      this.userMessage.showMessage = true;
+      this.userMessage.message = 'No existe especilidad para ser guardada';
+      this.userMessage.titleMessage = '¡Atención!';
+      this.userMessage.type = MessageType.DANGER;
+      return;
     }
+    /*const respuesta = await this.catalogoServiceCOR.saveEvaluacion(
+      obj,
+      event.especialidad
+    );
+    if (respuesta.id_evaluacion === 0) {
+    }
+    this.psicologyMessage = this.successMessage;
+    this.psicologiaAgendada = true;
+    this.updateTab('psicologia', true);*/
   }
 }

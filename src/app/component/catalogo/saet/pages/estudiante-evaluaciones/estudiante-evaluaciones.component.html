@@ -10,13 +10,14 @@
     { href: '', text: 'Evaluaciones' }
   ]"
 />
-<app-saet-mensaje-usuario
-  [show]="userMessage.showMessage"
-  [message]="userMessage.message"
-  [title]="userMessage.titleMessage"
-/>
 
 <div class="form-container">
+  <app-saet-mensaje-usuario
+    [show]="userMessage.showMessage"
+    [message]="userMessage.message"
+    [title]="userMessage.titleMessage"
+    [messageType]="userMessage.type"
+  />
   <div class="margin-top" style="width: 100%">
     <div
       *ngFor="let tab of agendaTabs; let i = index"
@@ -24,13 +25,17 @@
       style="width: 100%"
     >
       <app-saet-tab-agenda
-        (onAgendar)="tab.onAgendar()"
-        (onCancelar)="tab.onCancelar()"
+        (onAgendar)="tab.onAgendar($event)"
+        [especialidad]="tab.especialidad"
+        (onCancelarAgenda)="tab.onCancelarAgenda($event)"
         [agendado]="tab.agendado"
         (onIniciar)="tab.onIniciar()"
         [readOnly]="tab.readOnly"
         [leyend]="tab.leyend"
+        [agendaId]="tab.agendaId"
         [especialistaAgendado]="tab.especialistaAgendado"
+        [evaluationId]="tab.evaluationId"
+        (onMessage)="onMessage($event)"
       />
     </div>
   </div>

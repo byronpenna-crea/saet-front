@@ -46,3 +46,6 @@ Then('la URL debe incluir {string}', (text) => {
 Then('la caracterización debe guardarse exitosamente', () => {
   // Aquí podrías verificar que la caracterización se haya guardado correctamente
 });
+When('el usuario ve el primer input vacio', () => {
+  cy.get('[data-testid="input_1"]').should('have.value', '');
+})

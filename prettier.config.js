@@ -14,6 +14,7 @@ module.exports = {
     {
       files: [
         'src/app/component/catalogo/saet/**/*.ts',
+        'src/app/component/catalogo/saet/**/*.html',
         'services/catalogo/catalogo.service.cor.ts',
       ],
       options: {

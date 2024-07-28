@@ -2,7 +2,7 @@ Feature: Caracterización del estudiante
 
   Scenario: Iniciar la caracterización
     Given el usuario ha iniciado sesión como "usuario_psicologia" con "pass_psicologia"
-    When el usuario navega a la caracterización del estudiante con NIE "10696704"
+    When el usuario navega a la caracterización del estudiante con NIE "111111"
     And el usuario hace clic en "iniciar caracterizacion"
     Then la URL debe incluir "saet-caracterizacion-iniciar"
 
@@ -29,3 +29,15 @@ Feature: Caracterización del estudiante
     And el usuario escribe "persona que asiste" en el primer input
     And el usuario hace clic en "guardar"
     Then la caracterización debe guardarse exitosamente
+
+  Scenario: verificar que data offline es diferente por alumno
+    Given el usuario ha iniciado sesión como "usuario_psicologia" con "pass_psicologia"
+    When el usuario navega a la caracterización del estudiante con NIE "11111"
+    And el usuario hace clic en "iniciar caracterizacion"
+    And el usuario ve el primer input vacio
+    And el usuario escribe "persona que asiste alumno2" en el primer input
+    And el usuario recarga la página
+    Then el primer input debe contener "persona que asiste alumno2"
+    When el usuario navega a la caracterización del estudiante con NIE "10696704"
+    And el usuario hace clic en "iniciar caracterizacion"
+    Then el primer input debe contener "persona que asiste"

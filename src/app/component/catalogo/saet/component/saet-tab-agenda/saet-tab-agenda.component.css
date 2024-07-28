@@ -18,7 +18,7 @@
 
 .right-buttons {
   display: flex;
-  gap: 10px;
+  gap: 60px;
   align-items: center;
 }
 
@@ -53,6 +53,7 @@
   user-select: none;
   text-decoration: underline;
   color: #00498d;
+  vertical-align: middle;
 }
 
 ::ng-deep .second-item-time .p-calendar {

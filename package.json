@@ -10,7 +10,7 @@
     "lint": "ng lint",
     "storybook": "ng run mined_erp:storybook",
     "build-storybook": "ng run mined_erp:build-storybook",
-    "prettier": "npx prettier --write \"src/app/component/catalogo/saet/**/*.ts\" \"src/app/services/catalogo/catalogo.service.cor.ts\""
+    "prettier": "npx prettier --write \"src/app/component/catalogo/saet/**/*.ts\" \"src/app/component/catalogo/saet/**/*.html\" \"src/app/services/catalogo/catalogo.service.cor.ts\""
   },
   "cypress-cucumber-preprocessor": {
     "nonGlobalStepDefinitions": true
