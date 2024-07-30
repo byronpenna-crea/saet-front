@@ -51,9 +51,8 @@ export class QuestionsComponent extends BaseComponent {
     private confirmationService: ConfirmationService,
     @Inject(DOCUMENT) especialidadTarget: string
   ) {
-    console.log('constructor question ');
-    const _valuesKey = `${especialidadTarget}_values`;
     super(document, catalogoServiceCOR, route, router);
+    const _valuesKey = `${this.nie}_${especialidadTarget}_values`;
     this.targetEspecialidad = especialidadTarget;
     this.route.paramMap.subscribe(params => {
       const mode = params.get('mode');
@@ -82,8 +81,8 @@ export class QuestionsComponent extends BaseComponent {
         router.navigate(['menu/saet-evaluaciones', this.nie]);
       }
     }
-
     this.updateStoredValues(_valuesKey);
+    this.valuesKey = _valuesKey;
   }
   updateStoredValues(_valuesKey: string) {
     if (this.formMode === FormMode.EDIT || this.formMode === FormMode.CREATE) {
@@ -192,7 +191,7 @@ export class QuestionsComponent extends BaseComponent {
     const currentUrl = this.router.url;
     const newUrl = currentUrl.replace('/view', '/edit');
     this.formMode = FormMode.EDIT;
-    this.updateStoredValues(`${this.targetEspecialidad}_values`);
+    this.updateStoredValues(this.valuesKey);
     this.router.navigateByUrl(newUrl);
   }
   salirEditMode(): string {
