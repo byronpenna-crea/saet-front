@@ -112,7 +112,4 @@ export class EstudianteCuestionarioPsicologiaComponent
     this.router.navigateByUrl(url);
     return '';
   }
-  message: string = '';
-  showMessage: boolean = false;
-  titleMessage: string = '';
 }

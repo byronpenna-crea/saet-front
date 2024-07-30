@@ -7,12 +7,16 @@ import {
 import { DOCUMENT } from '@angular/common';
 import {
   CatalogoServiceCor,
+  ISaveQuestionary,
   StudentDetail,
 } from '../../../../../services/catalogo/catalogo.service.cor';
 import { ActivatedRoute, Router } from '@angular/router';
 import { QuestionsComponent } from '../../QuestionsComponent';
 import { ConfirmationService } from 'primeng/api';
 import { TIPO_EVALUACION } from '../../shared/evaluaciones';
+import { KeyValue } from '../../component/saet-input/saet-input.component';
+import { ButtonStyle } from '../../component/saet-button/saet-button.component';
+import { IconComponent } from '../../shared/component.config';
 
 @Component({
   selector: 'app-estudiante-cuestionario-lenguaje',
@@ -29,6 +33,8 @@ export class EstudianteCuestionarioLenguajeComponent
     titleMessage: '',
     type: MessageType.SUCCESS,
   };
+  btnStyle = ButtonStyle;
+  btnIcon = IconComponent;
   cuestionariosTableMode: number[] = [16];
   override async ngOnInit() {
     await super.ngOnInit();
@@ -36,6 +42,7 @@ export class EstudianteCuestionarioLenguajeComponent
       this.router.navigate(['/menu/saet-caracterizacion-estudiante', this.nie]);
     }
   }
+  idEvaluacion: number = 0;
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceCOR: CatalogoServiceCor,
@@ -53,14 +60,10 @@ export class EstudianteCuestionarioLenguajeComponent
       especialidadTarget
     );
 
-    catalogoServiceCOR.getLenguajeHablaQuestions().then(result => {
-      this.showActionButtons = true;
-      this.corSurveys.push(...result.cuestionarios);
-    });
-
     this.catalogoServiceCOR
       .getTipoDeEvaluacion(this.nie, TIPO_EVALUACION.logopeda_perfil)
       .then(response => {
+        this.idEvaluacion = response.id_evaluacion;
         this.handleMode(
           response.id_evaluacion,
           'menu/saet-lenguaje-habla',
@@ -76,6 +79,34 @@ export class EstudianteCuestionarioLenguajeComponent
         };
         console.log('this values ... ', this.values);
       });
+
+    catalogoServiceCOR.getLenguajeHablaQuestions().then(result => {
+      this.showActionButtons = true;
+      this.corSurveys.push(...result.cuestionarios);
+    });
   }
-  save() {}
+
+  onCheckboxChange(keyValues: KeyValue[]) {
+    const selectedValues = keyValues.map(e => e.value);
+    this.values[keyValues[0].key] = selectedValues.toString();
+    localStorage.setItem('values', JSON.stringify(this.values));
+  }
+  save() {
+    const objToSave: ISaveQuestionary = this.getQuestionaryObject();
+    console.log('obj to save', objToSave);
+    objToSave.id_evaluacion = this.idEvaluacion;
+    const x = this.catalogoServiceCOR.updateLenguaje(objToSave);
+  }
+  override salirEditMode(): string {
+    const url = super.salirEditMode();
+    this.catalogoServiceCOR
+      .getTipoDeEvaluacion(this.nie, TIPO_EVALUACION.logopeda_perfil)
+      .then(response => {
+        this.values = {
+          ...this.responseToValues(response),
+        };
+      });
+    this.router.navigateByUrl(url);
+    return '';
+  }
 }

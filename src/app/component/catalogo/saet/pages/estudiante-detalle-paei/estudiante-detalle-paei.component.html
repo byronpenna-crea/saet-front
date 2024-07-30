@@ -11,7 +11,20 @@
     { href: '', text: 'Edición' }
   ]"
 />
-
+<app-saet-mensaje-usuario
+  [show]="userMessage.showMessage"
+  [message]="userMessage.message"
+  [title]="userMessage.titleMessage"
+/>
+<app-saet-confirm
+  acceptButtonText="Continuar editando"
+  cancelButtonText="Salir sin guardar"
+  title="¡Estás a punto de salir del modo de edición!"
+  (onAccept)="continuarEditando()"
+  (onReject)="aceptarSalir()"
+  [acceptIcon]="iconCompoment.SAVE"
+  [rejectIcon]="iconCompoment.CLOSE"
+/>
 <div class="form-container">
   <ng-container *ngFor="let corSurvey of corSurveys">
     <div style="margin-top: 5%">
@@ -30,6 +43,7 @@
                 [testId]="pregunta.id_pregunta.toString()"
                 [name]="getName(pregunta.pregunta)"
                 [options]="getOptions(pregunta.opcion)"
+                (checkboxChange)="onCheckboxChange($event)"
                 [readonly]="formMode === formModeEnum.VIEW"
               />
             </app-tab-item>

@@ -1,8 +1,8 @@
 <ng-container *ngIf="type === QuestionType.ABIERTA_CON_FORMATO">
   <app-richtext
     (inputChange)="onInputChange($event)"
-    [value]="values['textarea_' + idPregunta.toString()]"
-    [name]="'textarea_' + idPregunta.toString()"
+    [value]="values['richtext_' + idPregunta.toString()]"
+    [name]="'richtext_' + idPregunta.toString()"
   />
 </ng-container>
 <ng-container *ngIf="type === QuestionType.ABIERTA">
@@ -45,7 +45,14 @@
 </ng-container>
 <ng-container *ngIf="type === QuestionType.ABIERTA_SIN_FORMATO">
   <div class="margin-bottom">
-    <textarea pInputTextarea style="width: 100%"></textarea>
+    <app-saet-text-area
+      [testId]="'textarea_' + idPregunta.toString()"
+      (inputChange)="onInputChange($event)"
+      [value]="values['textarea_' + idPregunta.toString()]"
+      [disabled]="readonly"
+      [name]="'textarea_' + idPregunta.toString()"
+    />
+    ----
   </div>
 </ng-container>
 

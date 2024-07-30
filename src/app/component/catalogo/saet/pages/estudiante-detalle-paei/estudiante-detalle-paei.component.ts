@@ -10,6 +10,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { userMessageInit } from '../../shared/messages.model';
 import { QuestionsComponent } from '../../QuestionsComponent';
 import { ConfirmationService } from 'primeng/api';
+import { ButtonStyle } from '../../component/saet-button/saet-button.component';
+import { IconComponent } from '../../shared/component.config';
+import { KeyValue } from '../../component/saet-input/saet-input.component';
 
 @Component({
   selector: 'app-estudiante-detalle-paei',
@@ -22,6 +25,8 @@ export class EstudianteDetallePaeiComponent
 {
   cuestionariosTableMode: number[] = [];
   userMessage: UserMessage = userMessageInit;
+  btnStyle = ButtonStyle;
+  btnIcon = IconComponent;
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceCOR: CatalogoServiceCor,
@@ -41,5 +46,10 @@ export class EstudianteDetallePaeiComponent
     this.catalogoServiceCOR.getPAEIQuestions().then(result => {
       this.corSurveys.push(...result.cuestionarios);
     });
+  }
+  onCheckboxChange(keyValues: KeyValue[]) {
+    const selectedValues = keyValues.map(e => e.value);
+    this.values[keyValues[0].key] = selectedValues.toString();
+    localStorage.setItem('values', JSON.stringify(this.values));
   }
 }
