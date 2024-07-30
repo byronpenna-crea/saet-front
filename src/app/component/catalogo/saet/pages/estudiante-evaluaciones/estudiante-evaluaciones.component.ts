@@ -1,16 +1,20 @@
-import {ChangeDetectorRef, Component, Inject} from '@angular/core';
-import {IMessageComponent, MessageType, UserMessage,} from '../../interfaces/message-component.interface';
-import {DOCUMENT} from '@angular/common';
+import { ChangeDetectorRef, Component, Inject } from '@angular/core';
+import {
+  IMessageComponent,
+  MessageType,
+  UserMessage,
+} from '../../interfaces/message-component.interface';
+import { DOCUMENT } from '@angular/common';
 import {
   CatalogoServiceCor,
   iEspecialidadEvaluacion,
   ISaveQuestionary,
   ResponseError,
 } from '../../../../../services/catalogo/catalogo.service.cor';
-import {ActivatedRoute, Router} from '@angular/router';
-import {userMessageInit} from '../../shared/messages.model';
-import {BaseComponent} from '../../BaseComponent';
-import {TIPO_EVALUACION} from '../../shared/evaluaciones';
+import { ActivatedRoute, Router } from '@angular/router';
+import { userMessageInit } from '../../shared/messages.model';
+import { BaseComponent } from '../../BaseComponent';
+import { TIPO_EVALUACION } from '../../shared/evaluaciones';
 import {
   IAgendaEspecialista,
   IAgendaParams,
@@ -310,7 +314,6 @@ export class EstudianteEvaluacionesComponent
     await this.router.navigate(['/menu/saet-lenguaje-habla/', this.nie]);
   }
 
-
   // pedagogia
   async agendarPedagogia() {
     if (this.studentInfo?.id_est_pk === undefined) {
@@ -386,7 +389,8 @@ export class EstudianteEvaluacionesComponent
     const currentDate = new Date();
     if (event.evaluationDate < currentDate) {
       this.userMessage.showMessage = true;
-      this.userMessage.message = 'La fecha de la agenda no puede ser menor que la fecha actual';
+      this.userMessage.message =
+        'La fecha de la agenda no puede ser menor que la fecha actual';
       this.userMessage.titleMessage = '¡Atención!';
       this.userMessage.type = MessageType.DANGER;
       return;
@@ -413,7 +417,7 @@ export class EstudianteEvaluacionesComponent
       return;
     }
 
-    try{
+    try {
       const respuesta = await this.catalogoServiceCOR.saveEvaluacion(
         obj,
         event.especialidad
@@ -427,10 +431,10 @@ export class EstudianteEvaluacionesComponent
         };
         this.updateTab(this.especialidad, true);
       }
-    }catch (ex:unknown){
+    } catch (ex: unknown) {
       const error = ex as ResponseError;
       this.userMessage.showMessage = true;
-      this.userMessage.titleMessage = "Error";
+      this.userMessage.titleMessage = 'Error';
       this.userMessage.message = error.message;
       this.userMessage.type = MessageType.DANGER;
     }

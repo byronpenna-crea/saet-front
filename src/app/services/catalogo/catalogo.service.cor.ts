@@ -232,14 +232,17 @@ export class CatalogoServiceCor {
     cuestionario: ISaveQuestionary,
     especialidadEvaluacion: iEspecialidadEvaluacion
   ) {
-    const especialidad  = especialidadEvaluacion === iEspecialidadEvaluacion.LENGUAJE ? 'lenguaje_habla' : especialidadEvaluacion;
+    const especialidad =
+      especialidadEvaluacion === iEspecialidadEvaluacion.LENGUAJE
+        ? 'lenguaje_habla'
+        : especialidadEvaluacion;
     const url = `${this.API_SERVER_URL}/evaluacion/cor/${especialidad}/`;
-    try{
+    try {
       return await this.postRequest<ISaveQuestionary, ISaveQuestionary>(
         url,
         cuestionario
       );
-    }catch (e){
+    } catch (e) {
       console.log('error ---- ', e);
       throw e;
     }
