@@ -99,23 +99,34 @@
     <div *ngIf="formMode === formModeEnum.CREATE" class="actionsButton">
       <app-saet-button
         (onClick)="salir()"
-        [buttonArgs]="{ text: 'Salir', buttonStyle: 1, buttonIcon: 6 }"
+        [buttonArgs]="{
+          text: 'Salir',
+          buttonStyle: btnStyle.BLUE,
+          buttonIcon: btnIcon.CLOSE
+        }"
       />
 
       <app-saet-button
         (onClick)="save()"
-        [buttonArgs]="{ text: 'Guardar', buttonStyle: 1 }"
+        [buttonArgs]="{ text: 'Guardar', buttonStyle: btnStyle.BLUE }"
       />
     </div>
     <div *ngIf="formMode === formModeEnum.EDIT" class="actionsButton">
       <app-saet-button
         (onClick)="salirEditMode()"
-        [buttonArgs]="{ text: 'Salir', buttonStyle: 1, buttonIcon: 6 }"
+        [buttonArgs]="{
+          text: 'Salir',
+          buttonStyle: btnStyle.BLUE,
+          buttonIcon: btnIcon.CLOSE
+        }"
       />
 
       <app-saet-button
         (onClick)="save()"
-        [buttonArgs]="{ text: 'Actualizar registro', buttonStyle: 1 }"
+        [buttonArgs]="{
+          text: 'Actualizar registro',
+          buttonStyle: btnStyle.BLUE
+        }"
       />
     </div>
     <div *ngIf="formMode === formModeEnum.VIEW" class="actionsButton">
@@ -123,8 +134,8 @@
         (click)="salir()"
         [buttonArgs]="{
           text: 'Regresar a la caracterización',
-          buttonStyle: 1,
-          buttonIcon: 7
+          buttonStyle: btnStyle.BLUE,
+          buttonIcon: btnIcon.LEFT_ARROW
         }"
       />
       <div class="right-buttons">

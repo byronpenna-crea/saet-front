@@ -206,12 +206,20 @@ export class CatalogoServiceCor {
     return response.json();
   }
   private async postRequest<T, U>(url: string, data: T): Promise<U> {
-    const response = await this.doRequest<T>(url, data);
-    if (!response.ok) {
-      throw new Error(JSON.stringify(await response.json()));
+    try {
+      const response = await this.doRequest<T>(url, data);
+      console.log('post request response ');
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(JSON.stringify(errorResponse));
+      }
+      console.log('hecha post request');
+      return response.json();
+    } catch (e: unknown) {
+      console.log('error in post request ', e);
+      const error = e as ResponseError;
+      throw error;
     }
-
-    return response.json();
   }
   // agendar
   public agendarPsicologia(obj: IQuestionaryHeader) {
@@ -224,11 +232,17 @@ export class CatalogoServiceCor {
     cuestionario: ISaveQuestionary,
     especialidadEvaluacion: iEspecialidadEvaluacion
   ) {
-    const url = `${this.API_SERVER_URL}/evaluacion/cor/${especialidadEvaluacion}/`;
-    return this.postRequest<ISaveQuestionary, ISaveQuestionary>(
-      url,
-      cuestionario
-    );
+    const especialidad  = especialidadEvaluacion === iEspecialidadEvaluacion.LENGUAJE ? 'lenguaje_habla' : especialidadEvaluacion;
+    const url = `${this.API_SERVER_URL}/evaluacion/cor/${especialidad}/`;
+    try{
+      return await this.postRequest<ISaveQuestionary, ISaveQuestionary>(
+        url,
+        cuestionario
+      );
+    }catch (e){
+      console.log('error ---- ', e);
+      throw e;
+    }
   }
   public async savePsicologia(cuestionarioPsicologia: ISaveQuestionary) {
     console.log('save here post request');

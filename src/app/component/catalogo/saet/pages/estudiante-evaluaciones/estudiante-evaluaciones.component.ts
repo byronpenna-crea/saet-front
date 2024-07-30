@@ -1,20 +1,16 @@
-import { ChangeDetectorRef, Component, Inject } from '@angular/core';
-import {
-  IMessageComponent,
-  MessageType,
-  UserMessage,
-} from '../../interfaces/message-component.interface';
-import { DOCUMENT } from '@angular/common';
+import {ChangeDetectorRef, Component, Inject} from '@angular/core';
+import {IMessageComponent, MessageType, UserMessage,} from '../../interfaces/message-component.interface';
+import {DOCUMENT} from '@angular/common';
 import {
   CatalogoServiceCor,
   iEspecialidadEvaluacion,
   ISaveQuestionary,
   ResponseError,
 } from '../../../../../services/catalogo/catalogo.service.cor';
-import { ActivatedRoute, Router } from '@angular/router';
-import { userMessageInit } from '../../shared/messages.model';
-import { BaseComponent } from '../../BaseComponent';
-import { TIPO_EVALUACION } from '../../shared/evaluaciones';
+import {ActivatedRoute, Router} from '@angular/router';
+import {userMessageInit} from '../../shared/messages.model';
+import {BaseComponent} from '../../BaseComponent';
+import {TIPO_EVALUACION} from '../../shared/evaluaciones';
 import {
   IAgendaEspecialista,
   IAgendaParams,
@@ -235,8 +231,8 @@ export class EstudianteEvaluacionesComponent
         leyend: 'Evaluación Habla y lenguaje',
         agendado: this.lenguajeHablaAgendada,
         readOnly: this.readOnlyTab,
-        onAgendar: this.agendarLenguaje.bind(this),
-        onCancelarAgenda: this.cancelarLenguaje.bind(this),
+        onAgendar: this.agendar.bind(this),
+        onCancelarAgenda: this.cancelar.bind(this),
         evaluationId: this.psicologiaEvaluationId,
         onIniciar: this.iniciarLenguajeHabla.bind(this),
         especialistaAgendado:
@@ -313,15 +309,8 @@ export class EstudianteEvaluacionesComponent
   async iniciarLenguajeHabla() {
     await this.router.navigate(['/menu/saet-lenguaje-habla/', this.nie]);
   }
-  // lenguaje y habla
-  agendarLenguaje() {
-    this.lenguajeHablaAgendada = true;
 
-    this.updateTab('lenguaje', true);
-  }
-  cancelarLenguaje() {
-    this.lenguajeHablaAgendada = false;
-  }
+
   // pedagogia
   async agendarPedagogia() {
     if (this.studentInfo?.id_est_pk === undefined) {
@@ -393,6 +382,16 @@ export class EstudianteEvaluacionesComponent
       this.userMessage.titleMessage = '¡Atención!';
       return;
     }
+
+    const currentDate = new Date();
+    if (event.evaluationDate < currentDate) {
+      this.userMessage.showMessage = true;
+      this.userMessage.message = 'La fecha de la agenda no puede ser menor que la fecha actual';
+      this.userMessage.titleMessage = '¡Atención!';
+      this.userMessage.type = MessageType.DANGER;
+      return;
+    }
+
     const timeToSave = this.formatTimeToHHMM(event.evaluationTime);
     const dateToSave = this.formatDateToDDMMYYYY(event.evaluationDate);
 
@@ -414,19 +413,28 @@ export class EstudianteEvaluacionesComponent
       return;
     }
 
-    const respuesta = await this.catalogoServiceCOR.saveEvaluacion(
-      obj,
-      event.especialidad
-    );
-    if (respuesta.id_evaluacion !== 0) {
-      this.agendaId[this.especialidad] = respuesta.id_evaluacion ?? 0;
-      const nombreCompleto = `${localStorage.getItem('primer_nombre')} ${localStorage.getItem('primer_apellido')}`;
-      this.especialista[this.especialidad] = {
-        nombreCompleto: nombreCompleto,
-        dui: localStorage.getItem('dui') ?? '',
-      };
-      this.updateTab(this.especialidad, true);
+    try{
+      const respuesta = await this.catalogoServiceCOR.saveEvaluacion(
+        obj,
+        event.especialidad
+      );
+      if (respuesta.id_evaluacion !== 0) {
+        this.agendaId[this.especialidad] = respuesta.id_evaluacion ?? 0;
+        const nombreCompleto = `${localStorage.getItem('primer_nombre')} ${localStorage.getItem('primer_apellido')}`;
+        this.especialista[this.especialidad] = {
+          nombreCompleto: nombreCompleto,
+          dui: localStorage.getItem('dui') ?? '',
+        };
+        this.updateTab(this.especialidad, true);
+      }
+    }catch (ex:unknown){
+      const error = ex as ResponseError;
+      this.userMessage.showMessage = true;
+      this.userMessage.titleMessage = "Error";
+      this.userMessage.message = error.message;
+      this.userMessage.type = MessageType.DANGER;
     }
+
     /*this.psicologyMessage = this.successMessage;
     this.psicologiaAgendada = true;
     this.updateTab('psicologia', true);*/
