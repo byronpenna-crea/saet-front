@@ -1,0 +1,36 @@
+<table class="styled-table">
+  <thead>
+    <tr>
+      <th>Indicador</th>
+      <th>Respuesta</th>
+      <th>Observaciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container *ngFor="let pregunta of corSurvey?.preguntas">
+      <tr>
+        <td>
+          {{ pregunta.pregunta }}
+        </td>
+        <td>
+          <app-saet-radio
+            (radioChange)="onchangeQuestions.emit($event)"
+            [name]="'radio_' + pregunta.id_pregunta.toString()"
+            [disabled]="formMode === formModeEnum.VIEW"
+            [selectedValue]="values['radio_' + pregunta.id_pregunta.toString()]"
+            [options]="(getOptions && getOptions(pregunta.opcion)) ?? []"
+          />
+        </td>
+        <td>
+          <app-saet-input
+            [name]="'input_' + pregunta.id_pregunta.toString()"
+            [disabled]="formMode === formModeEnum.VIEW"
+            [inputArgs]="{ text: '' }"
+            [value]="values['input_' + pregunta.id_pregunta.toString()]"
+            (inputChange)="onchangeQuestions.emit($event)"
+          />
+        </td>
+      </tr>
+    </ng-container>
+  </tbody>
+</table>

@@ -10,6 +10,7 @@ import {
   SurveyResponse,
 } from '../../component/catalogo/saet/shared/survey';
 import { TIPO_EVALUACION } from '../../component/catalogo/saet/shared/evaluaciones';
+import { IQuestionaryAnswer } from '../../component/catalogo/saet/QuestionsComponent';
 
 export enum HttpMethod {
   GET = 'GET',
@@ -27,6 +28,16 @@ export interface StudentDetail {
   telefono: string[];
   correo: string;
   id_est_pk: number;
+}
+export interface iPaeiUpdate {
+  id_paei: number;
+}
+export interface iPaeiSave {
+  id_paei: number | null;
+  id_estudiante_fk: number;
+  id_especialista: number;
+  id_coordinador: number;
+  respuestas: IQuestionaryAnswer[];
 }
 export enum iEspecialidadEvaluacion {
   PSICOLOGIA = 'psicologia',
@@ -442,6 +453,29 @@ export class CatalogoServiceCor {
     } catch (e: unknown) {
       const error = e as ResponseError;
       throw error;
+    }
+  }
+  /*public async updatePAEI(){
+    try {
+      const url = `${this.API_SERVER_URL}/paei/`;
+      return await this.postRequest<iPaeiSave, iPaeiSave>(
+        url,
+        cuestionario
+      );
+    } catch (e: unknown) {
+      const error = e as Error;
+      const errorDetails = JSON.parse(error.message);
+      throw new Error(errorDetails.message);
+    }
+  }*/
+  public async savePAEI(cuestionario: iPaeiSave) {
+    try {
+      const url = `${this.API_SERVER_URL}/paei/`;
+      return await this.postRequest<iPaeiSave, iPaeiSave>(url, cuestionario);
+    } catch (e: unknown) {
+      const error = e as Error;
+      const errorDetails = JSON.parse(error.message);
+      throw new Error(errorDetails.message);
     }
   }
   public async getPAEIQuestions() {

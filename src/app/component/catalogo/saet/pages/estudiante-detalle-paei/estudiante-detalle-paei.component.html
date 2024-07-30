@@ -94,4 +94,66 @@
       </app-tabs>
     </div>
   </ng-container>
+  <div *ngIf="showActionButtons" style="margin-top: 30px">
+    <div *ngIf="formMode === formModeEnum.CREATE" class="actionsButton">
+      <app-saet-button
+        (onClick)="salir()"
+        [buttonArgs]="{
+          text: 'Salir',
+          buttonStyle: btnStyle.BLUE,
+          buttonIcon: btnIcon.CLOSE
+        }"
+      />
+
+      <app-saet-button
+        (onClick)="save()"
+        [buttonArgs]="{ text: 'Guardar', buttonStyle: btnStyle.BLUE }"
+      />
+    </div>
+    <div *ngIf="formMode === formModeEnum.EDIT" class="actionsButton">
+      <app-saet-button
+        (onClick)="salirEditMode()"
+        [buttonArgs]="{
+          text: 'Salir',
+          buttonStyle: btnStyle.BLUE,
+          buttonIcon: btnIcon.CLOSE
+        }"
+      />
+
+      <app-saet-button
+        (onClick)="save()"
+        [buttonArgs]="{
+          text: 'Actualizar registro',
+          buttonStyle: btnStyle.BLUE
+        }"
+      />
+    </div>
+    <div *ngIf="formMode === formModeEnum.VIEW" class="actionsButton">
+      <app-saet-button
+        (click)="salir()"
+        [buttonArgs]="{
+          text: 'Regresar a la caracterización',
+          buttonStyle: btnStyle.BLUE,
+          buttonIcon: btnIcon.LEFT_ARROW
+        }"
+      />
+      <div class="right-buttons">
+        <app-saet-button
+          (onClick)="entrarEditMode()"
+          [buttonArgs]="{
+            text: 'Editar',
+            buttonIcon: btnIcon.EDIT,
+            buttonStyle: btnStyle.BLUE
+          }"
+        />
+        <app-saet-button
+          [buttonArgs]="{
+            text: 'Generar PDF',
+            buttonIcon: btnIcon.PRINTER,
+            buttonStyle: btnStyle.BLUE
+          }"
+        />
+      </div>
+    </div>
+  </div>
 </div>

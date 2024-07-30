@@ -1,0 +1,9 @@
+<textarea
+  pInputTextarea
+  style="width: 100%"
+  [disabled]="disabled"
+  [(ngModel)]="value"
+  [attr.name]="name"
+  (ngModelChange)="onInputChange($event)"
+  [attr.data-testid]="testId"
+></textarea>

@@ -96,7 +96,7 @@ export class EstudianteEvaluacionesComponent
   especialidad: iEspecialidadEvaluacion;
   idPersona: number = 0;
 
-  especialidades = ['Psicologia', 'lenguaje', 'Pedagogía'];
+  especialidades = ['Psicologia', 'Lenguaje y habla', 'Pedagogía'];
 
   constructor(
     @Inject(DOCUMENT) document: Document,
@@ -182,12 +182,30 @@ export class EstudianteEvaluacionesComponent
         if (this.especialidades.includes(especialista.especialidad)) {
           if (especialista.especialidad === 'Psicologia') {
             this.agendado[iEspecialidadEvaluacion.PSICOLOGIA] = true;
+            this.especialista[iEspecialidadEvaluacion.PSICOLOGIA] = {
+              nombreCompleto: especialista.nombre_completo,
+              dui: especialista.dui,
+            };
             this.updateTab('psicologia', true);
           }
           if (especialista.especialidad === 'Pedagogía') {
             this.agendado[iEspecialidadEvaluacion.PEDAGOGIA] = true;
-            this.updateTab('pedagogia', true);
+            this.especialista[iEspecialidadEvaluacion.PEDAGOGIA] = {
+              nombreCompleto: especialista.nombre_completo,
+              dui: especialista.dui,
+            };
+            this.updateTab(iEspecialidadEvaluacion.PEDAGOGIA, true);
           }
+          if (especialista.especialidad === 'Lenguaje y habla') {
+            console.log('here especialista ', especialista);
+            this.agendado[iEspecialidadEvaluacion.LENGUAJE] = true;
+            this.especialista[iEspecialidadEvaluacion.LENGUAJE] = {
+              nombreCompleto: especialista.nombre_completo,
+              dui: especialista.dui,
+            };
+            this.updateTab(iEspecialidadEvaluacion.LENGUAJE, true);
+          }
+          //
         }
       });
     });
