@@ -1,0 +1,84 @@
+<div>
+  <app-tab-item label="Especialista responsable de agendar:">
+    <app-saet-input
+      [value]="especialistaResponsableAgendar.nombreCompleto"
+      [disabled]="true"
+    />
+  </app-tab-item>
+  <app-tab-item label="">
+    {{
+      especialistaResponsableAgendar.dui !== ''
+        ? especialistaResponsableAgendar.dui
+        : 'xxxxxxxx-x'
+    }}
+    | Especialista - COR
+  </app-tab-item>
+</div>
+
+<div>
+  <app-tab-item label="Especialista responsable de realizar evaluación:">
+    <app-saet-input
+      [value]="especialistaResponsableEvaluacion.nombreCompleto"
+      [disabled]="true"
+    />
+  </app-tab-item>
+  <app-tab-item label="">
+    {{
+      especialistaResponsableEvaluacion.dui !== ''
+        ? especialistaResponsableEvaluacion.dui
+        : 'xxxxxxxx-x'
+    }}
+    | Especialista
+    {{
+      especialistaResponsableEvaluacion.especialidad !== undefined
+        ? 'en ' + especialistaResponsableEvaluacion.especialidad
+        : ''
+    }}
+    - COR
+  </app-tab-item>
+</div>
+
+<app-saet-underlined-title />
+
+<div class="flex wrap margin-top">
+  <div class="first-column">
+    <label class="first-item">Fecha de evaluación:</label>
+    <div class="second-item">
+      <p-calendar
+        [(ngModel)]="evaluationDate"
+        [disabled]="readOnly"
+        [showIcon]="true"
+        dateFormat="dd/mm/yy"
+      >
+      </p-calendar>
+    </div>
+  </div>
+  <div class="second-column">
+    <label class="first-item">Hora de evaluación:</label>
+    <div class="second-item-time">
+      <p-calendar
+        [disabled]="readOnly"
+        inputId="calendar-timeonly"
+        [timeOnly]="true"
+        onInput="onHoraEvaluacionSelect()"
+      />
+    </div>
+  </div>
+</div>
+
+<div>
+  <app-saet-button
+    [buttonArgs]="{
+      buttonIcon: buttonIcon.PLUS,
+      buttonStyle: buttonStyle.WHITE,
+      text: 'Agregar otra evaluación'
+    }"
+  />
+  <app-saet-button
+    [buttonArgs]="{
+      buttonIcon: buttonIcon.EYE,
+      buttonStyle: buttonStyle.WHITE,
+      text: 'Ver evaluación'
+    }"
+  />
+</div>

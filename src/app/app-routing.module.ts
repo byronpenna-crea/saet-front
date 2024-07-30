@@ -29,6 +29,8 @@ import { EstudiantePaeiComponent } from './component/catalogo/saet/pages/estudia
 import { EstudianteDetallePaeiComponent } from './component/catalogo/saet/pages/estudiante-detalle-paei/estudiante-detalle-paei.component';
 import { EstudianteEvaluacionAgendaComponent } from './component/catalogo/saet/pages/estudiante-evaluacion-agenda/estudiante-evaluacion-agenda.component';
 import { EstudianteGraficasComponent } from './component/catalogo/saet/pages/estudiante-graficas/estudiante-graficas.component';
+import {EstudianteResetComponent} from "./component/catalogo/saet/pages/estudiante-reset/estudiante-reset.component";
+
 /*
 const routes: Routes = [
 
@@ -119,7 +121,10 @@ const routes: Routes = [
         path: 'saet-pedagogia/:nie/:mode',
         component: EstudianteCuestionarioPedagogiaComponent,
       },
-
+      {
+        path: 'saet-reset',
+        component: EstudianteResetComponent,
+      },
       {
         path: 'saet-evaluaciones/:nie',
         component: EstudianteEvaluacionesComponent,

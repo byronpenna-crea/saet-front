@@ -41,6 +41,7 @@ interface TabInput {
   onIniciar: () => void;
   onAgendar: (event: IAgendaParams) => void;
   onCancelarAgenda: (event: IOnCancelarAgenda) => void;
+  tipoEvaluacion: TIPO_EVALUACION;
 }
 @Component({
   selector: 'app-estudiante-evaluaciones',
@@ -92,7 +93,7 @@ export class EstudianteEvaluacionesComponent
     title: 'Datos guardados',
   };
 
-  especialidad: string = '';
+  especialidad: iEspecialidadEvaluacion;
   idPersona: number = 0;
 
   especialidades = ['Psicologia', 'lenguaje', 'Pedagogía'];
@@ -126,7 +127,9 @@ export class EstudianteEvaluacionesComponent
         console.log('error on getStudentInfo', ex);
       });
 
-    this.especialidad = localStorage.getItem('especialidad') ?? '';
+    this.especialidad = localStorage.getItem(
+      'especialidad'
+    ) as iEspecialidadEvaluacion;
 
     const idPersonaStr = localStorage.getItem('id_persona') ?? '0';
     this.idPersona = isNaN(parseInt(idPersonaStr, 10))
@@ -143,13 +146,7 @@ export class EstudianteEvaluacionesComponent
     );
     this.agendaTabs[0].readOnly = false;
     const indexEspecialidad: iEspecialidadEvaluacion | undefined =
-      this.especialidad === 'psicologia'
-        ? iEspecialidadEvaluacion.PSICOLOGIA
-        : this.especialidad === 'lenguaje'
-          ? iEspecialidadEvaluacion.LENGUAJE
-          : this.especialidad === 'pedagogia'
-            ? iEspecialidadEvaluacion.PEDAGOGIA
-            : undefined;
+      this.getIndexEspecialidad(this.especialidad);
 
     const enumEspecialidad: TIPO_EVALUACION = this.getTipoEvaluacionFromString(
       this.especialidad
@@ -169,6 +166,7 @@ export class EstudianteEvaluacionesComponent
               nombreCompleto: response.especialista_responsable,
               dui: '',
             };
+            this.agendaId[indexEspecialidad] = response.id_evaluacion;
           }
           this.psicologiaEvaluationId = response.id_evaluacion;
           this.updateTab(this.especialidad, true);
@@ -204,6 +202,17 @@ export class EstudianteEvaluacionesComponent
     this.userMessage.type = event.messageType;
     this.userMessage.showMessage = true;
   }
+  getIndexEspecialidad(
+    especialidad: string
+  ): iEspecialidadEvaluacion | undefined {
+    return this.especialidad === 'psicologia'
+      ? iEspecialidadEvaluacion.PSICOLOGIA
+      : this.especialidad === 'lenguaje'
+        ? iEspecialidadEvaluacion.LENGUAJE
+        : this.especialidad === 'pedagogia'
+          ? iEspecialidadEvaluacion.PEDAGOGIA
+          : undefined;
+  }
   getTipoEvaluacionFromString(especialidad: string) {
     switch (especialidad) {
       case 'pedagogia': {
@@ -233,8 +242,9 @@ export class EstudianteEvaluacionesComponent
         especialistaAgendado:
           this.especialista[iEspecialidadEvaluacion.LENGUAJE],
         agendaId: this.agendaId[iEspecialidadEvaluacion.LENGUAJE],
-        name: 'lenguaje',
+        name: iEspecialidadEvaluacion.LENGUAJE,
         especialidad: iEspecialidadEvaluacion.LENGUAJE,
+        tipoEvaluacion: TIPO_EVALUACION.logopeda_perfil,
       },
       {
         leyend: 'Evaluación psicologica',
@@ -247,22 +257,24 @@ export class EstudianteEvaluacionesComponent
         especialistaAgendado:
           this.especialista[iEspecialidadEvaluacion.PSICOLOGIA],
         agendaId: this.agendaId[iEspecialidadEvaluacion.PSICOLOGIA],
-        name: 'psicologia',
+        name: iEspecialidadEvaluacion.PSICOLOGIA,
         especialidad: iEspecialidadEvaluacion.PSICOLOGIA,
+        tipoEvaluacion: TIPO_EVALUACION.psicologo_perfil,
       },
       {
         leyend: 'Evaluación pedagogica',
         agendado: this.agendado[iEspecialidadEvaluacion.PEDAGOGIA],
         readOnly: this.readOnlyTab,
-        onAgendar: this.agendarPedagogia.bind(this),
+        onAgendar: this.agendar.bind(this),
         onCancelarAgenda: this.cancelar.bind(this),
         onIniciar: this.iniciarPedagogia.bind(this),
         especialistaAgendado:
           this.especialista[iEspecialidadEvaluacion.PEDAGOGIA],
         evaluationId: this.agendaId[iEspecialidadEvaluacion.PEDAGOGIA],
         agendaId: this.agendaId[iEspecialidadEvaluacion.PEDAGOGIA],
-        name: 'pedagogia',
+        name: iEspecialidadEvaluacion.PEDAGOGIA,
         especialidad: iEspecialidadEvaluacion.PEDAGOGIA,
+        tipoEvaluacion: TIPO_EVALUACION.pedagogo_perfil,
       },
     ];
     if (name === '') {
@@ -344,6 +356,7 @@ export class EstudianteEvaluacionesComponent
       this.userMessage.showMessage = true;
       this.userMessage.titleMessage = 'Atencion';
       this.userMessage.message = 'No hay un id de evaluacion';
+      this.userMessage.type = MessageType.WARNING;
     }
     await this.catalogoServiceCOR.deleteEvaluacionCor(
       event.evaluationId.toString()
@@ -400,13 +413,21 @@ export class EstudianteEvaluacionesComponent
       this.userMessage.type = MessageType.DANGER;
       return;
     }
-    /*const respuesta = await this.catalogoServiceCOR.saveEvaluacion(
+
+    const respuesta = await this.catalogoServiceCOR.saveEvaluacion(
       obj,
       event.especialidad
     );
-    if (respuesta.id_evaluacion === 0) {
+    if (respuesta.id_evaluacion !== 0) {
+      this.agendaId[this.especialidad] = respuesta.id_evaluacion ?? 0;
+      const nombreCompleto = `${localStorage.getItem('primer_nombre')} ${localStorage.getItem('primer_apellido')}`;
+      this.especialista[this.especialidad] = {
+        nombreCompleto: nombreCompleto,
+        dui: localStorage.getItem('dui') ?? '',
+      };
+      this.updateTab(this.especialidad, true);
     }
-    this.psicologyMessage = this.successMessage;
+    /*this.psicologyMessage = this.successMessage;
     this.psicologiaAgendada = true;
     this.updateTab('psicologia', true);*/
   }

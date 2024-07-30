@@ -98,6 +98,7 @@ import { SaetGraficaPastelComponent } from './component/catalogo/saet/component/
 import { SaetGraficaBarrasComponent } from './component/catalogo/saet/component/saet-grafica-barras/saet-grafica-barras.component';
 import { SaetGraficaLinearComponent } from './component/catalogo/saet/component/saet-grafica-linear/saet-grafica-linear.component';
 import { EstudianteResetComponent } from './component/catalogo/saet/pages/estudiante-reset/estudiante-reset.component';
+import { SaetAgendarEvaluacionComponent } from './component/catalogo/saet/component/saet-agendar-evaluacion/saet-agendar-evaluacion.component';
 
 @NgModule({
   declarations: [
@@ -153,6 +154,7 @@ import { EstudianteResetComponent } from './component/catalogo/saet/pages/estudi
     SaetGraficaBarrasComponent,
     SaetGraficaLinearComponent,
     EstudianteResetComponent,
+    SaetAgendarEvaluacionComponent,
   ],
   imports: [
     BrowserModule,
