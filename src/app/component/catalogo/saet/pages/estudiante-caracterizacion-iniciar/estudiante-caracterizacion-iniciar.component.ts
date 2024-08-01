@@ -59,9 +59,6 @@ export class EstudianteCaracterizacionIniciarComponent
   //readOnlyEvaluaciones:boolean = true;
   //readOnlyPaei:boolean = true;
 
-  iconCompoment = IconComponent;
-  btnStyle = ButtonStyle;
-
   generalInformation: IinformationTab = {
     isActive: false,
     legend: 'Datos personales del estudiante',

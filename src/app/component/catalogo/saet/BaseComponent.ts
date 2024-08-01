@@ -13,6 +13,8 @@ import {
   IQuestionaryAnswer,
   IValuesForm,
 } from './QuestionsComponent';
+import { IconComponent } from './shared/component.config';
+import { ButtonStyle } from './component/saet-button/saet-button.component';
 
 interface informationTabBody {
   values: string[];
@@ -21,6 +23,9 @@ interface informationTabBody {
 export class BaseComponent implements OnInit {
   nie: string = '';
   studentInfo?: StudentDetail;
+
+  iconCompoment = IconComponent;
+  btnStyle = ButtonStyle;
 
   caracterizacion: IGetCaracterizacion | undefined;
   readOnlyEvaluaciones: boolean = true;

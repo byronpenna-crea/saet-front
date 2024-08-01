@@ -55,7 +55,6 @@ export class EstudianteInformeTrimestralComponent
   }
   async salir() {}
   async guardar() {}
-  btnStyle = ButtonStyle;
   btnIcon = IconComponent;
   onInputChange(keyValue: KeyValue) {
     this.inputNIE = keyValue.value;

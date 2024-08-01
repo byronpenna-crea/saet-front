@@ -31,7 +31,6 @@ export class EstudianteDetallePaeiComponent
 {
   cuestionariosTableMode: number[] = [];
   userMessage: UserMessage = userMessageInit;
-  btnStyle = ButtonStyle;
   btnIcon = IconComponent;
   constructor(
     @Inject(DOCUMENT) document: Document,

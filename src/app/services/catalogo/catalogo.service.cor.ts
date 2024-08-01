@@ -478,6 +478,27 @@ export class CatalogoServiceCor {
       throw new Error(errorDetails.message);
     }
   }
+  public async getPAEIPerNIE(nie: string) {
+    try {
+      const url = `${this.API_SERVER_URL}/paei/${nie}`;
+      const response = await this.doRequest<undefined>(
+        url,
+        undefined,
+        HttpMethod.GET
+      );
+
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(JSON.stringify(errorResponse));
+      }
+
+      return response.json();
+    } catch (e: unknown) {
+      const error = e as Error;
+      const errorDetails = JSON.parse(error.message);
+      throw new Error(errorDetails.message);
+    }
+  }
   public async getPAEIQuestions() {
     try {
       const url = `${this.API_SERVER_URL}/paei/preguntas`;
@@ -542,6 +563,11 @@ export class CatalogoServiceCor {
   }
   public getPedagogiaQuestions(): Promise<SurveyResponse> {
     return this.getSurveyQuestions(this.API_SERVER_PEDAGOGIA_QUESTIONS);
+  }
+  public getDaiCaracterizacionQuestion(): Promise<SurveyResponse> {
+    return this.getSurveyQuestions(
+      `${this.API_SERVER_URL}/caracterizacion/dai/preguntas`
+    );
   }
   public getCORQuestions(): Promise<SurveyResponse> {
     return this.getSurveyQuestions(this.API_SERVER_COR);

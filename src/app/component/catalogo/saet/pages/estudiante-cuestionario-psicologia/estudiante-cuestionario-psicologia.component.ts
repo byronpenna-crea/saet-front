@@ -27,7 +27,6 @@ export class EstudianteCuestionarioPsicologiaComponent
   implements IMessageComponent
 {
   userMessage: UserMessage = userMessageInit;
-  btnStyle = ButtonStyle;
   btnIcon = IconComponent;
   cuestionariosTableMode: number[] = [7, 10, 11, 12, 13];
   override async ngOnInit() {

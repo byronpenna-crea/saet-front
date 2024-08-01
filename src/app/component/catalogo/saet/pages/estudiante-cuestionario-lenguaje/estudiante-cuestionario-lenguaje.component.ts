@@ -33,7 +33,6 @@ export class EstudianteCuestionarioLenguajeComponent
     titleMessage: '',
     type: MessageType.SUCCESS,
   };
-  btnStyle = ButtonStyle;
   btnIcon = IconComponent;
   cuestionariosTableMode: number[] = [16];
   override async ngOnInit() {

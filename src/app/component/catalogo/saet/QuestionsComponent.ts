@@ -41,7 +41,6 @@ export class QuestionsComponent extends BaseComponent {
   editMode: boolean = false;
   formModeEnum = FormMode;
   formMode: FormMode = FormMode.CREATE;
-  iconCompoment = IconComponent;
   targetEspecialidad: string = '';
   constructor(
     @Inject(DOCUMENT) document: Document,
