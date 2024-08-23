@@ -1,0 +1,44 @@
+.tarjeta-informe {
+  padding: 20px;
+  border: solid 2px;
+  border-radius: 8px;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 250px;
+}
+.saet-button-white{
+  border-color: #003366;
+  color: #003366;
+}
+.saet-button-blue{
+  background-color: #003366;
+  color: #ffffff;
+}
+.numero {
+  font-size: 48px;
+  font-weight: bold;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.detalle {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  margin-top: 10px;
+  min-height: 120px;
+  justify-content: flex-start;
+}
+
+.descripcion {
+  font-size: 14px;
+  margin: 0;
+  font-weight: bold;
+}
+
+.titulo {
+  font-size: 12px;
+  margin: 0;
+}

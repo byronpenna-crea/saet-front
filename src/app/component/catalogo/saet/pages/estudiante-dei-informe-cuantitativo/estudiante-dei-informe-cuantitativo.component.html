@@ -1,0 +1,109 @@
+
+<p-tabView>
+  <p-tabPanel header="Informe cuantitativo">
+    <div style="display: flex; gap: 25px;">
+      <app-saet-tarjeta-informe
+        [numero]="3"
+        titulo="Total de miembros"
+        descripcion="Centro de Orientación y Recursos (COR)"
+        [style]="style.BLUE"
+      />
+      <app-saet-tarjeta-informe
+        [numero]="15"
+        titulo="Total de miembros"
+        descripcion="Docente de Apoyo a la Inclusion (DAI)"
+      />
+    </div>
+
+    <div style="display: flex;flex-direction: column;">
+      <h2 class="title">Datos generales a nivel nacional</h2>
+      <div class="graphics-container">
+        <div class="graphic-container">
+          <h3>Caracterizaciones por departamentos</h3>
+          <app-saet-grafica-pastel
+            [single]="[
+            { name: 'Ahuachapán', value: 15 },
+            { name: 'Usulután', value: 13 },
+            { name: 'Sonsonate', value: 8 },
+            { name: 'Cuscatlán', value: 3 },
+
+            { name: 'La Paz', value: 3 },
+            { name: 'La Unión', value: 3 },
+            { name: 'La Libertad', value: 3 },
+            { name: 'San Vicente', value: 3 },
+            { name: 'Morazán', value: 3 },
+            { name: 'San Miguel', value: 3 },
+            { name: 'San Salvador', value: 3 },
+            { name: 'Santa Ana', value: 3 },
+            { name: 'Chalatenango', value: 3 },
+            { name: 'Cabañas', value: 3 },
+            ]"
+          />
+          <div style="display: flex;gap: 20px;">
+            <div>
+              <app-saet-individual-radio
+              value="1"
+              label="Realizadas"
+              />
+            </div>
+            <div>
+              <app-saet-individual-radio
+                value="1"
+                label="En proceso"
+              />
+
+            </div>
+            <div>
+              <app-saet-radio />
+              Programadas
+            </div>
+          </div>
+        </div>
+        <div class="graphic-container">
+          <h3>Evaluaciones por departamentos</h3>
+          <app-saet-grafica-barras
+            [single]="[
+            { name: 'La Paz', value: 30 },
+            { name: 'Cuscatlán', value: 40 },
+            { name: 'Morazán', value: 40 },
+            { name: 'La Unión', value: 50 },
+            { name: 'Santa Ana', value: 60 },
+            { name: 'San Vicente', value: 50 },
+            { name: 'San Miguel', value: 50 },
+            { name: 'Chalatenango', value: 30 },
+            { name: 'Cabañas', value: 50 },
+            { name: 'Sonsonate', value: 60 },
+            { name: 'La Libertad', value: 60 },
+            { name: 'San Salvador', value: 80 }
+            ]"
+                [mode]="direction.LANDSCAPE"
+              />
+          <div>
+
+            <div>
+              <app-saet-radio />
+              Realizadas
+            </div>
+            <div>
+              <app-saet-radio />
+              En proceso
+            </div>
+            <div>
+              <app-saet-radio />
+              Programadas
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div style="display: flex;flex-direction: row">
+        new row
+      </div>
+    </div>
+
+  </p-tabPanel>
+  <p-tabPanel header="Informe cualitativo">
+  </p-tabPanel>
+  <p-tabPanel header="Informe Trimestral COR">
+  </p-tabPanel>
+</p-tabView>

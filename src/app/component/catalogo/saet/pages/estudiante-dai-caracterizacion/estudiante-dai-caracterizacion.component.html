@@ -1,0 +1,133 @@
+<app-saet-global-header
+  [nie]="nie"
+  [nombreCompleto]="studentInfo?.nombreCompleto ?? ''"
+  selectedTab="Caracterizacion"
+  [readOnlyEvaluaciones]="readOnlyEvaluaciones"
+  [readOnlyPaei]="readOnlyPaei"
+  [breadcrumb]="[
+    { href: '#/menu/saet-buscar', text: 'Buscar estudiante' },
+    { href: '#/menu/saet-buscar/' + nie, text: nie },
+    {
+      href: '#/menu/saet-caracterizacion-estudiante/' + nie,
+      text: 'Caracterización'
+    },
+    { href: '', text: 'Edición' }
+  ]"
+/>
+
+<app-saet-confirm
+  acceptButtonText="Continuar editando"
+  cancelButtonText="Salir sin guardar"
+  title="¡Estás a punto de salir del modo de edición!"
+  (onAccept)="acceptConfirmDialog()"
+  (onReject)="rejectConfirmDialog()"
+  [acceptIcon]="iconCompoment.SAVE"
+  [rejectIcon]="iconCompoment.CLOSE"
+/>
+<div class="form-container">
+  <app-saet-mensaje-usuario
+    [show]="userMessage.showMessage"
+    [message]="userMessage.message"
+    [title]="userMessage.titleMessage"
+    [messageType]="userMessage.type"
+  />
+</div>
+<div class="form-container">
+  <ng-container *ngFor="let corSurvey of corSurveys">
+    <div style="margin-top: 5%">
+      <app-tabs [legend]="corSurvey.titulo">
+        <ng-container *ngFor="let pregunta of corSurvey.preguntas">
+          <app-tab-item marginTop="3%" [label]="pregunta.pregunta">
+            <app-saet-question
+              (onChange)="onchange($event)"
+              [type]="getQuestionType(pregunta.tipoPregunta)"
+              [idPregunta]="pregunta.id_pregunta"
+              [value]="values[pregunta.id_pregunta.toString()]"
+              [values]="values"
+              [testId]="pregunta.id_pregunta.toString()"
+              [name]="getName(pregunta.pregunta)"
+              [options]="getOptions(pregunta.opcion)"
+              (checkboxChange)="onCheckboxChange($event)"
+              [readonly]="formMode === formModeEnum.VIEW"
+            />
+          </app-tab-item>
+        </ng-container>
+      </app-tabs>
+    </div>
+  </ng-container>
+  <div style="margin-top: 20px">
+    <div *ngIf="formMode === formModeEnum.CREATE" class="actionsButton">
+      <app-saet-button
+        (onClick)="salir()"
+        testId="btn-salir"
+        [buttonArgs]="{
+          text: 'Salir',
+          buttonStyle: btnStyle.BLUE,
+          buttonIcon: iconCompoment.CLOSE
+        }"
+      />
+
+      <app-saet-button
+        (onClick)="save()"
+        testId="btn-guardar"
+        [buttonArgs]="{
+          text: 'Guardar',
+          buttonStyle: btnStyle.BLUE,
+          buttonIcon: iconCompoment.SAVE
+        }"
+      />
+    </div>
+    <div *ngIf="formMode === formModeEnum.EDIT" class="actionsButton">
+      <div style="width: 300px">
+        <app-saet-button
+          (onClick)="retornarCaracterizacion()"
+          [buttonArgs]="{
+            text: 'Regresar a la caracterización',
+            buttonStyle: btnStyle.BLUE,
+            buttonIcon: iconCompoment.LEFT_ARROW
+          }"
+          customClasses="w-full"
+        />
+      </div>
+
+      <div class="right-buttons">
+        <app-saet-button
+          (onClick)="update()"
+          [buttonArgs]="{
+            text: 'Actualizar',
+            buttonStyle: btnStyle.BLUE,
+            buttonIcon: iconCompoment.EDIT
+          }"
+        />
+        <app-saet-button
+          (onClick)="generatePDF()"
+          [buttonArgs]="{
+            text: 'Generar PDF',
+            buttonStyle: btnStyle.BLUE,
+            buttonIcon: iconCompoment.PRINTER
+          }"
+        />
+      </div>
+    </div>
+
+    <div *ngIf="formMode === formModeEnum.VIEW" class="actionsButton">
+      <app-saet-button
+        (click)="salir()"
+        [buttonArgs]="{
+          text: 'Regresar a la caracterización',
+          buttonStyle: btnStyle.BLUE,
+          buttonIcon: iconCompoment.LEFT_ARROW
+        }"
+      />
+      <div class="right-buttons">
+        <app-saet-button
+          (onClick)="entrarEditMode()"
+          [buttonArgs]="{ text: 'Editar', buttonStyle: 1 }"
+        />
+        <app-saet-button
+          [buttonArgs]="{ text: 'Generar PDF', buttonStyle: 1 }"
+        />
+      </div>
+    </div>
+  </div>
+</div>

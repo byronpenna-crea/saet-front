@@ -1,0 +1,20 @@
+card-container
+.graphics-container{
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+.title{
+  font-size: 28px;
+  font-weight: bold;
+}
+.graphic-container{
+  border: solid 1px black;
+  padding-top: 30px;
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.graphic-container h3{
+  font-size: 16px;
+  font-weight: bold;
+}
