@@ -30,6 +30,8 @@ import { EstudianteDetallePaeiComponent } from './component/catalogo/saet/pages/
 import { EstudianteEvaluacionAgendaComponent } from './component/catalogo/saet/pages/estudiante-evaluacion-agenda/estudiante-evaluacion-agenda.component';
 import { EstudianteGraficasComponent } from './component/catalogo/saet/pages/estudiante-graficas/estudiante-graficas.component';
 import {EstudianteResetComponent} from "./component/catalogo/saet/pages/estudiante-reset/estudiante-reset.component";
+import {EstudianteDaiCaracterizacionComponent} from "./component/catalogo/saet/pages/estudiante-dai-caracterizacion/estudiante-dai-caracterizacion.component";
+import {EstudianteDeiInformeCuantitativoComponent} from "./component/catalogo/saet/pages/estudiante-dei-informe-cuantitativo/estudiante-dei-informe-cuantitativo.component";
 
 /*
 const routes: Routes = [
@@ -88,7 +90,14 @@ const routes: Routes = [
         path: 'saet-caracterizacion-iniciar/:nie/:mode',
         component: EstudianteCaracterizacionIniciarComponent,
       },
-
+      {
+        path: 'dai/saet-caracterizacion-iniciar/:nie',
+        component: EstudianteDaiCaracterizacionComponent,
+      },
+      {
+        path: 'dei/informe-cuantitativo',
+        component: EstudianteDeiInformeCuantitativoComponent,
+      },
       {
         path: 'saet-lenguaje-habla/:nie',
         component: EstudianteCuestionarioLenguajeComponent,
