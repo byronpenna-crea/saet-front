@@ -243,4 +243,6 @@ export class BuscarEstudianteComponent
       this.router.navigate(['/menu/saet-datos-estudiante', this.inputNIE]);
     }
   }
+
+  protected readonly ButtonStyle = ButtonStyle;
 }

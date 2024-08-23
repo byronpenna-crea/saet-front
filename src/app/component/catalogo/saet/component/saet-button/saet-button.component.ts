@@ -36,7 +36,11 @@ export class SaetButtonComponent implements OnChanges {
   @Input() disabled: boolean = false;
   @Output() onClick: EventEmitter<Event> = new EventEmitter<Event>();
   handleClick(event: Event): void {
-    this.onClick.emit(event);
+    console.log('handle clic button',this.disabled);
+    if(!this.disabled){
+      console.log('here', event);
+      this.onClick.emit(event);
+    }
   }
   @Input() customClasses: string = '';
   styleClasses: string = '';

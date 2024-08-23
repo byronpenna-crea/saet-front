@@ -16,8 +16,12 @@
     <app-saet-button
       testId="btn-buscar"
       [disabled]="showTable"
-      [buttonArgs]="{ text: 'Buscar', buttonStyle: 1, buttonIcon: 5 }"
-      (click)="toggleTable()"
+      [buttonArgs]="{
+        text: 'Buscar',
+        buttonStyle: ButtonStyle.BLUE,
+        buttonIcon: iconCompoment.SEARCH
+      }"
+      (onClick)="toggleTable()"
     />
     <button data-testId="btn-clean" class="clear-text" (click)="cleanInput()">
       limpiar búsqueda
@@ -44,9 +48,9 @@
         <app-tab-item label="NIE">
           <app-saet-input
             testId="input-nie"
-            [disabled]="1 == 1"
+            [disabled]="true"
             [value]="studentInfo?.nie ?? ''"
-            [inputArgs]="{ text: studentInfo?.nie }"
+            [inputArgs]="{ text: studentInfo?.nie ?? '' }"
           />
         </app-tab-item>
       </div>
@@ -54,9 +58,9 @@
         <app-tab-item label="NUI">
           <app-saet-input
             testId="input-nui"
-            [disabled]="1 == 1"
+            [disabled]="true"
             [value]="studentInfo?.nui ?? ''"
-            [inputArgs]="{ text: studentInfo?.nui }"
+            [inputArgs]="{ text: studentInfo?.nui ?? '' }"
           />
         </app-tab-item>
       </div>
@@ -65,9 +69,9 @@
         <app-tab-item label="Nombre completo:">
           <app-saet-input
             testId="input-nombrecompleto"
-            [disabled]="1 == 1"
+            [disabled]="true"
             [value]="studentInfo?.nombreCompleto ?? ''"
-            [inputArgs]="{ text: studentInfo?.nombreCompleto }"
+            [inputArgs]="{ text: studentInfo?.nombreCompleto ?? '' }"
           />
         </app-tab-item>
       </div>
@@ -76,7 +80,7 @@
         <app-tab-item label="Centro Educativo:">
           <app-saet-input
             testId="input-centroeducativo"
-            [disabled]="1 == 1"
+            [disabled]="true"
             [value]="centroEducativo"
             [inputArgs]="{ text: centroEducativo }"
           />
