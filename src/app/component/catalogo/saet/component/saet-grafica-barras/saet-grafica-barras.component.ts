@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, Input} from '@angular/core';
 import { ScaleType } from '@swimlane/ngx-charts';
 export enum Direction {
   VERTICAL = 0,
@@ -14,7 +14,7 @@ interface DataItem {
   styleUrls: ['./saet-grafica-barras.component.css'],
 })
 export class SaetGraficaBarrasComponent {
-  single: DataItem[] = [];
+  @Input() single: DataItem[] = [];
 
   view: [number, number] = [700, 400];
 
@@ -29,7 +29,7 @@ export class SaetGraficaBarrasComponent {
   yAxisLabel: string = '';
   barPadding: number = 20;
   direction = Direction;
-  mode: Direction = Direction.VERTICAL;
+  @Input() mode: Direction = Direction.VERTICAL;
   colorScheme: string = '#5AA454';
   schemeTye: ScaleType = ScaleType.Ordinal;
   constructor() {

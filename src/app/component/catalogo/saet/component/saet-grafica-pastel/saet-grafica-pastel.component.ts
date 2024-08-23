@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 interface DataItem {
   name: string;
@@ -10,7 +10,7 @@ interface DataItem {
   styleUrls: ['./saet-grafica-pastel.component.css'],
 })
 export class SaetGraficaPastelComponent {
-  single: DataItem[] = [];
+  @Input() single: DataItem[] = [];
   view: [number, number] = [700, 400];
 
   // options

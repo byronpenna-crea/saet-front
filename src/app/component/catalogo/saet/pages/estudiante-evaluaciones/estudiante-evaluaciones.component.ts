@@ -7,7 +7,6 @@ import {
 import { DOCUMENT } from '@angular/common';
 import {
   CatalogoServiceCor,
-  iEspecialidadEvaluacion,
   ISaveQuestionary,
   ResponseError,
 } from '../../../../../services/catalogo/catalogo.service.cor';
@@ -20,6 +19,7 @@ import {
   IAgendaParams,
   IOnCancelarAgenda,
 } from '../../component/saet-tab-agenda/saet-tab-agenda.component';
+import {iEspecialidadEvaluacion} from "../../../../../services/shared/saet-types";
 
 interface IUserMessage {
   show: boolean;

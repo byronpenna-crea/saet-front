@@ -99,6 +99,14 @@ import { SaetGraficaBarrasComponent } from './component/catalogo/saet/component/
 import { SaetGraficaLinearComponent } from './component/catalogo/saet/component/saet-grafica-linear/saet-grafica-linear.component';
 import { EstudianteResetComponent } from './component/catalogo/saet/pages/estudiante-reset/estudiante-reset.component';
 import { SaetAgendarEvaluacionComponent } from './component/catalogo/saet/component/saet-agendar-evaluacion/saet-agendar-evaluacion.component';
+import { SaetQuestionTableComponent } from './component/catalogo/saet/component/saet-question-table/saet-question-table.component';
+import { SaetTextAreaComponent } from './component/catalogo/saet/component/saet-text-area/saet-text-area.component';
+import { EstudianteDaiCaracterizacionComponent } from './component/catalogo/saet/pages/estudiante-dai-caracterizacion/estudiante-dai-caracterizacion.component';
+import { EstudianteDeiInformeCuantitativoComponent } from './component/catalogo/saet/pages/estudiante-dei-informe-cuantitativo/estudiante-dei-informe-cuantitativo.component';
+import { EstudianteDeiInformeTrimestralComponent } from './component/catalogo/saet/pages/estudiante-dei-informe-trimestral/estudiante-dei-informe-trimestral.component';
+import { EstudianteDeiInformeCualitativoComponent } from './component/catalogo/saet/pages/estudiante-dei-informe-cualitativo/estudiante-dei-informe-cualitativo.component';
+import { SaetTarjetaInformeComponent } from './component/catalogo/saet/component/saet-tarjeta-informe/saet-tarjeta-informe.component';
+import { SaetIndividualRadioComponent } from './component/catalogo/saet/component/saet-individual-radio/saet-individual-radio.component';
 
 @NgModule({
   declarations: [
@@ -155,6 +163,14 @@ import { SaetAgendarEvaluacionComponent } from './component/catalogo/saet/compon
     SaetGraficaLinearComponent,
     EstudianteResetComponent,
     SaetAgendarEvaluacionComponent,
+    SaetQuestionTableComponent,
+    SaetTextAreaComponent,
+    EstudianteDaiCaracterizacionComponent,
+    EstudianteDeiInformeCuantitativoComponent,
+    EstudianteDeiInformeTrimestralComponent,
+    EstudianteDeiInformeCualitativoComponent,
+    SaetTarjetaInformeComponent,
+    SaetIndividualRadioComponent,
   ],
   imports: [
     BrowserModule,

@@ -11,14 +11,10 @@ import {
 } from '../../component/catalogo/saet/shared/survey';
 import { TIPO_EVALUACION } from '../../component/catalogo/saet/shared/evaluaciones';
 import { IQuestionaryAnswer } from '../../component/catalogo/saet/QuestionsComponent';
+import { HttpMethod, iEspecialidadEvaluacion} from "../shared/saet-types";
+import {CatalogoService} from "../catalogo.service";
+import {CatalogoServiceSaet} from "../shared/saet";
 
-export enum HttpMethod {
-  GET = 'GET',
-  POST = 'POST',
-  PUT = 'PUT',
-  DELETE = 'DELETE',
-  PATCH = 'PATCH',
-}
 export interface StudentDetail {
   nie: string;
   nui: string;
@@ -39,11 +35,7 @@ export interface iPaeiSave {
   id_coordinador: number;
   respuestas: IQuestionaryAnswer[];
 }
-export enum iEspecialidadEvaluacion {
-  PSICOLOGIA = 'psicologia',
-  PEDAGOGIA = 'pedagogia',
-  LENGUAJE = 'lenguaje',
-}
+
 export interface StudentInfoResponse {
   estudiante: StudentDetail;
   centroEducativo: {
@@ -137,23 +129,26 @@ export class ResponseError extends Error {
 @Injectable({
   providedIn: 'root',
 })
-export class CatalogoServiceCor {
-  private API_SERVER_URL = `${environment.API_SERVER_URL}`; //v2
-  private API_SERVER_COR = `${this.API_SERVER_URL}/caracterizacion/cor/preguntas`;
-  private API_SERVER_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/pedagogia/preguntas`;
-  private API_SERVER_LENGUAJE_HABLA_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/lenguaje_habla/preguntas`;
-  private API_SERVER_PSICOLOGIA_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/psicologia/preguntas`;
+export class CatalogoServiceCor extends CatalogoServiceSaet {
+
+  //private API_SERVER_COR = `${this.API_SERVER_URL}/caracterizacion/cor/preguntas`;
+  //private API_SERVER_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/pedagogia/preguntas`;
+
+  /*private API_SERVER_LENGUAJE_HABLA_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/lenguaje_habla/preguntas`;
+  private API_SERVER_PSICOLOGIA_QUESTIONS =  `${this.API_SERVER_URL}/evaluacion/cor/psicologia/preguntas`;
   private API_SERVER_PEDAGOGIA_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/pedagogia/preguntas`;
-  private API_SERVER_AGENDA_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/preguntas/reporte`;
+  private API_SERVER_AGENDA_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/preguntas/reporte`;*/
   private API_SERVER_ESTUDIANTE = `${this.API_SERVER_URL}/tempEstudiantesSigesv2/buscarEstudiantePorNIE?nie=[NIE]`;
+
   constructor(
     private httpClient: HttpClient,
     private router: Router,
     private cookieService: CookieService
-  ) {}
+  ) {
+    super();
+  }
 
-  token: string | null =
-    'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIwNDIzMjYzOTUiLCJleHAiOjE3MTQ4NjA5NjgsInVzdV9jb2RpZ28iOiIwNDIzMjYzOTUifQ.3FaRNEQHzr5kwxYCjRA8iigf9ttoYN3UrpBdEBa7_GbpAQyroMWBxb2PWWYnKWowyeZq8AL3ViT4lmrQ-HWjQQ'; //this.cookieService.get('token');
+   //this.cookieService.get('token');
   public async getStudentInfo(NIE: string): Promise<StudentInfoResponse> {
     const url = this.API_SERVER_ESTUDIANTE.replace('[NIE]', NIE);
     console.log('url ', url);
@@ -166,13 +161,27 @@ export class CatalogoServiceCor {
       console.log('response get ', response);
 
       if (!response.ok) {
-        const errorResponse = await response.json();
-        throw new Error(JSON.stringify(errorResponse));
+        console.log('here ', response);
+        let errorMessage: string = "";
+        if(response.status === 401){
+          throw new ResponseError(response.status, 'No Autorizado');
+        }
+
+        try{
+          const errorResponse = await response.json();
+          errorMessage = errorResponse.message;
+        }catch (e){
+
+        }
+
+        throw new ResponseError(response.status, errorMessage);
       }
 
       return response.json();
     } catch (e: unknown) {
+
       const error = e as ResponseError;
+      console.log(' e here --- ', error.message);
       throw error;
     }
   }
@@ -185,7 +194,7 @@ export class CatalogoServiceCor {
     let fetchObject: RequestInit = {
       method: method,
       headers: {
-        Authorization: `Bearer ${this.token}`,
+        Authorization: `Bearer ${this.MockedToken}`,
         'Content-Type': 'application/json',
       },
       body: data !== undefined ? JSON.stringify(data) : undefined,
@@ -200,8 +209,18 @@ export class CatalogoServiceCor {
 
     // Check if the response is not successful (status 200-299)
     if (!response.ok) {
-      const errorResponse = await response.json();
-      throw new ResponseError(response.status, errorResponse.message);
+      let errorMessage:string = '';
+      if(response.status === 401){
+        throw new ResponseError(response.status, 'No Autorizado');
+      }
+      try{
+        const errorResponse = await response.json();
+        errorMessage = errorResponse.message;
+      }catch (e){
+
+      }
+
+      throw new ResponseError(response.status, errorMessage);
     }
 
     return response;
@@ -553,16 +572,16 @@ export class CatalogoServiceCor {
   }
   public getAgendaQuestions(): Promise<SurveyResponse> {
     //API_SERVER_AGENDA_QUESTIONS
-    return this.getSurveyQuestions(this.API_SERVER_AGENDA_QUESTIONS);
+    return this.getSurveyQuestions(this.saetRoutes.PREGUNTAS_COR_REPORTE());
   }
   public getPsicologiaQuestions(): Promise<SurveyResponse> {
-    return this.getSurveyQuestions(this.API_SERVER_PSICOLOGIA_QUESTIONS);
+    return this.getSurveyQuestions(this.saetRoutes.PREGUNTAS_COR_EVALUACION(iEspecialidadEvaluacion.PSICOLOGIA));
   }
   public getLenguajeHablaQuestions(): Promise<SurveyResponse> {
-    return this.getSurveyQuestions(this.API_SERVER_LENGUAJE_HABLA_QUESTIONS);
+    return this.getSurveyQuestions(this.saetRoutes.PREGUNTAS_COR_EVALUACION(iEspecialidadEvaluacion.LENGUAJE));
   }
   public getPedagogiaQuestions(): Promise<SurveyResponse> {
-    return this.getSurveyQuestions(this.API_SERVER_PEDAGOGIA_QUESTIONS);
+    return this.getSurveyQuestions(this.saetRoutes.PREGUNTAS_COR_EVALUACION(iEspecialidadEvaluacion.PEDAGOGIA));
   }
   public getDaiCaracterizacionQuestion(): Promise<SurveyResponse> {
     return this.getSurveyQuestions(
@@ -570,9 +589,9 @@ export class CatalogoServiceCor {
     );
   }
   public getCORQuestions(): Promise<SurveyResponse> {
-    return this.getSurveyQuestions(this.API_SERVER_COR);
+    return this.getSurveyQuestions(this.saetRoutes.PREGUNTAS_COR_CARACTERIZACION());
   }
   public getQuestions(): Promise<SurveyResponse> {
-    return this.getSurveyQuestions(this.API_SERVER_QUESTIONS);
+    return this.getSurveyQuestions(this.saetRoutes.PREGUNTAS_COR_CARACTERIZACION());
   }
 }

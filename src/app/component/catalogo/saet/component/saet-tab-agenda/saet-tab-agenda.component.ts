@@ -5,8 +5,10 @@ import {
 } from '../../interfaces/message-component.interface';
 import { ButtonStyle } from '../saet-button/saet-button.component';
 import { IconComponent } from '../../shared/component.config';
-import { iEspecialidadEvaluacion } from '../../../../../services/catalogo/catalogo.service.cor';
+
 import { TIPO_EVALUACION } from '../../shared/evaluaciones';
+import {iEspecialidadEvaluacion} from "../../../../../services/shared/saet-types";
+
 
 export interface IAgendaParams {
   evaluationDate: Date | null;

@@ -42,7 +42,6 @@ export class BaseComponent implements OnInit {
       }
     } catch (ex) {
       const error = ex as ResponseError;
-      console.log();
       if (
         error.status === 404 &&
         (this.router.url.includes('/menu/saet-evaluaciones/') ||

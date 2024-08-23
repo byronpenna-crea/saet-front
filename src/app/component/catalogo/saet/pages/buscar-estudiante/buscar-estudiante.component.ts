@@ -6,7 +6,7 @@ import {
 import { TableColumn } from '../../component/saet-table/saet-table.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
-  CatalogoServiceCor,
+  CatalogoServiceCor, ResponseError,
   StudentDetail,
   StudentInfoResponse,
 } from '../../../../../services/catalogo/catalogo.service.cor';
@@ -72,6 +72,8 @@ export class BuscarEstudianteComponent
     try {
       this.loadStudentInfo()
         .then(result => {
+
+          console.log('result --- ', result);
           this.cnResult = 1;
           this.studentData = this.populateStudent(result);
           this.centroEducativo = result.centroEducativo.nombre;
@@ -200,8 +202,10 @@ export class BuscarEstudianteComponent
         this.errorMessage = "";*/
         this.showTable = true;
       } catch (e: unknown) {
-        const error = e as Error;
-
+        const error = e as ResponseError;
+        if(error.status === 401){
+          console.log('back to login', error.message);
+        }
         this.userMessage = {
           showMessage: true,
           message: error.message,
@@ -209,7 +213,7 @@ export class BuscarEstudianteComponent
         };
 
         this.showTable = false;
-        console.error('error console', error);
+
       }
     } else {
       this.userMessage = {
