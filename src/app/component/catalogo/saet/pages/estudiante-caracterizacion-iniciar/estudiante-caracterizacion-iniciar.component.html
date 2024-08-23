@@ -33,27 +33,30 @@
   />
 </div>
 <div class="form-container">
-  <ng-container *ngFor="let corSurvey of corSurveys">
-    <div style="margin-top: 5%">
-      <app-tabs [legend]="corSurvey.titulo">
-        <ng-container *ngFor="let pregunta of corSurvey.preguntas">
-          <app-tab-item marginTop="3%" [label]="pregunta.pregunta">
-            <app-saet-question
-              (onChange)="onchange($event)"
-              [type]="getQuestionType(pregunta.tipoPregunta)"
-              [idPregunta]="pregunta.id_pregunta"
-              [value]="values[pregunta.id_pregunta.toString()]"
-              [values]="values"
-              [testId]="pregunta.id_pregunta.toString()"
-              [name]="getName(pregunta.pregunta)"
-              [options]="getOptions(pregunta.opcion)"
-              (checkboxChange)="onCheckboxChange($event)"
-              [readonly]="formMode === formModeEnum.VIEW"
-            />
-          </app-tab-item>
-        </ng-container>
-      </app-tabs>
-    </div>
+  <app-saet-loading [isLoading]="pageLoading" />
+  <ng-container *ngIf="!pageLoading">
+    <ng-container *ngFor="let corSurvey of corSurveys">
+      <div style="margin-top: 5%">
+        <app-tabs [legend]="corSurvey.titulo">
+          <ng-container *ngFor="let pregunta of corSurvey.preguntas">
+            <app-tab-item marginTop="3%" [label]="pregunta.pregunta">
+              <app-saet-question
+                (onChange)="onchange($event)"
+                [type]="getQuestionType(pregunta.tipoPregunta)"
+                [idPregunta]="pregunta.id_pregunta"
+                [value]="values[pregunta.id_pregunta.toString()]"
+                [values]="values"
+                [testId]="pregunta.id_pregunta.toString()"
+                [name]="getName(pregunta.pregunta)"
+                [options]="getOptions(pregunta.opcion)"
+                (checkboxChange)="onCheckboxChange($event)"
+                [readonly]="formMode === formModeEnum.VIEW"
+              />
+            </app-tab-item>
+          </ng-container>
+        </app-tabs>
+      </div>
+    </ng-container>
   </ng-container>
   <div style="margin-top: 20px">
     <div *ngIf="formMode === formModeEnum.CREATE" class="actionsButton">

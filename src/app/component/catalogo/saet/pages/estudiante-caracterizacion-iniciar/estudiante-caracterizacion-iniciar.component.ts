@@ -53,8 +53,9 @@ export class EstudianteCaracterizacionIniciarComponent
 
   //nie:string = "";
   //studentInfo?: StudentDetail;
+  pageLoading = true;
   corSurveys: iSurvey[] = [];
-  editMode: boolean = false;
+  //editMode: boolean = false;
   formModeEnum = FormMode;
   //readOnlyEvaluaciones:boolean = true;
   //readOnlyPaei:boolean = true;
@@ -184,6 +185,7 @@ export class EstudianteCaracterizacionIniciarComponent
 
     catalogoServiceCOR.getCORQuestions().then(result => {
       this.corSurveys.push(...result.cuestionarios);
+      this.pageLoading = false;
     });
     catalogoServiceCOR.getStudentInfo(this.nie).then(result => {
       this.studentInfo = result.estudiante;
@@ -285,7 +287,7 @@ export class EstudianteCaracterizacionIniciarComponent
     });
   }
   validarPreguntas(respuestas: IQuestionaryAnswer[], cuestionarios: iSurvey[]) {
-    let idsValidos = new Set();
+    const idsValidos = new Set();
     cuestionarios.forEach(cuestionario => {
       cuestionario.preguntas.forEach(pregunta => {
         idsValidos.add(pregunta.id_pregunta);
