@@ -194,7 +194,7 @@ export class CatalogoServiceCor extends CatalogoServiceSaet {
     let fetchObject: RequestInit = {
       method: method,
       headers: {
-        Authorization: `Bearer ${this.MockedToken}`,
+        Authorization: `Bearer ${this.cookieService.get('token')}`,
         'Content-Type': 'application/json',
       },
       body: data !== undefined ? JSON.stringify(data) : undefined,
