@@ -5,5 +5,4 @@ export class Municipios {
   nombre_municipio!:string;
   codigo_departamento!:Departamentos;
 
-
 }

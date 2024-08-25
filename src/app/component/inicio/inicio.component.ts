@@ -50,18 +50,18 @@ export class InicioComponent {
     //console.log("El nombre del usuario en el menu es: " + this.nombre_usuario);
     this.dui_usuario=localStorage.getItem('dui');
 
-    
+
 
 
     this.menuService.getAllMenusPrincipales()
       .then(response => {
-        console.log(response)
-       
-        this.lista_menus_principales = response;
-       
-      
+        console.log('All menus principales ----',response)
 
-        
+        this.lista_menus_principales = response;
+
+
+
+
 
         // Itera sobre tu lista de objetos y establece las variables en true según coincidencias
         for (const item of this.lista_menus_principales) {
@@ -98,7 +98,7 @@ export class InicioComponent {
             this.W5 = true;
             //this.menuService.opcion_menu='W5';
 
-          
+
 
           }else if (item.ope_codigo === 'W8') {
            // console.log("Estoy en 8");
@@ -154,7 +154,7 @@ export class InicioComponent {
 
 // Esta función se llama cuando se hace clic en el elemento
 cambiarOpcionMenu(opcion: string) {
-  //console.log("La opción en inicio es: " + opcion);
+  console.log("La opción en inicio es: " + opcion);
 
   this.menuService.opcion_menu = opcion;
   this.cookieService.set('opcionMenuPrincipal',opcion);

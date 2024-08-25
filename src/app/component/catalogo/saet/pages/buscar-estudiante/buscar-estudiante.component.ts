@@ -53,10 +53,11 @@ export class BuscarEstudianteComponent
   extends BaseComponent
   implements IMessageComponent
 {
-  inputNIE: string = '';
+  inputNIE = '';
   userMessage: UserMessage = userMessageInit;
-  cnResult: number = 0;
-  centroEducativo: string = '';
+  cnResult = 0;
+  centroEducativo = '';
+  pageLoading = false;
   onInputChange(keyValue: KeyValue) {
     this.inputNIE = keyValue.value;
   }
@@ -70,6 +71,7 @@ export class BuscarEstudianteComponent
   ) {
     super(document, catalogoServiceCOR, route, router);
     try {
+      this.pageLoading = true;
       this.loadStudentInfo()
         .then(result => {
 
@@ -82,7 +84,9 @@ export class BuscarEstudianteComponent
         })
         .catch(e => {
           console.log('no existe NIE en url', e);
-        });
+        }).finally(() => {
+          this.pageLoading = false;
+      });
     } catch (e) {
       console.log('error en constructor', e);
     }
@@ -182,6 +186,8 @@ export class BuscarEstudianteComponent
   }
   async toggleTable() {
     this.userMessage.showMessage = false;
+
+    this.pageLoading = true;
     if (this.inputNIE) {
       try {
         const result = await this.catalogoServiceCOR.getStudentInfo(
@@ -225,6 +231,7 @@ export class BuscarEstudianteComponent
 
       this.showTable = false;
     }
+    this.pageLoading = false;
   }
 
   searchButton: SaetButtonArgs = {

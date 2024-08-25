@@ -6,7 +6,7 @@
   />
 </ng-container>
 <ng-container *ngIf="type === QuestionType.ABIERTA">
-  <div style="margin-top: -20px">
+  <div >
     <app-saet-input
       [testId]="'input_' + idPregunta.toString()"
       (inputChange)="onInputChange($event)"
@@ -21,7 +21,7 @@
   MULTIPLE_CON_RESPUESTA
 </ng-container>
 <ng-container *ngIf="type === QuestionType.OPCION_UNICA_CON_RESPUESTA">
-  <div style="margin-top: -20px">
+  <div >
     <div style="margin-bottom: 20px">
       <app-saet-radio
         [name]="'radio_' + idPregunta.toString()"

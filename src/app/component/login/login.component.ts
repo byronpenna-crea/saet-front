@@ -26,12 +26,12 @@ export class LoginComponent implements OnInit {
 
     private seguridadService:SeguridadService,
     @Inject(DOCUMENT) private document: Document,
-     private router: Router,
-     private cookieService: CookieService
+    private router: Router,
+    private cookieService: CookieService
 
-    ){
+  ){
 
-   }
+  }
 
 
 
@@ -43,39 +43,36 @@ export class LoginComponent implements OnInit {
 
 
 
-/*
-//Version 1
-  validarUsuario(us: Usuarios_login) {
+  /*
+  //Version 1
+    validarUsuario(us: Usuarios_login) {
 
 
 
-    this.seguridadService.validarUsuario(us.usuario, us.contrasena).subscribe(resp => {
+      this.seguridadService.validarUsuario(us.usuario, us.contrasena).subscribe(resp => {
 
-      this.cookieService.set('token',resp);
+        this.cookieService.set('token',resp);
 
+      }
+      , error => {
+        this.msgs_dialog=[];
+        //console.error(error);
+        this.msgs_dialog.push(
+          { severity: 'error', summary: 'Error Message', detail: 'Credenciales incorrectas.' });
+        this.showMessages_dialog = true;
+      });
     }
-    , error => {
-      this.msgs_dialog=[];
-      //console.error(error);
-      this.msgs_dialog.push(
-        { severity: 'error', summary: 'Error Message', detail: 'Credenciales incorrectas.' });
-      this.showMessages_dialog = true;
-    });
-  }
 
-  */
+    */
 
   validarUsuario(us: Usuarios_login) {
-    console.log("validar usuario");
     this.seguridadService.validarUsuario(us.usuario, us.contrasena).subscribe(
       (resp) => {
-        console.log("respuesta es ",resp);
         // Autenticación exitosa
         this.cookieService.set('token', resp);
-        this.router.navigate(['/inicio']); // Redirigir a la página deseada después de la autenticación exitosa
+        ////////////this.router.navigate(['/inicio']); // Redirigir a la página deseada después de la autenticación exitosa
       },
       (error) => {
-        console.log("error ",error)
         // Error de autenticación
         if (error.status === 401) {
           // Credenciales incorrectas
@@ -105,40 +102,40 @@ export class LoginComponent implements OnInit {
 
 
 
-/*
-  encriptarContrasena(): string {
-    const input = this.contrasena01;
-    const hashedPassword = crypto.createHash('sha256').update(input).digest('hex');
-    return hashedPassword;
+  /*
+    encriptarContrasena(): string {
+      const input = this.contrasena01;
+      const hashedPassword = crypto.createHash('sha256').update(input).digest('hex');
+      return hashedPassword;
+    }
+
+  */
+
+
+
+  /*
+  validarUsuario(us: Usuarios_login) {
+    console.log("Estoy dentro del login01, el usuario y password que envio es: "+us.usuario+", "+us.contrasena);
+
+    this.seguridadService.validarUsuario(us.usuario, us.contrasena).subscribe(resp => {
+      console.log("Dentro de respuesta",resp)
+      const jsonResponse = resp.body;
+      this.cookieService.set('token', jsonResponse.token);
+      const nombre = jsonResponse.nombre;
+        console.log("El valor del nombre es: " + nombre)
+        localStorage.setItem('nombre', nombre);
+
+      // const token = resp.body.get('token');
+
+      //localStorage.setItem('token', token);
+      // Resto del código aquí
+    }, error => {
+      console.error(error);
+    });
   }
 
-*/
 
-
-
-/*
-validarUsuario(us: Usuarios_login) {
-  console.log("Estoy dentro del login01, el usuario y password que envio es: "+us.usuario+", "+us.contrasena);
-
-  this.seguridadService.validarUsuario(us.usuario, us.contrasena).subscribe(resp => {
-    console.log("Dentro de respuesta",resp)
-    const jsonResponse = resp.body;
-    this.cookieService.set('token', jsonResponse.token);
-    const nombre = jsonResponse.nombre;
-      console.log("El valor del nombre es: " + nombre)
-      localStorage.setItem('nombre', nombre);
-
-    // const token = resp.body.get('token');
-
-    //localStorage.setItem('token', token);
-    // Resto del código aquí
-  }, error => {
-    console.error(error);
-  });
-}
-
-
-*/
+  */
 
 
 

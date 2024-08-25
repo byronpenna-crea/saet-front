@@ -12,6 +12,7 @@
   border-radius: 0px;
   border-bottom: solid 1px #00498d;
   padding-left: 50px;
+  flex-wrap: wrap;
 }
 
 ::ng-deep .tabButton,
@@ -21,8 +22,8 @@
   border: solid 1px #00498d;
   color: #00498d;
   text-decoration: none;
-  width: 196px;
-  height: 46px;
+  /*width: 196px;*/
+  /*height: 46px;*/
 }
 
 ::ng-deep .tabSeletectedButton {
@@ -76,19 +77,19 @@
   }
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 800px) {
   ::ng-deep .button-container-group {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 0px;
     border-radius: 0px;
     border-bottom: solid 0.5px #00498d;
-    padding-left: 25px;
+    padding-left: 0;
   }
 
   ::ng-deep .tabButton,
   .tabSeletectedButton {
-    width: 280px;
-    height: 46px;
+    /*width: 280px;*/
+    /*height: 46px;*/
   }
 }

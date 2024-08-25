@@ -253,6 +253,7 @@ const httpOptions = {
 
   public getAllDepartamentos(): Promise<any> {
     const url = this.API_SERVER_SUB_LISTA_DEPARTAMENTOS;
+    console.log('to do fetch')
     const token: string | null = this.cookieService.get('token');
     return new Promise((resolve, reject) => {
       fetch(url, {

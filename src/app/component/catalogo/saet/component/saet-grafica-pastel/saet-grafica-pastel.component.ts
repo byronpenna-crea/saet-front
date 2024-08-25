@@ -14,16 +14,18 @@ export class SaetGraficaPastelComponent {
   view: [number, number] = [700, 400];
 
   // options
-  gradient: boolean = true;
-  showLegend: boolean = true;
-  showLabels: boolean = true;
-  isDoughnut: boolean = true;
+  gradient = true;
+  showLegend = true;
+  showLabels = true;
+  isDoughnut = true;
 
   colorScheme = {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA'],
   };
 
-  constructor() {}
+  constructor() {
+
+  }
 
   onSelect(data: any): void {
     console.log('Item clicked', JSON.parse(JSON.stringify(data)));

@@ -32,6 +32,9 @@ import { EstudianteGraficasComponent } from './component/catalogo/saet/pages/est
 import {EstudianteResetComponent} from "./component/catalogo/saet/pages/estudiante-reset/estudiante-reset.component";
 import {EstudianteDaiCaracterizacionComponent} from "./component/catalogo/saet/pages/estudiante-dai-caracterizacion/estudiante-dai-caracterizacion.component";
 import {EstudianteDeiInformeCuantitativoComponent} from "./component/catalogo/saet/pages/estudiante-dei-informe-cuantitativo/estudiante-dei-informe-cuantitativo.component";
+import {
+  EstudianteDeiInformeTrimestralComponent
+} from "./component/catalogo/saet/pages/estudiante-dei-informe-trimestral/estudiante-dei-informe-trimestral.component";
 
 /*
 const routes: Routes = [
@@ -97,6 +100,10 @@ const routes: Routes = [
       {
         path: 'dei/informe-cuantitativo',
         component: EstudianteDeiInformeCuantitativoComponent,
+      },
+      {
+        path: 'dei/informe-trimestral',
+        component: EstudianteDeiInformeTrimestralComponent,
       },
       {
         path: 'saet-lenguaje-habla/:nie',

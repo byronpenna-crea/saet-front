@@ -1,3 +1,21 @@
+.item-component-parent {
+  display: table;
+  width: 100%;
+}
+
+.row {
+  display: table-row;
+}
+
+.cell {
+  display: table-cell;
+  padding: 8px;
+  vertical-align: middle;
+}
+.cell:first-child {
+  width: 50%;
+  white-space: wrap;
+}
 @media screen and (max-width: 500px) {
   .container-flex {
     flex-direction: column;

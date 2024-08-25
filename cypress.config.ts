@@ -3,7 +3,7 @@ import { defineConfig } from 'cypress';
 export default defineConfig({
 
   e2e: {
-    baseUrl: 'http://192.168.1.12/#/menu',
+    baseUrl: 'http://192.168.12.135/#/menu',
     video: true,
     env: {
       NEXT_PUBLIC_BASE_PATH: ''

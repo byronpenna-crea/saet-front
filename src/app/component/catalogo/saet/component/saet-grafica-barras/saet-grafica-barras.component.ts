@@ -19,18 +19,18 @@ export class SaetGraficaBarrasComponent {
   view: [number, number] = [700, 400];
 
   // options
-  showXAxis: boolean = true;
-  showYAxis: boolean = true;
-  gradient: boolean = false;
-  showLegend: boolean = true;
-  showXAxisLabel: boolean = true;
-  xAxisLabel: string = '';
-  showYAxisLabel: boolean = true;
-  yAxisLabel: string = '';
-  barPadding: number = 20;
+  showXAxis = true;
+  showYAxis = true;
+  gradient = false;
+  showLegend = true;
+  showXAxisLabel = true;
+  xAxisLabel = '';
+  showYAxisLabel = true;
+  yAxisLabel = '';
+  barPadding = 20;
   direction = Direction;
   @Input() mode: Direction = Direction.VERTICAL;
-  colorScheme: string = '#5AA454';
+  colorScheme = '#5AA454';
   schemeTye: ScaleType = ScaleType.Ordinal;
   constructor() {
     // La propiedad single ya está inicializada directamente

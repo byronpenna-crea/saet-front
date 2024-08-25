@@ -1,1 +1,41 @@
-<p>estudiante-dei-informe-trimestral works!</p>
+<p-tabView>
+  <p-tabPanel header="Informe Trimestral COR">
+    <div class="form-container">
+      <p class="title">Escribe el NIE del estudiante.</p>
+      <app-saet-input
+        testId="input-nie"
+        [inputArgs]="{ text: inputNIE }"
+        [value]="inputNIE"
+        [disabled]="showTable"
+        (inputChange)="onInputChange($event)"
+      />
+      <div class="button-container">
+        <app-saet-button
+          testId="btn-buscar"
+          [disabled]="showTable"
+          [buttonArgs]="{
+            text: 'Buscar',
+            buttonStyle: ButtonStyle.BLUE,
+            buttonIcon: IconCompoment.SEARCH
+          }"
+          (onClick)="toggleTable()"
+        />
+        <button
+          data-testId="btn-clean"
+          class="clear-text"
+          (click)="cleanInput()"
+        >
+          limpiar búsqueda
+        </button>
+      </div>
+      <div *ngIf="showTable">
+        <app-saet-underlined-title>
+          <div style="display: flex; flex-direction: row">
+            <div style="font-weight: bold; width: 300px">Resultado(s):</div>
+            <div>{{ cnResult }} elemento(s)</div>
+          </div>
+        </app-saet-underlined-title>
+      </div>
+    </div>
+  </p-tabPanel>
+</p-tabView>

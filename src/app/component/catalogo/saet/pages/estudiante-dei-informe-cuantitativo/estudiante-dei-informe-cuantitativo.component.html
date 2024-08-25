@@ -1,109 +1,256 @@
+<div style="width: 100%">
+  <p-tabView>
+    <p-tabPanel header="Informe cuantitativo">
+      <div style="display: flex; gap: 25px">
+        <app-saet-tarjeta-informe
+          [numero]="3"
+          titulo="Total de miembros"
+          descripcion="Centro de Orientación y Recursos (COR)"
+          [style]="style.BLUE"
+        />
+        <app-saet-tarjeta-informe
+          [numero]="15"
+          titulo="Total de miembros"
+          descripcion="Docente de Apoyo a la Inclusion (DAI)"
+        />
+      </div>
 
-<p-tabView>
-  <p-tabPanel header="Informe cuantitativo">
-    <div style="display: flex; gap: 25px;">
-      <app-saet-tarjeta-informe
-        [numero]="3"
-        titulo="Total de miembros"
-        descripcion="Centro de Orientación y Recursos (COR)"
-        [style]="style.BLUE"
-      />
-      <app-saet-tarjeta-informe
-        [numero]="15"
-        titulo="Total de miembros"
-        descripcion="Docente de Apoyo a la Inclusion (DAI)"
-      />
-    </div>
-
-    <div style="display: flex;flex-direction: column;">
-      <h2 class="title">Datos generales a nivel nacional</h2>
-      <div class="graphics-container">
-        <div class="graphic-container">
-          <h3>Caracterizaciones por departamentos</h3>
-          <app-saet-grafica-pastel
-            [single]="[
-            { name: 'Ahuachapán', value: 15 },
-            { name: 'Usulután', value: 13 },
-            { name: 'Sonsonate', value: 8 },
-            { name: 'Cuscatlán', value: 3 },
-
-            { name: 'La Paz', value: 3 },
-            { name: 'La Unión', value: 3 },
-            { name: 'La Libertad', value: 3 },
-            { name: 'San Vicente', value: 3 },
-            { name: 'Morazán', value: 3 },
-            { name: 'San Miguel', value: 3 },
-            { name: 'San Salvador', value: 3 },
-            { name: 'Santa Ana', value: 3 },
-            { name: 'Chalatenango', value: 3 },
-            { name: 'Cabañas', value: 3 },
-            ]"
-          />
-          <div style="display: flex;gap: 20px;">
-            <div>
-              <app-saet-individual-radio
-              value="1"
-              label="Realizadas"
-              />
+      <div style="display: flex; flex-direction: column; gap: 20px">
+        <h2 class="title">Datos generales a nivel nacional</h2>
+        <div class="graphics-container">
+          <div
+            style="
+              display: flex;
+              gap: 20px;
+              align-items: flex-start;
+              border: 1px solid #ccc;
+              padding: 20px;
+            "
+          >
+            <!-- Sección de Geografía -->
+            <div style="flex: 2">
+              <fieldset style="border: 1px solid #ccc; padding: 10px">
+                <legend style="font-weight: bold">Geografía</legend>
+                <div style="display: flex; flex-wrap: wrap; gap: 20px">
+                  <div style="flex: 1">
+                    <label>Zonas</label>
+                    <select>
+                      <option>Seleccionar</option>
+                    </select>
+                  </div>
+                  <div style="flex: 1">
+                    <label>Centro Educativo</label>
+                    <select>
+                      <option>Seleccionar</option>
+                    </select>
+                  </div>
+                  <div style="flex: 1">
+                    <label>Sexo</label>
+                    <select>
+                      <option>Seleccionar</option>
+                    </select>
+                  </div>
+                  <div style="flex: 1">
+                    <label>Departamento</label>
+                    <select>
+                      <option>Seleccionar</option>
+                    </select>
+                  </div>
+                  <div style="flex: 1">
+                    <label>Grado</label>
+                    <select>
+                      <option>Seleccionar</option>
+                    </select>
+                  </div>
+                </div>
+              </fieldset>
             </div>
-            <div>
-              <app-saet-individual-radio
-                value="1"
-                label="En proceso"
-              />
 
-            </div>
-            <div>
-              <app-saet-radio />
-              Programadas
+            <!-- Sección de Período de tiempo -->
+            <div style="flex: 1">
+              <fieldset style="border: 1px solid #ccc; padding: 10px">
+                <legend style="font-weight: bold">Período de tiempo</legend>
+                <div style="display: flex; flex-direction: column; gap: 10px">
+                  <div>
+                    <label>Desde</label>
+                    <input type="date" />
+                  </div>
+                  <div>
+                    <label>Hasta</label>
+                    <input type="date" />
+                  </div>
+                </div>
+              </fieldset>
             </div>
           </div>
         </div>
-        <div class="graphic-container">
-          <h3>Evaluaciones por departamentos</h3>
-          <app-saet-grafica-barras
-            [single]="[
-            { name: 'La Paz', value: 30 },
-            { name: 'Cuscatlán', value: 40 },
-            { name: 'Morazán', value: 40 },
-            { name: 'La Unión', value: 50 },
-            { name: 'Santa Ana', value: 60 },
-            { name: 'San Vicente', value: 50 },
-            { name: 'San Miguel', value: 50 },
-            { name: 'Chalatenango', value: 30 },
-            { name: 'Cabañas', value: 50 },
-            { name: 'Sonsonate', value: 60 },
-            { name: 'La Libertad', value: 60 },
-            { name: 'San Salvador', value: 80 }
-            ]"
-                [mode]="direction.LANDSCAPE"
-              />
-          <div>
+        <div class="graphics-container">
+          <div class="graphic-container">
+            <h3>Caracterizaciones por departamentos</h3>
+            <app-saet-grafica-pastel
+              [single]="[
+                { name: 'Ahuachapán', value: 15 },
+                { name: 'Usulután', value: 13 },
+                { name: 'Sonsonate', value: 8 },
+                { name: 'Cuscatlán', value: 3 },
 
-            <div>
-              <app-saet-radio />
-              Realizadas
+                { name: 'La Paz', value: 3 },
+                { name: 'La Unión', value: 3 },
+                { name: 'La Libertad', value: 3 },
+                { name: 'San Vicente', value: 3 },
+                { name: 'Morazán', value: 3 },
+                { name: 'San Miguel', value: 3 },
+                { name: 'San Salvador', value: 3 },
+                { name: 'Santa Ana', value: 3 },
+                { name: 'Chalatenango', value: 3 },
+                { name: 'Cabañas', value: 3 }
+              ]"
+            />
+            <div class="radios">
+              <div>
+                <app-saet-individual-radio value="1" label="Realizadas" />
+              </div>
+              <div>
+                <app-saet-individual-radio value="1" label="En proceso" />
+              </div>
+              <div>
+                <app-saet-individual-radio value="1" label="Programadas" />
+              </div>
             </div>
-            <div>
-              <app-saet-radio />
-              En proceso
+          </div>
+          <div class="graphic-container">
+            <h3>Evaluaciones por departamentos</h3>
+            <app-saet-grafica-barras
+              [single]="[
+                { name: 'La Paz', value: 30 },
+                { name: 'Cuscatlán', value: 40 },
+                { name: 'Morazán', value: 40 },
+                { name: 'La Unión', value: 50 },
+                { name: 'Santa Ana', value: 60 },
+                { name: 'San Vicente', value: 50 },
+                { name: 'San Miguel', value: 50 },
+                { name: 'Chalatenango', value: 30 },
+                { name: 'Cabañas', value: 50 },
+                { name: 'Sonsonate', value: 60 },
+                { name: 'La Libertad', value: 60 },
+                { name: 'San Salvador', value: 80 }
+              ]"
+              [mode]="direction.LANDSCAPE"
+            />
+            <div class="radios">
+              <div>
+                <app-saet-radio />
+                Realizadas
+              </div>
+              <div>
+                <app-saet-radio />
+                En proceso
+              </div>
+              <div>
+                <app-saet-radio />
+                Programadas
+              </div>
             </div>
-            <div>
-              <app-saet-radio />
-              Programadas
-            </div>
+          </div>
+        </div>
+        <div class="graphics-container">
+          <div class="graphic-container">
+            <h3>Alcance por departamento</h3>
+            <app-saet-grafica-pastel
+              [single]="[
+                { name: 'Ahuachapán', value: 15 },
+                { name: 'Usulután', value: 13 },
+                { name: 'Sonsonate', value: 8 },
+                { name: 'Cuscatlán', value: 3 },
 
+                { name: 'La Paz', value: 3 },
+                { name: 'La Unión', value: 3 },
+                { name: 'La Libertad', value: 3 },
+                { name: 'San Vicente', value: 3 },
+                { name: 'Morazán', value: 3 },
+                { name: 'San Miguel', value: 3 },
+                { name: 'San Salvador', value: 3 },
+                { name: 'Santa Ana', value: 3 },
+                { name: 'Chalatenango', value: 3 },
+                { name: 'Cabañas', value: 3 }
+              ]"
+            />
+            <div style="display: flex; flex-direction: column; gap: 5px">
+              Departamentos
+              <select>
+                <option
+                  *ngFor="let departamento of departamentos"
+                  [value]="departamento.codigo_departamento"
+                >
+                  {{ departamento.nombre_departamento }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="graphic-container">
+            <h3>Usuarios inscritos por departamento</h3>
+            <app-saet-grafica-barras
+              [mode]="direction.VERTICAL"
+              [single]="[
+                { name: 'ENE', value: 20 },
+                { name: 'FEB', value: 30 },
+                { name: 'MAR', value: 25 },
+                { name: 'ABR', value: 40 },
+                { name: 'MAY', value: 50 },
+                { name: 'JUN', value: 70 },
+                { name: 'JUL', value: 60 },
+                { name: 'AGO', value: 65 },
+                { name: 'SEP', value: 55 },
+                { name: 'OCT', value: 70 },
+                { name: 'NOV', value: 75 },
+                { name: 'DIC', value: 80 }
+              ]"
+            />
+            <div style="display: flex; flex-direction: column; gap: 5px">
+              Departamentos
+              <select>
+                <option
+                  *ngFor="let departamento of departamentos"
+                  [value]="departamento.codigo_departamento"
+                >
+                  {{ departamento.nombre_departamento }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="graphics-container">
+          <div class="graphic-container">
+            <h3>Casos abordados</h3>
+            <app-saet-grafica-linear
+              [view]="[1024, 300]"
+              [multi]="[
+                {
+                  name: 'Casos abordados por sexo-femenino',
+                  series: filteredCasosAbordadosData
+                }
+              ]"
+            />
+
+            <select (change)="onDepartmentChange($event)">
+              <option
+                *ngFor="let departamento of departamentos"
+                [value]="departamento.codigo_departamento"
+              >
+                {{ departamento.nombre_departamento }}
+              </option>
+            </select>
           </div>
         </div>
       </div>
-      <div style="display: flex;flex-direction: row">
-        new row
-      </div>
-    </div>
-
-  </p-tabPanel>
-  <p-tabPanel header="Informe cualitativo">
-  </p-tabPanel>
-  <p-tabPanel header="Informe Trimestral COR">
-  </p-tabPanel>
-</p-tabView>
+    </p-tabPanel>
+    <p-tabPanel header="Informe cualitativo"> </p-tabPanel>
+    <p-tabPanel header="Informe cualitativo">
+      <ng-template pTemplate="header">
+        <a (click)="redirectTo('menu/dei/informe-trimestral')">
+          Informe Trimestral COR
+        </a>
+      </ng-template>
+    </p-tabPanel>
+  </p-tabView>
+</div>

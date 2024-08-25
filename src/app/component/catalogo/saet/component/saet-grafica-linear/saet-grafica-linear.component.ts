@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, Input} from '@angular/core';
 
 interface Series {
   name: string;
@@ -16,9 +16,10 @@ interface Multi {
   styleUrls: ['./saet-grafica-linear.component.css'],
 })
 export class SaetGraficaLinearComponent {
-  multi: Multi[] = [];
+  @Input() multi: Multi[] = [];
 
-  view: [number, number] = [700, 300];
+  @Input() view: [number, number] = [700, 300];
+
 
   // options
   legend: boolean = true;
@@ -39,7 +40,6 @@ export class SaetGraficaLinearComponent {
   constructor() {
     Object.assign(this, { multi: this.multi });
   }
-
   onSelect(data: any): void {
     console.log('Item clicked', JSON.parse(JSON.stringify(data)));
   }

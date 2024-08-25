@@ -21,15 +21,15 @@ interface informationTabBody {
 }
 @Injectable()
 export class BaseComponent implements OnInit {
-  nie: string = '';
+  nie = '';
   studentInfo?: StudentDetail;
 
   iconCompoment = IconComponent;
   btnStyle = ButtonStyle;
 
   caracterizacion: IGetCaracterizacion | undefined;
-  readOnlyEvaluaciones: boolean = true;
-  readOnlyPaei: boolean = true;
+  readOnlyEvaluaciones = true;
+  readOnlyPaei = true;
   async ngOnInit() {
     try {
       const response = await this.catalogoServiceCOR.getCaracterizacionPorNIE(
