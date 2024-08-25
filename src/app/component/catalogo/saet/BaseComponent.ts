@@ -35,12 +35,15 @@ export class BaseComponent implements OnInit {
       const response = await this.catalogoServiceCOR.getCaracterizacionPorNIE(
         this.nie
       );
+      console.log('caracterizacion por nie');
       this.caracterizacion = response;
       if (response.id_caracterizacion !== 0) {
         this.readOnlyPaei = false;
         this.readOnlyEvaluaciones = false;
       }
     } catch (ex) {
+
+      console.log('caracterizacion por nie error');
       const error = ex as ResponseError;
       if (
         error.status === 404 &&

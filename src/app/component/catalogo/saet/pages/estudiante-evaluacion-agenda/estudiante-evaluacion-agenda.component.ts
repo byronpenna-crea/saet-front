@@ -27,9 +27,9 @@ export class EstudianteEvaluacionAgendaComponent
   userMessage: UserMessage = userMessageInit;
 
   cuestionariosTableMode: number[] = [];
-  override async ngOnInit() {
+  override ngOnInit = async () => {
     await super.ngOnInit();
-  }
+  };
   onCheckboxChange(keyValues: KeyValue[]) {
     const selectedValues = keyValues.map(e => e.value);
     this.values[keyValues[0].key] = selectedValues.toString();

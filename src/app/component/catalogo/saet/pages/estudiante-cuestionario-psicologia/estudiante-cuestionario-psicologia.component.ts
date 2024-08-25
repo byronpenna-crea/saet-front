@@ -29,7 +29,7 @@ export class EstudianteCuestionarioPsicologiaComponent
   userMessage: UserMessage = userMessageInit;
   btnIcon = IconComponent;
   cuestionariosTableMode: number[] = [7, 10, 11, 12, 13];
-  override async ngOnInit() {
+  override ngOnInit = async () => {
     await super.ngOnInit();
     console.log('init');
     if (this.readOnlyEvaluaciones) {
@@ -38,7 +38,7 @@ export class EstudianteCuestionarioPsicologiaComponent
         this.nie,
       ]);
     }
-  }
+  };
   idEvaluacion: number = 0;
   constructor(
     @Inject(DOCUMENT) document: Document,

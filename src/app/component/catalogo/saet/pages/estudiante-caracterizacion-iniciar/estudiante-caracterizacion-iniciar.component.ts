@@ -134,11 +134,13 @@ export class EstudianteCaracterizacionIniciarComponent
         ...this.values,
         ...this.respuestasToValues(this.caracterizacion?.respuestas ?? []),
       };
-      console.log('here 2', this.values);
     });
   }
   override async ngOnInit() {
+
+    console.log('before --------------- xx ')
     await super.ngOnInit();
+    console.log('init --------------- xx ')
     const url = '/menu/saet-caracterizacion-iniciar';
     const idCaracterizacion: number =
       this.caracterizacion?.id_caracterizacion ?? 0;
@@ -162,7 +164,7 @@ export class EstudianteCaracterizacionIniciarComponent
     this.route.paramMap.subscribe(params => {
       const nie = params.get('nie');
       const formMode = params.get('mode');
-      console.log('form mode -----', formMode);
+
       if (nie) {
         this.nie = nie;
       }
@@ -242,23 +244,71 @@ export class EstudianteCaracterizacionIniciarComponent
     return result;
   }
 
-  generatePDF() {
+  async generatePDF() {
     const doc = new jsPDF();
+    const totalPages = this.corSurveys.length;
+    let currentY = 30;
 
-    const respuestas =
-      this.caracterizacion?.respuestas.map((respuesta: iQuestion) => [
-        respuesta.id_pregunta.toString(),
-        respuesta.pregunta,
-        respuesta.respuesta ?? '',
-      ]) ?? [];
+    const title = 'Caracterización de estudiante';
+    const titleWidth = doc.getTextWidth(title);
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const titleX = (pageWidth - titleWidth) / 2;
 
-    doc.text('Caracterización de estudiante', 10, 10);
-    autoTable(doc, {
-      head: [['ID Pregunta', 'Pregunta', 'Respuesta']],
-      body: [...respuestas.map(respuesta => respuesta)],
-      startY: 30,
+    const logoPath = '/assets/logo.png'; // Cambia esto a la ruta de tu archivo de logo
+
+    const loadImage = (url: string): Promise<HTMLImageElement> => {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = url;
+        img.onload = () => resolve(img);
+        img.onerror = (err) => reject(err);
+      });
+    };
+    const logo = await loadImage(logoPath);
+    console.log('logo ', logo)
+    doc.text(title, titleX, currentY);
+    currentY += 10; // Espacio debajo del título principal
+    let pageNumber = 1;
+
+    this.corSurveys.forEach(cuestionario => {
+      const respuestas =
+        this.caracterizacion?.respuestas
+          .filter((respuesta: iQuestion) =>
+            cuestionario.preguntas.some(p => p.id_pregunta === respuesta.id_pregunta))
+          .map((respuesta: iQuestion) => [
+            respuesta.pregunta,
+            respuesta.respuesta ?? '',
+          ]) ?? [];
+      console.log('repsuestas', respuestas);
+      console.log('repsuestas 2', this.caracterizacion?.respuestas);
+      console.log('cuestionario', cuestionario);
+      console.log('----------');
+      if (respuestas.length > 0) {
+        // Agrega el título del cuestionario como encabezado
+        doc.text(cuestionario.titulo, 8, currentY);
+        currentY += 10; // Espacio debajo del título del cuestionario
+
+        // Agrega la tabla para este cuestionario
+        autoTable(doc, {
+          head: [['Pregunta', 'Respuesta']],
+          body: respuestas,
+          startY: currentY,
+          didDrawPage: (data) => {
+            doc.setFontSize(10);
+            doc.text(`Página ${pageNumber}`, pageWidth - 40, pageHeight - 10);
+            doc.addImage(logo, 'PNG', 10, pageHeight - 30, 50, 20);
+            pageNumber++;
+          }
+        });
+        currentY = (doc as any).lastAutoTable.finalY + 10;
+      }
+
+      return false;
     });
-    doc.save('student-info.pdf');
+
+    console.log('Respuestas ---- ', this.caracterizacion?.respuestas);
+    doc.save(`Caracterizacion-estudiante-${this.nie}.pdf`);
   }
   async retornarCaracterizacion() {
     await this.router.navigate([

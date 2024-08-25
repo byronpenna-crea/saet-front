@@ -81,7 +81,7 @@ export class EstudianteCaracterizacionComponent
       await this.router.navigate([link, this.nie]);
     }
   }
-  override async ngOnInit() {
+  override ngOnInit = async () => {
     await super.ngOnInit();
     console.log('caracterizacion load ', this.caracterizacion);
     if (
@@ -90,7 +90,7 @@ export class EstudianteCaracterizacionComponent
     ) {
       this.nombreUsuario = this.caracterizacion.especialista_responsable;
     }
-  }
+  };
 
   constructor(
     @Inject(DOCUMENT) document: Document,

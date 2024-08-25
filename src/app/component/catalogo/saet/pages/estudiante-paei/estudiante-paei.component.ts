@@ -29,9 +29,9 @@ export class EstudiantePaeiComponent
 {
   userMessage: UserMessage = userMessageInit;
 
-  override async ngOnInit() {
+  override ngOnInit = async () => {
     await super.ngOnInit();
-  }
+  };
   buttonStyle = ButtonStyle;
   buttonIcon = IconComponent;
   nombreEspecialista: {

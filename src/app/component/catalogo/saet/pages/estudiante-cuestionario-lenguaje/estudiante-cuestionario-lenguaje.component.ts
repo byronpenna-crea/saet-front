@@ -35,12 +35,12 @@ export class EstudianteCuestionarioLenguajeComponent
   };
   btnIcon = IconComponent;
   cuestionariosTableMode: number[] = [16];
-  override async ngOnInit() {
+  override ngOnInit = async () => {
     await super.ngOnInit();
     if (this.readOnlyEvaluaciones) {
       this.router.navigate(['/menu/saet-caracterizacion-estudiante', this.nie]);
     }
-  }
+  };
   idEvaluacion: number = 0;
   constructor(
     @Inject(DOCUMENT) document: Document,

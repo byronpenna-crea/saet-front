@@ -27,12 +27,12 @@ export class EstudianteCuestionarioPedagogiaComponent
     type: MessageType.SUCCESS,
   };
 
-  override async ngOnInit() {
+  override ngOnInit = async () => {
     await super.ngOnInit();
     if (this.readOnlyEvaluaciones) {
       this.router.navigate(['/menu/saet-caracterizacion-estudiante', this.nie]);
     }
-  }
+  };
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceCOR: CatalogoServiceCor,

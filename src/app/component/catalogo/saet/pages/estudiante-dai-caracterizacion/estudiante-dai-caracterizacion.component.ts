@@ -41,7 +41,7 @@ export class EstudianteDaiCaracterizacionComponent
   }
   formMode: FormMode = FormMode.CREATE;
   formModeEnum = FormMode;
-  override async ngOnInit() {
+  override ngOnInit = async () => {
     await super.ngOnInit();
     this.route.paramMap.subscribe(params => {
       const storedValues = localStorage.getItem(
@@ -51,7 +51,7 @@ export class EstudianteDaiCaracterizacionComponent
         this.values = JSON.parse(storedValues);
       }
     });
-  }
+  };
 
   async salir() {
     this.confirmationService.confirm({
