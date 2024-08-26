@@ -33,7 +33,7 @@
   />
 </div>
 <div class="form-container">
-  <app-saet-loading [isLoading]="pageLoading" />
+  <app-saet-loading [isLoading]="pageLoading" [message]="loadingMessage" />
   <ng-container *ngIf="!pageLoading">
     <ng-container *ngFor="let corSurvey of corSurveys">
       <div style="margin-top: 5%">
@@ -128,6 +128,7 @@
           [buttonArgs]="{ text: 'Editar', buttonStyle: 1 }"
         />
         <app-saet-button
+          (onClick)="generatePDF()"
           [buttonArgs]="{ text: 'Generar PDF', buttonStyle: 1 }"
         />
       </div>

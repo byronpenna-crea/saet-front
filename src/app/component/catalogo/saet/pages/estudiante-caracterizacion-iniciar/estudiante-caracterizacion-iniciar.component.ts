@@ -27,6 +27,7 @@ import {
 import { handleMode } from '../../shared/forms';
 import { ButtonStyle } from '../../component/saet-button/saet-button.component';
 import { SAET_MODULE } from '../../shared/evaluaciones';
+import {PrintPdf} from "../../shared/PrintPdf";
 
 interface IinformationTab {
   labels: string[];
@@ -54,6 +55,7 @@ export class EstudianteCaracterizacionIniciarComponent
   //nie:string = "";
   //studentInfo?: StudentDetail;
   pageLoading = true;
+  loadingMessage?:string = undefined;
   corSurveys: iSurvey[] = [];
   //editMode: boolean = false;
   formModeEnum = FormMode;
@@ -246,7 +248,6 @@ export class EstudianteCaracterizacionIniciarComponent
 
   async generatePDF() {
     const doc = new jsPDF();
-    const totalPages = this.corSurveys.length;
     let currentY = 30;
 
     const title = 'Caracterización de estudiante';
@@ -269,17 +270,25 @@ export class EstudianteCaracterizacionIniciarComponent
     console.log('logo ', logo)
     doc.text(title, titleX, currentY);
     currentY += 10; // Espacio debajo del título principal
-    let pageNumber = 1;
-
+    let pageNumber = 0;
+    const respuestasFormulario = this.getAnswerObject(this.values);
+    console.log('respuesta formulario en pdf ', respuestasFormulario);
     this.corSurveys.forEach(cuestionario => {
       const respuestas =
         this.caracterizacion?.respuestas
           .filter((respuesta: iQuestion) =>
             cuestionario.preguntas.some(p => p.id_pregunta === respuesta.id_pregunta))
-          .map((respuesta: iQuestion) => [
-            respuesta.pregunta,
-            respuesta.respuesta ?? '',
-          ]) ?? [];
+          .map((respuesta: iQuestion) => {
+            const concatOptions = respuesta.opcion.reduce((acc, current) => {
+              return acc ? `${acc}, ${current.opcion}` : current.opcion;
+            }, '');
+            console.log('concat options ', concatOptions);
+            const strResponse = respuesta?.respuesta !== undefined && respuesta?.respuesta !== '' ? respuesta?.respuesta : concatOptions;
+            return [
+              respuesta.pregunta,
+              strResponse,
+            ];
+          }) ?? [];
       console.log('repsuestas', respuestas);
       console.log('repsuestas 2', this.caracterizacion?.respuestas);
       console.log('cuestionario', cuestionario);
@@ -295,8 +304,12 @@ export class EstudianteCaracterizacionIniciarComponent
           body: respuestas,
           startY: currentY,
           didDrawPage: (data) => {
+            console.log('did draw ', data);
             doc.setFontSize(10);
-            doc.text(`Página ${pageNumber}`, pageWidth - 40, pageHeight - 10);
+            if(data.pageNumber !== pageNumber){
+              doc.text(`Página ${data.pageNumber}`, pageWidth - 40, pageHeight - 10);
+              pageNumber = data.pageNumber;
+            }
             doc.addImage(logo, 'PNG', 10, pageHeight - 30, 50, 20);
             pageNumber++;
           }
@@ -351,7 +364,8 @@ export class EstudianteCaracterizacionIniciarComponent
   }
 
   async update() {
-    const objToUpdate = {};
+    this.pageLoading = true;
+    this.loadingMessage = 'Actualizando caracterizacion'
     const respuestas = this.getAnswerObject(this.values);
     const objToSave: ISaveCaracterizacion = {
       id_caracterizacion: this.caracterizacion?.id_caracterizacion ?? 0,
@@ -362,11 +376,9 @@ export class EstudianteCaracterizacionIniciarComponent
       respuestas: this.validarPreguntas(respuestas, this.corSurveys),
       grupoFamiliar: [],
     };
-    console.log('values ', this.values);
-    console.log('objToSave', objToSave);
     try {
-      const resp = this.catalogoServiceCOR.updateCaracterizacion(objToSave);
-      console.log('resp', await resp);
+      const resp = await this.catalogoServiceCOR.updateCaracterizacion(objToSave);
+      console.log('respuesta de actualizar ', resp);
     } catch (e) {
       console.log('error e', e);
       const error = e as Error;
@@ -378,7 +390,13 @@ export class EstudianteCaracterizacionIniciarComponent
         titleMessage: 'Error',
         type: MessageType.DANGER,
       };
+
+    } finally {
+      this.pageLoading = false;
+      this.loadingMessage = undefined;
     }
+
+
   }
   async save() {
     const respuestas = this.getAnswerObject(this.values);

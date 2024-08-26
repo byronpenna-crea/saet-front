@@ -7,5 +7,5 @@ import {Component, Input} from '@angular/core';
 })
 export class SaetLoadingComponent {
   @Input() isLoading:boolean = true;
-
+  @Input() message?:string= 'Cargando...'
 }
