@@ -1,5 +1,10 @@
-<p-tabView>
-  <p-tabPanel header="Informe Trimestral COR">
+<p-tabView (onChange)="onTabChange($event)">
+  <p-tabPanel header="Informe cualitativo">
+    cualitativo
+  </p-tabPanel>
+  <p-tabPanel header="Informe cuantitativo">
+  </p-tabPanel>
+  <p-tabPanel header="Informe Trimestral COR" [selected]="true">
     <div class="form-container">
       <p class="title">Escribe el NIE del estudiante.</p>
       <app-saet-input

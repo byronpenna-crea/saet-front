@@ -10,7 +10,7 @@ import {CatalogoServiceDei} from "../../../../../services/catalogo/catalogo.serv
 
 import {Router} from "@angular/router";
 import {DeiBaseComponent} from "../../DeiBaseComponent";
-import {catalogoDepartamento, EnumDepartamentos} from "../../shared/dei";
+import {catalgoZona, catalogoDepartamento, catalogoSexo, EnumDepartamentos, Sexo, Zona} from "../../shared/dei";
 import {linearMockData, LinearMockDataType} from "./mock/linear-data";
 
 @Component({
@@ -70,6 +70,8 @@ export class EstudianteDeiInformeCuantitativoComponent extends DeiBaseComponent 
   }
 
   cities: Departamentos[] = catalogoDepartamento;
+  sexs: Sexo[] = catalogoSexo;
+  zones: Zona[] = catalgoZona;
   departamentos = catalogoDepartamento;
   constructor(
     private deiService:CatalogoServiceDei,

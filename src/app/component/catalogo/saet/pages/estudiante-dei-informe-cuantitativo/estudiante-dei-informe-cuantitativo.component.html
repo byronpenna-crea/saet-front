@@ -1,6 +1,7 @@
 <div style="width: 100%">
   <p-tabView>
-    <p-tabPanel header="Informe cuantitativo">
+    <p-tabPanel header="Informe cualitativo"> </p-tabPanel>
+    <p-tabPanel header="Informe cuantitativo" [selected]="true">
       <div style="display: flex; gap: 25px; margin-bottom: 25px">
         <app-saet-tarjeta-informe
           [numero]="3"
@@ -34,9 +35,13 @@
                 <div style="display: flex; flex-wrap: wrap; gap: 20px">
                   <div style="flex: 1">
                     <label>Zonas</label>
-                    <select>
-                      <option>Seleccionar</option>
-                    </select>
+                    <p-dropdown
+                      [options]="zones"
+                      id="zona-global"
+                      optionLabel="zone_nombre"
+                      placeholder="Selecciona"
+                      optionValue="zone_codigo"
+                    />
                   </div>
                   <div style="flex: 1">
                     <label>Centro Educativo</label>
@@ -46,9 +51,13 @@
                   </div>
                   <div style="flex: 1">
                     <label>Sexo</label>
-                    <select>
-                      <option>Seleccionar</option>
-                    </select>
+                    <p-dropdown
+                      [options]="sexs"
+                      id="sexo-global"
+                      optionLabel="sex_nombre"
+                      placeholder="Selecciona"
+                      optionValue="sex_codigo"
+                    />
                   </div>
                   <div style="flex: 1">
                     <label>Departamento</label>
@@ -78,11 +87,19 @@
                 <div style="display: flex; flex-direction: column; gap: 10px">
                   <div>
                     <label>Desde</label>
-                    <input type="date" />
+                    <p-calendar
+                      [showIcon]="true"
+                      dateFormat="dd/mm/yy"
+                    >
+                    </p-calendar>
                   </div>
                   <div>
                     <label>Hasta</label>
-                    <input type="date" />
+                    <p-calendar
+                      [showIcon]="true"
+                      dateFormat="dd/mm/yy"
+                    >
+                    </p-calendar>
                   </div>
                 </div>
               </fieldset>
@@ -244,7 +261,6 @@
         </div>
       </div>
     </p-tabPanel>
-    <p-tabPanel header="Informe cualitativo"> </p-tabPanel>
     <p-tabPanel header="Informe cualitativo">
       <ng-template pTemplate="header">
         <a (click)="redirectTo('menu/dei/informe-trimestral')">
