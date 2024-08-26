@@ -7,9 +7,11 @@ import {DOCUMENT} from "@angular/common";
 import {ThemeService} from "../../../../../services/ThemeService";
 import {CatalogoServiceDai} from "../../../../../services/catalogo/catalogo.service.dai";
 import {CatalogoServiceDei} from "../../../../../services/catalogo/catalogo.service.dei";
-import {catalogoDepartamento, EnumDepartamentos, linearMockData} from "./mock/linear-data";
+
 import {Router} from "@angular/router";
 import {DeiBaseComponent} from "../../DeiBaseComponent";
+import {catalogoDepartamento, EnumDepartamentos} from "../../shared/dei";
+import {linearMockData, LinearMockDataType} from "./mock/linear-data";
 
 @Component({
   selector: 'app-estudiante-dei-informe-cuantitativo',
@@ -23,15 +25,52 @@ export class EstudianteDeiInformeCuantitativoComponent extends DeiBaseComponent 
   direction = Direction;
 
   linearGraphicData = linearMockData;
-  filteredCasosAbordadosData = this.linearGraphicData[EnumDepartamentos.SANTA_ANA];
+  filteredCasosAbordadosData = this.getFilteredData(this.linearGraphicData);
+  getFilteredData(data:LinearMockDataType) {
+    return Object.keys(data).map(departamentoKey => {
+      const departamentoName = EnumDepartamentos[departamentoKey as keyof typeof EnumDepartamentos] as unknown as string;
+      return {
+        name: departamentoName,
+        series: this.linearGraphicData[departamentoKey as unknown as EnumDepartamentos].map(item => ({
+          name: item.name,
+          value: item.value
+        }))
+      };
+    });
+  }
+  getFilteredDataByDep(departamentoKey:keyof typeof EnumDepartamentos){
 
-  onDepartmentChange(event: Event) {
-    const target = event.target as HTMLSelectElement;
-    const index: number =  parseInt(target.value) ;
-    this.filteredCasosAbordadosData = this.linearGraphicData[index as EnumDepartamentos] || [];
+  }
+  selectedGraphics = {
+    alcance: undefined as EnumDepartamentos | undefined,
+    casos: undefined as EnumDepartamentos | undefined,
+    evaluaciones: undefined as EnumDepartamentos | undefined,
+  };
+  onGlobalDepartmentChange(event: { value: EnumDepartamentos }){
+    const index: EnumDepartamentos =  event.value;
+    this.selectedGraphics['alcance'] = index;
+    this.selectedGraphics.casos = index;
+    this.selectedGraphics.evaluaciones = index;
+    this.onCasesChange({value: index});
+    console.log('selected graphics ----', this.selectedGraphics)
+  }
+  onCasesChange(event: { value: EnumDepartamentos }) {
+    const index: EnumDepartamentos =  event.value;
+    console.log('index here --- ', index);
+    //this.filteredCasosAbordadosData = this.linearGraphicData[index as EnumDepartamentos] || [];
+    this.filteredCasosAbordadosData = [{
+      name: EnumDepartamentos[index],
+      series: this.linearGraphicData[index].map(item => ({
+        name: item.name,
+        value: item.value
+      }))
+    }];
+    console.log('filteredCasosAbordados')
+    this.selectedGraphics.casos = index;
   }
 
-  departamentos: Departamentos[] = catalogoDepartamento;
+  cities: Departamentos[] = catalogoDepartamento;
+  departamentos = catalogoDepartamento;
   constructor(
     private deiService:CatalogoServiceDei,
     @Inject(DOCUMENT) private document: Document,

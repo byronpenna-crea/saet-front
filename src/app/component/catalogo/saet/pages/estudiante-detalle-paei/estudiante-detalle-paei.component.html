@@ -11,6 +11,8 @@
     { href: '', text: 'Edición' }
   ]"
 />
+<app-saet-loading [isLoading]="pageLoading" [message]="loadingMessage" />
+
 <app-saet-mensaje-usuario
   [show]="userMessage.showMessage"
   [message]="userMessage.message"

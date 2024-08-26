@@ -32,6 +32,9 @@ export class EstudianteDetallePaeiComponent
   cuestionariosTableMode: number[] = [];
   userMessage: UserMessage = userMessageInit;
   btnIcon = IconComponent;
+
+  pageLoading = true;
+  loadingMessage?:string = undefined;
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceCOR: CatalogoServiceCor,
@@ -39,7 +42,7 @@ export class EstudianteDetallePaeiComponent
     router: Router,
     confirmationService: ConfirmationService
   ) {
-    const especialidadTarget: string = 'paei';
+    const especialidadTarget = 'paei';
     super(
       document,
       catalogoServiceCOR,
@@ -51,6 +54,7 @@ export class EstudianteDetallePaeiComponent
     this.showActionButtons = true;
     this.catalogoServiceCOR.getPAEIQuestions().then(result => {
       this.corSurveys.push(...result.cuestionarios);
+      this.pageLoading = false;
     });
   }
   onCheckboxChange(keyValues: KeyValue[]) {

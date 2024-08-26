@@ -1,7 +1,7 @@
 <div style="width: 100%">
   <p-tabView>
     <p-tabPanel header="Informe cuantitativo">
-      <div style="display: flex; gap: 25px">
+      <div style="display: flex; gap: 25px; margin-bottom: 25px">
         <app-saet-tarjeta-informe
           [numero]="3"
           titulo="Total de miembros"
@@ -52,9 +52,14 @@
                   </div>
                   <div style="flex: 1">
                     <label>Departamento</label>
-                    <select>
-                      <option>Seleccionar</option>
-                    </select>
+                    <p-dropdown
+                      [options]="cities"
+                      id="departamento-global"
+                      (onChange)="onGlobalDepartmentChange($event)"
+                      optionLabel="nombre_departamento"
+                      placeholder="Selecciona departamento"
+                      optionValue="codigo_departamento"
+                    />
                   </div>
                   <div style="flex: 1">
                     <label>Grado</label>
@@ -177,6 +182,14 @@
             />
             <div style="display: flex; flex-direction: column; gap: 5px">
               Departamentos
+
+              <p-dropdown
+                [options]="cities"
+                optionLabel="nombre_departamento"
+                placeholder="Selecciona departamento"
+                optionValue="nombre_departamento"
+              />
+
               <select>
                 <option
                   *ngFor="let departamento of departamentos"
@@ -207,15 +220,7 @@
               ]"
             />
             <div style="display: flex; flex-direction: column; gap: 5px">
-              Departamentos
-              <select>
-                <option
-                  *ngFor="let departamento of departamentos"
-                  [value]="departamento.codigo_departamento"
-                >
-                  {{ departamento.nombre_departamento }}
-                </option>
-              </select>
+
             </div>
           </div>
         </div>
@@ -224,22 +229,17 @@
             <h3>Casos abordados</h3>
             <app-saet-grafica-linear
               [view]="[1024, 300]"
-              [multi]="[
-                {
-                  name: 'Casos abordados por sexo-femenino',
-                  series: filteredCasosAbordadosData
-                }
-              ]"
+              [multi]="filteredCasosAbordadosData"
             />
-
-            <select (change)="onDepartmentChange($event)">
-              <option
-                *ngFor="let departamento of departamentos"
-                [value]="departamento.codigo_departamento"
-              >
-                {{ departamento.nombre_departamento }}
-              </option>
-            </select>
+            <p-dropdown
+              [options]="cities"
+              id="casos-abordados"
+              (onChange)="onCasesChange($event)"
+              optionLabel="nombre_departamento"
+              placeholder="Selecciona departamento"
+              optionValue="codigo_departamento"
+              [ngModel]="selectedGraphics.casos"
+            />
           </div>
         </div>
       </div>
