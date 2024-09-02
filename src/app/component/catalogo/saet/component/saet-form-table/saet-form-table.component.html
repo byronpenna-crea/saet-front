@@ -1,0 +1,57 @@
+<div>
+  <app-tab-item marginTop="3%" label="Nombre completo">
+    <app-saet-input
+      testId="input_nombre_completo"
+      [value]="nombreCompleto"
+      name="input_nombre_completo"
+    />
+  </app-tab-item>
+
+  <app-tab-item marginTop="3%" label="Edad">
+    <app-saet-input testId="input_edad" [value]="edad" name="input_edad" />
+  </app-tab-item>
+
+  <app-tab-item marginTop="3%" label="Parentesco">
+    <app-saet-input
+      testId="input_parentesco"
+      [value]="parentesco"
+      name="input_parentesco"
+    />
+  </app-tab-item>
+
+  <app-tab-item marginTop="3%" label="Nivel educativo">
+    <app-saet-input
+      testId="input_nivel_educativo"
+      [value]="nivelEducativo"
+      name="input_nivel_educativo"
+    />
+  </app-tab-item>
+
+  <app-tab-item marginTop="3%" label="Ocupacion:">
+    <app-saet-input
+      testId="input_ocapacion"
+      [value]="ocupacion"
+      name="input_ocapacion"
+    />
+  </app-tab-item>
+  <app-saet-underlined-title />
+  <div
+    style="
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      margin-top: 25px;
+    "
+  >
+    <app-saet-button
+      [buttonArgs]="{
+        buttonIcon: IconComponent.PLUS,
+        buttonStyle: ButtonStyle.WHITE,
+        text: 'Agregar miembros familiares'
+      }"
+      (onClick)="(agregarMiembroFamiliar)"
+    />
+  </div>
+
+  <app-saet-table [data]="data" [columns]="columns"> </app-saet-table>
+</div>
