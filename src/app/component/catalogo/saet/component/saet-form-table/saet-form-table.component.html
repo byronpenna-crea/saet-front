@@ -2,19 +2,26 @@
   <app-tab-item marginTop="3%" label="Nombre completo">
     <app-saet-input
       testId="input_nombre_completo"
-      [value]="nombreCompleto"
+      [value]="formData.nombreCompleto"
+      (inputChange)="onInputChange($event, 'nombreCompleto')"
       name="input_nombre_completo"
     />
   </app-tab-item>
 
   <app-tab-item marginTop="3%" label="Edad">
-    <app-saet-input testId="input_edad" [value]="edad" name="input_edad" />
+    <app-saet-input
+      testId="input_edad"
+      (inputChange)="onInputChange($event, 'edad')"
+      [value]="formData.edad"
+      name="input_edad"
+    />
   </app-tab-item>
 
   <app-tab-item marginTop="3%" label="Parentesco">
     <app-saet-input
       testId="input_parentesco"
-      [value]="parentesco"
+      [value]="formData.parentesco"
+      (inputChange)="onInputChange($event, 'parentesco')"
       name="input_parentesco"
     />
   </app-tab-item>
@@ -22,7 +29,8 @@
   <app-tab-item marginTop="3%" label="Nivel educativo">
     <app-saet-input
       testId="input_nivel_educativo"
-      [value]="nivelEducativo"
+      [value]="formData.nivelEducativo"
+      (inputChange)="onInputChange($event, 'nivelEducativo')"
       name="input_nivel_educativo"
     />
   </app-tab-item>
@@ -30,7 +38,8 @@
   <app-tab-item marginTop="3%" label="Ocupacion:">
     <app-saet-input
       testId="input_ocapacion"
-      [value]="ocupacion"
+      [value]="formData.ocupacion"
+      (inputChange)="onInputChange($event, 'ocupacion')"
       name="input_ocapacion"
     />
   </app-tab-item>
@@ -49,9 +58,43 @@
         buttonStyle: ButtonStyle.WHITE,
         text: 'Agregar miembros familiares'
       }"
-      (onClick)="(agregarMiembroFamiliar)"
+      [disabled]="!canAdd"
+      (onClick)="agregarMiembroFamiliar($event)"
     />
   </div>
 
-  <app-saet-table [data]="data" [columns]="columns"> </app-saet-table>
+  <p-table data-testid="table-information" [columns]="columns" [value]="data">
+    <ng-template pTemplate="header" let-columns>
+      <tr>
+        <th *ngFor="let col of columns">
+          {{ col.header }}
+        </th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-rowData>
+      <tr>
+        <td>
+          {{ rowData['nombreCompleto'] }}
+        </td>
+        <td>
+          {{ rowData['nivelEducativo'] }}
+        </td>
+        <td>
+          {{ rowData['col3'] }}
+        </td>
+        <td>
+          <app-saet-button
+            [buttonArgs]="{
+              text: '',
+              buttonStyle: ButtonStyle.BLUE,
+              buttonIcon: IconComponent.CLOSE
+            }"
+            [disabled]="!canDelete"
+            (onClick)="eliminarMiembroFamiliar($event, rowData)"
+          />
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
 </div>
