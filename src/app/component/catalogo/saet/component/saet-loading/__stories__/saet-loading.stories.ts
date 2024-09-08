@@ -12,6 +12,11 @@ export default {
       imports: [StorybookPrimeNgModule, BrowserAnimationsModule],
     }),
   ],
+  argTypes: {
+    message: {
+      control: 'text'
+    }
+  }
 }
 const Template: Story<SaetLoadingComponent> = (args: SaetLoadingComponent) => ({
   component: SaetLoadingComponent,
@@ -20,3 +25,7 @@ const Template: Story<SaetLoadingComponent> = (args: SaetLoadingComponent) => ({
   },
 });
 export const Primary = Template.bind({});
+Primary.args = {
+  message: 'Cargando',
+  isLoading: true
+}
