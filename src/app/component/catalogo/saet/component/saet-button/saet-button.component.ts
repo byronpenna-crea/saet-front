@@ -24,16 +24,13 @@ export interface SaetButtonArgs {
   styleUrls: ['./saet-button.component.css'],
 })
 export class SaetButtonComponent implements OnChanges {
-  /*@Input() text:string = "";
-  @Input() buttonStyle?:ButtonStyle = ButtonStyle.WHITE;
-  @Input() buttonIcon?:ButtonIcon | null = null;*/
-  @Input() testId: string = '';
+  @Input() testId = '';
   @Input() buttonArgs: SaetButtonArgs = {
     buttonIcon: null,
     buttonStyle: ButtonStyle.WHITE,
     text: '',
   };
-  @Input() disabled: boolean = false;
+  @Input() disabled = false;
   @Output() onClick: EventEmitter<Event> = new EventEmitter<Event>();
   handleClick(event: Event): void {
     console.log('handle clic button',this.disabled);
@@ -42,9 +39,9 @@ export class SaetButtonComponent implements OnChanges {
       this.onClick.emit(event);
     }
   }
-  @Input() customClasses: string = '';
-  styleClasses: string = '';
-  iconClass: string = '';
+  @Input() customClasses = '';
+  styleClasses = '';
+  iconClass = '';
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['buttonArgs']) {
