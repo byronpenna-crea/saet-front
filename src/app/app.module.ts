@@ -108,6 +108,7 @@ import { EstudianteDeiInformeCualitativoComponent } from './component/catalogo/s
 import { SaetTarjetaInformeComponent } from './component/catalogo/saet/component/saet-tarjeta-informe/saet-tarjeta-informe.component';
 import { SaetIndividualRadioComponent } from './component/catalogo/saet/component/saet-individual-radio/saet-individual-radio.component';
 import { SaetLoadingComponent } from './component/catalogo/saet/component/saet-loading/saet-loading.component';
+import { SaetFormTableComponent } from './component/catalogo/saet/component/saet-form-table/saet-form-table.component';
 
 @NgModule({
   declarations: [
@@ -173,6 +174,7 @@ import { SaetLoadingComponent } from './component/catalogo/saet/component/saet-l
     SaetTarjetaInformeComponent,
     SaetIndividualRadioComponent,
     SaetLoadingComponent,
+    SaetFormTableComponent,
   ],
   imports: [
     BrowserModule,

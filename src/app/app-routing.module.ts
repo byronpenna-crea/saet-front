@@ -35,6 +35,9 @@ import {EstudianteDeiInformeCuantitativoComponent} from "./component/catalogo/sa
 import {
   EstudianteDeiInformeTrimestralComponent
 } from "./component/catalogo/saet/pages/estudiante-dei-informe-trimestral/estudiante-dei-informe-trimestral.component";
+import {
+  EstudianteDeiInformeCualitativoComponent
+} from "./component/catalogo/saet/pages/estudiante-dei-informe-cualitativo/estudiante-dei-informe-cualitativo.component";
 
 /*
 const routes: Routes = [
@@ -96,6 +99,10 @@ const routes: Routes = [
       {
         path: 'dai/saet-caracterizacion-iniciar/:nie',
         component: EstudianteDaiCaracterizacionComponent,
+      },
+      {
+        path: 'dei/informe-cualitativo',
+        component: EstudianteDeiInformeCualitativoComponent,
       },
       {
         path: 'dei/informe-cuantitativo',

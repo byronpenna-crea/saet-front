@@ -27,13 +27,13 @@ export class EstudianteInformeTrimestralComponent
 {
   userMessage: UserMessage = userMessageInit;
   showTable = false;
-  inputNIE: string = '';
-  cnResult: number = 0;
+  inputNIE = '';
+  cnResult = 0;
   searchButton: SaetButtonArgs = {
     buttonStyle: ButtonStyle.BLUE,
     text: 'Buscar',
   };
-
+  pageLoading = false;
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceCOR: CatalogoServiceCor,
@@ -68,6 +68,7 @@ export class EstudianteInformeTrimestralComponent
   async toggleTable() {
     if (this.inputNIE) {
       try {
+        this.pageLoading = true;
         const result = await this.catalogoServiceCOR.getStudentInfo(
           this.inputNIE
         );
@@ -79,6 +80,8 @@ export class EstudianteInformeTrimestralComponent
           message: 'Error al obtener la información del estudiante',
           type: MessageType.DANGER,
         };
+      } finally {
+        this.pageLoading = false;
       }
     } else {
       this.userMessage = {

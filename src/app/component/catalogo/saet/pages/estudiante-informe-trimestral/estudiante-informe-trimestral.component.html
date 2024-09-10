@@ -5,6 +5,8 @@
     </a>
   </div>
 </div>
+<app-saet-loading [isLoading]="pageLoading" />
+
 <div class="form-container">
   <p class="title">Escribe el NIE del estudiante.</p>
   <app-saet-input
@@ -50,6 +52,80 @@
       <app-saet-underlined-title>
         Informe trimestral de estudiantes atendidos en el COR
       </app-saet-underlined-title>
+      <p-table
+        data-testid="served-students"
+        [columns]="[
+          { key: 'number', header: 'Nº' },
+          { key: 'tableHeaderStudentName', header: 'Nombre estudiante' },
+          { key: 'tableHeaderStudentSex', header: 'Sexo' },
+          { key: 'tableHeaderStudentAge', header: 'Edad' },
+          { key: 'tableHeaderStudentGrade', header: 'Grado' },
+          {
+            key: 'tableHeaderStudentSchool',
+            header: 'Centro educativo de procedencia'
+          },
+          { key: 'tableHeaderStudentCity', header: 'Municipio' },
+          {
+            key: 'tableHeaderStudentIssue',
+            header: 'Dificultad que representa'
+          },
+          { key: 'tableHeaderStudentPaeiStatus', header: 'Estatus PAEI' }
+        ]"
+        [value]="[
+          {
+            number: '1',
+            tableHeaderStudentName: 'Byron Aldair Pena',
+            tableHeaderStudentSex: 'M',
+            tableHeaderStudentAge: 30,
+            tableHeaderStudentGrade: 9,
+            tableHeaderStudentSchool: 'Ricaldone',
+            tableHeaderStudentCity: 'Soyapango',
+            tableHeaderStudentIssue: 'Demasiado bueno'
+          }
+        ]"
+      >
+        <ng-template pTemplate="header" let-columns>
+          <tr>
+            <th *ngFor="let col of columns">
+              {{ col.header }}
+            </th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData>
+          <tr>
+            <td>
+              {{ rowData['number'] }}
+            </td>
+            <td>
+              {{ rowData['tableHeaderStudentName'] }}
+            </td>
+            <td>
+              {{ rowData['tableHeaderStudentSex'] }}
+            </td>
+            <td>
+              {{ rowData['tableHeaderStudentAge'] }}
+            </td>
+            <td>
+              {{ rowData['tableHeaderStudentGrade'] }}
+            </td>
+            <td>
+              {{ rowData['tableHeaderStudentSchool'] }}
+            </td>
+            <td>
+              {{ rowData['tableHeaderStudentCity'] }}
+            </td>
+            <td>
+              {{ rowData['tableHeaderStudentIssue'] }}
+            </td>
+            <td>
+              <div style="display: flex; flex-direction: Column; gap: 10px;">
+                <app-saet-individual-radio label="Entregado" />
+                <app-saet-individual-radio label="Pendiente" />
+              </div>
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
     </app-tabs>
   </div>
   <div class="mt-2">
