@@ -1,4 +1,4 @@
-::ng-deep .saet-button-parent {
+.saet-button-parent {
   display: flex;
   flex-direction: column;
   padding: 10px;
@@ -6,7 +6,7 @@
   margin-top: 1%;
 }
 
-::ng-deep .button-container-group {
+.button-container-group {
   display: flex;
   gap: 30px;
   border-radius: 0px;
@@ -15,7 +15,7 @@
   flex-wrap: wrap;
 }
 
-::ng-deep .tabButton,
+.tabButton,
 .tabSeletectedButton {
   border-radius: 3px 3px 0px 0px;
   background: white;
@@ -26,29 +26,29 @@
   /*height: 46px;*/
 }
 
-::ng-deep .tabSeletectedButton {
+.tabSeletectedButton {
   background: #00498d;
   color: white;
   text-align: center;
 }
 
-::ng-deep .form-container .button-container a {
+.form-container .button-container a {
   text-decoration: none;
 }
 
-::ng-deep .read-only .button-container-group,
-::ng-deep .read-only .tabButton,
-::ng-deep .read-only .tabSeletectedButton {
+.read-only .button-container-group,
+.read-only .tabButton,
+.read-only .tabSeletectedButton {
   border-color: gray;
   color: gray;
 }
 
-::ng-deep .read-only .tabButton,
-::ng-deep .read-only .tabSeletectedButton {
+.read-only .tabButton,
+.read-only .tabSeletectedButton {
   background: lightgray;
 }
 
-::ng-deep .read-only .tabSeletectedButton {
+.read-only .tabSeletectedButton {
   background: gray;
   color: lightgray;
 }
@@ -58,7 +58,7 @@
 */
 
 @media screen and (max-width: 1920px) {
-  ::ng-deep .saet-button-parent {
+  .saet-button-parent {
     display: flex;
     flex-direction: column;
     padding: 10px;
@@ -68,7 +68,7 @@
 }
 
 @media screen and (max-width: 1600px) {
-  ::ng-deep .saet-button-parent {
+  .saet-button-parent {
     display: flex;
     flex-direction: column;
     padding: 10px;
@@ -78,7 +78,7 @@
 }
 
 @media screen and (max-width: 800px) {
-  ::ng-deep .button-container-group {
+  .button-container-group {
     display: flex;
     flex-direction: column;
     gap: 0px;
@@ -87,7 +87,7 @@
     padding-left: 0;
   }
 
-  ::ng-deep .tabButton,
+  .tabButton,
   .tabSeletectedButton {
     /*width: 280px;*/
     /*height: 46px;*/

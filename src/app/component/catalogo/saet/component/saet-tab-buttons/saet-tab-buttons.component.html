@@ -1,5 +1,23 @@
 <div [class.read-only]="readOnly" class="saet-button-parent">
   <div class="button-container-group">
-    <ng-content></ng-content>
+    <ng-container *ngIf="tabs && tabs.length > 0; else noTabsTemplate">
+      <a
+        *ngFor="let tab of tabs"
+        type="button"
+        class="p-button p-component tabButton"
+        [attr.data-testid]="tab.testId"
+        [ngClass]="{
+          tabSeletectedButton: tab.selected,
+          'global-header-read-only': tab.readOnly
+        }"
+        [href]="tab.readOnly ? null : tab.href"
+        (click)="handleClick($event, tab)"
+      >
+        {{ tab.text }}
+      </a>
+    </ng-container>
+    <ng-template #noTabsTemplate>
+      <ng-content></ng-content>
+    </ng-template>
   </div>
 </div>
