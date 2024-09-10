@@ -1,0 +1,13 @@
+<app-saet-global-header
+  [nie]="nie"
+  [nombreCompleto]="studentInfo?.nombreCompleto ?? ''"
+  selectedTab="datosGenerales"
+  [readOnlyPaei]="readOnlyPaei"
+  [readOnlyEvaluaciones]="readOnlyEvaluaciones"
+  module="DAI"
+  [breadcrumb]="[
+    { href: '#/menu/saet-buscar', text: 'Buscar estudiante' },
+    { href: '#/menu/saet-buscar/' + nie, text: nie },
+    { href: '#/menu/saet-datos-estudiante/' + nie, text: 'Datos generales' }
+  ]"
+/>
