@@ -3,13 +3,18 @@ import {Meta, moduleMetadata, Story} from "@storybook/angular";
 import {StorybookPrimeNgModule} from "../../../../../../storybook-config/storybook-prime-ng.module";
 import {SaetAgendarEvaluacionComponent} from "../saet-agendar-evaluacion.component";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-
+import {TabItemComponent} from "../../tab-item/tab-item.component";
+import {SaetInputComponent} from "../../saet-input/saet-input.component";
+import {SaetUnderlinedTitleComponent} from "../../saet-underlined-title/saet-underlined-title.component";
+import {SaetButtonComponent} from "../../saet-button/saet-button.component";
 export default {
   title: 'Agendar-evaluacion',
   component: SaetAgendarEvaluacionComponent,
   decorators: [
     moduleMetadata({
-      imports: [StorybookPrimeNgModule, BrowserAnimationsModule],
+      declarations: [TabItemComponent, SaetInputComponent,SaetUnderlinedTitleComponent, SaetButtonComponent],
+      imports: [
+        StorybookPrimeNgModule, BrowserAnimationsModule],
     }),
   ],
 } as Meta;
@@ -20,3 +25,14 @@ const Template: Story<SaetAgendarEvaluacionComponent> = (args: SaetAgendarEvalua
 });
 
 export const Primary = Template.bind({});
+Primary.args = {
+  readOnly: false,
+  especialistaResponsableAgendar: {
+    dui: '05035096-8',
+    nombreCompleto: 'Byron Aldair Pena Portillo'
+  },
+  especialistaResponsableEvaluacion: {
+    dui: '02156478-8',
+    nombreCompleto: 'Diana Lisbeth Alfaro Galdamez'
+  }
+}

@@ -1,6 +1,5 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
-import { CatalogoServiceCor } from '../../../../../services/catalogo/catalogo.service.cor';
-import { DOCUMENT } from '@angular/common';
+import { Component, Input, OnInit } from '@angular/core';
+import { SAET_MODULE } from '../../shared/evaluaciones';
 
 interface BreadcrumbItem {
   href: string;
@@ -15,7 +14,8 @@ export class SaetGlobalHeaderComponent implements OnInit {
   @Input() nie: string = '';
   @Input() nombreCompleto: string = '';
   @Input() selectedTab: string = '';
-  tabMenu: {
+  @Input() module:SAET_MODULE = SAET_MODULE.COR;
+  @Input() tabMenu: {
     url: string;
     text: string;
     name: string;
@@ -27,6 +27,14 @@ export class SaetGlobalHeaderComponent implements OnInit {
   @Input() _readOnlyEvaluaciones: boolean = true;
   @Input() _readOnlyPaei: boolean = true;
 
+  getModuleString() {
+    switch (this.module) {
+      case SAET_MODULE.COR:
+        return 'COR';
+      case SAET_MODULE.DAI:
+        return 'DAI';
+    }
+  }
   @Input()
   set readOnlyEvaluaciones(value: boolean) {
     this._readOnlyEvaluaciones = value;
@@ -37,8 +45,37 @@ export class SaetGlobalHeaderComponent implements OnInit {
     this._readOnlyPaei = value;
     this.generateTabs();
   }
-
-  generateTabs() {
+  generateTabs(){
+    switch (this.module) {
+      case SAET_MODULE.DAI:
+        console.log('dai tabs');
+        this.generateDAITabs();
+        return;
+      case SAET_MODULE.COR:
+        console.log('here cor');
+        this.generateCORTabs();
+        return;
+    }
+  }
+  generateDAITabs() {
+    this.tabMenu = [
+      {
+        name: 'datosGenerales',
+        url: `#/menu/dai/saet-datos-estudiante/${this.nie}`,
+        text: 'Datos generales',
+        readOnly: false,
+        testId: 'tab-datos-generales',
+      },
+      {
+        name: 'Caracterizacion',
+        url: `#/menu/dai/saet-caracterizacion-estudiante/${this.nie}`,
+        text: 'Caracterización',
+        readOnly: false,
+        testId: 'tab-caracterizacion',
+      },
+    ];
+  }
+  generateCORTabs() {
     this.tabMenu = [
       {
         name: 'datosGenerales',

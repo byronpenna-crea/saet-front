@@ -7,19 +7,8 @@
       }}</span>
       <span *ngIf="!isLast"> / </span>
     </ng-container>
-    <!--
-
-    <a href="#/menu/saet-buscar">Buscar estudiante</a>
-    <span *ngIf="nie !== ''">
-      /
-      <a href="#/menu/saet-buscar/{{nie}}">{{nie}}</a>
-      /
-      <a href="#/menu/saet-datos-estudiante/{{nie}}}">Datos generales</a>
-    </span>
-
-    -->
   </div>
-  <h2>Buscar estudiante</h2>
+  <h2>{{ getModuleString() }} - Buscar estudiante</h2>
 </div>
 <div class="form-container">
   <app-saet-student-name-header [name]="nombreCompleto" />

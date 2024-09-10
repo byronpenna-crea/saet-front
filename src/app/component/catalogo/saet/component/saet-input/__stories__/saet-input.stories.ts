@@ -2,14 +2,17 @@ import {Meta, moduleMetadata, Story} from "@storybook/angular";
 import {StorybookPrimeNgModule} from "../../../../../../storybook-config/storybook-prime-ng.module";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {SaetInputComponent} from "../saet-input.component";
+import {InputTextModule} from "primeng/inputtext";
 export default {
   title: 'saet-input',
   component: SaetInputComponent,
   decorators: [
     moduleMetadata({
-
-      declarations: [SaetInputComponent],
-      imports: [StorybookPrimeNgModule, BrowserAnimationsModule],
+      imports: [
+        StorybookPrimeNgModule,
+        BrowserAnimationsModule,
+        InputTextModule
+      ],
     }),
   ],
 } as Meta;
