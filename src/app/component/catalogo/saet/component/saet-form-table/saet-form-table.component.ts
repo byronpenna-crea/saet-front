@@ -54,15 +54,17 @@ export class SaetFormTableComponent {
     this.updateCanAdd();
   }
   agregarMiembroFamiliar(event: Event){
+    console.log('pariente to add ');
     const pariente:FormTablePariente = {
       id: `temp-${this.cn}`,
-      nombreCompleto: this.formData.nombreCompleto,
-      nivelEducativo: this.formData.nivelEducativo,
-      ocupacion: this.formData.ocupacion,
-      parentesco: this.formData.parentesco
+      nombreCompleto: this.formData.nombreCompleto ?? '',
+      nivelEducativo: this.formData.nivelEducativo ?? '',
+      ocupacion: this.formData.ocupacion ?? '',
+      parentesco: this.formData.parentesco ?? ''
     }
-    this.data.push(pariente);
     console.log('pariente to add ', pariente);
+    console.log('data', this.data);
+    this.data !== undefined ? this.data.push(pariente) : this.data = [pariente];
     this.cn++;
     this.formAdd.emit({pariente: pariente});
     this.cleanValues();

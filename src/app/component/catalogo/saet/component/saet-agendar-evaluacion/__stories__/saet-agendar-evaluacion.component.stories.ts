@@ -7,14 +7,17 @@ import {TabItemComponent} from "../../tab-item/tab-item.component";
 import {SaetInputComponent} from "../../saet-input/saet-input.component";
 import {SaetUnderlinedTitleComponent} from "../../saet-underlined-title/saet-underlined-title.component";
 import {SaetButtonComponent} from "../../saet-button/saet-button.component";
+import {SaetTabComponent} from "../../saet-tab/saet-tab.component";
+import {TabViewModule} from "primeng/tabview";
+import {FieldsetModule} from "primeng/fieldset";
 export default {
   title: 'Agendar-evaluacion',
   component: SaetAgendarEvaluacionComponent,
   decorators: [
     moduleMetadata({
-      declarations: [TabItemComponent, SaetInputComponent,SaetUnderlinedTitleComponent, SaetButtonComponent],
+      declarations: [TabItemComponent, SaetInputComponent,SaetUnderlinedTitleComponent, SaetButtonComponent, SaetTabComponent],
       imports: [
-        StorybookPrimeNgModule, BrowserAnimationsModule],
+        StorybookPrimeNgModule, BrowserAnimationsModule, TabViewModule, FieldsetModule],
     }),
   ],
 } as Meta;
