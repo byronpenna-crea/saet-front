@@ -56,8 +56,8 @@ export class EstudianteEvaluacionesComponent
   //nie:string = "";
   //studentInfo?: StudentDetail;
 
-  psicologiaEspecilistaAgendado: string = '';
-  psicologiaEvaluationId: number = 0;
+  psicologiaEspecilistaAgendado = '';
+  psicologiaEvaluationId = 0;
   especialista: { [key in iEspecialidadEvaluacion]: IAgendaEspecialista } = {
     [iEspecialidadEvaluacion.LENGUAJE]: {
       dui: '',
@@ -83,9 +83,9 @@ export class EstudianteEvaluacionesComponent
     [iEspecialidadEvaluacion.PSICOLOGIA]: false,
   };
 
-  lenguajeHablaAgendada: boolean = false;
+  lenguajeHablaAgendada = false;
 
-  readOnlyTab: boolean = true;
+  readOnlyTab = true;
   agendaTabs: TabInput[] = [];
   successMessage: IUserMessage = {
     show: true,
@@ -94,7 +94,7 @@ export class EstudianteEvaluacionesComponent
   };
 
   especialidad: iEspecialidadEvaluacion;
-  idPersona: number = 0;
+  idPersona = 0;
 
   especialidades = ['Psicologia', 'Lenguaje y habla', 'Pedagogía'];
 
@@ -247,7 +247,7 @@ export class EstudianteEvaluacionesComponent
       }
     }
   }
-  getTabs(name: string = '') {
+  getTabs(name = '') {
     const tabs: TabInput[] = [
       {
         leyend: 'Evaluación Habla y lenguaje',
