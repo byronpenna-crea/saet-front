@@ -6,7 +6,7 @@ import {
 } from '../../../services/catalogo/catalogo.service.cor';
 import { DOCUMENT } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BaseComponent } from './BaseComponent';
+import { CorBaseComponent } from './CorBaseComponent';
 import { IconComponent, QuestionType } from './shared/component.config';
 import { iSurvey } from './shared/survey';
 import { KeyValue } from './component/saet-input/saet-input.component';
@@ -32,7 +32,7 @@ export interface IQuestionaryAnswer {
   respuesta: string;
 }
 @Injectable()
-export class QuestionsComponent extends BaseComponent {
+export class QuestionsComponent extends CorBaseComponent {
   corSurveys: iSurvey[] = [];
 
   values: IValuesForm = {};
@@ -96,24 +96,6 @@ export class QuestionsComponent extends BaseComponent {
   getQuestionType(type: string): QuestionType {
     return QuestionType[type as keyof typeof QuestionType];
   }
-  convertString(input: string): string {
-    let result = input.toLowerCase();
-    const accentsMap: { [key: string]: string } = {
-      á: 'a',
-      é: 'e',
-      í: 'i',
-      ó: 'o',
-      ú: 'u',
-      ü: 'u',
-      ñ: 'n',
-    };
-
-    result = result.replace(/[áéíóúüñ]/g, match => accentsMap[match]);
-
-    result = result.replace(/\s+/g, '_');
-
-    return result;
-  }
   getName(name: string): string {
     return this.convertString(name);
   }
@@ -138,6 +120,7 @@ export class QuestionsComponent extends BaseComponent {
       this.router.navigate([url, this.nie]);
     }
   }
+
   responseToValues(response: IEvaluacionResponse): IValuesForm {
     const values: IValuesForm = {};
 
@@ -146,7 +129,7 @@ export class QuestionsComponent extends BaseComponent {
       const inputKey = `input_${respuesta.id_pregunta}`;
 
       if (respuesta.opcion.length > 0) {
-        values[radioKey] = respuesta.opcion[0].opcion;
+        values[radioKey] = respuesta.opcion[0].opcion_pregunta_pk !== undefined ? respuesta.opcion[0].opcion_pregunta_pk.toString() : '';
       }
       values[inputKey] = respuesta.respuesta;
     });

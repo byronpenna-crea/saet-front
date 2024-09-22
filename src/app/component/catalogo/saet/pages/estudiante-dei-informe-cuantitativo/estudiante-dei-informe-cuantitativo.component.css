@@ -5,6 +5,37 @@
   justify-content: center;
   width: 100%;
 }
+.filters-parent-div{
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  border: 1px solid #ccc;
+  padding: 20px;
+  width: 100%;
+}
+.periodo-tiempo-row {
+  display: flex;
+  align-items: center;
+  text-align: right;
+}
+
+.periodo-tiempo-label {
+  flex: 0 0 80px; /* Deja que la etiqueta ocupe el espacio mínimo necesario */
+  margin-right: 10px;
+}
+
+.periodo-tiempo-input {
+  flex: 1; /* El input se expande para ocupar el espacio restante */
+}
+.filter-container{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px
+}
+.filter-cell{
+  display: flex;
+  flex-direction: column;
+}
 .radios {
   display: flex; gap: 20px;
 }

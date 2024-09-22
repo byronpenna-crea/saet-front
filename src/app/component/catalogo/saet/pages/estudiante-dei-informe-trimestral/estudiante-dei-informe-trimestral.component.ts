@@ -36,5 +36,8 @@ export class EstudianteDeiInformeTrimestralComponent extends DeiBaseComponent{
     if (index === 1) {
       this.redirectTo('menu/dei/informe-cuantitativo');
     }
+    if (index === 1) {
+      this.redirectTo('menu/dei/informe-cuantitativo');
+    }
   }
 }

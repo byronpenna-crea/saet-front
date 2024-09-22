@@ -19,21 +19,12 @@
       <div style="display: flex; flex-direction: column; gap: 20px">
         <h2 class="title">Datos generales a nivel nacional</h2>
         <div class="graphics-container">
-          <div
-            style="
-              display: flex;
-              gap: 20px;
-              align-items: flex-start;
-              border: 1px solid #ccc;
-              padding: 20px;
-            "
-          >
-            <!-- Sección de Geografía -->
+          <div class="filters-parent-div">
             <div style="flex: 2">
               <fieldset style="border: 1px solid #ccc; padding: 10px">
                 <legend style="font-weight: bold">Geografía</legend>
-                <div style="display: flex; flex-wrap: wrap; gap: 20px">
-                  <div style="flex: 1">
+                <div class="filter-container">
+                  <div class="filter-cell">
                     <label>Zonas</label>
                     <p-dropdown
                       [options]="zones"
@@ -43,13 +34,17 @@
                       optionValue="zone_codigo"
                     />
                   </div>
-                  <div style="flex: 1">
+                  <div class="filter-cell">
                     <label>Centro Educativo</label>
-                    <select>
-                      <option>Seleccionar</option>
-                    </select>
+                    <p-dropdown
+                      [options]="[]"
+                      id="centro-educativo-global"
+                      optionLabel="centro_label"
+                      placeholder="Selecciona"
+                      optionValue="centro_value"
+                    />
                   </div>
-                  <div style="flex: 1">
+                  <div class="filter-cell">
                     <label>Sexo</label>
                     <p-dropdown
                       [options]="sexs"
@@ -59,7 +54,7 @@
                       optionValue="sex_codigo"
                     />
                   </div>
-                  <div style="flex: 1">
+                  <div class="filter-cell">
                     <label>Departamento</label>
                     <p-dropdown
                       [options]="cities"
@@ -70,11 +65,15 @@
                       optionValue="codigo_departamento"
                     />
                   </div>
-                  <div style="flex: 1">
+                  <div class="filter-cell">
                     <label>Grado</label>
-                    <select>
-                      <option>Seleccionar</option>
-                    </select>
+                    <p-dropdown
+                      [options]="[]"
+                      id="grado-global"
+                      optionLabel="centro_label"
+                      placeholder="Selecciona"
+                      optionValue="centro_value"
+                    />
                   </div>
                 </div>
               </fieldset>
@@ -85,19 +84,27 @@
               <fieldset style="border: 1px solid #ccc; padding: 10px">
                 <legend style="font-weight: bold">Período de tiempo</legend>
                 <div style="display: flex; flex-direction: column; gap: 10px">
-                  <div>
-                    <label>Desde</label>
+                  <div class="periodo-tiempo-row">
+                    <label for="desde" class="periodo-tiempo-label"
+                      >Desde:</label
+                    >
                     <p-calendar
+                      id="desde"
                       [showIcon]="true"
                       dateFormat="dd/mm/yy"
+                      styleClass="periodo-tiempo-input"
                     >
                     </p-calendar>
                   </div>
-                  <div>
-                    <label>Hasta</label>
+                  <div class="periodo-tiempo-row">
+                    <label for="hasta" class="periodo-tiempo-label"
+                      >Hasta:</label
+                    >
                     <p-calendar
+                      id="hasta"
                       [showIcon]="true"
                       dateFormat="dd/mm/yy"
+                      styleClass="periodo-tiempo-input"
                     >
                     </p-calendar>
                   </div>
@@ -206,15 +213,6 @@
                 placeholder="Selecciona departamento"
                 optionValue="nombre_departamento"
               />
-
-              <select>
-                <option
-                  *ngFor="let departamento of departamentos"
-                  [value]="departamento.codigo_departamento"
-                >
-                  {{ departamento.nombre_departamento }}
-                </option>
-              </select>
             </div>
           </div>
           <div class="graphic-container">
@@ -236,9 +234,7 @@
                 { name: 'DIC', value: 80 }
               ]"
             />
-            <div style="display: flex; flex-direction: column; gap: 5px">
-
-            </div>
+            <div style="display: flex; flex-direction: column; gap: 5px"></div>
           </div>
         </div>
         <div class="graphics-container">

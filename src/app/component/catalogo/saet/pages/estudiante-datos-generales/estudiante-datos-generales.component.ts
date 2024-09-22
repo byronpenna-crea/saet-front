@@ -5,7 +5,7 @@ import {
   StudentDetail,
 } from '../../../../../services/catalogo/catalogo.service.cor';
 import { ActivatedRoute, Router } from '@angular/router';
-import { BaseComponent } from '../../BaseComponent';
+import { CorBaseComponent } from '../../CorBaseComponent';
 import {
   generalInformationInit,
   institutionalInfoInit,
@@ -35,8 +35,7 @@ enum informationTabMapping {
   templateUrl: './estudiante-datos-generales.component.html',
   styleUrls: ['./estudiante-datos-generales.component.css'],
 })
-export class EstudianteDatosGeneralesComponent extends BaseComponent {
-  corSurveys: iSurvey[] = [];
+export class EstudianteDatosGeneralesComponent extends CorBaseComponent {
 
   generalInformation: IinformationTab = generalInformationInit;
   trustedAdultInfo: IinformationTab = trustedAdultInfoInit;
@@ -49,6 +48,7 @@ export class EstudianteDatosGeneralesComponent extends BaseComponent {
     router: Router
   ) {
     super(document, catalogoServiceCOR, route, router);
+    this.pageLoading = true;
     this.loadStudentInfo()
       .then(estudiante => {
         const { generalInformation, institutionalInfo, trustedAdultInfo } =
@@ -73,7 +73,10 @@ export class EstudianteDatosGeneralesComponent extends BaseComponent {
       })
       .catch(e => {
         console.log('Error loading student info in derived component:', e);
-      });
+      }).finally(() => {
+
+      this.pageLoading = false;
+    });
   }
 
   handleDatosGeneralesClick(): void {

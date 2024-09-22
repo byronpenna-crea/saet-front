@@ -12,7 +12,7 @@ import {
 } from '../../../../../services/catalogo/catalogo.service.cor';
 import { ActivatedRoute, Router } from '@angular/router';
 import { userMessageInit } from '../../shared/messages.model';
-import { BaseComponent } from '../../BaseComponent';
+import { CorBaseComponent } from '../../CorBaseComponent';
 import { TIPO_EVALUACION } from '../../shared/evaluaciones';
 import {
   IAgendaEspecialista,
@@ -49,12 +49,10 @@ interface TabInput {
   styleUrls: ['./estudiante-evaluaciones.component.css'],
 })
 export class EstudianteEvaluacionesComponent
-  extends BaseComponent
+  extends CorBaseComponent
   implements IMessageComponent
 {
   userMessage: UserMessage = userMessageInit;
-  //nie:string = "";
-  //studentInfo?: StudentDetail;
 
   psicologiaEspecilistaAgendado = '';
   psicologiaEvaluationId = 0;
@@ -87,17 +85,11 @@ export class EstudianteEvaluacionesComponent
 
   readOnlyTab = true;
   agendaTabs: TabInput[] = [];
-  successMessage: IUserMessage = {
-    show: true,
-    message: '¡Los datos han sido guardados exitosamente!',
-    title: 'Datos guardados',
-  };
 
   especialidad: iEspecialidadEvaluacion;
   idPersona = 0;
 
   especialidades = ['Psicologia', 'Lenguaje y habla', 'Pedagogía'];
-
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceCOR: CatalogoServiceCor,
@@ -106,7 +98,10 @@ export class EstudianteEvaluacionesComponent
     router: Router
   ) {
     super(document, catalogoServiceCOR, route, router);
+    this.pageLoading = true;
+    this.userMessage.showMessage = false;
 
+    console.log('constructor -----------');
     Object.values(iEspecialidadEvaluacion).forEach(especialidad => {
       this.agendado[especialidad] = false;
     });
@@ -130,6 +125,7 @@ export class EstudianteEvaluacionesComponent
     this.especialidad = localStorage.getItem(
       'especialidad'
     ) as iEspecialidadEvaluacion;
+    console.log('especialidad logueado ', this.especialidad);
 
     const idPersonaStr = localStorage.getItem('id_persona') ?? '0';
     this.idPersona = isNaN(parseInt(idPersonaStr, 10))
@@ -141,7 +137,7 @@ export class EstudianteEvaluacionesComponent
       this.agendaTabs = tabs;
     }
 
-    this.agendaTabs = this.agendaTabs.sort((a, b) =>
+    this.agendaTabs = this.agendaTabs.sort((a,) =>
       a.name === this.especialidad ? -1 : 1
     );
     this.agendaTabs[0].readOnly = false;
@@ -155,8 +151,6 @@ export class EstudianteEvaluacionesComponent
     this.catalogoServiceCOR
       .getTipoDeEvaluacion(this.nie, enumEspecialidad)
       .then(response => {
-        console.log('evaluacion here ---- ', response);
-        console.log('enum especialidad ---- ', enumEspecialidad);
         if (response.id_evaluacion !== 0) {
           this.psicologiaEspecilistaAgendado =
             response.especialista_responsable;
@@ -177,7 +171,6 @@ export class EstudianteEvaluacionesComponent
       });
 
     catalogoServiceCOR.getCorEspecialistas(this.nie).then(response => {
-      console.log('response especialistas ', response);
       response.forEach(especialista => {
         if (this.especialidades.includes(especialista.especialidad)) {
           if (especialista.especialidad === 'Psicologia') {
@@ -197,7 +190,6 @@ export class EstudianteEvaluacionesComponent
             this.updateTab(iEspecialidadEvaluacion.PEDAGOGIA, true);
           }
           if (especialista.especialidad === 'Lenguaje y habla') {
-            console.log('here especialista ', especialista);
             this.agendado[iEspecialidadEvaluacion.LENGUAJE] = true;
             this.especialista[iEspecialidadEvaluacion.LENGUAJE] = {
               nombreCompleto: especialista.nombre_completo,
@@ -208,6 +200,8 @@ export class EstudianteEvaluacionesComponent
           //
         }
       });
+    }).finally(() => {
+      this.pageLoading = false;
     });
   }
   onMessage(event: {
@@ -329,18 +323,19 @@ export class EstudianteEvaluacionesComponent
     await this.router.navigate(['/menu/saet-pedagogia/', this.nie]);
   }
   async iniciarLenguajeHabla() {
-    await this.router.navigate(['/menu/saet-lenguaje-habla/', this.nie]);
+    console.log('lenguaje y habla');
+    //await this.router.navigate(['/menu/saet-lenguaje-habla/', this.nie]);
   }
 
   // pedagogia
-  async agendarPedagogia() {
+  /* async agendarPedagogia() {
     if (this.studentInfo?.id_est_pk === undefined) {
       console.error('estudiante no encontrado');
       return;
     }
     const obj: ISaveQuestionary = {
       id_estudiante_fk: this.studentInfo?.id_est_pk,
-      id_especialista: this.idPersona,
+      id_especialista: 2,//this.idPersona,
       id_tipo_evaluacion: TIPO_EVALUACION.pedagogo_perfil,
       fecha: '12/12/2023',
       hora: '12:40',
@@ -352,7 +347,8 @@ export class EstudianteEvaluacionesComponent
       this.agendado[iEspecialidadEvaluacion.PEDAGOGIA] = true;
       this.updateTab('pedagogia', true);
     }
-  }
+  } */
+
   /*cancelarPedagogia() {
     this.pedagogiaAgendada = false;
     this.pedagogiaMessage = {
@@ -362,6 +358,7 @@ export class EstudianteEvaluacionesComponent
   }*/
   // psicologia
   async cancelar(event: IOnCancelarAgenda) {
+    this.pageLoading = true;
     if (event.evaluationId === 0) {
       this.userMessage.showMessage = true;
       this.userMessage.titleMessage = 'Atencion';
@@ -371,9 +368,9 @@ export class EstudianteEvaluacionesComponent
     await this.catalogoServiceCOR.deleteEvaluacionCor(
       event.evaluationId.toString()
     );
-
     this.agendado[iEspecialidadEvaluacion.PSICOLOGIA] = false;
     this.updateTab(event.especialidad, false);
+    this.pageLoading = true;
   }
   formatDateToDDMMYYYY(date: Date) {
     const day = String(date.getDate()).padStart(2, '0');
@@ -390,17 +387,21 @@ export class EstudianteEvaluacionesComponent
 
   async agendar(event: IAgendaParams) {
     this.userMessage.showMessage = false;
+    this.pageLoading = true;
+
     if (this.studentInfo?.id_est_pk === undefined) {
       this.userMessage.titleMessage = '¡Atención!';
       this.userMessage.message = 'Estudiante no encontrado';
       this.userMessage.type = MessageType.DANGER;
       console.error('estudiante no encontrado');
+      this.pageLoading = false;
       return;
     }
     if (event.evaluationTime === null || event.evaluationDate === null) {
       this.userMessage.showMessage = true;
       this.userMessage.message = 'Debes llenar la fecha y hora para agendar';
       this.userMessage.titleMessage = '¡Atención!';
+      this.pageLoading = false;
       return;
     }
 
@@ -411,6 +412,7 @@ export class EstudianteEvaluacionesComponent
         'La fecha de la agenda no puede ser menor que la fecha actual';
       this.userMessage.titleMessage = '¡Atención!';
       this.userMessage.type = MessageType.DANGER;
+      this.pageLoading = false;
       return;
     }
 
@@ -419,19 +421,20 @@ export class EstudianteEvaluacionesComponent
 
     const obj: ISaveQuestionary = {
       id_estudiante_fk: this.studentInfo?.id_est_pk,
-      id_especialista: this.idPersona,
+      id_especialista: 2,//this.idPersona,
       id_tipo_evaluacion: event.tipoEvaluacion,
       fecha: dateToSave,
       hora: timeToSave,
       id_evaluacion: null,
       respuestas: [],
     };
-    console.log('obj ', obj);
+
     if (event.especialidad === undefined) {
       this.userMessage.showMessage = true;
       this.userMessage.message = 'No existe especilidad para ser guardada';
       this.userMessage.titleMessage = '¡Atención!';
       this.userMessage.type = MessageType.DANGER;
+      this.pageLoading = false;
       return;
     }
 
@@ -456,7 +459,7 @@ export class EstudianteEvaluacionesComponent
       this.userMessage.message = error.message;
       this.userMessage.type = MessageType.DANGER;
     }
-
+    this.pageLoading = false;
     /*this.psicologyMessage = this.successMessage;
     this.psicologiaAgendada = true;
     this.updateTab('psicologia', true);*/

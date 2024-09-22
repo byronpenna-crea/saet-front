@@ -34,6 +34,7 @@
 </div>
 <div class="form-container">
   <app-saet-loading [isLoading]="pageLoading" [message]="loadingMessage" />
+  <app-saet-form-table [data]="guardianControlData" />
   <ng-container *ngIf="!pageLoading">
     <ng-container *ngFor="let corSurvey of corSurveys">
       <div style="margin-top: 5%">

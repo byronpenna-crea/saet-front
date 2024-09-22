@@ -2,12 +2,42 @@
   [nie]="nie"
   [nombreCompleto]="studentInfo?.nombreCompleto ?? ''"
   selectedTab="datosGenerales"
-  [readOnlyPaei]="readOnlyPaei"
-  [readOnlyEvaluaciones]="readOnlyEvaluaciones"
-  module="DAI"
+  [readOnlyPaei]="false"
+  [readOnlyEvaluaciones]="false"
+  [module]="SAET_MODULE.DAI"
   [breadcrumb]="[
     { href: '#/menu/saet-buscar', text: 'Buscar estudiante' },
     { href: '#/menu/saet-buscar/' + nie, text: nie },
-    { href: '#/menu/saet-datos-estudiante/' + nie, text: 'Datos generales' }
+    { href: '#/menu/dai/saet-datos-estudiante/' + nie, text: 'Datos generales' }
   ]"
 />
+<app-saet-mensaje-usuario />
+<app-saet-loading [isLoading]="pageLoading" />
+<div class="form-container">
+  <div class="margin-top">
+    <app-tabs
+      [label]="generalInformation.labels"
+      [legend]="generalInformation.legend"
+      [value]="generalInformation.values"
+      [isActive]="generalInformation.isActive"
+      testId="general-tab-info"
+    ></app-tabs>
+  </div>
+  <div class="margin-top">
+    <app-tabs
+      [label]="institutionalInfo.labels"
+      [legend]="institutionalInfo.legend"
+      [value]="institutionalInfo.values"
+      [isActive]="institutionalInfo.isActive"
+    ></app-tabs>
+  </div>
+
+  <div class="margin-top">
+    <app-tabs
+      [label]="trustedAdultInfo.labels"
+      [legend]="trustedAdultInfo.legend"
+      [value]="trustedAdultInfo.values"
+      [isActive]="trustedAdultInfo.isActive"
+    ></app-tabs>
+  </div>
+</div>

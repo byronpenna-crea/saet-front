@@ -131,6 +131,7 @@
               <app-saet-button
                 (onClick)="goTo(rowData['href'])"
                 testId="btn-ver-detalle"
+                [disabled]="rowData['href'] === ''"
                 [buttonArgs]="{
                   buttonIcon: 0,
                   buttonStyle: 0,

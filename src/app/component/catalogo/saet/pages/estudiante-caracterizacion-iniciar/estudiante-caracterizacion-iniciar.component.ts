@@ -15,7 +15,7 @@ import { userMessageInit } from '../../shared/messages.model';
 import { KeyValue } from '../../component/saet-input/saet-input.component';
 import { iQuestion } from '../../shared/survey';
 import { ConfirmationService } from 'primeng/api';
-import { BaseComponent } from '../../BaseComponent';
+import { CorBaseComponent } from '../../CorBaseComponent';
 
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
@@ -28,6 +28,7 @@ import { handleMode } from '../../shared/forms';
 import { ButtonStyle } from '../../component/saet-button/saet-button.component';
 import { SAET_MODULE } from '../../shared/evaluaciones';
 import {PrintPdf} from "../../shared/PrintPdf";
+import {FormTablePariente} from "../../component/saet-form-table/saet-form-table.component";
 
 interface IinformationTab {
   labels: string[];
@@ -45,22 +46,16 @@ interface iSurvey {
   styleUrls: ['./estudiante-caracterizacion-iniciar.component.css'],
 })
 export class EstudianteCaracterizacionIniciarComponent
-  extends BaseComponent
+  extends CorBaseComponent
   implements IMessageComponent, OnInit
 {
   @ViewChild('cd') confirmDialog: any;
 
   userMessage: UserMessage = userMessageInit;
 
-  //nie:string = "";
-  //studentInfo?: StudentDetail;
-  pageLoading = true;
   loadingMessage?:string = undefined;
   corSurveys: iSurvey[] = [];
-  //editMode: boolean = false;
   formModeEnum = FormMode;
-  //readOnlyEvaluaciones:boolean = true;
-  //readOnlyPaei:boolean = true;
 
   generalInformation: IinformationTab = {
     isActive: false,
@@ -150,6 +145,7 @@ export class EstudianteCaracterizacionIniciarComponent
     this.init();
   }
   formMode: FormMode = FormMode.CREATE;
+  guardianControlData: FormTablePariente[] = [];
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceCOR: CatalogoServiceCor,
@@ -158,6 +154,7 @@ export class EstudianteCaracterizacionIniciarComponent
     private confirmationService: ConfirmationService
   ) {
     super(document, catalogoServiceCOR, route, router);
+    this.pageLoading = true;
     const storedValues = localStorage.getItem('values');
     if (storedValues) {
       this.values = JSON.parse(storedValues);
@@ -187,11 +184,54 @@ export class EstudianteCaracterizacionIniciarComponent
       }
     });
 
-    catalogoServiceCOR.getCORQuestions().then(result => {
-      this.corSurveys.push(...result.cuestionarios);
+
+    const corQuestionPromise = catalogoServiceCOR.getCORQuestions();
+    const studentInfoPromise = catalogoServiceCOR.getStudentInfo(this.nie);
+    const studentGuardiansPromise = catalogoServiceCOR.getGuardians(this.nie);
+    Promise.all([corQuestionPromise,studentInfoPromise, studentGuardiansPromise]).then(([corQuestionResult, studentInfoResult, guardiansResult]) => {
+      this.corSurveys.push(...corQuestionResult.cuestionarios);
       this.pageLoading = false;
-    });
-    catalogoServiceCOR.getStudentInfo(this.nie).then(result => {
+      // ####################
+      this.studentInfo = studentInfoResult.estudiante;
+      this.generalInformation = {
+        ...this.generalInformation,
+        values: [
+          studentInfoResult.estudiante.nombreCompleto,
+          studentInfoResult.estudiante.nie,
+          studentInfoResult.estudiante.fechaNacimiento,
+          studentInfoResult.estudiante.direccion,
+          studentInfoResult.estudiante.telefono[0],
+          studentInfoResult.estudiante.correo,
+        ],
+      };
+      this.institutionalInfo = {
+        ...this.institutionalInfo,
+        values: [
+          studentInfoResult.centroEducativo.nombre,
+          studentInfoResult.centroEducativo.codigo,
+          studentInfoResult.centroEducativo.direccion,
+          studentInfoResult.centroEducativo.ultimoGradoCursado,
+          studentInfoResult.centroEducativo.gradoActual,
+          studentInfoResult.centroEducativo.seccion,
+          studentInfoResult.centroEducativo.docenteOrientador,
+          studentInfoResult.centroEducativo.correoOrientador,
+          studentInfoResult.centroEducativo.telefonoOrientador[0],
+        ],
+      };
+      // #####################
+      console.log('Guardian result is ', guardiansResult);
+      this.guardianControlData = guardiansResult.map(guardian => {
+        return {
+          id: guardian.grupo_familiar_pk,
+          parentesco: guardian.parentesco,
+          ocupacion: guardian.ocupacion,
+          nivelEducativo: guardian.nivel_educativo,
+          nombreCompleto: `${guardian.primer_nombre} ${guardian.segundo_nombre} ${guardian.primer_apellido} ${guardian.segundo_apellido}`,
+        } as unknown as FormTablePariente;
+      });
+    })
+
+    /*.then(result => {
       this.studentInfo = result.estudiante;
       this.generalInformation = {
         ...this.generalInformation,
@@ -218,7 +258,9 @@ export class EstudianteCaracterizacionIniciarComponent
           result.centroEducativo.telefonoOrientador[0],
         ],
       };
-    });
+    });*/
+
+
     this.init();
   }
 
@@ -226,25 +268,7 @@ export class EstudianteCaracterizacionIniciarComponent
   getQuestionType(type: string): QuestionType {
     return QuestionType[type as keyof typeof QuestionType];
   }
-  convertString(input: string): string {
-    let result = input.toLowerCase();
 
-    const accentsMap: { [key: string]: string } = {
-      á: 'a',
-      é: 'e',
-      í: 'i',
-      ó: 'o',
-      ú: 'u',
-      ü: 'u',
-      ñ: 'n',
-    };
-
-    result = result.replace(/[áéíóúüñ]/g, match => accentsMap[match]);
-
-    result = result.replace(/\s+/g, '_');
-
-    return result;
-  }
 
   async generatePDF() {
     const doc = new jsPDF();

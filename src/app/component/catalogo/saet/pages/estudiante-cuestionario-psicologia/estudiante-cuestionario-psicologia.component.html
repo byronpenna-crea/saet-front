@@ -16,6 +16,7 @@
   [message]="userMessage.message"
   [title]="userMessage.titleMessage"
 />
+<app-saet-loading [isLoading]="pageLoading" />
 <app-saet-confirm
   acceptButtonText="Continuar editando"
   cancelButtonText="Salir sin guardar"
@@ -148,6 +149,7 @@
           }"
         />
         <app-saet-button
+          (onClick)="generarPDF()"
           [buttonArgs]="{
             text: 'Generar PDF',
             buttonIcon: btnIcon.PRINTER,

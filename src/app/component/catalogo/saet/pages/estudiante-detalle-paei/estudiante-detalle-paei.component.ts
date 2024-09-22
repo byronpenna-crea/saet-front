@@ -33,7 +33,6 @@ export class EstudianteDetallePaeiComponent
   userMessage: UserMessage = userMessageInit;
   btnIcon = IconComponent;
 
-  pageLoading = true;
   loadingMessage?:string = undefined;
   constructor(
     @Inject(DOCUMENT) document: Document,
@@ -52,6 +51,7 @@ export class EstudianteDetallePaeiComponent
       especialidadTarget
     );
     this.showActionButtons = true;
+    this.pageLoading = true;
     this.catalogoServiceCOR.getPAEIQuestions().then(result => {
       this.corSurveys.push(...result.cuestionarios);
       this.pageLoading = false;

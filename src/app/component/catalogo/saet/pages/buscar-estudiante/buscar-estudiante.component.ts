@@ -16,7 +16,7 @@ import {
   UserMessage,
 } from '../../interfaces/message-component.interface';
 import { userMessageInit } from '../../shared/messages.model';
-import { BaseComponent } from '../../BaseComponent';
+import { CorBaseComponent } from '../../CorBaseComponent';
 import { DOCUMENT } from '@angular/common';
 import { KeyValue } from '../../component/saet-input/saet-input.component';
 
@@ -50,14 +50,13 @@ interface flowTableInterface {
   styleUrls: ['./buscar-estudiante.component.css'],
 })
 export class BuscarEstudianteComponent
-  extends BaseComponent
+  extends CorBaseComponent
   implements IMessageComponent
 {
   inputNIE = '';
   userMessage: UserMessage = userMessageInit;
   cnResult = 0;
   centroEducativo = '';
-  pageLoading = false;
   onInputChange(keyValue: KeyValue) {
     this.inputNIE = keyValue.value;
   }
@@ -74,8 +73,6 @@ export class BuscarEstudianteComponent
       this.pageLoading = true;
       this.loadStudentInfo()
         .then(result => {
-
-          console.log('result --- ', result);
           this.cnResult = 1;
           this.studentData = this.populateStudent(result);
           this.centroEducativo = result.centroEducativo.nombre;
@@ -93,9 +90,6 @@ export class BuscarEstudianteComponent
   }
 
   showTable = false;
-  showError = false;
-  errorMessage = '';
-  searchedNIE = '';
 
   flowColumns: TableColumn<flowTableInterface>[] = [
     { key: 'responsable', header: 'Responsables' },
@@ -114,7 +108,7 @@ export class BuscarEstudianteComponent
       col1: 'Docente de Apoyo a la Inclusión (DAI)',
       col2: 'Sin atención',
       col3: '',
-      href: '',
+      href: '/menu/dai/saet-datos-estudiante',
     },
     {
       col1: 'Consejería Escolar (CE)',
@@ -140,14 +134,6 @@ export class BuscarEstudianteComponent
       col3: '',
       href: '',
     },
-  ];
-  studentTableColumns: TableColumn<Estudiante>[] = [
-    { key: 'nie', header: 'NIE' },
-    { key: 'primerApellido', header: 'Primer apellido' },
-    { key: 'primerNombre', header: 'Primer nombre' },
-    { key: 'fechaNacimiento', header: 'Fecha nacimiento' },
-    { key: 'EstadoApoyo', header: 'Estado de apoyo' },
-    { key: 'Acciones', header: 'Acciones' },
   ];
 
   studentData: Estudiante[] = [
@@ -185,6 +171,7 @@ export class BuscarEstudianteComponent
     ];
   }
   async toggleTable() {
+    await this.router.navigate([`/menu/saet-buscar`, this.inputNIE]);
     this.userMessage.showMessage = false;
 
     this.pageLoading = true;
@@ -193,7 +180,6 @@ export class BuscarEstudianteComponent
         const result = await this.catalogoServiceCOR.getStudentInfo(
           this.inputNIE
         );
-        console.log('result ', result);
         this.cnResult = 1;
         this.studentData = this.populateStudent(result);
         this.studentInfo = result.estudiante;
@@ -207,6 +193,9 @@ export class BuscarEstudianteComponent
         /*this.showError = false;
         this.errorMessage = "";*/
         this.showTable = true;
+
+
+
       } catch (e: unknown) {
         const error = e as ResponseError;
         if(error.status === 401){
@@ -243,12 +232,6 @@ export class BuscarEstudianteComponent
     this.inputNIE = '';
     this.userMessage.showMessage = false;
     this.showTable = false;
-  }
-
-  navigateToDetails() {
-    if (this.inputNIE) {
-      this.router.navigate(['/menu/saet-datos-estudiante', this.inputNIE]);
-    }
   }
 
   protected readonly ButtonStyle = ButtonStyle;

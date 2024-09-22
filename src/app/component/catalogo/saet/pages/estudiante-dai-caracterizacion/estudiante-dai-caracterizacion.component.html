@@ -2,8 +2,9 @@
   [nie]="nie"
   [nombreCompleto]="studentInfo?.nombreCompleto ?? ''"
   selectedTab="Caracterizacion"
-  [readOnlyEvaluaciones]="readOnlyEvaluaciones"
-  [readOnlyPaei]="readOnlyPaei"
+  [readOnlyEvaluaciones]="false"
+  [readOnlyPaei]="false"
+  [module]="SAET_MODULE.DAI"
   [breadcrumb]="[
     { href: '#/menu/saet-buscar', text: 'Buscar estudiante' },
     { href: '#/menu/saet-buscar/' + nie, text: nie },

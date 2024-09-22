@@ -1,5 +1,5 @@
 import { Component, Inject } from '@angular/core';
-import { BaseComponent } from '../../BaseComponent';
+import { CorBaseComponent } from '../../CorBaseComponent';
 import {
   IMessageComponent,
   UserMessage,
@@ -24,7 +24,7 @@ interface estadoValidacionTableInterface {
   styleUrls: ['./estudiante-paei.component.css'],
 })
 export class EstudiantePaeiComponent
-  extends BaseComponent
+  extends CorBaseComponent
   implements IMessageComponent
 {
   userMessage: UserMessage = userMessageInit;

@@ -62,7 +62,7 @@ export class SaetGlobalHeaderComponent implements OnInit {
       {
         name: 'datosGenerales',
         url: `#/menu/dai/saet-datos-estudiante/${this.nie}`,
-        text: 'Datos generales',
+        text: `Datos generales`,
         readOnly: false,
         testId: 'tab-datos-generales',
       },

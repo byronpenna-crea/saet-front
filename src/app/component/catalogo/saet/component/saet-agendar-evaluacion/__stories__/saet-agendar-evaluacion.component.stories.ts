@@ -11,7 +11,7 @@ import {SaetTabComponent} from "../../saet-tab/saet-tab.component";
 import {TabViewModule} from "primeng/tabview";
 import {FieldsetModule} from "primeng/fieldset";
 export default {
-  title: 'Agendar-evaluacion',
+  title: 'agendar/02-Agendar-evaluacion',
   component: SaetAgendarEvaluacionComponent,
   decorators: [
     moduleMetadata({

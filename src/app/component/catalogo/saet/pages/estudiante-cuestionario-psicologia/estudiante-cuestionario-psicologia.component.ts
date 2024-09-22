@@ -31,7 +31,6 @@ export class EstudianteCuestionarioPsicologiaComponent
   cuestionariosTableMode: number[] = [7, 10, 11, 12, 13];
   override ngOnInit = async () => {
     await super.ngOnInit();
-    console.log('init');
     if (this.readOnlyEvaluaciones) {
       await this.router.navigate([
         '/menu/saet-caracterizacion-estudiante',
@@ -39,7 +38,7 @@ export class EstudianteCuestionarioPsicologiaComponent
       ]);
     }
   };
-  idEvaluacion: number = 0;
+  idEvaluacion = 0;
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceCOR: CatalogoServiceCor,
@@ -47,7 +46,8 @@ export class EstudianteCuestionarioPsicologiaComponent
     router: Router,
     confirmationService: ConfirmationService
   ) {
-    const especialidadTarget: string = 'psicologia';
+    const especialidadTarget = 'psicologia';
+
     super(
       document,
       catalogoServiceCOR,
@@ -56,47 +56,59 @@ export class EstudianteCuestionarioPsicologiaComponent
       confirmationService,
       especialidadTarget
     );
+    this.pageLoading = true;
 
-    this.catalogoServiceCOR
-      .getTipoDeEvaluacion(this.nie, TIPO_EVALUACION.psicologo_perfil)
-      .then(response => {
-        this.idEvaluacion = response.id_evaluacion;
+    const tipoEvaluacionPromise = this.catalogoServiceCOR.getTipoDeEvaluacion(this.nie, TIPO_EVALUACION.psicologo_perfil);
+    const psicologiaQuestionsPromise = this.catalogoServiceCOR.getPsicologiaQuestions();
+
+    Promise.all([tipoEvaluacionPromise, psicologiaQuestionsPromise])
+      .then(([responseEvaluacion, resultQuestions]) => {
+        this.idEvaluacion = responseEvaluacion.id_evaluacion;
+        console.log('original response ', responseEvaluacion)
         this.handleMode(
-          response.id_evaluacion,
+          responseEvaluacion.id_evaluacion,
           'menu/saet-psicologia',
           this.formMode
         );
-
-        console.log('Evaluacion here ', response);
-        console.log('values here ', this.values);
-        console.log('transformed response ', this.responseToValues(response));
-
+        console.log('depurados ', this.responseToValues(responseEvaluacion));
         this.values = {
+
+          ...this.responseToValues(responseEvaluacion),
           ...this.values,
-          ...this.responseToValues(response),
         };
         console.log('this values ... ', this.values);
-      })
-      .catch(ex => {
-        console.log('ex here', ex);
+
+        this.showActionButtons = true;
+        this.corSurveys.push(...resultQuestions.cuestionarios);
+      }).catch(ex => {
+      console.log('ex here', ex);
+    })
+      .finally(() => {
+        this.pageLoading = false;
       });
 
-    catalogoServiceCOR.getPsicologiaQuestions().then(result => {
-      this.showActionButtons = true;
-      this.corSurveys.push(...result.cuestionarios);
-    });
   }
   onCheckboxChange(keyValues: KeyValue[]) {
     const selectedValues = keyValues.map(e => e.value);
     this.values[keyValues[0].key] = selectedValues.toString();
     localStorage.setItem('values', JSON.stringify(this.values));
   }
-
-  save() {
+  generarPDF() {
+    console.log('Generar PDF');
+  }
+  async save() {
+    this.pageLoading = true;
     const objToSave: ISaveQuestionary = this.getQuestionaryObject();
     console.log('obj to save', objToSave);
     objToSave.id_evaluacion = this.idEvaluacion;
-    const x = this.catalogoServiceCOR.updatePsicologia(objToSave);
+    try{
+      const resp = await this.catalogoServiceCOR.updatePsicologia(objToSave);
+      console.log('Actualizado ', resp);
+    }catch (e){
+      console.log('Error ---- ', e);
+    }finally {
+      this.pageLoading = false;
+    }
   }
 
   override salirEditMode(): string {

@@ -92,6 +92,7 @@ export class SaetTabAgendaComponent {
   }
   cancelar() {
     if (!this.readOnly) {
+      console.log('XXX ---- XXX ---', this.agendaId);
       this.onCancelarAgenda.emit({
         evaluationId: this.agendaId,
         especialidad: this.especialidad ?? iEspecialidadEvaluacion.PSICOLOGIA,

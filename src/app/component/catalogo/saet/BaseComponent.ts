@@ -1,152 +1,17 @@
-import { Inject, Injectable, OnInit } from '@angular/core';
-import {
-  CatalogoServiceCor,
-  IGetCaracterizacion,
-  ResponseError,
-  StudentDetail,
-  StudentInfoResponse,
-} from '../../../services/catalogo/catalogo.service.cor';
-import { DOCUMENT } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
-import {
-  FormMode,
-  IQuestionaryAnswer,
-  IValuesForm,
-} from './QuestionsComponent';
-import { IconComponent } from './shared/component.config';
-import { ButtonStyle } from './component/saet-button/saet-button.component';
+import {Injectable} from "@angular/core";
+import {IconComponent} from "./shared/component.config";
+import {ButtonStyle} from "./component/saet-button/saet-button.component";
+import {StudentDetail, StudentInfoResponse} from "../../../services/catalogo/catalogo.service.cor";
+import {informationTabBody} from "./CorBaseComponent";
 
-interface informationTabBody {
-  values: string[];
-}
 @Injectable()
-export class BaseComponent implements OnInit {
+export class BaseComponent {
+
   nie = '';
   studentInfo?: StudentDetail;
-
   iconCompoment = IconComponent;
   btnStyle = ButtonStyle;
-
-  caracterizacion: IGetCaracterizacion | undefined;
-  readOnlyEvaluaciones = true;
-  readOnlyPaei = true;
-  async ngOnInit() {
-    try {
-      const response = await this.catalogoServiceCOR.getCaracterizacionPorNIE(
-        this.nie
-      );
-      console.log('caracterizacion por nie');
-      this.caracterizacion = response;
-      if (response.id_caracterizacion !== 0) {
-        this.readOnlyPaei = false;
-        this.readOnlyEvaluaciones = false;
-      }
-    } catch (ex) {
-
-      console.log('caracterizacion por nie error');
-      const error = ex as ResponseError;
-      if (
-        error.status === 404 &&
-        (this.router.url.includes('/menu/saet-evaluaciones/') ||
-          this.router.url.includes('/menu/saet-paei-detalle/') ||
-          this.router.url.includes('/menu/saet-paei/'))
-      ) {
-        await this.router.navigate([
-          '/menu/saet-caracterizacion-estudiante',
-          this.nie,
-        ]);
-      }
-      console.log('error ex base ', error.status);
-    }
-  }
-  getAnswerObject(data: IValuesForm): IQuestionaryAnswer[] {
-    const result: IQuestionaryAnswer[] = [];
-
-    const keys = Object.keys(data);
-    console.log('keys', keys);
-    const groupedData = keys.reduce<
-      Record<string, { radio?: string; input?: string; check?: string }>
-    >((acc, key) => {
-      const [type, id] = key.split('_');
-      if (!acc[id]) {
-        acc[id] = {};
-      }
-      if (type === 'radio' || type === 'input') {
-        acc[id][type] = data[key];
-      }
-      return acc;
-    }, {});
-    console.log('grouped data ', groupedData);
-
-    for (const id in groupedData) {
-      if (groupedData.hasOwnProperty(id)) {
-        const idPregunta = parseInt(id, 10);
-
-        !isNaN(idPregunta) &&
-          result.push({
-            id_pregunta: idPregunta,
-            opcion:
-              !!groupedData[id].radio || !!groupedData[id].check
-                ? [
-                    {
-                      id_opcion: parseInt(groupedData[id].radio ?? '0', 10),
-                      opcion: groupedData[id].radio || '',
-                    },
-                  ]
-                : [],
-            respuesta: groupedData[id].input || '',
-          });
-        console.log(
-          'grouped data here',
-          !!groupedData[id].radio || !!groupedData[id].check
-        );
-      }
-    }
-
-    return result;
-  }
-  /*getFormModeFromString(formModeString:string | null) {
-    switch (formModeString){
-      case null:
-        return FormMode.CREATE;
-        break;
-      case 'view':
-        return FormMode.VIEW;
-        break;
-      case 'edit':
-        return FormMode.EDIT;
-        break;
-      default:
-        return undefined;
-        break;
-    }
-  }*/
-  constructor(
-    @Inject(DOCUMENT) protected document: Document,
-    protected catalogoServiceCOR: CatalogoServiceCor,
-    protected route: ActivatedRoute,
-    protected router: Router
-  ) {
-    this.route.paramMap.subscribe(params => {
-      const nie = params.get('nie');
-      if (nie) {
-        this.nie = nie;
-        this.loadStudentInfo();
-      }
-    });
-  }
-  protected loadStudentInfo(): Promise<StudentInfoResponse> {
-    return this.catalogoServiceCOR
-      .getStudentInfo(this.nie)
-      .then(result => {
-        this.studentInfo = result.estudiante;
-        return result;
-      })
-      .catch(e => {
-        this.router.navigate(['menu/saet-buscar']);
-        throw e;
-      });
-  }
+  pageLoading = false;
 
   protected populateStudentInformation(studentResponse: StudentInfoResponse) {
     const generalInformation: informationTabBody = {
@@ -177,28 +42,47 @@ export class BaseComponent implements OnInit {
       studentResponse.responsables.nombre !== undefined &&
       studentResponse.responsables.nombre !== ''
         ? {
-            values: [
-              studentResponse.responsables.nombre,
-              studentResponse.responsables.dui,
-              studentResponse.responsables.nit,
-              studentResponse.responsables.direccion,
-              studentResponse.responsables.telefono,
-            ],
-          }
+          values: [
+            studentResponse.responsables.nombre,
+            studentResponse.responsables.dui,
+            studentResponse.responsables.nit,
+            studentResponse.responsables.direccion,
+            studentResponse.responsables.telefono,
+          ],
+        }
         : {
-            values: [
-              'No disponible',
-              'No disponible',
-              'No disponible',
-              'No disponible',
-              'No disponible',
-            ],
-          };
+          values: [
+            'No disponible',
+            'No disponible',
+            'No disponible',
+            'No disponible',
+            'No disponible',
+          ],
+        };
 
     return {
       generalInformation,
       institutionalInfo,
       trustedAdultInfo,
     };
+  }
+  convertString(input: string): string {
+    let result = input.toLowerCase();
+
+    const accentsMap: { [key: string]: string } = {
+      á: 'a',
+      é: 'e',
+      í: 'i',
+      ó: 'o',
+      ú: 'u',
+      ü: 'u',
+      ñ: 'n',
+    };
+
+    result = result.replace(/[áéíóúüñ]/g, match => accentsMap[match]);
+
+    result = result.replace(/\s+/g, '_');
+
+    return result;
   }
 }

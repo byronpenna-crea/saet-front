@@ -41,7 +41,7 @@ export class EstudianteCuestionarioLenguajeComponent
       this.router.navigate(['/menu/saet-caracterizacion-estudiante', this.nie]);
     }
   };
-  idEvaluacion: number = 0;
+  idEvaluacion = 0;
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceCOR: CatalogoServiceCor,
@@ -49,7 +49,7 @@ export class EstudianteCuestionarioLenguajeComponent
     router: Router,
     confirmationService: ConfirmationService
   ) {
-    const especialidadTarget: string = 'lenguaje';
+    const especialidadTarget = 'lenguaje';
     super(
       document,
       catalogoServiceCOR,

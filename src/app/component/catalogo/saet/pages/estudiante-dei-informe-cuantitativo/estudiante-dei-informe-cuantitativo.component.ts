@@ -90,5 +90,15 @@ export class EstudianteDeiInformeCuantitativoComponent extends DeiBaseComponent 
       console.log("Error al obtener departamentos: " + error)
     });
   }
+  onTabChange(event: any) {
+    const index = event.index;
+    console.log('index ',index);
+    if (index === 0) {
+      this.redirectTo('menu/dei/informe-cuantitativo');
+    }
+    if (index === 2) {
+      this.redirectTo('menu/dei/informe-trimestral');
+    }
+  }
   protected readonly EnumDepartamentos = EnumDepartamentos;
 }

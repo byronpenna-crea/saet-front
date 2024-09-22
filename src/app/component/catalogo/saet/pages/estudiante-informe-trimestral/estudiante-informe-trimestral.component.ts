@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, Inject } from '@angular/core';
-import { BaseComponent } from '../../BaseComponent';
+import { CorBaseComponent } from '../../CorBaseComponent';
 import {
   IMessageComponent,
   MessageType,
@@ -22,7 +22,7 @@ import { IconComponent } from '../../shared/component.config';
   styleUrls: ['./estudiante-informe-trimestral.component.css'],
 })
 export class EstudianteInformeTrimestralComponent
-  extends BaseComponent
+  extends CorBaseComponent
   implements IMessageComponent
 {
   userMessage: UserMessage = userMessageInit;
@@ -33,7 +33,6 @@ export class EstudianteInformeTrimestralComponent
     buttonStyle: ButtonStyle.BLUE,
     text: 'Buscar',
   };
-  pageLoading = false;
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceCOR: CatalogoServiceCor,
@@ -53,8 +52,12 @@ export class EstudianteInformeTrimestralComponent
       console.log('error en constructor', e);
     }
   }
-  async salir() {}
-  async guardar() {}
+  async salir() {
+    await this.router.navigate(['menu/saet-buscar/', this.nie])
+  }
+  async guardar() {
+
+  }
   btnIcon = IconComponent;
   onInputChange(keyValue: KeyValue) {
     this.inputNIE = keyValue.value;
@@ -69,9 +72,10 @@ export class EstudianteInformeTrimestralComponent
     if (this.inputNIE) {
       try {
         this.pageLoading = true;
-        const result = await this.catalogoServiceCOR.getStudentInfo(
+        /*const result = await this.catalogoServiceCOR.getStudentInfo(
           this.inputNIE
         );
+        console.log('result here ', result);*/
         this.cnResult = 1;
         this.showTable = true;
       } catch (error) {
