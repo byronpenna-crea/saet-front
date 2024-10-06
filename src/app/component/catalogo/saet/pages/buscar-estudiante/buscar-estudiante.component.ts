@@ -54,7 +54,6 @@ export class BuscarEstudianteComponent
   implements IMessageComponent
 {
   inputNIE = '';
-  userMessage: UserMessage = userMessageInit;
   cnResult = 0;
   centroEducativo = '';
   onInputChange(keyValue: KeyValue) {

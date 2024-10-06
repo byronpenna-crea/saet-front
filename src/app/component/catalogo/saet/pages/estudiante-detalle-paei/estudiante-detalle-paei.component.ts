@@ -30,7 +30,6 @@ export class EstudianteDetallePaeiComponent
   implements IMessageComponent
 {
   cuestionariosTableMode: number[] = [];
-  userMessage: UserMessage = userMessageInit;
   btnIcon = IconComponent;
 
   loadingMessage?:string = undefined;

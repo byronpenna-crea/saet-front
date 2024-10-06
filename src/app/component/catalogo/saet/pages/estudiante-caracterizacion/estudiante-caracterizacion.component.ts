@@ -24,7 +24,6 @@ export class EstudianteCaracterizacionComponent
   extends CorBaseComponent
   implements IMessageComponent
 {
-  userMessage: UserMessage = userMessageInit;
   nombreUsuario = '';
   especialidad = '';
   readonlyInput = true;

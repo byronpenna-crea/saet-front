@@ -1,87 +1,88 @@
-
 <div class="login" id="div_login">
-
-
-  <div style="position: fixed; top: 0; left: 0; width: 100%; background-color: white; z-index: 100;">
+  <div
+    style="
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background-color: white;
+      z-index: 100;
+    "
+  >
     <p>
-        <mat-toolbar color="primary" mat-mini-toolbar class="main-toolbar">
-    
-            <span class="app-title toolbar-item">
-                <img src="assets/logo-sistema.png" alt="Ícono">
-            </span>
-          
-          
-    
-          <span class="app-title toolbar-item" style="margin-left: 78%;">
-            <img src="assets/logo-mined-w.png" alt="Ícono">
+      <mat-toolbar color="primary" mat-mini-toolbar class="main-toolbar">
+        <span class="app-title toolbar-item">
+          <img src="assets/logo-sistema.png" alt="Ícono" />
         </span>
-         
-    
-    
-        </mat-toolbar>
-      
+
+        <span class="app-title toolbar-item" style="margin-left: 78%">
+          <img src="assets/logo-mined-w.png" alt="Ícono" />
+        </span>
+      </mat-toolbar>
+    </p>
+
+    <div style="display: flex; margin-top: -12px">
+      <div style="background-color: #8cc63f; width: 25%; height: 5px"></div>
+      <div style="background-color: #f1c40f; width: 25%; height: 5px"></div>
+      <div style="background-color: #be2857; width: 25%; height: 5px"></div>
+      <div style="background-color: #29abe2; width: 25%; height: 5px"></div>
+    </div>
+
+    <div class="large-screen">
+      <p>
+        <span class="large-screen">
+          <strong
+            >Sistema de Información para la Gestión Educativa
+            Salvadoreña</strong
+          >
+        </span>
       </p>
-    
-      <div style="display: flex;margin-top:-12px ">
-        <div style="background-color: #8cc63f; width: 25%; height: 5px;"></div>
-        <div style="background-color: #f1c40f; width: 25%; height: 5px;"></div>
-        <div style="background-color: #be2857; width: 25%; height: 5px;"></div>
-        <div style="background-color: #29abe2; width: 25%; height: 5px;"></div>
+    </div>
+    <form id="frm_login">
+      <p-messages
+        [(value)]="msgs_dialog"
+        class="p-messages"
+        *ngIf="showMessages_dialog"
+      ></p-messages>
+
+      <h2>Iniciar sesión</h2>
+
+      <div class="p-inputgroup">
+        <span class="p-inputgroup-addon">
+          <i class="pi pi-user"></i>
+        </span>
+        <input
+          type="text"
+          [(ngModel)]="usuario.usuario"
+          name="usuario"
+          pInputText
+          placeholder="USUARIO"
+        />
       </div>
-    
-    
-   <div class="large-screen">
-  <p>
-    <span class="large-screen">
-      <strong>Sistema de Información para la Gestión Educativa Salvadoreña</strong>
-    </span>
-  </p>
-</div>
 
-      
+      <div class="p-inputgroup">
+        <span class="p-inputgroup-addon">
+          <i class="pi pi-lock"></i>
+        </span>
+        <input
+          type="password"
+          [(ngModel)]="usuario.contrasena"
+          name="contrasena"
+          pInputText
+          placeholder="CONTRASEÑA"
+        />
+      </div>
 
-
-  <form id="frm_login">
-
-
-    <p-messages [(value)]="msgs_dialog" class="p-messages" *ngIf="showMessages_dialog"></p-messages>
-
-  <h2>Iniciar sesión</h2>
-
-
-
-
-
-  <div class="p-inputgroup">
-    <span class="p-inputgroup-addon">
-      <i class="pi pi-user"></i>
-    </span>
-    <input type="text" [(ngModel)]="usuario.usuario" name="usuario" pInputText placeholder="USUARIO" />
-
+      <br />
+      <br />
+      <button
+        pButton
+        type="button"
+        (click)="validarUsuario(usuario)"
+        class="boton-iniciar-sesion"
+      >
+        INICIAR SESIÓN
+      </button>
+    </form>
   </div>
-
-  <div class="p-inputgroup">
-    <span class="p-inputgroup-addon">
-      <i class="pi pi-lock"></i>
-    </span>
-    <input type="password" [(ngModel)]="usuario.contrasena" name="contrasena" pInputText placeholder="CONTRASEÑA" />
-  </div>
-
-
-
-
-
-
-
-<br>
-<br>
-<button pButton type="button" (click)="validarUsuario(usuario)" class="boton-iniciar-sesion">INICIAR SESIÓN</button>
-
-
-
-
-
-</form>
-
 </div>
-

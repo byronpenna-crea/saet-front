@@ -38,6 +38,9 @@ import {
 import {
   EstudianteDeiInformeCualitativoComponent
 } from "./component/catalogo/saet/pages/estudiante-dei-informe-cualitativo/estudiante-dei-informe-cualitativo.component";
+import {
+  DaiEstudianteDatosGeneralesComponent
+} from "./component/catalogo/saet/pages/dai-estudiante-datos-generales/dai-estudiante-datos-generales.component";
 
 /*
 const routes: Routes = [
@@ -76,16 +79,22 @@ const routes: Routes = [
       { path: 'saet', component: SaetComponent },
       { path: 'saet-buscar', component: BuscarEstudianteComponent },
       { path: 'saet-buscar/:nie', component: BuscarEstudianteComponent },
-
       {
         path: 'saet-datos-estudiante/:nie',
         component: EstudianteDatosGeneralesComponent,
       },
       {
+        path: 'dai/saet-datos-estudiante/:nie',
+        component: DaiEstudianteDatosGeneralesComponent,
+      },
+      {
         path: 'saet-caracterizacion-estudiante/:nie',
         component: EstudianteCaracterizacionComponent,
       },
-
+      {
+        path: 'dai/saet-caracterizacion-estudiante/:nie',
+        component: EstudianteDaiCaracterizacionComponent,
+      },
       { path: 'saet-pdf/:name', component: EstudiantePdfComponent },
 
       {
@@ -96,10 +105,7 @@ const routes: Routes = [
         path: 'saet-caracterizacion-iniciar/:nie/:mode',
         component: EstudianteCaracterizacionIniciarComponent,
       },
-      {
-        path: 'dai/saet-caracterizacion-iniciar/:nie',
-        component: EstudianteDaiCaracterizacionComponent,
-      },
+
       {
         path: 'dei/informe-cualitativo',
         component: EstudianteDeiInformeCualitativoComponent,

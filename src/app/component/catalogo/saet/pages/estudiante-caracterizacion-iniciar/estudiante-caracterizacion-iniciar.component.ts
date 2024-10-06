@@ -51,7 +51,6 @@ export class EstudianteCaracterizacionIniciarComponent
 {
   @ViewChild('cd') confirmDialog: any;
 
-  userMessage: UserMessage = userMessageInit;
 
   loadingMessage?:string = undefined;
   corSurveys: iSurvey[] = [];
@@ -502,7 +501,6 @@ export class EstudianteCaracterizacionIniciarComponent
     );
   }
   onchange(keyValue: KeyValue) {
-    console.log('onchange triggered', keyValue);
     this.values[keyValue.key] = keyValue.value;
     localStorage.setItem(
       `caracterizacion-${this.nie}`,

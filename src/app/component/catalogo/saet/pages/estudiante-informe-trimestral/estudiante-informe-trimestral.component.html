@@ -14,7 +14,7 @@
     [inputArgs]="{ text: inputNIE }"
     [value]="inputNIE"
     [disabled]="showTable"
-    (inputChange)="onInputChange($event)"
+    (inputChange)="onInputNIEChange($event)"
   />
   <div class="button-container">
     <app-saet-button
@@ -22,7 +22,7 @@
       [buttonArgs]="{
         text: 'Buscar',
         buttonStyle: btnStyle.BLUE,
-        buttonIcon: btnIcon.SEARCH
+        buttonIcon: IconComponent.SEARCH
       }"
       (click)="toggleTable()"
       [disabled]="showTable"
@@ -140,7 +140,11 @@
           escritura - lectura y matemática.</span
         >
         <div class="container-rich">
-          <app-richtext value="xxx" />
+          <app-richtext
+            testId="richtext_1"
+            name="richtext_1"
+            [value]="values['richtext_1']"
+            (inputChange)="onInputChange($event)"/>
         </div>
       </div>
 
@@ -151,7 +155,12 @@
           integración social, hiperactividad.</span
         >
         <div class="container-rich">
-          <app-richtext />
+          <app-richtext
+            testId="richtext_2"
+            name="richtext_2"
+            [value]="values['richtext_2']"
+            (inputChange)="onInputChange($event)"
+          />
         </div>
       </div>
 
@@ -174,7 +183,12 @@
           otros.</span
         >
         <div class="container-rich">
-          <app-richtext />
+          <app-richtext
+            testId="richtext_3"
+            name="richtext_3"
+            [value]="values['richtext_3']"
+            (inputChange)="onInputChange($event)"
+          />
         </div>
       </div>
     </app-tabs>
@@ -186,13 +200,23 @@
       <div class="mt-2 mb-2">
         <span>Fortalezas</span>
         <div class="container-rich">
-          <app-richtext />
+          <app-richtext
+            testId="richtext_4"
+            name="richtext_4"
+            [value]="values['richtext_4']"
+            (inputChange)="onInputChange($event)"
+          />
         </div>
       </div>
       <div class="mt-2 mb-2">
         <span>Limitantes</span>
         <div class="container-rich">
-          <app-richtext />
+          <app-richtext
+            testId="richtext_5"
+            name="richtext_5"
+            [value]="values['richtext_5']"
+            (inputChange)="onInputChange($event)"
+          />
         </div>
       </div>
       <!-- ###################################### -->
@@ -204,14 +228,23 @@
       <div class="mt-2 mb-2">
         <span>Fortalezas</span>
         <div class="container-rich">
-          <app-richtext />
+          <app-richtext
+            testId="richtext_6"
+            name="richtext_6"
+            [value]="values['richtext_6']"
+            (inputChange)="onInputChange($event)" />
         </div>
       </div>
 
       <div class="mt-2 mb-2">
         <span>Limitantes</span>
         <div class="container-rich">
-          <app-richtext />
+          <app-richtext
+            testId="richtext_7"
+            name="richtext_7"
+            [value]="values['richtext_7']"
+            (inputChange)="onInputChange($event)"
+          />
         </div>
       </div>
       <!-- ###################################### -->
@@ -224,14 +257,24 @@
       <div class="mt-2 mb-2">
         <span>Fortalezas</span>
         <div class="container-rich">
-          <app-richtext />
+          <app-richtext
+            testId="richtext_8"
+            name="richtext_8"
+            [value]="values['richtext_8']"
+            (inputChange)="onInputChange($event)"
+          />
         </div>
       </div>
 
       <div class="mt-2 mb-2">
         <span>Limitantes</span>
         <div class="container-rich">
-          <app-richtext />
+          <app-richtext
+            testId="richtext_9"
+            name="richtext_9"
+            [value]="values['richtext_9']"
+            (inputChange)="onInputChange($event)"
+          />
         </div>
       </div>
       <!-- ###################################### -->
@@ -244,14 +287,24 @@
       <div class="mt-2 mb-2">
         <span>Fortalezas</span>
         <div class="container-rich">
-          <app-richtext />
+          <app-richtext
+            testId="richtext_10"
+            name="richtext_10"
+            [value]="values['richtext_10']"
+            (inputChange)="onInputChange($event)"
+          />
         </div>
       </div>
 
       <div class="mt-2 mb-2">
         <span>Limitantes</span>
         <div class="container-rich">
-          <app-richtext />
+          <app-richtext
+            testId="richtext_11"
+            name="richtext_11"
+            [value]="values['richtext_11']"
+            (inputChange)="onInputChange($event)"
+          />
         </div>
       </div>
       <!-- ###################################### -->
@@ -263,7 +316,12 @@
       <div class="mt-2 mb-2">
         <span>Otros aspectos relevantes.</span>
         <div class="container-rich">
-          <app-richtext />
+          <app-richtext
+            testId="richtext_12"
+            name="richtext_12"
+            [value]="values['richtext_12']"
+            (inputChange)="onInputChange($event)"
+          />
         </div>
       </div>
     </app-tabs>
@@ -274,16 +332,16 @@
       [buttonArgs]="{
         text: 'Salir',
         buttonStyle: btnStyle.BLUE,
-        buttonIcon: btnIcon.CLOSE
+        buttonIcon: IconComponent.CLOSE
       }"
     />
     <div class="right-buttons">
       <app-saet-button
-        (onClick)="guardar()"
+        (onClick)="save()"
         [buttonArgs]="{
           text: 'Guardar y continuar',
           buttonStyle: btnStyle.BLUE,
-          buttonIcon: btnIcon.SAVE
+          buttonIcon: IconComponent.SAVE
         }"
       />
     </div>

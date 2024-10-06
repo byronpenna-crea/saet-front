@@ -15,6 +15,8 @@ import { CatalogoServiceCor } from '../../../../../services/catalogo/catalogo.se
 import { ActivatedRoute, Router } from '@angular/router';
 import { KeyValue } from '../../component/saet-input/saet-input.component';
 import { IconComponent } from '../../shared/component.config';
+import {QuarterBaseComponent} from "../../QuarterBaseComponent";
+import {CatalogoServiceQuarterReport} from "../../../../../services/catalogo/catalogo.service.quater_report";
 
 @Component({
   selector: 'app-estudiante-informe-trimestral',
@@ -22,32 +24,36 @@ import { IconComponent } from '../../shared/component.config';
   styleUrls: ['./estudiante-informe-trimestral.component.css'],
 })
 export class EstudianteInformeTrimestralComponent
-  extends CorBaseComponent
+  extends QuarterBaseComponent
   implements IMessageComponent
 {
-  userMessage: UserMessage = userMessageInit;
   showTable = false;
   inputNIE = '';
   cnResult = 0;
-  searchButton: SaetButtonArgs = {
-    buttonStyle: ButtonStyle.BLUE,
-    text: 'Buscar',
-  };
+  localStorageKey = 'quarter-values';
   constructor(
     @Inject(DOCUMENT) document: Document,
-    catalogoServiceCOR: CatalogoServiceCor,
+    catalogoServiceQuarterReport: CatalogoServiceQuarterReport,
     private cdr: ChangeDetectorRef,
     route: ActivatedRoute,
     router: Router
   ) {
-    super(document, catalogoServiceCOR, route, router);
-    const storedValues = localStorage.getItem('values');
+    super(document, catalogoServiceQuarterReport, route, router);
     try {
       this.inputNIE = this.nie;
       if (this.nie) {
         this.toggleTable();
+        const storedValues = localStorage.getItem(`${this.localStorageKey}-${this.nie}`);
+        if (storedValues) {
+          this.values = JSON.parse(storedValues);
+        }
+        const questionPromise = catalogoServiceQuarterReport.getQuestions();
+        const answerPromise = catalogoServiceQuarterReport.getByNie(this.nie);
+        Promise.all([questionPromise,answerPromise]).then(([questionResult,answerPromise]) => {
+          console.log('Qeustion result ', questionResult);
+          console.log('answerPromise ', answerPromise);
+        })
       }
-      console.log('input nie ', this.inputNIE);
     } catch (e) {
       console.log('error en constructor', e);
     }
@@ -55,12 +61,21 @@ export class EstudianteInformeTrimestralComponent
   async salir() {
     await this.router.navigate(['menu/saet-buscar/', this.nie])
   }
-  async guardar() {
+  async save() {
+    const respuestas = this.getAnswerObject(this.values);
 
   }
-  btnIcon = IconComponent;
-  onInputChange(keyValue: KeyValue) {
+  values: { [key: string]: string } = {};
+  onInputNIEChange(keyValue: KeyValue){
     this.inputNIE = keyValue.value;
+  }
+  onInputChange(keyValue: KeyValue) {
+    console.log('on change ', keyValue);
+    this.values[keyValue.key] = keyValue.value;
+    localStorage.setItem(
+      `${this.localStorageKey}-${this.nie}`,
+      JSON.stringify(this.values)
+    );
   }
 
   cleanInput() {
@@ -69,6 +84,7 @@ export class EstudianteInformeTrimestralComponent
     this.showTable = false;
   }
   async toggleTable() {
+    this.userMessage.showMessage = false;
     if (this.inputNIE) {
       try {
         this.pageLoading = true;
@@ -98,4 +114,6 @@ export class EstudianteInformeTrimestralComponent
       this.showTable = false;
     }
   }
+
+  protected readonly IconComponent = IconComponent;
 }

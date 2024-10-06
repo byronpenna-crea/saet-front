@@ -27,12 +27,6 @@ export class EstudianteCuestionarioLenguajeComponent
   extends QuestionsComponent
   implements IMessageComponent
 {
-  userMessage: UserMessage = {
-    showMessage: false,
-    message: '',
-    titleMessage: '',
-    type: MessageType.SUCCESS,
-  };
   btnIcon = IconComponent;
   cuestionariosTableMode: number[] = [16];
   override ngOnInit = async () => {

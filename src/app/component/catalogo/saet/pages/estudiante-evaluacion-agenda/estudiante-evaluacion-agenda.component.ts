@@ -24,7 +24,6 @@ export class EstudianteEvaluacionAgendaComponent
   extends QuestionsComponent
   implements IMessageComponent
 {
-  userMessage: UserMessage = userMessageInit;
 
   cuestionariosTableMode: number[] = [];
   override ngOnInit = async () => {

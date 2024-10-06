@@ -447,7 +447,7 @@ const httpOptions = {
           localStorage.setItem('id_persona', id_persona);
           localStorage.setItem('primer_nombre', primer_nombre);
           localStorage.setItem('primer_apellido', primer_apellido);
-
+          localStorage.setItem('especialidad', 'psicologia');
           //console.log("Estoy dentro del if del token, el valor del nombre es: "+nombre)
           //console.log("Estoy dentro del if del token, el valor del dui es: "+dui)
           localStorage.setItem('usuario', this.datosLogin.usuario);

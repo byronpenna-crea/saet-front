@@ -1,11 +1,11 @@
 import { environment } from '../../environments/environment';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse, HttpStatusCode} from '@angular/common/http';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { Injectable } from '@angular/core';
 import {
   iQuestion,
-  iQuestionSave,
+  iQuestionSave, iQuestionSave2,
   iSurvey,
   SurveyResponse,
 } from '../../component/catalogo/saet/shared/survey';
@@ -61,6 +61,25 @@ export interface IGetCaracterizacion {
   id_caracterizacion: number;
   especialista_responsable: string;
   respuestas: iQuestion[];
+}
+export interface IEvaluacionResponse2 {
+  id_evaluacion: number;
+  especialista_responsable: string;
+  respuestas: iQuestionSave2[];
+}
+
+export interface IGuardianData {
+  grupo_familiar_pk: number,
+  primer_nombre: string,
+  segundo_nombre: string,
+  tercer_nombre: string,
+  primer_apellido: string,
+  segundo_apellido: string,
+  tercer_apellido: string,
+  edad: number,
+  parentesco: string,
+  nivel_educativo: string,
+  ocupacion: string
 }
 export interface IEvaluacionResponse {
   id_evaluacion: number;
@@ -138,120 +157,16 @@ export class CatalogoServiceCor extends CatalogoServiceSaet {
   private API_SERVER_PSICOLOGIA_QUESTIONS =  `${this.API_SERVER_URL}/evaluacion/cor/psicologia/preguntas`;
   private API_SERVER_PEDAGOGIA_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/pedagogia/preguntas`;
   private API_SERVER_AGENDA_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/preguntas/reporte`;*/
-  private API_SERVER_ESTUDIANTE = `${this.API_SERVER_URL}/tempEstudiantesSigesv2/buscarEstudiantePorNIE?nie=[NIE]`;
 
   constructor(
     private httpClient: HttpClient,
     private router: Router,
-    private cookieService: CookieService
+    cookieService: CookieService
   ) {
-    super();
+    super(cookieService);
   }
 
-   //this.cookieService.get('token');
-  public async getStudentInfo(NIE: string): Promise<StudentInfoResponse> {
-    const url = this.API_SERVER_ESTUDIANTE.replace('[NIE]', NIE);
-    console.log('url ', url);
-    try {
-      const response = await this.doRequest<undefined>(
-        url,
-        undefined,
-        HttpMethod.GET
-      );
-      console.log('response get ', response);
 
-      if (!response.ok) {
-        console.log('here ', response);
-        let errorMessage: string = "";
-        if(response.status === 401){
-          throw new ResponseError(response.status, 'No Autorizado');
-        }
-
-        try{
-          const errorResponse = await response.json();
-          errorMessage = errorResponse.message;
-        }catch (e){
-
-        }
-
-        throw new ResponseError(response.status, errorMessage);
-      }
-
-      return response.json();
-    } catch (e: unknown) {
-
-      const error = e as ResponseError;
-      console.log(' e here --- ', error.message);
-      throw error;
-    }
-  }
-
-  private async doRequest<T>(
-    url: string,
-    data?: T,
-    method: HttpMethod = HttpMethod.POST
-  ): Promise<Response> {
-    let fetchObject: RequestInit = {
-      method: method,
-      headers: {
-        Authorization: `Bearer ${this.cookieService.get('token')}`,
-        'Content-Type': 'application/json',
-      },
-      body: data !== undefined ? JSON.stringify(data) : undefined,
-    };
-
-    // Remove the body property if it's undefined
-    if (fetchObject.body === undefined) {
-      delete fetchObject.body;
-    }
-
-    const response = await fetch(url, fetchObject);
-
-    // Check if the response is not successful (status 200-299)
-    if (!response.ok) {
-      let errorMessage:string = '';
-      if(response.status === 401){
-        throw new ResponseError(response.status, 'No Autorizado');
-      }
-      try{
-        const errorResponse = await response.json();
-        errorMessage = errorResponse.message;
-      }catch (e){
-
-      }
-
-      throw new ResponseError(response.status, errorMessage);
-    }
-
-    return response;
-  }
-  private async putRequest<T, U>(url: string, data: T): Promise<U> {
-    const response = await this.doRequest<T>(url, data, HttpMethod.PUT);
-
-    if (!response.ok) {
-      const errorResponse = await response.json();
-      throw new ResponseError(response.status, errorResponse.message);
-    }
-
-    return response.json();
-  }
-  private async postRequest<T, U>(url: string, data: T): Promise<U> {
-    try {
-      const response = await this.doRequest<T>(url, data);
-      console.log('post request response ');
-      if (!response.ok) {
-        const errorResponse = await response.json();
-        throw new Error(JSON.stringify(errorResponse));
-      }
-      console.log('hecha post request');
-      return response.json();
-    } catch (e: unknown) {
-      console.log('error in post request ', e);
-      const error = e as ResponseError;
-      throw error;
-    }
-  }
-  // agendar
   public agendarPsicologia(obj: IQuestionaryHeader) {
     const url = `${this.API_SERVER_URL}/evaluacion/cor/psicologia/`;
     return this.postRequest<IQuestionaryHeader, IQuestionaryHeader>(url, obj);
@@ -277,8 +192,23 @@ export class CatalogoServiceCor extends CatalogoServiceSaet {
       throw e;
     }
   }
+
+  public async getGuardians(nie = ''){
+    if(nie === ''){
+      throw new ResponseError(HttpStatusCode.NotFound, 'Nie no definido para traer responsables');
+    }
+    const url = `${this.API_SERVER_URL}/grupo_familiar/${nie}`;
+    return this.getRequest<IGuardianData[]>(url)
+  }
+
+  public async updateGuardian(guardians:IGuardianData[]){
+    const url = `${this.API_SERVER_URL}/grupo_familiar/`;
+    return this.putRequest<IGuardianData[], IGuardianData[]>(
+      url,
+      guardians
+    );
+  }
   public async savePsicologia(cuestionarioPsicologia: ISaveQuestionary) {
-    console.log('save here post request');
     const url = `${this.API_SERVER_URL}/evaluacion/cor/psicologia/`;
     return this.postRequest<ISaveQuestionary, ISaveQuestionary>(
       url,
@@ -307,11 +237,12 @@ export class CatalogoServiceCor extends CatalogoServiceSaet {
     );
   }
   // update
-  evaluacionURL: string = `${this.API_SERVER_URL}/evaluacion/cor/`;
+  evaluacionURL = `${this.API_SERVER_URL}/evaluacion/cor/`;
   public updatePsicologia(cuestionarioPsicologia: ISaveQuestionary) {
     const tipo = TIPO_EVALUACION.psicologo_perfil;
+    console.log('update psicologia ----- ');
     return this.putRequest<ISaveQuestionary, ISaveQuestionary>(
-      this.evaluacionURL,
+      `${this.evaluacionURL}psicologia/`,
       cuestionarioPsicologia
     );
   }
@@ -363,24 +294,6 @@ export class CatalogoServiceCor extends CatalogoServiceSaet {
       const error = e as ResponseError;
       throw error;
     }
-
-    /*return new Promise((resolve, reject) => {
-      fetch(url, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${this.token}`,
-          'Content-Type': 'application/json'
-        }
-      }).then(response => {
-        if (response.ok) {
-          resolve(response.json());
-        } else {
-          reject(new Error('No se pudo obtener los datos'));
-        }
-      }).catch(error => {
-        reject(new Error('Hubo un error al obtener los datos: ' + error.message));
-      })
-    });*/
   }
   // Temporaly method
   public async reset(): Promise<{
@@ -541,27 +454,6 @@ export class CatalogoServiceCor extends CatalogoServiceSaet {
     }
   }
   //get questions
-  public async getSurveyQuestions(url: string): Promise<SurveyResponse> {
-    try {
-      const response = await this.doRequest<undefined>(
-        url,
-        undefined,
-        HttpMethod.GET
-      );
-      console.log('response get ', response);
-
-      if (!response.ok) {
-        const errorResponse = await response.json();
-        throw new Error(JSON.stringify(errorResponse));
-      }
-
-      return response.json();
-    } catch (e: unknown) {
-      const error = e as Error;
-      const errorDetails = JSON.parse(error.message);
-      throw new Error(errorDetails.message);
-    }
-  }
   public getDaiFichaVisitasQuestions(): Promise<SurveyResponse> {
     return this.getSurveyQuestions(
       `${this.API_SERVER_URL}/dai/ficha_visita/preguntas`
@@ -582,11 +474,6 @@ export class CatalogoServiceCor extends CatalogoServiceSaet {
   }
   public getPedagogiaQuestions(): Promise<SurveyResponse> {
     return this.getSurveyQuestions(this.saetRoutes.PREGUNTAS_COR_EVALUACION(iEspecialidadEvaluacion.PEDAGOGIA));
-  }
-  public getDaiCaracterizacionQuestion(): Promise<SurveyResponse> {
-    return this.getSurveyQuestions(
-      `${this.API_SERVER_URL}/caracterizacion/dai/preguntas`
-    );
   }
   public getCORQuestions(): Promise<SurveyResponse> {
     return this.getSurveyQuestions(this.saetRoutes.PREGUNTAS_COR_CARACTERIZACION());

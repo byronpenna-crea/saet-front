@@ -52,7 +52,6 @@ export class EstudianteEvaluacionesComponent
   extends CorBaseComponent
   implements IMessageComponent
 {
-  userMessage: UserMessage = userMessageInit;
 
   psicologiaEspecilistaAgendado = '';
   psicologiaEvaluationId = 0;

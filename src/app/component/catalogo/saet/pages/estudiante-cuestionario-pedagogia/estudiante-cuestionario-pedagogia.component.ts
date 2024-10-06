@@ -20,12 +20,6 @@ export class EstudianteCuestionarioPedagogiaComponent
   extends QuestionsComponent
   implements IMessageComponent
 {
-  userMessage: UserMessage = {
-    showMessage: false,
-    message: '',
-    titleMessage: '',
-    type: MessageType.SUCCESS,
-  };
 
   override ngOnInit = async () => {
     await super.ngOnInit();

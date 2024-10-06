@@ -6,6 +6,7 @@ import { Usuarios_login } from 'src/app/models/usuarios_login';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { HttpHeaders } from '@angular/common/http';
+import {FormTablePariente} from "../catalogo/saet/component/saet-form-table/saet-form-table.component";
 
 
 @Component({
@@ -21,6 +22,8 @@ export class LoginComponent implements OnInit {
   privateIPAddress: string = '';
   msgs_dialog: Message[] = [];
   showMessages_dialog = false;
+
+  initialData:FormTablePariente[] = []
 
   constructor(
 

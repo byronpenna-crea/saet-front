@@ -27,7 +27,6 @@ export class EstudianteDaiCaracterizacionComponent extends DaiBaseComponent
   implements IMessageComponent
 {
   @ViewChild('cd') confirmDialog: any;
-  userMessage: UserMessage = userMessageInit;
   values: { [key: string]: string } = {};
   corSurveys: iSurvey[] = [];
   constructor(

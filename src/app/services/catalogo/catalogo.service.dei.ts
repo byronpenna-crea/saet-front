@@ -13,20 +13,19 @@ export class CatalogoServiceDei extends CatalogoServiceSaet {
   constructor(
     private httpClient: HttpClient,
     private router: Router,
-    private cookieService: CookieService
+    cookieService: CookieService
   ) {
-    super();
+    super(cookieService);
   }
 
   public getAllDepartamentos(): Promise<Departamentos[]> {
 
     const url = `${environment.API_SERVER_URL}/listaDepartamentos08032023/`;
-    const token: string | null = this.cookieService.get('token');
     return new Promise((resolve, reject) => {
       fetch(url, {
         method: 'GET',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          'Authorization': `Bearer ${this.cookieService.get('token')}`,
           'Content-Type': 'application/json'
         }
       })
