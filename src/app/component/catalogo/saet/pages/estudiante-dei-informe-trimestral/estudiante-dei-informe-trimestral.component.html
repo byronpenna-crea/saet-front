@@ -1,12 +1,10 @@
+<app-saet-loading [isLoading]="pageLoading" />
 <p-tabView (onChange)="onTabChange($event)">
-  <p-tabPanel header="Informe cualitativo">
-    cualitativo
-  </p-tabPanel>
-  <p-tabPanel header="Informe cuantitativo">
-  </p-tabPanel>
+  <p-tabPanel header="Informe cualitativo"></p-tabPanel>
+  <p-tabPanel header="Informe cuantitativo"></p-tabPanel>
   <p-tabPanel header="Informe Trimestral COR" [selected]="true">
     <div class="form-container">
-      <p class="title">Escribe el NIE del estudiante.</p>
+      <p class="title">DUI del COR.</p>
       <app-saet-input
         testId="input-nie"
         [inputArgs]="{ text: inputNIE }"
@@ -40,6 +38,63 @@
             <div>{{ cnResult }} elemento(s)</div>
           </div>
         </app-saet-underlined-title>
+
+        <div class="container">
+          <h2 style="margin: 0">INFORME COR</h2>
+          <div style="border: 1px solid #ccc; padding: 20px">
+            <div class="form-section">
+              <div class="form-group">
+                <label>DUI:</label>
+                <app-saet-input
+                  name="name"
+                  testId="input-nie"
+                  [inputArgs]="{ text: '' }"
+                  [disabled]="!showTable"
+                />
+              </div>
+              <div class="form-group">
+                <label>Nombre completo:</label>
+                <app-saet-input
+                  name="name"
+                  testId="input-nie"
+                  [inputArgs]="{ text: '' }"
+                  [disabled]="!showTable"
+                />
+              </div>
+            </div>
+            <hr />
+            <table class="report-table">
+              <thead>
+                <tr>
+                  <th>Responsables</th>
+                  <th>Estado del informe</th>
+                  <th>Ver informe Trimestral</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Centro de Orientación y Recursos (COR)</td>
+                  <td>Realizado</td>
+                  <td>
+                    <app-saet-button
+                      testId="btn-buscar"
+                      [disabled]="!showTable"
+                      [buttonArgs]="{
+                        text: 'Ver informe',
+                        buttonStyle: ButtonStyle.WHITE,
+                        buttonIcon: IconCompoment.EYE
+                      }"
+                      (onClick)="generateReport(inputNIE)"
+                    />
+                    <!--                    <button class="view-report-btn">-->
+                    <!--                      <span class="icon">⏺</span> Ver informe-->
+                    <!--                    </button>-->
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   </p-tabPanel>

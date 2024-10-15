@@ -119,6 +119,10 @@ const routes: Routes = [
         component: EstudianteDeiInformeTrimestralComponent,
       },
       {
+        path: 'dei/informe-trimestral/:nie',
+        component: EstudianteDeiInformeTrimestralComponent,
+      },
+      {
         path: 'saet-lenguaje-habla/:nie',
         component: EstudianteCuestionarioLenguajeComponent,
       },

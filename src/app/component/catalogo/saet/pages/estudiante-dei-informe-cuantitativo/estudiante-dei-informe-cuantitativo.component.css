@@ -36,8 +36,31 @@
   display: flex;
   flex-direction: column;
 }
+
+.filter-input{
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 15px;
+}
+.flex-center{
+  display: flex;
+  justify-content: center;
+}
+.filter-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.filter-label {
+  text-align: left;
+  margin-bottom: 5px;
+}
+
 .radios {
   display: flex; gap: 20px;
+  justify-content: center;
+  margin-bottom: 15px;
 }
 
 .title{

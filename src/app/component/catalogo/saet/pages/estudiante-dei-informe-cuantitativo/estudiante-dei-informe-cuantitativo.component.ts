@@ -94,7 +94,7 @@ export class EstudianteDeiInformeCuantitativoComponent extends DeiBaseComponent 
     const index = event.index;
     console.log('index ',index);
     if (index === 0) {
-      this.redirectTo('menu/dei/informe-cuantitativo');
+      this.redirectTo('menu/dei/informe-cualitativo');
     }
     if (index === 2) {
       this.redirectTo('menu/dei/informe-trimestral');

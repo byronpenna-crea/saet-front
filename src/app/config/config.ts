@@ -1,7 +1,7 @@
 export const environment = {
   production: false,
   ///API_SERVER_URL: 'https://www.clases.edu.sv/reportes/api', //Ip del puerto donde esta mi backend
-  API_SERVER_URL: 'http://192.168.1.12', //Ip del puerto donde esta mi backend //v1
+  API_SERVER_URL: 'https://crea.ritsasv.com/sgpa_saet-0.0.1-SNAPSHOT', //Ip del puerto donde esta mi backend //v1
   //////////API_SERVER_URL: 'https://www.clases.edu.sv/api', //Ip del puerto donde esta mi backend //v2 -Produ
   //API_SERVER_URL: 'http://35.208.74.102', //Ip del puerto donde esta mi backend final de google
   //API_SERVER_URL: 'http://172.16.32.5', //Ip del puerto donde esta mi backend, ip de la nube.

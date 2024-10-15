@@ -1,5 +1,5 @@
 <div style="width: 100%">
-  <p-tabView>
+  <p-tabView (onChange)="onTabChange($event)">
     <p-tabPanel header="Informe cualitativo"> </p-tabPanel>
     <p-tabPanel header="Informe cuantitativo" [selected]="true">
       <div style="display: flex; gap: 25px; margin-bottom: 25px">
@@ -137,13 +137,25 @@
             />
             <div class="radios">
               <div>
-                <app-saet-individual-radio value="1" label="Realizadas" />
+                <app-saet-individual-radio
+                  name="caracterizaciones-departamento"
+                  value="1"
+                  label="Realizadas"
+                />
               </div>
               <div>
-                <app-saet-individual-radio value="1" label="En proceso" />
+                <app-saet-individual-radio
+                  name="caracterizaciones-departamento"
+                  value="1"
+                  label="En proceso"
+                />
               </div>
               <div>
-                <app-saet-individual-radio value="1" label="Programadas" />
+                <app-saet-individual-radio
+                  name="caracterizaciones-departamento"
+                  value="1"
+                  label="Programadas"
+                />
               </div>
             </div>
           </div>
@@ -168,16 +180,25 @@
             />
             <div class="radios">
               <div>
-                <app-saet-radio />
-                Realizadas
+                <app-saet-individual-radio
+                  name="evaluaciones-departamento"
+                  value="1"
+                  label="Realizadas"
+                />
               </div>
               <div>
-                <app-saet-radio />
-                En proceso
+                <app-saet-individual-radio
+                  name="evaluaciones-departamento"
+                  value="1"
+                  label="En proceso"
+                />
               </div>
               <div>
-                <app-saet-radio />
-                Programadas
+                <app-saet-individual-radio
+                  name="evaluaciones-departamento"
+                  value="1"
+                  label="Programadas"
+                />
               </div>
             </div>
           </div>
@@ -205,14 +226,17 @@
               ]"
             />
             <div style="display: flex; flex-direction: column; gap: 5px">
-              Departamentos
-
-              <p-dropdown
-                [options]="cities"
-                optionLabel="nombre_departamento"
-                placeholder="Selecciona departamento"
-                optionValue="nombre_departamento"
-              />
+              <div class="flex-center filter-input" style="">
+                <div class="filter-cell">
+                  <div class="filter-label">Departamentos</div>
+                  <p-dropdown
+                    [options]="cities"
+                    optionLabel="nombre_departamento"
+                    placeholder="Selecciona departamento"
+                    optionValue="nombre_departamento"
+                  />
+                </div>
+              </div>
             </div>
           </div>
           <div class="graphic-container">
@@ -244,25 +268,25 @@
               [view]="[1024, 300]"
               [multi]="filteredCasosAbordadosData"
             />
-            <p-dropdown
-              [options]="cities"
-              id="casos-abordados"
-              (onChange)="onCasesChange($event)"
-              optionLabel="nombre_departamento"
-              placeholder="Selecciona departamento"
-              optionValue="codigo_departamento"
-              [ngModel]="selectedGraphics.casos"
-            />
+
+            <div class="flex-center filter-input" style="">
+              <div class="filter-cell">
+                <div class="filter-label">Departamentos</div>
+                <p-dropdown
+                  [options]="cities"
+                  id="casos-abordados"
+                  (onChange)="onCasesChange($event)"
+                  optionLabel="nombre_departamento"
+                  placeholder="Selecciona departamento"
+                  optionValue="codigo_departamento"
+                  [ngModel]="selectedGraphics.casos"
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </p-tabPanel>
-    <p-tabPanel header="Informe cualitativo">
-      <ng-template pTemplate="header">
-        <a (click)="redirectTo('menu/dei/informe-trimestral')">
-          Informe Trimestral COR
-        </a>
-      </ng-template>
-    </p-tabPanel>
+    <p-tabPanel header="Informe Trimestral COR"> </p-tabPanel>
   </p-tabView>
 </div>
