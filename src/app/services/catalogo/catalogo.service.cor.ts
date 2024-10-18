@@ -1,19 +1,24 @@
 import { environment } from '../../environments/environment';
-import {HttpClient, HttpErrorResponse, HttpStatusCode} from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpStatusCode,
+} from '@angular/common/http';
 import { Router } from '@angular/router';
 import { CookieService } from 'ngx-cookie-service';
 import { Injectable } from '@angular/core';
 import {
   iQuestion,
-  iQuestionSave, iQuestionSave2,
+  iQuestionSave,
+  iQuestionSave2,
   iSurvey,
   SurveyResponse,
 } from '../../component/catalogo/saet/shared/survey';
 import { TIPO_EVALUACION } from '../../component/catalogo/saet/shared/evaluaciones';
 import { IQuestionaryAnswer } from '../../component/catalogo/saet/QuestionsComponent';
-import { HttpMethod, iEspecialidadEvaluacion} from "../shared/saet-types";
-import {CatalogoService} from "../catalogo.service";
-import {CatalogoServiceSaet} from "../shared/saet";
+import { HttpMethod, iEspecialidadEvaluacion } from '../shared/saet-types';
+import { CatalogoService } from '../catalogo.service';
+import { CatalogoServiceSaet } from '../shared/saet';
 
 export interface StudentDetail {
   nie: string;
@@ -69,17 +74,17 @@ export interface IEvaluacionResponse2 {
 }
 
 export interface IGuardianData {
-  grupo_familiar_pk: number,
-  primer_nombre: string,
-  segundo_nombre: string,
-  tercer_nombre: string,
-  primer_apellido: string,
-  segundo_apellido: string,
-  tercer_apellido: string,
-  edad: number,
-  parentesco: string,
-  nivel_educativo: string,
-  ocupacion: string
+  grupo_familiar_pk: number;
+  primer_nombre: string;
+  segundo_nombre: string;
+  tercer_nombre: string;
+  primer_apellido: string;
+  segundo_apellido: string;
+  tercer_apellido: string;
+  edad: number;
+  parentesco: string;
+  nivel_educativo: string;
+  ocupacion: string;
 }
 export interface IEvaluacionResponse {
   id_evaluacion: number;
@@ -149,7 +154,6 @@ export class ResponseError extends Error {
   providedIn: 'root',
 })
 export class CatalogoServiceCor extends CatalogoServiceSaet {
-
   //private API_SERVER_COR = `${this.API_SERVER_URL}/caracterizacion/cor/preguntas`;
   //private API_SERVER_QUESTIONS = `${this.API_SERVER_URL}/evaluacion/cor/pedagogia/preguntas`;
 
@@ -165,7 +169,6 @@ export class CatalogoServiceCor extends CatalogoServiceSaet {
   ) {
     super(cookieService);
   }
-
 
   public agendarPsicologia(obj: IQuestionaryHeader) {
     const url = `${this.API_SERVER_URL}/evaluacion/cor/psicologia/`;
@@ -193,20 +196,20 @@ export class CatalogoServiceCor extends CatalogoServiceSaet {
     }
   }
 
-  public async getGuardians(nie = ''){
-    if(nie === ''){
-      throw new ResponseError(HttpStatusCode.NotFound, 'Nie no definido para traer responsables');
+  public async getGuardians(nie = '') {
+    if (nie === '') {
+      throw new ResponseError(
+        HttpStatusCode.NotFound,
+        'Nie no definido para traer responsables'
+      );
     }
     const url = `${this.API_SERVER_URL}/grupo_familiar/${nie}`;
-    return this.getRequest<IGuardianData[]>(url)
+    return this.getRequest<IGuardianData[]>(url);
   }
 
-  public async updateGuardian(guardians:IGuardianData[]){
+  public async updateGuardian(guardians: IGuardianData[]) {
     const url = `${this.API_SERVER_URL}/grupo_familiar/`;
-    return this.putRequest<IGuardianData[], IGuardianData[]>(
-      url,
-      guardians
-    );
+    return this.putRequest<IGuardianData[], IGuardianData[]>(url, guardians);
   }
   public async savePsicologia(cuestionarioPsicologia: ISaveQuestionary) {
     const url = `${this.API_SERVER_URL}/evaluacion/cor/psicologia/`;
@@ -467,18 +470,32 @@ export class CatalogoServiceCor extends CatalogoServiceSaet {
     return this.getSurveyQuestions(this.saetRoutes.PREGUNTAS_COR_REPORTE());
   }
   public getPsicologiaQuestions(): Promise<SurveyResponse> {
-    return this.getSurveyQuestions(this.saetRoutes.PREGUNTAS_COR_EVALUACION(iEspecialidadEvaluacion.PSICOLOGIA));
+    return this.getSurveyQuestions(
+      this.saetRoutes.PREGUNTAS_COR_EVALUACION(
+        iEspecialidadEvaluacion.PSICOLOGIA
+      )
+    );
   }
   public getLenguajeHablaQuestions(): Promise<SurveyResponse> {
-    return this.getSurveyQuestions(this.saetRoutes.PREGUNTAS_COR_EVALUACION(iEspecialidadEvaluacion.LENGUAJE));
+    return this.getSurveyQuestions(
+      this.saetRoutes.PREGUNTAS_COR_EVALUACION(iEspecialidadEvaluacion.LENGUAJE)
+    );
   }
   public getPedagogiaQuestions(): Promise<SurveyResponse> {
-    return this.getSurveyQuestions(this.saetRoutes.PREGUNTAS_COR_EVALUACION(iEspecialidadEvaluacion.PEDAGOGIA));
+    return this.getSurveyQuestions(
+      this.saetRoutes.PREGUNTAS_COR_EVALUACION(
+        iEspecialidadEvaluacion.PEDAGOGIA
+      )
+    );
   }
   public getCORQuestions(): Promise<SurveyResponse> {
-    return this.getSurveyQuestions(this.saetRoutes.PREGUNTAS_COR_CARACTERIZACION());
+    return this.getSurveyQuestions(
+      this.saetRoutes.PREGUNTAS_COR_CARACTERIZACION()
+    );
   }
   public getQuestions(): Promise<SurveyResponse> {
-    return this.getSurveyQuestions(this.saetRoutes.PREGUNTAS_COR_CARACTERIZACION());
+    return this.getSurveyQuestions(
+      this.saetRoutes.PREGUNTAS_COR_CARACTERIZACION()
+    );
   }
 }

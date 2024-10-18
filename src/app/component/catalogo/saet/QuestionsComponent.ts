@@ -36,12 +36,12 @@ export class QuestionsComponent extends CorBaseComponent {
   corSurveys: iSurvey[] = [];
 
   values: IValuesForm = {};
-  valuesKey: string = '';
-  showActionButtons: boolean = false;
-  editMode: boolean = false;
+  valuesKey = '';
+  showActionButtons = false;
+  editMode = false;
   formModeEnum = FormMode;
   formMode: FormMode = FormMode.CREATE;
-  targetEspecialidad: string = '';
+  targetEspecialidad = '';
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceCOR: CatalogoServiceCor,
@@ -129,7 +129,10 @@ export class QuestionsComponent extends CorBaseComponent {
       const inputKey = `input_${respuesta.id_pregunta}`;
 
       if (respuesta.opcion.length > 0) {
-        values[radioKey] = respuesta.opcion[0].opcion_pregunta_pk !== undefined ? respuesta.opcion[0].opcion_pregunta_pk.toString() : '';
+        values[radioKey] =
+          respuesta.opcion[0].opcion_pregunta_pk !== undefined
+            ? respuesta.opcion[0].opcion_pregunta_pk.toString()
+            : '';
       }
       values[inputKey] = respuesta.respuesta;
     });
