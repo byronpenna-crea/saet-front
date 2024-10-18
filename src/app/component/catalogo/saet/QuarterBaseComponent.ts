@@ -1,14 +1,16 @@
-import {Inject, Injectable, OnInit} from "@angular/core";
-import {BaseComponent} from "./BaseComponent";
-import {DOCUMENT} from "@angular/common";
-import {CatalogoServiceCor, StudentInfoResponse} from "../../../services/catalogo/catalogo.service.cor";
-import {ActivatedRoute, Router} from "@angular/router";
-import {CatalogoServiceQuarterReport} from "../../../services/catalogo/catalogo.service.quater_report";
+import { Inject, Injectable, OnInit } from '@angular/core';
+import { BaseComponent } from './BaseComponent';
+import { DOCUMENT } from '@angular/common';
+import {
+  CatalogoServiceCor,
+  StudentInfoResponse,
+} from '../../../services/catalogo/catalogo.service.cor';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CatalogoServiceQuarterReport } from '../../../services/catalogo/catalogo.service.quater_report';
 
 @Injectable()
 export class QuarterBaseComponent extends BaseComponent implements OnInit {
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
   protected loadStudentInfo(): Promise<StudentInfoResponse> {
     return this.catalogoServiceQuarterReport
       .getStudentInfo(this.nie)

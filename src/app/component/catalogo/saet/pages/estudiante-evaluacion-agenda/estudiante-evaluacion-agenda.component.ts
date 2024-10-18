@@ -24,7 +24,6 @@ export class EstudianteEvaluacionAgendaComponent
   extends QuestionsComponent
   implements IMessageComponent
 {
-
   cuestionariosTableMode: number[] = [];
   override ngOnInit = async () => {
     await super.ngOnInit();

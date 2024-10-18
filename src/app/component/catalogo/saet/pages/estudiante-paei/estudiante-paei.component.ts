@@ -27,7 +27,6 @@ export class EstudiantePaeiComponent
   extends CorBaseComponent
   implements IMessageComponent
 {
-
   override ngOnInit = async () => {
     await super.ngOnInit();
   };

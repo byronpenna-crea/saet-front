@@ -20,7 +20,6 @@ export class EstudianteCuestionarioPedagogiaComponent
   extends QuestionsComponent
   implements IMessageComponent
 {
-
   override ngOnInit = async () => {
     await super.ngOnInit();
     if (this.readOnlyEvaluaciones) {

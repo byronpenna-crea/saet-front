@@ -118,7 +118,7 @@
               {{ rowData['tableHeaderStudentIssue'] }}
             </td>
             <td>
-              <div style="display: flex; flex-direction: Column; gap: 10px;">
+              <div style="display: flex; flex-direction: Column; gap: 10px">
                 <app-saet-individual-radio label="Entregado" />
                 <app-saet-individual-radio label="Pendiente" />
               </div>
@@ -144,7 +144,8 @@
             testId="richtext_1"
             name="richtext_1"
             [value]="values['richtext_1']"
-            (inputChange)="onInputChange($event)"/>
+            (inputChange)="onInputChange($event)"
+          />
         </div>
       </div>
 
@@ -158,7 +159,7 @@
           <app-richtext
             testId="richtext_2"
             name="richtext_2"
-            [value]="values['richtext_2']"
+            [value]="values['quarter-richtext_2']"
             (inputChange)="onInputChange($event)"
           />
         </div>
@@ -186,7 +187,7 @@
           <app-richtext
             testId="richtext_3"
             name="richtext_3"
-            [value]="values['richtext_3']"
+            [value]="values['quarter-richtext_3']"
             (inputChange)="onInputChange($event)"
           />
         </div>
@@ -203,7 +204,7 @@
           <app-richtext
             testId="richtext_4"
             name="richtext_4"
-            [value]="values['richtext_4']"
+            [value]="values['quarter-richtext_4']"
             (inputChange)="onInputChange($event)"
           />
         </div>
@@ -232,7 +233,8 @@
             testId="richtext_6"
             name="richtext_6"
             [value]="values['richtext_6']"
-            (inputChange)="onInputChange($event)" />
+            (inputChange)="onInputChange($event)"
+          />
         </div>
       </div>
 

@@ -6,7 +6,8 @@ import {
 import { TableColumn } from '../../component/saet-table/saet-table.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
-  CatalogoServiceCor, ResponseError,
+  CatalogoServiceCor,
+  ResponseError,
   StudentDetail,
   StudentInfoResponse,
 } from '../../../../../services/catalogo/catalogo.service.cor';
@@ -81,7 +82,7 @@ export class BuscarEstudianteComponent
         })
         .catch(e => {
           const error = e as ResponseError;
-          if(error.status === 401){
+          if (error.status === 401) {
             console.log('back to login', error.message);
           }
           this.userMessage = {
@@ -89,9 +90,10 @@ export class BuscarEstudianteComponent
             message: error.message,
             type: MessageType.DANGER,
           };
-        }).finally(() => {
+        })
+        .finally(() => {
           this.pageLoading = false;
-      });
+        });
     } catch (e) {
       console.log('error en constructor', e);
     }
@@ -203,7 +205,7 @@ export class BuscarEstudianteComponent
         this.showTable = true;
       } catch (e: unknown) {
         const error = e as ResponseError;
-        if(error.status === 401){
+        if (error.status === 401) {
           console.log('back to login', error.message);
         }
         this.userMessage = {
@@ -213,7 +215,6 @@ export class BuscarEstudianteComponent
         };
 
         this.showTable = false;
-
       }
     } else {
       this.userMessage = {

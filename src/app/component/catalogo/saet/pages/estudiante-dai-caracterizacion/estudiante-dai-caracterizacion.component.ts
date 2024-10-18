@@ -13,18 +13,18 @@ import { iSurvey } from '../../shared/survey';
 import { QuestionType } from '../../shared/component.config';
 import { KeyValue } from '../../component/saet-input/saet-input.component';
 import { FormMode } from '../../QuestionsComponent';
-import {BaseComponent} from "../../BaseComponent";
-import {DaiBaseComponent} from "../../DaiBaseComponent";
-import {CatalogoServiceDai} from "../../../../../services/catalogo/catalogo.service.dai";
-import {SAET_MODULE} from "../../shared/evaluaciones";
+import { BaseComponent } from '../../BaseComponent';
+import { DaiBaseComponent } from '../../DaiBaseComponent';
+import { CatalogoServiceDai } from '../../../../../services/catalogo/catalogo.service.dai';
+import { SAET_MODULE } from '../../shared/evaluaciones';
 
 @Component({
   selector: 'app-estudiante-dai-caracterizacion',
   templateUrl: './estudiante-dai-caracterizacion.component.html',
   styleUrls: ['./estudiante-dai-caracterizacion.component.css'],
 })
-
-export class EstudianteDaiCaracterizacionComponent extends DaiBaseComponent
+export class EstudianteDaiCaracterizacionComponent
+  extends DaiBaseComponent
   implements IMessageComponent
 {
   @ViewChild('cd') confirmDialog: any;

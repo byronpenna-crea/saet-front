@@ -14,7 +14,7 @@ export class SaetGlobalHeaderComponent implements OnInit {
   @Input() nie: string = '';
   @Input() nombreCompleto: string = '';
   @Input() selectedTab: string = '';
-  @Input() module:SAET_MODULE = SAET_MODULE.COR;
+  @Input() module: SAET_MODULE = SAET_MODULE.COR;
   @Input() tabMenu: {
     url: string;
     text: string;
@@ -45,7 +45,7 @@ export class SaetGlobalHeaderComponent implements OnInit {
     this._readOnlyPaei = value;
     this.generateTabs();
   }
-  generateTabs(){
+  generateTabs() {
     switch (this.module) {
       case SAET_MODULE.DAI:
         console.log('dai tabs');

@@ -27,8 +27,8 @@ import {
 import { handleMode } from '../../shared/forms';
 import { ButtonStyle } from '../../component/saet-button/saet-button.component';
 import { SAET_MODULE } from '../../shared/evaluaciones';
-import {PrintPdf} from "../../shared/PrintPdf";
-import {FormTablePariente} from "../../component/saet-form-table/saet-form-table.component";
+import { PrintPdf } from '../../shared/PrintPdf';
+import { FormTablePariente } from '../../component/saet-form-table/saet-form-table.component';
 
 interface IinformationTab {
   labels: string[];
@@ -51,8 +51,7 @@ export class EstudianteCaracterizacionIniciarComponent
 {
   @ViewChild('cd') confirmDialog: any;
 
-
-  loadingMessage?:string = undefined;
+  loadingMessage?: string = undefined;
   corSurveys: iSurvey[] = [];
   formModeEnum = FormMode;
 
@@ -133,10 +132,9 @@ export class EstudianteCaracterizacionIniciarComponent
     });
   }
   override async ngOnInit() {
-
-    console.log('before --------------- xx ')
+    console.log('before --------------- xx ');
     await super.ngOnInit();
-    console.log('init --------------- xx ')
+    console.log('init --------------- xx ');
     const url = '/menu/saet-caracterizacion-iniciar';
     const idCaracterizacion: number =
       this.caracterizacion?.id_caracterizacion ?? 0;
@@ -183,11 +181,14 @@ export class EstudianteCaracterizacionIniciarComponent
       }
     });
 
-
     const corQuestionPromise = catalogoServiceCOR.getCORQuestions();
     const studentInfoPromise = catalogoServiceCOR.getStudentInfo(this.nie);
     const studentGuardiansPromise = catalogoServiceCOR.getGuardians(this.nie);
-    Promise.all([corQuestionPromise,studentInfoPromise, studentGuardiansPromise]).then(([corQuestionResult, studentInfoResult, guardiansResult]) => {
+    Promise.all([
+      corQuestionPromise,
+      studentInfoPromise,
+      studentGuardiansPromise,
+    ]).then(([corQuestionResult, studentInfoResult, guardiansResult]) => {
       this.corSurveys.push(...corQuestionResult.cuestionarios);
       // ####################
       this.studentInfo = studentInfoResult.estudiante;
@@ -228,9 +229,8 @@ export class EstudianteCaracterizacionIniciarComponent
         } as unknown as FormTablePariente;
       });
 
-
       this.pageLoading = false;
-    })
+    });
 
     /*.then(result => {
       this.studentInfo = result.estudiante;
@@ -261,7 +261,6 @@ export class EstudianteCaracterizacionIniciarComponent
       };
     });*/
 
-
     this.init();
   }
 
@@ -269,7 +268,6 @@ export class EstudianteCaracterizacionIniciarComponent
   getQuestionType(type: string): QuestionType {
     return QuestionType[type as keyof typeof QuestionType];
   }
-
 
   async generatePDF() {
     const doc = new jsPDF();
@@ -288,11 +286,11 @@ export class EstudianteCaracterizacionIniciarComponent
         const img = new Image();
         img.src = url;
         img.onload = () => resolve(img);
-        img.onerror = (err) => reject(err);
+        img.onerror = err => reject(err);
       });
     };
     const logo = await loadImage(logoPath);
-    console.log('logo ', logo)
+    console.log('logo ', logo);
     doc.text(title, titleX, currentY);
     currentY += 10; // Espacio debajo del título principal
     let pageNumber = 0;
@@ -302,17 +300,20 @@ export class EstudianteCaracterizacionIniciarComponent
       const respuestas =
         this.caracterizacion?.respuestas
           .filter((respuesta: iQuestion) =>
-            cuestionario.preguntas.some(p => p.id_pregunta === respuesta.id_pregunta))
+            cuestionario.preguntas.some(
+              p => p.id_pregunta === respuesta.id_pregunta
+            )
+          )
           .map((respuesta: iQuestion) => {
             const concatOptions = respuesta.opcion.reduce((acc, current) => {
               return acc ? `${acc}, ${current.opcion}` : current.opcion;
             }, '');
             console.log('concat options ', concatOptions);
-            const strResponse = respuesta?.respuesta !== undefined && respuesta?.respuesta !== '' ? respuesta?.respuesta : concatOptions;
-            return [
-              respuesta.pregunta,
-              strResponse,
-            ];
+            const strResponse =
+              respuesta?.respuesta !== undefined && respuesta?.respuesta !== ''
+                ? respuesta?.respuesta
+                : concatOptions;
+            return [respuesta.pregunta, strResponse];
           }) ?? [];
       console.log('repsuestas', respuestas);
       console.log('repsuestas 2', this.caracterizacion?.respuestas);
@@ -328,16 +329,20 @@ export class EstudianteCaracterizacionIniciarComponent
           head: [['Pregunta', 'Respuesta']],
           body: respuestas,
           startY: currentY,
-          didDrawPage: (data) => {
+          didDrawPage: data => {
             console.log('did draw ', data);
             doc.setFontSize(10);
-            if(data.pageNumber !== pageNumber){
-              doc.text(`Página ${data.pageNumber}`, pageWidth - 40, pageHeight - 10);
+            if (data.pageNumber !== pageNumber) {
+              doc.text(
+                `Página ${data.pageNumber}`,
+                pageWidth - 40,
+                pageHeight - 10
+              );
               pageNumber = data.pageNumber;
             }
             doc.addImage(logo, 'PNG', 10, pageHeight - 30, 50, 20);
             pageNumber++;
-          }
+          },
         });
         currentY = (doc as any).lastAutoTable.finalY + 10;
       }
@@ -390,7 +395,7 @@ export class EstudianteCaracterizacionIniciarComponent
 
   async update() {
     this.pageLoading = true;
-    this.loadingMessage = 'Actualizando caracterizacion'
+    this.loadingMessage = 'Actualizando caracterizacion';
     const respuestas = this.getAnswerObject(this.values);
     const objToSave: ISaveCaracterizacion = {
       id_caracterizacion: this.caracterizacion?.id_caracterizacion ?? 0,
@@ -402,7 +407,8 @@ export class EstudianteCaracterizacionIniciarComponent
       grupoFamiliar: [],
     };
     try {
-      const resp = await this.catalogoServiceCOR.updateCaracterizacion(objToSave);
+      const resp =
+        await this.catalogoServiceCOR.updateCaracterizacion(objToSave);
       console.log('respuesta de actualizar ', resp);
     } catch (e) {
       console.log('error e', e);
@@ -415,13 +421,10 @@ export class EstudianteCaracterizacionIniciarComponent
         titleMessage: 'Error',
         type: MessageType.DANGER,
       };
-
     } finally {
       this.pageLoading = false;
       this.loadingMessage = undefined;
     }
-
-
   }
   async save() {
     const respuestas = this.getAnswerObject(this.values);

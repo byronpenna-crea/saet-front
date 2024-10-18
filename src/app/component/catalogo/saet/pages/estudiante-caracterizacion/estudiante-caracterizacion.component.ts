@@ -64,10 +64,13 @@ export class EstudianteCaracterizacionComponent
       ? `Especialista en ${localStorage.getItem('especialidad')} - COR`
       : '';
 
-    catalogoServiceCOR.getStudentInfo(this.nie).then(result => {
-      this.studentInfo = result.estudiante;
-    }).finally(() => {
-      this.pageLoading = false;
-    });
+    catalogoServiceCOR
+      .getStudentInfo(this.nie)
+      .then(result => {
+        this.studentInfo = result.estudiante;
+      })
+      .finally(() => {
+        this.pageLoading = false;
+      });
   }
 }

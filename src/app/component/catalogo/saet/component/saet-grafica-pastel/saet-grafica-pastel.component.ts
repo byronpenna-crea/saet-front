@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 interface DataItem {
   name: string;
@@ -23,9 +23,7 @@ export class SaetGraficaPastelComponent {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA'],
   };
 
-  constructor() {
-
-  }
+  constructor() {}
 
   onSelect(data: any): void {
     console.log('Item clicked', JSON.parse(JSON.stringify(data)));

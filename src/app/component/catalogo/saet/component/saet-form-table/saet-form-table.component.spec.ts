@@ -8,9 +8,8 @@ describe('SaetFormTableComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SaetFormTableComponent ]
-    })
-    .compileComponents();
+      declarations: [SaetFormTableComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(SaetFormTableComponent);
     component = fixture.componentInstance;

@@ -1,29 +1,28 @@
-import {Meta, moduleMetadata, Story} from "@storybook/angular";
-import {StorybookPrimeNgModule} from "../../../../../../storybook-config/storybook-prime-ng.module";
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {SaetTabButtonsComponent} from "../saet-tab-buttons.component";
+import { Meta, moduleMetadata, Story } from '@storybook/angular';
+import { StorybookPrimeNgModule } from '../../../../../../storybook-config/storybook-prime-ng.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SaetTabButtonsComponent } from '../saet-tab-buttons.component';
 
 export default {
   title: 'saet-tab-buttons',
   component: SaetTabButtonsComponent,
   decorators: [
     moduleMetadata({
-      imports: [
-        StorybookPrimeNgModule,
-        BrowserAnimationsModule
-      ],
+      imports: [StorybookPrimeNgModule, BrowserAnimationsModule],
     }),
-  ]
+  ],
   /*,
   argTypes: {
 
   }*/
 } as Meta;
 
-const Template: Story<SaetTabButtonsComponent> = (args: SaetTabButtonsComponent) => ({
+const Template: Story<SaetTabButtonsComponent> = (
+  args: SaetTabButtonsComponent
+) => ({
   component: SaetTabButtonsComponent,
   props: {
-    ...args
+    ...args,
   },
 });
 
@@ -36,7 +35,9 @@ Primary.args = {
       readOnly: false,
       testId: '',
       selected: false,
-      onClick: () => {console.log('Datos generales click')}
-    }
-  ]
-}
+      onClick: () => {
+        console.log('Datos generales click');
+      },
+    },
+  ],
+};

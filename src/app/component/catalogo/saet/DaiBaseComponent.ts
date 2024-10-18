@@ -1,13 +1,15 @@
-import {Inject, Injectable, OnInit} from "@angular/core";
-import {BaseComponent} from "./BaseComponent";
-import {DOCUMENT} from "@angular/common";
-import {CatalogoServiceCor, StudentInfoResponse} from "../../../services/catalogo/catalogo.service.cor";
-import {ActivatedRoute, Router} from "@angular/router";
-import {CatalogoServiceDai} from "../../../services/catalogo/catalogo.service.dai";
+import { Inject, Injectable, OnInit } from '@angular/core';
+import { BaseComponent } from './BaseComponent';
+import { DOCUMENT } from '@angular/common';
+import {
+  CatalogoServiceCor,
+  StudentInfoResponse,
+} from '../../../services/catalogo/catalogo.service.cor';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CatalogoServiceDai } from '../../../services/catalogo/catalogo.service.dai';
 
 @Injectable()
 export class DaiBaseComponent extends BaseComponent implements OnInit {
-
   protected loadStudentInfo(): Promise<StudentInfoResponse> {
     return this.catalogoServiceDai
       .getStudentInfo(this.nie)
@@ -36,7 +38,5 @@ export class DaiBaseComponent extends BaseComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void {}
 }

@@ -1,8 +1,8 @@
-import {Meta, moduleMetadata, Story} from "@storybook/angular";
-import {StorybookPrimeNgModule} from "../../../../../../storybook-config/storybook-prime-ng.module";
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {SaetInputComponent} from "../saet-input.component";
-import {InputTextModule} from "primeng/inputtext";
+import { Meta, moduleMetadata, Story } from '@storybook/angular';
+import { StorybookPrimeNgModule } from '../../../../../../storybook-config/storybook-prime-ng.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SaetInputComponent } from '../saet-input.component';
+import { InputTextModule } from 'primeng/inputtext';
 export default {
   title: 'saet-input',
   component: SaetInputComponent,
@@ -11,7 +11,7 @@ export default {
       imports: [
         StorybookPrimeNgModule,
         BrowserAnimationsModule,
-        InputTextModule
+        InputTextModule,
       ],
     }),
   ],
@@ -19,10 +19,8 @@ export default {
 const Template: Story<SaetInputComponent> = (args: SaetInputComponent) => ({
   component: SaetInputComponent,
   props: {
-    ...args
+    ...args,
   },
 });
 export const Primary = Template.bind({});
-Primary.args = {
-
-}
+Primary.args = {};

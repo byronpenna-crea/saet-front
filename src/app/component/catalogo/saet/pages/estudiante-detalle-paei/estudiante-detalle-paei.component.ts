@@ -32,7 +32,7 @@ export class EstudianteDetallePaeiComponent
   cuestionariosTableMode: number[] = [];
   btnIcon = IconComponent;
 
-  loadingMessage?:string = undefined;
+  loadingMessage?: string = undefined;
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceCOR: CatalogoServiceCor,

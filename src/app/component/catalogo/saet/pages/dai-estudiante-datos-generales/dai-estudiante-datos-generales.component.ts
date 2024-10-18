@@ -1,18 +1,22 @@
-import {ChangeDetectorRef, Component, Inject} from '@angular/core';
-import {CorBaseComponent} from "../../CorBaseComponent";
-import {DOCUMENT} from "@angular/common";
-import {CatalogoServiceCor} from "../../../../../services/catalogo/catalogo.service.cor";
-import {ActivatedRoute, Router} from "@angular/router";
-import {SAET_MODULE} from "../../shared/evaluaciones";
-import {DaiBaseComponent} from "../../DaiBaseComponent";
-import {CatalogoServiceDai} from "../../../../../services/catalogo/catalogo.service.dai";
-import {generalInformationInit, institutionalInfoInit, trustedAdultInfoInit} from "../../shared/information-tab.model";
-import {IinformationTab} from "../../component/tabs/tabs.component";
+import { ChangeDetectorRef, Component, Inject } from '@angular/core';
+import { CorBaseComponent } from '../../CorBaseComponent';
+import { DOCUMENT } from '@angular/common';
+import { CatalogoServiceCor } from '../../../../../services/catalogo/catalogo.service.cor';
+import { ActivatedRoute, Router } from '@angular/router';
+import { SAET_MODULE } from '../../shared/evaluaciones';
+import { DaiBaseComponent } from '../../DaiBaseComponent';
+import { CatalogoServiceDai } from '../../../../../services/catalogo/catalogo.service.dai';
+import {
+  generalInformationInit,
+  institutionalInfoInit,
+  trustedAdultInfoInit,
+} from '../../shared/information-tab.model';
+import { IinformationTab } from '../../component/tabs/tabs.component';
 
 @Component({
   selector: 'app-dai-estudiante-datos-generales',
   templateUrl: './dai-estudiante-datos-generales.component.html',
-  styleUrls: ['./dai-estudiante-datos-generales.component.css']
+  styleUrls: ['./dai-estudiante-datos-generales.component.css'],
 })
 export class DaiEstudianteDatosGeneralesComponent extends DaiBaseComponent {
   generalInformation: IinformationTab = generalInformationInit;
@@ -50,10 +54,10 @@ export class DaiEstudianteDatosGeneralesComponent extends DaiBaseComponent {
       })
       .catch(e => {
         console.log('Error loading student info in derived component:', e);
-      }).finally(() => {
-
-      this.pageLoading = false;
-    });
+      })
+      .finally(() => {
+        this.pageLoading = false;
+      });
   }
 
   protected readonly SAET_MODULE = SAET_MODULE;

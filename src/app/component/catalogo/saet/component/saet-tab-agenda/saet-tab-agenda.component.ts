@@ -7,8 +7,7 @@ import { ButtonStyle } from '../saet-button/saet-button.component';
 import { IconComponent } from '../../shared/component.config';
 
 import { TIPO_EVALUACION } from '../../shared/evaluaciones';
-import {iEspecialidadEvaluacion} from "../../../../../services/shared/saet-types";
-
+import { iEspecialidadEvaluacion } from '../../../../../services/shared/saet-types';
 
 export interface IAgendaParams {
   evaluationDate: Date | null;

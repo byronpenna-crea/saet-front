@@ -19,7 +19,7 @@ import {
   IAgendaParams,
   IOnCancelarAgenda,
 } from '../../component/saet-tab-agenda/saet-tab-agenda.component';
-import {iEspecialidadEvaluacion} from "../../../../../services/shared/saet-types";
+import { iEspecialidadEvaluacion } from '../../../../../services/shared/saet-types';
 
 interface IUserMessage {
   show: boolean;
@@ -52,7 +52,6 @@ export class EstudianteEvaluacionesComponent
   extends CorBaseComponent
   implements IMessageComponent
 {
-
   psicologiaEspecilistaAgendado = '';
   psicologiaEvaluationId = 0;
   especialista: { [key in iEspecialidadEvaluacion]: IAgendaEspecialista } = {
@@ -136,7 +135,7 @@ export class EstudianteEvaluacionesComponent
       this.agendaTabs = tabs;
     }
 
-    this.agendaTabs = this.agendaTabs.sort((a,) =>
+    this.agendaTabs = this.agendaTabs.sort(a =>
       a.name === this.especialidad ? -1 : 1
     );
     this.agendaTabs[0].readOnly = false;
@@ -169,39 +168,42 @@ export class EstudianteEvaluacionesComponent
         console.log('error ex', ex.status);
       });
 
-    catalogoServiceCOR.getCorEspecialistas(this.nie).then(response => {
-      response.forEach(especialista => {
-        if (this.especialidades.includes(especialista.especialidad)) {
-          if (especialista.especialidad === 'Psicologia') {
-            this.agendado[iEspecialidadEvaluacion.PSICOLOGIA] = true;
-            this.especialista[iEspecialidadEvaluacion.PSICOLOGIA] = {
-              nombreCompleto: especialista.nombre_completo,
-              dui: especialista.dui,
-            };
-            this.updateTab('psicologia', true);
+    catalogoServiceCOR
+      .getCorEspecialistas(this.nie)
+      .then(response => {
+        response.forEach(especialista => {
+          if (this.especialidades.includes(especialista.especialidad)) {
+            if (especialista.especialidad === 'Psicologia') {
+              this.agendado[iEspecialidadEvaluacion.PSICOLOGIA] = true;
+              this.especialista[iEspecialidadEvaluacion.PSICOLOGIA] = {
+                nombreCompleto: especialista.nombre_completo,
+                dui: especialista.dui,
+              };
+              this.updateTab('psicologia', true);
+            }
+            if (especialista.especialidad === 'Pedagogía') {
+              this.agendado[iEspecialidadEvaluacion.PEDAGOGIA] = true;
+              this.especialista[iEspecialidadEvaluacion.PEDAGOGIA] = {
+                nombreCompleto: especialista.nombre_completo,
+                dui: especialista.dui,
+              };
+              this.updateTab(iEspecialidadEvaluacion.PEDAGOGIA, true);
+            }
+            if (especialista.especialidad === 'Lenguaje y habla') {
+              this.agendado[iEspecialidadEvaluacion.LENGUAJE] = true;
+              this.especialista[iEspecialidadEvaluacion.LENGUAJE] = {
+                nombreCompleto: especialista.nombre_completo,
+                dui: especialista.dui,
+              };
+              this.updateTab(iEspecialidadEvaluacion.LENGUAJE, true);
+            }
+            //
           }
-          if (especialista.especialidad === 'Pedagogía') {
-            this.agendado[iEspecialidadEvaluacion.PEDAGOGIA] = true;
-            this.especialista[iEspecialidadEvaluacion.PEDAGOGIA] = {
-              nombreCompleto: especialista.nombre_completo,
-              dui: especialista.dui,
-            };
-            this.updateTab(iEspecialidadEvaluacion.PEDAGOGIA, true);
-          }
-          if (especialista.especialidad === 'Lenguaje y habla') {
-            this.agendado[iEspecialidadEvaluacion.LENGUAJE] = true;
-            this.especialista[iEspecialidadEvaluacion.LENGUAJE] = {
-              nombreCompleto: especialista.nombre_completo,
-              dui: especialista.dui,
-            };
-            this.updateTab(iEspecialidadEvaluacion.LENGUAJE, true);
-          }
-          //
-        }
+        });
+      })
+      .finally(() => {
+        this.pageLoading = false;
       });
-    }).finally(() => {
-      this.pageLoading = false;
-    });
   }
   onMessage(event: {
     title: string;
@@ -420,7 +422,7 @@ export class EstudianteEvaluacionesComponent
 
     const obj: ISaveQuestionary = {
       id_estudiante_fk: this.studentInfo?.id_est_pk,
-      id_especialista: 2,//this.idPersona,
+      id_especialista: 2, //this.idPersona,
       id_tipo_evaluacion: event.tipoEvaluacion,
       fecha: dateToSave,
       hora: timeToSave,

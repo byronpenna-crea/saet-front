@@ -36,7 +36,6 @@ enum informationTabMapping {
   styleUrls: ['./estudiante-datos-generales.component.css'],
 })
 export class EstudianteDatosGeneralesComponent extends CorBaseComponent {
-
   generalInformation: IinformationTab = generalInformationInit;
   trustedAdultInfo: IinformationTab = trustedAdultInfoInit;
   institutionalInfo: IinformationTab = institutionalInfoInit;
@@ -73,10 +72,10 @@ export class EstudianteDatosGeneralesComponent extends CorBaseComponent {
       })
       .catch(e => {
         console.log('Error loading student info in derived component:', e);
-      }).finally(() => {
-
-      this.pageLoading = false;
-    });
+      })
+      .finally(() => {
+        this.pageLoading = false;
+      });
   }
 
   handleDatosGeneralesClick(): void {

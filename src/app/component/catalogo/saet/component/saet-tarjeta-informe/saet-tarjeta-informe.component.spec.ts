@@ -8,9 +8,8 @@ describe('SaetTarjetaInformeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SaetTarjetaInformeComponent ]
-    })
-    .compileComponents();
+      declarations: [SaetTarjetaInformeComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(SaetTarjetaInformeComponent);
     component = fixture.componentInstance;

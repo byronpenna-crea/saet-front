@@ -16,7 +16,7 @@ export interface ITabButton {
 })
 export class SaetTabButtonsComponent {
   @Input() readOnly: boolean = false;
-  @Input() tabs:ITabButton[] = [];
+  @Input() tabs: ITabButton[] = [];
 
   handleClick(event: Event, tab: ITabButton) {
     if (tab.readOnly || tab.onClick) {

@@ -1,14 +1,20 @@
-import {Component, Inject} from '@angular/core';
-import {ButtonStyle} from "../../component/saet-button/saet-button.component";
-import {KeyValue} from "../../component/saet-input/saet-input.component";
-import {IconComponent} from "../../shared/component.config";
-import {MessageType, UserMessage} from "../../interfaces/message-component.interface";
-import {userMessageInit} from "../../shared/messages.model";
-import {DeiBaseComponent} from "../../DeiBaseComponent";
-import {DOCUMENT} from "@angular/common";
-import {CatalogoServiceCor, ResponseError} from "../../../../../services/catalogo/catalogo.service.cor";
-import {ActivatedRoute, Router} from "@angular/router";
-import jsPDF from "jspdf";
+import { Component, Inject } from '@angular/core';
+import { ButtonStyle } from '../../component/saet-button/saet-button.component';
+import { KeyValue } from '../../component/saet-input/saet-input.component';
+import { IconComponent } from '../../shared/component.config';
+import {
+  MessageType,
+  UserMessage,
+} from '../../interfaces/message-component.interface';
+import { userMessageInit } from '../../shared/messages.model';
+import { DeiBaseComponent } from '../../DeiBaseComponent';
+import { DOCUMENT } from '@angular/common';
+import {
+  CatalogoServiceCor,
+  ResponseError,
+} from '../../../../../services/catalogo/catalogo.service.cor';
+import { ActivatedRoute, Router } from '@angular/router';
+import jsPDF from 'jspdf';
 
 @Component({
   selector: 'app-estudiante-dei-informe-trimestral',
@@ -52,12 +58,12 @@ export class EstudianteDeiInformeTrimestralComponent extends DeiBaseComponent {
         const img = new Image();
         img.src = url;
         img.onload = () => resolve(img);
-        img.onerror = (err) => reject(err);
+        img.onerror = err => reject(err);
       });
     };
 
     const logo = await loadImage(logoPath);
-    console.log('logo ', logo)
+    console.log('logo ', logo);
     doc.text(title, titleX, currentY);
     //currentY += 10; // Espacio debajo del título principal
     //let pageNumber = 0;
@@ -72,7 +78,7 @@ export class EstudianteDeiInformeTrimestralComponent extends DeiBaseComponent {
         const result = await this.catalogoServiceCOR.getStudentInfo(
           this.inputNIE
         );
-        result.estudiante.nombreCompleto
+        result.estudiante.nombreCompleto;
         this.cnResult = 1;
         this.userMessage = {
           showMessage: false,
@@ -83,10 +89,9 @@ export class EstudianteDeiInformeTrimestralComponent extends DeiBaseComponent {
         this.showTable = true;
       } catch (e) {
         const error = e as ResponseError;
-        if(error.status === 401){
+        if (error.status === 401) {
           console.log('back to login', error.message);
         }
-
       }
     }
     this.pageLoading = false;

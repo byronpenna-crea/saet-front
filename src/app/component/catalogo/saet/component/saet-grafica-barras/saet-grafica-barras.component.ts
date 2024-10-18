@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ScaleType } from '@swimlane/ngx-charts';
 export enum Direction {
   VERTICAL = 0,

@@ -1,26 +1,32 @@
-import {SaetButtonComponent} from "../../saet-button/saet-button.component";
-import {SaetFormTableComponent} from "../saet-form-table.component";
-import {moduleMetadata, Story} from "@storybook/angular";
-import {StorybookPrimeNgModule} from "../../../../../../storybook-config/storybook-prime-ng.module";
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {SaetInputComponent} from "../../saet-input/saet-input.component";
-import {TabItemComponent} from "../../tab-item/tab-item.component";
-import {SaetUnderlinedTitleComponent} from "../../saet-underlined-title/saet-underlined-title.component";
-import {SaetTableComponent} from "../../saet-table/saet-table.component";
+import { SaetButtonComponent } from '../../saet-button/saet-button.component';
+import { SaetFormTableComponent } from '../saet-form-table.component';
+import { moduleMetadata, Story } from '@storybook/angular';
+import { StorybookPrimeNgModule } from '../../../../../../storybook-config/storybook-prime-ng.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { SaetInputComponent } from '../../saet-input/saet-input.component';
+import { TabItemComponent } from '../../tab-item/tab-item.component';
+import { SaetUnderlinedTitleComponent } from '../../saet-underlined-title/saet-underlined-title.component';
+import { SaetTableComponent } from '../../saet-table/saet-table.component';
 
 export default {
   title: 'form-table',
   component: SaetFormTableComponent,
   decorators: [
-
     moduleMetadata({
-
-      declarations: [TabItemComponent,SaetUnderlinedTitleComponent,SaetInputComponent,SaetTableComponent, SaetButtonComponent],
+      declarations: [
+        TabItemComponent,
+        SaetUnderlinedTitleComponent,
+        SaetInputComponent,
+        SaetTableComponent,
+        SaetButtonComponent,
+      ],
       imports: [StorybookPrimeNgModule, BrowserAnimationsModule],
     }),
-  ]
-}
-const Template: Story<SaetFormTableComponent> = (args: SaetFormTableComponent) => ({
+  ],
+};
+const Template: Story<SaetFormTableComponent> = (
+  args: SaetFormTableComponent
+) => ({
   component: SaetFormTableComponent,
   props: {
     ...args,
@@ -32,11 +38,9 @@ const Template: Story<SaetFormTableComponent> = (args: SaetFormTableComponent) =
   `,
 });
 
-export const Primary = Template.bind({
-
-});
+export const Primary = Template.bind({});
 export const WidthPreviousData = Template.bind({});
-WidthPreviousData.args={
+WidthPreviousData.args = {
   data: [
     {
       id: '1',
@@ -44,7 +48,7 @@ WidthPreviousData.args={
       parentesco: 'Padre',
       nivelEducativo: 'Universidad',
       ocupacion: 'Ingeniero',
-      action: ''
-    }
-  ]
-}
+      action: '',
+    },
+  ],
+};

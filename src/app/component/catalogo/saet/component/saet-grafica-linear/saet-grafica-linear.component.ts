@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 interface Series {
   name: string;
@@ -19,7 +19,6 @@ export class SaetGraficaLinearComponent {
   @Input() multi: Multi[] = [];
 
   @Input() view: [number, number] = [700, 300];
-
 
   // options
   legend: boolean = true;

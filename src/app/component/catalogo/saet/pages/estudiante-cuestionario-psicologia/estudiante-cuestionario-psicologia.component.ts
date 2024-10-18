@@ -57,13 +57,17 @@ export class EstudianteCuestionarioPsicologiaComponent
     );
     this.pageLoading = true;
 
-    const tipoEvaluacionPromise = this.catalogoServiceCOR.getTipoDeEvaluacion(this.nie, TIPO_EVALUACION.psicologo_perfil);
-    const psicologiaQuestionsPromise = this.catalogoServiceCOR.getPsicologiaQuestions();
+    const tipoEvaluacionPromise = this.catalogoServiceCOR.getTipoDeEvaluacion(
+      this.nie,
+      TIPO_EVALUACION.psicologo_perfil
+    );
+    const psicologiaQuestionsPromise =
+      this.catalogoServiceCOR.getPsicologiaQuestions();
 
     Promise.all([tipoEvaluacionPromise, psicologiaQuestionsPromise])
       .then(([responseEvaluacion, resultQuestions]) => {
         this.idEvaluacion = responseEvaluacion.id_evaluacion;
-        console.log('original response ', responseEvaluacion)
+        console.log('original response ', responseEvaluacion);
         this.handleMode(
           responseEvaluacion.id_evaluacion,
           'menu/saet-psicologia',
@@ -71,7 +75,6 @@ export class EstudianteCuestionarioPsicologiaComponent
         );
         console.log('depurados ', this.responseToValues(responseEvaluacion));
         this.values = {
-
           ...this.responseToValues(responseEvaluacion),
           ...this.values,
         };
@@ -79,13 +82,13 @@ export class EstudianteCuestionarioPsicologiaComponent
 
         this.showActionButtons = true;
         this.corSurveys.push(...resultQuestions.cuestionarios);
-      }).catch(ex => {
-      console.log('ex here', ex);
-    })
+      })
+      .catch(ex => {
+        console.log('ex here', ex);
+      })
       .finally(() => {
         this.pageLoading = false;
       });
-
   }
   onCheckboxChange(keyValues: KeyValue[]) {
     const selectedValues = keyValues.map(e => e.value);
@@ -100,12 +103,12 @@ export class EstudianteCuestionarioPsicologiaComponent
     const objToSave: ISaveQuestionary = this.getQuestionaryObject();
     console.log('obj to save', objToSave);
     objToSave.id_evaluacion = this.idEvaluacion;
-    try{
+    try {
       const resp = await this.catalogoServiceCOR.updatePsicologia(objToSave);
       console.log('Actualizado ', resp);
-    }catch (e){
+    } catch (e) {
       console.log('Error ---- ', e);
-    }finally {
+    } finally {
       this.pageLoading = false;
     }
   }
