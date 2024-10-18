@@ -7,6 +7,7 @@ import {CatalogoServiceDai} from "../../../services/catalogo/catalogo.service.da
 
 @Injectable()
 export class DaiBaseComponent extends BaseComponent implements OnInit {
+
   protected loadStudentInfo(): Promise<StudentInfoResponse> {
     return this.catalogoServiceDai
       .getStudentInfo(this.nie)

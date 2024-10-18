@@ -81,6 +81,7 @@ export class CorBaseComponent extends BaseComponent implements OnInit {
       const nie = params.get('nie');
       if (nie) {
         this.nie = nie;
+        console.log('la url es ',this.router.url);
         this.loadStudentInfo();
       }
     });
@@ -93,7 +94,9 @@ export class CorBaseComponent extends BaseComponent implements OnInit {
         return result;
       })
       .catch(e => {
-        this.router.navigate(['menu/saet-buscar']);
+        if(!this.router.url.includes('/menu/saet-buscar')){
+          this.router.navigate(['menu/saet-buscar']);
+        }
         throw e;
       });
   }

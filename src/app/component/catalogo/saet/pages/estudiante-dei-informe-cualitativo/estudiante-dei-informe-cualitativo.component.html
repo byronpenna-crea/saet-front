@@ -6,13 +6,13 @@
         testId="input-nie"
         [inputArgs]="{ text: inputNIE }"
         [value]="inputNIE"
-        [disabled]="showTable"
+        [disabled]="!showTable"
         (inputChange)="onInputChange($event)"
       />
       <div class="button-container">
         <app-saet-button
           testId="btn-buscar"
-          [disabled]="showTable"
+          [disabled]="!showTable"
           [buttonArgs]="{
             text: 'Buscar',
             buttonStyle: ButtonStyle.BLUE,
@@ -35,6 +35,9 @@
             <div>{{ cnResult }} elemento(s)</div>
           </div>
         </app-saet-underlined-title>
+
+
+
       </div>
     </div>
   </p-tabPanel>

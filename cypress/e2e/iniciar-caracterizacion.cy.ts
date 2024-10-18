@@ -1,4 +1,5 @@
 describe('llegar al modulo', () => {
+  const baseUrl = Cypress.config('baseUrl');
   beforeEach(() => {
     cy.viewport(1920, 1920);
   });

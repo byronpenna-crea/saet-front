@@ -37,7 +37,7 @@ export class EstudianteDeiInformeTrimestralComponent extends DeiBaseComponent {
   }
   async generateReport(nie: string) {
     const doc = new jsPDF();
-    //let currentY = 30;
+    const currentY = 30;
 
     const title = 'Informe trimestral COR';
     const titleWidth = doc.getTextWidth(title);
@@ -58,7 +58,7 @@ export class EstudianteDeiInformeTrimestralComponent extends DeiBaseComponent {
 
     const logo = await loadImage(logoPath);
     console.log('logo ', logo)
-    //doc.text(title, titleX, currentY);
+    doc.text(title, titleX, currentY);
     //currentY += 10; // Espacio debajo del título principal
     //let pageNumber = 0;
     doc.save(`informe-trimestral-cor.pdf`);

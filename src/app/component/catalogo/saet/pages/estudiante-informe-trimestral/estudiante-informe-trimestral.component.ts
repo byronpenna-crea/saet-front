@@ -11,7 +11,7 @@ import {
   SaetButtonArgs,
 } from '../../component/saet-button/saet-button.component';
 import { DOCUMENT } from '@angular/common';
-import { CatalogoServiceCor } from '../../../../../services/catalogo/catalogo.service.cor';
+import {CatalogoServiceCor, ResponseError} from '../../../../../services/catalogo/catalogo.service.cor';
 import { ActivatedRoute, Router } from '@angular/router';
 import { KeyValue } from '../../component/saet-input/saet-input.component';
 import { IconComponent } from '../../shared/component.config';
@@ -88,16 +88,20 @@ export class EstudianteInformeTrimestralComponent
     if (this.inputNIE) {
       try {
         this.pageLoading = true;
-        /*const result = await this.catalogoServiceCOR.getStudentInfo(
+        const result = await this.catalogoServiceQuarterReport.getStudentInfo(
           this.inputNIE
         );
-        console.log('result here ', result);*/
+        console.log('result here ', result);
         this.cnResult = 1;
         this.showTable = true;
-      } catch (error) {
+      } catch (e: unknown) {
+        const error = e as ResponseError;
+        if(error.status === 401){
+          console.log('back to login', error.message);
+        }
         this.userMessage = {
           showMessage: true,
-          message: 'Error al obtener la información del estudiante',
+          message: error.message,
           type: MessageType.DANGER,
         };
       } finally {

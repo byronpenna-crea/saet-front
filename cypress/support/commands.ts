@@ -55,9 +55,9 @@ for (const command of [
     });
   });
 }
-
+const baseUrl = Cypress.config('baseUrl');
 Cypress.Commands.add('login', (username: string, password: string) => {
-  cy.visit('http://192.168.12.135/#/login', { timeout: 100000 });
+  cy.visit(`${baseUrl}/#/login`, { timeout: 100000 });
   cy.contains('body', 'Iniciar sesión', { timeout: 100000 }).should(
     'be.visible'
   );

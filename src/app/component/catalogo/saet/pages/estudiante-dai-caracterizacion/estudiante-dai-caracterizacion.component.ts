@@ -23,6 +23,7 @@ import {SAET_MODULE} from "../../shared/evaluaciones";
   templateUrl: './estudiante-dai-caracterizacion.component.html',
   styleUrls: ['./estudiante-dai-caracterizacion.component.css'],
 })
+
 export class EstudianteDaiCaracterizacionComponent extends DaiBaseComponent
   implements IMessageComponent
 {
@@ -37,12 +38,15 @@ export class EstudianteDaiCaracterizacionComponent extends DaiBaseComponent
     private confirmationService: ConfirmationService
   ) {
     super(document, catalogoServiceDai, route, router);
+    this.pageLoading = true;
     catalogoServiceDai.getDaiCaracterizacionQuestion().then(result => {
       this.corSurveys.push(...result.cuestionarios);
+      this.pageLoading = false;
     });
   }
   formMode: FormMode = FormMode.CREATE;
   formModeEnum = FormMode;
+
   // override ngOnInit = async () => {
   //   await super.ngOnInit();
   //   this.route.paramMap.subscribe(params => {
@@ -54,6 +58,7 @@ export class EstudianteDaiCaracterizacionComponent extends DaiBaseComponent
   //     }
   //   });
   // };
+
   onCheckboxChange(keyValues: KeyValue[]) {
     const selectedValues = keyValues.map(e => e.value);
     this.values[keyValues[0].key] = selectedValues.toString();

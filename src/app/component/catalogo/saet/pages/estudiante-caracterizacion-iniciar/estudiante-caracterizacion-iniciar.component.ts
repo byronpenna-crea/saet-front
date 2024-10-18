@@ -189,7 +189,6 @@ export class EstudianteCaracterizacionIniciarComponent
     const studentGuardiansPromise = catalogoServiceCOR.getGuardians(this.nie);
     Promise.all([corQuestionPromise,studentInfoPromise, studentGuardiansPromise]).then(([corQuestionResult, studentInfoResult, guardiansResult]) => {
       this.corSurveys.push(...corQuestionResult.cuestionarios);
-      this.pageLoading = false;
       // ####################
       this.studentInfo = studentInfoResult.estudiante;
       this.generalInformation = {
@@ -228,6 +227,9 @@ export class EstudianteCaracterizacionIniciarComponent
           nombreCompleto: `${guardian.primer_nombre} ${guardian.segundo_nombre} ${guardian.primer_apellido} ${guardian.segundo_apellido}`,
         } as unknown as FormTablePariente;
       });
+
+
+      this.pageLoading = false;
     })
 
     /*.then(result => {

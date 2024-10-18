@@ -1,13 +1,13 @@
 Feature: Caracterización del estudiante
 
-  Scenario: Iniciar la caracterización
-    Given el usuario ha iniciado sesión como "usuario_psicologia" con "pass_psicologia"
-    When el usuario navega a la caracterización del estudiante con NIE "111111"
+  Scenario: Iniciar la caracterización (Usuario Byron [psicologo] )
+    Given el usuario ha iniciado sesión como "050350968" con "BienvenidoSiges"
+    When el usuario navega a la caracterización del estudiante con NIE "10696704"
     And el usuario hace clic en "iniciar caracterizacion"
     Then la URL debe incluir "saet-caracterizacion-iniciar"
 
-  Scenario: Verificar local storage
-    Given el usuario ha iniciado sesión como "usuario_psicologia" con "pass_psicologia"
+  Scenario: Verificar local storage (Usuario Byron [psicologo] )
+    Given el usuario ha iniciado sesión como "050350968" con "BienvenidoSiges"
     When el usuario navega a la caracterización del estudiante con NIE "10696704"
     And el usuario hace clic en "iniciar caracterizacion"
     And el usuario escribe "persona que asiste" en el primer input
@@ -22,8 +22,8 @@ Feature: Caracterización del estudiante
     And el usuario hace clic en "continuar editando"
     Then la URL debe incluir "saet-caracterizacion-iniciar"
 
-  Scenario: Guardar caracterización
-    Given el usuario ha iniciado sesión como "usuario_psicologia" con "pass_psicologia"
+  Scenario: Guardar caracterización (Usuario Byron [psicologo] )
+    Given el usuario ha iniciado sesión como "050350968" con "BienvenidoSiges"
     When el usuario navega a la caracterización del estudiante con NIE "10696704"
     And el usuario hace clic en "iniciar caracterizacion"
     And el usuario escribe "persona que asiste" en el primer input
@@ -31,7 +31,7 @@ Feature: Caracterización del estudiante
     Then la caracterización debe guardarse exitosamente
 
   Scenario: verificar que data offline es diferente por alumno
-    Given el usuario ha iniciado sesión como "usuario_psicologia" con "pass_psicologia"
+    Given el usuario ha iniciado sesión como "050350968" con "BienvenidoSiges"
     When el usuario navega a la caracterización del estudiante con NIE "11111"
     And el usuario hace clic en "iniciar caracterizacion"
     And el usuario ve el primer input vacio

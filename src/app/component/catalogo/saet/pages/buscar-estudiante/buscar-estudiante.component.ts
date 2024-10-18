@@ -70,7 +70,8 @@ export class BuscarEstudianteComponent
     super(document, catalogoServiceCOR, route, router);
     try {
       this.pageLoading = true;
-      this.loadStudentInfo()
+      this.catalogoServiceCOR
+        .getStudentInfo(this.nie)
         .then(result => {
           this.cnResult = 1;
           this.studentData = this.populateStudent(result);
@@ -79,7 +80,15 @@ export class BuscarEstudianteComponent
           this.inputNIE = result.estudiante.nie;
         })
         .catch(e => {
-          console.log('no existe NIE en url', e);
+          const error = e as ResponseError;
+          if(error.status === 401){
+            console.log('back to login', error.message);
+          }
+          this.userMessage = {
+            showMessage: true,
+            message: error.message,
+            type: MessageType.DANGER,
+          };
         }).finally(() => {
           this.pageLoading = false;
       });
@@ -192,9 +201,6 @@ export class BuscarEstudianteComponent
         /*this.showError = false;
         this.errorMessage = "";*/
         this.showTable = true;
-
-
-
       } catch (e: unknown) {
         const error = e as ResponseError;
         if(error.status === 401){

@@ -1,10 +1,13 @@
-import { Component } from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {DeiBaseComponent} from "../../DeiBaseComponent";
 import {ButtonStyle} from "../../component/saet-button/saet-button.component";
 import {IconComponent} from "../../shared/component.config";
-import {UserMessage} from "../../interfaces/message-component.interface";
+import {MessageType, UserMessage} from "../../interfaces/message-component.interface";
 import {userMessageInit} from "../../shared/messages.model";
 import {KeyValue} from "../../component/saet-input/saet-input.component";
+import {DOCUMENT} from "@angular/common";
+import {CatalogoServiceCor, ResponseError} from "../../../../../services/catalogo/catalogo.service.cor";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-estudiante-dei-informe-cualitativo',
@@ -19,12 +22,45 @@ export class EstudianteDeiInformeCualitativoComponent extends DeiBaseComponent{
 
   inputNIE = '';
   cnResult = 0;
-  showTable = false;
+  showTable = true;
+  pageLoading = false;
+
+  constructor(
+    @Inject(DOCUMENT) protected document: Document,
+    protected catalogoServiceCOR: CatalogoServiceCor,
+    protected override router: Router
+  ) {
+    super(router);
+  }
 
   onInputChange(keyValue: KeyValue) {
     this.inputNIE = keyValue.value;
   }
   async toggleTable() {
+
+    this.userMessage.showMessage = false;
+    this.pageLoading = true;
+
+    if (this.inputNIE) {
+      try {
+        const result = await this.catalogoServiceCOR.getStudentInfo(
+          this.inputNIE
+        );
+        this.cnResult = 1;
+        this.userMessage = {
+          showMessage: false,
+          message: '',
+          titleMessage: '',
+          type: MessageType.SUCCESS,
+        };
+        this.showTable = true;
+      }catch (e){
+        const error = e as ResponseError;
+        if(error.status === 401){
+          console.log('back to login', error.message);
+        }
+      }
+    }
 
   }
   cleanInput() {
