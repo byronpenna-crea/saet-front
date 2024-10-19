@@ -138,7 +138,9 @@ export class EstudianteDaiCaracterizacionComponent
   //   ]);
   // }
   async entrarEditMode() {}
-  async save() {}
+  async save() {
+    console.log('saaveee');
+  }
   async retornarCaracterizacion() {}
   async update() {}
   async generatePDF() {}

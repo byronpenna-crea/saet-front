@@ -1,25 +1,20 @@
 import { ChangeDetectorRef, Component, Inject } from '@angular/core';
-import { CorBaseComponent } from '../../CorBaseComponent';
 import {
   IMessageComponent,
   MessageType,
-  UserMessage,
 } from '../../interfaces/message-component.interface';
-import { userMessageInit } from '../../shared/messages.model';
-import {
-  ButtonStyle,
-  SaetButtonArgs,
-} from '../../component/saet-button/saet-button.component';
 import { DOCUMENT } from '@angular/common';
-import {
-  CatalogoServiceCor,
-  ResponseError,
-} from '../../../../../services/catalogo/catalogo.service.cor';
+import { ResponseError } from '../../../../../services/catalogo/catalogo.service.cor';
 import { ActivatedRoute, Router } from '@angular/router';
 import { KeyValue } from '../../component/saet-input/saet-input.component';
 import { IconComponent } from '../../shared/component.config';
 import { QuarterBaseComponent } from '../../QuarterBaseComponent';
-import { CatalogoServiceQuarterReport } from '../../../../../services/catalogo/catalogo.service.quater_report';
+import {
+  CatalogoServiceQuarterReport,
+  ISaveQuarterReport,
+} from '../../../../../services/catalogo/catalogo.service.quater_report';
+import { iQuestion, iQuestionSave } from '../../shared/survey';
+import { IValuesForm } from '../../QuestionsComponent';
 
 @Component({
   selector: 'app-estudiante-informe-trimestral',
@@ -34,6 +29,19 @@ export class EstudianteInformeTrimestralComponent
   inputNIE = '';
   cnResult = 0;
   localStorageKey = 'quarter-values';
+  respuestasToValues(respuestas: iQuestion[]) {
+    const values: IValuesForm = {};
+    respuestas.forEach(respuesta => {
+      const radioKey = `radio_${respuesta.id_pregunta}`;
+      const inputKey = `richtext_${respuesta.id_pregunta}`;
+
+      if (respuesta.opcion !== undefined && respuesta.opcion.length > 0) {
+        values[radioKey] = respuesta.opcion[0].opcion_pregunta_pk.toString();
+      }
+      values[inputKey] = respuesta.respuesta ?? '';
+    });
+    return values;
+  }
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceQuarterReport: CatalogoServiceQuarterReport,
@@ -46,21 +54,32 @@ export class EstudianteInformeTrimestralComponent
       this.inputNIE = this.nie;
       if (this.nie) {
         this.toggleTable();
-        const storedValues = localStorage.getItem(
-          `${this.localStorageKey}-${this.nie}`
-        );
-        if (storedValues) {
-          this.values = JSON.parse(storedValues);
-        }
+
+        /*
+         */
+
         console.log('stored values in constructor ', this.values);
         const questionPromise = catalogoServiceQuarterReport.getQuestions();
         const answerPromise = catalogoServiceQuarterReport.getByNie(this.nie);
         Promise.all([questionPromise, answerPromise]).then(
           ([questionResult, answerPromise]) => {
             console.log('Qeustion result ', questionResult);
-            console.log('answerPromise ', answerPromise);
+            console.log('answerPromise ', answerPromise.respuestas);
+            const respuestas = this.respuestasToValues(
+              answerPromise.respuestas ?? []
+            );
+            this.values = {
+              ...this.values,
+              ...respuestas,
+            };
           }
         );
+        const storedValues = localStorage.getItem(
+          `${this.localStorageKey}-${this.nie}`
+        );
+        if (storedValues) {
+          this.values = JSON.parse(storedValues);
+        }
       }
     } catch (e) {
       console.log('error en constructor', e);
@@ -70,8 +89,23 @@ export class EstudianteInformeTrimestralComponent
     await this.router.navigate(['menu/saet-buscar/', this.nie]);
   }
   async save() {
+    console.log('to save xxxx----');
     const respuestas = this.getAnswerObject(this.values);
-    console.log('respuestas ', respuestas);
+    console.log('respuestas here ', respuestas);
+    const studentId = this.studentInfo?.id_est_pk ?? 0;
+    if (studentId === 0) {
+      this.userMessage.showMessage = true;
+      this.userMessage.message = 'El estudiante es requerido';
+      this.userMessage.type = MessageType.WARNING;
+      return;
+    }
+
+    const objToSave: ISaveQuarterReport = {
+      id_estudiante_fk: studentId,
+      respuestas: respuestas,
+    };
+    await this.catalogoServiceQuarterReport.save(objToSave);
+    console.log('respuestas to save', objToSave);
   }
   values: { [key: string]: string } = {};
   onInputNIEChange(keyValue: KeyValue) {

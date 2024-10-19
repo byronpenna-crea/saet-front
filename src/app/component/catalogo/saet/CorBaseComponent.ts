@@ -27,6 +27,10 @@ export class CorBaseComponent extends BaseComponent implements OnInit {
   readOnlyPaei = true;
   async ngOnInit() {
     try {
+      if(this.nie === ''){
+        console.log('here xxy');
+        return;
+      }
       const response = await this.catalogoServiceCOR.getCaracterizacionPorNIE(
         this.nie
       );

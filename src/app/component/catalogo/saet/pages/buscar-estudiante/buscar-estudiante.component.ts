@@ -71,6 +71,10 @@ export class BuscarEstudianteComponent
     super(document, catalogoServiceCOR, route, router);
     try {
       this.pageLoading = true;
+      if(this.nie === ''){
+        this.pageLoading = false;
+        return;
+      }
       this.catalogoServiceCOR
         .getStudentInfo(this.nie)
         .then(result => {
@@ -82,8 +86,9 @@ export class BuscarEstudianteComponent
         })
         .catch(e => {
           const error = e as ResponseError;
+          console.log('catch getStudentInfo', error.message);
           if (error.status === 401) {
-            console.log('back to login', error.message);
+            // redirect
           }
           this.userMessage = {
             showMessage: true,

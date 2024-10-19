@@ -23,15 +23,24 @@ export class BaseComponent {
     const result: IQuestionaryAnswer[] = [];
 
     const keys = Object.keys(data);
+    console.log('-----------------');
     console.log('keys', keys);
+    console.log('data', data);
+    console.log('-----------------');
     const groupedData = keys.reduce<
-      Record<string, { radio?: string; input?: string; check?: string }>
+      Record<
+        string,
+        { radio?: string; input?: string; check?: string; richtext?: string }
+      >
     >((acc, key) => {
       const [type, id] = key.split('_');
+      console.log(acc);
+      console.log(id);
+      console.log(type);
       if (!acc[id]) {
         acc[id] = {};
       }
-      if (type === 'radio' || type === 'input') {
+      if (type === 'radio' || type === 'input' || type === 'richtext') {
         acc[id][type] = data[key];
       }
       return acc;
@@ -54,7 +63,12 @@ export class BaseComponent {
                     },
                   ]
                 : [],
-            respuesta: groupedData[id].input || '',
+            respuesta:
+              (groupedData[id].input ?? '') !== ''
+                ? groupedData[id].input ?? ''
+                : (groupedData[id].richtext ?? '') !== ''
+                  ? groupedData[id].richtext ?? ''
+                  : '',
           });
         console.log(
           'grouped data here',
