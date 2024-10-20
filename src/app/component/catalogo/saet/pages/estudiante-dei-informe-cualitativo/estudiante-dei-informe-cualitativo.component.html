@@ -43,6 +43,116 @@
             <div>{{ cnResult }} elemento(s)</div>
           </div>
         </app-saet-underlined-title>
+
+        <div class="container">
+          <h2 style="margin: 0">Estudiante</h2>
+          <div style="border: 1px solid #ccc; padding: 20px">
+            <div class="form-section">
+              <div class="form-group">
+                <label>NIE:</label>
+                <app-saet-input
+                  name="name"
+                  testId="input-nie"
+                  [inputArgs]="{ text: student.Nie }"
+                  [disabled]="true"
+                  [value]="student.Nie"
+                />
+              </div>
+              <div class="form-group">
+                <label>NUI:</label>
+                <app-saet-input
+                  name="name"
+                  testId="input-nui"
+                  [inputArgs]="{ text: student.Nui }"
+                  [disabled]="true"
+                  [value]="student.Nui"
+                />
+              </div>
+              <div class="form-group">
+                <label>Nombre completo:</label>
+                <app-saet-input
+                  name="name"
+                  testId="input-nombre-completo"
+                  [inputArgs]="{ text: student.nombreCompleto }"
+                  [disabled]="true"
+                  [value]="student.nombreCompleto"
+                />
+              </div>
+              <div class="form-group">
+                <label>Centro educativo:</label>
+                <app-saet-input
+                  name="name"
+                  testId="input-centro-educativo"
+                  [inputArgs]="{ text: student.centroEducativo }"
+                  [disabled]="true"
+                  [value]="student.centroEducativo"
+                />
+              </div>
+            </div>
+            <hr />
+            <table class="report-table">
+              <thead>
+                <tr>
+                  <th>Responsables</th>
+                  <th>Estado del informe</th>
+                  <th>Ver informe Trimestral</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Centro de Orientación y Recursos (COR)</td>
+                  <td>Atendido</td>
+                  <td>
+                    <app-saet-button
+                      testId="btn-buscar-cor"
+                      [disabled]="!showTable"
+                      [buttonArgs]="{
+                        text: 'Ver informe',
+                        buttonStyle: ButtonStyle.WHITE,
+                        buttonIcon: IconCompoment.EYE
+                      }"
+                      (onClick)="generateReport(inputNIE)"
+                    />
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>Docente de Apoyo a la Inclusión (DAI)</td>
+                  <td>Atendido</td>
+                  <td>
+                    <app-saet-button
+                      testId="btn-buscar-dai"
+                      [disabled]="!showTable"
+                      [buttonArgs]="{
+                        text: 'Ver informe',
+                        buttonStyle: ButtonStyle.WHITE,
+                        buttonIcon: IconCompoment.EYE
+                      }"
+                      (onClick)="generateReport(inputNIE)"
+                    />
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>Consejería Escolar (CE)</td>
+                  <td>Atendido</td>
+                  <td>
+                    <app-saet-button
+                      testId="btn-buscar-ce"
+                      [disabled]="true"
+                      [buttonArgs]="{
+                        text: 'Ver informe',
+                        buttonStyle: ButtonStyle.WHITE,
+                        buttonIcon: IconCompoment.EYE
+                      }"
+                      (onClick)="generateReport(inputNIE)"
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   </p-tabPanel>

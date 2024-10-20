@@ -89,6 +89,8 @@ export class EstudianteDeiInformeCuantitativoComponent
   corCount = 0;
   daiCount = 0;
 
+
+
   constructor(
     private deiService: CatalogoServiceDei,
     @Inject(DOCUMENT) private document: Document,

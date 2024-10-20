@@ -14,6 +14,7 @@ import {
   ResponseError,
 } from '../../../../../services/catalogo/catalogo.service.cor';
 import {ActivatedRoute, Router} from '@angular/router';
+import jsPDF from "jspdf";
 
 @Component({
   selector: 'app-estudiante-dei-informe-cualitativo',
@@ -28,6 +29,45 @@ export class EstudianteDeiInformeCualitativoComponent extends DeiBaseComponent {
   inputNIE = '';
   cnResult = 0;
   showTable = false;
+  student:{
+    Nie: string,
+    Nui: string,
+    nombreCompleto: string,
+    centroEducativo: string
+  } = {
+    Nie: '',
+    Nui: '',
+    centroEducativo: '',
+    nombreCompleto: ''
+  }
+  async generateReport(nie: string) {
+    const doc = new jsPDF();
+    const currentY = 30;
+
+    const title = 'Informe cualitativo COR';
+    const titleWidth = doc.getTextWidth(title);
+    const pageWidth = doc.internal.pageSize.getWidth();
+    //const pageHeight = doc.internal.pageSize.getHeight();
+    const titleX = (pageWidth - titleWidth) / 2;
+
+    const logoPath = '/assets/logo.png'; // Cambia esto a la ruta de tu archivo de logo
+
+    const loadImage = (url: string): Promise<HTMLImageElement> => {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = url;
+        img.onload = () => resolve(img);
+        img.onerror = err => reject(err);
+      });
+    };
+
+    const logo = await loadImage(logoPath);
+
+    doc.text(title, titleX, currentY);
+    //currentY += 10; // Espacio debajo del título principal
+    //let pageNumber = 0;
+    doc.save(`informe-cualitativo-cor.pdf`);
+  }
 
   constructor(
     @Inject(DOCUMENT) protected document: Document,
@@ -57,6 +97,11 @@ export class EstudianteDeiInformeCualitativoComponent extends DeiBaseComponent {
         const result = await this.catalogoServiceCOR.getStudentInfo(
           this.inputNIE
         );
+        console.log('result here ', result);
+        this.student.Nie = result.estudiante.nie;
+        this.student.Nui = result.estudiante.nui;
+        this.student.centroEducativo = result.centroEducativo.nombre;
+        this.student.nombreCompleto = result.estudiante.nombreCompleto;
         this.cnResult = 1;
         this.userMessage = {
           showMessage: false,
