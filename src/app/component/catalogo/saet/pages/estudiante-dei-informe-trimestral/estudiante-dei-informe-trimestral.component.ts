@@ -24,7 +24,6 @@ import jsPDF from 'jspdf';
 export class EstudianteDeiInformeTrimestralComponent extends DeiBaseComponent {
   protected readonly ButtonStyle = ButtonStyle;
   protected readonly IconCompoment = IconComponent;
-  userMessage: UserMessage = userMessageInit;
 
   constructor(
     @Inject(DOCUMENT) protected document: Document,
@@ -46,7 +45,6 @@ export class EstudianteDeiInformeTrimestralComponent extends DeiBaseComponent {
   inputNIE = '';
   showTable = false;
   cnResult = 0;
-  pageLoading = false;
   onInputChange(keyValue: KeyValue) {
     this.inputNIE = keyValue.value;
   }

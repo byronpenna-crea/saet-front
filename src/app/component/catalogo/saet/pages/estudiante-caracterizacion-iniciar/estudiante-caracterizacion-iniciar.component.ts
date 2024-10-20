@@ -182,84 +182,12 @@ export class EstudianteCaracterizacionIniciarComponent
     });
 
     const corQuestionPromise = catalogoServiceCOR.getCORQuestions();
-    const studentInfoPromise = catalogoServiceCOR.getStudentInfo(this.nie);
-    const studentGuardiansPromise = catalogoServiceCOR.getGuardians(this.nie);
     Promise.all([
-      corQuestionPromise,
-      studentInfoPromise,
-      studentGuardiansPromise,
-    ]).then(([corQuestionResult, studentInfoResult, guardiansResult]) => {
+      corQuestionPromise
+    ]).then(([corQuestionResult]) => {
       this.corSurveys.push(...corQuestionResult.cuestionarios);
-      // ####################
-      this.studentInfo = studentInfoResult.estudiante;
-      this.generalInformation = {
-        ...this.generalInformation,
-        values: [
-          studentInfoResult.estudiante.nombreCompleto,
-          studentInfoResult.estudiante.nie,
-          studentInfoResult.estudiante.fechaNacimiento,
-          studentInfoResult.estudiante.direccion,
-          studentInfoResult.estudiante.telefono[0],
-          studentInfoResult.estudiante.correo,
-        ],
-      };
-      this.institutionalInfo = {
-        ...this.institutionalInfo,
-        values: [
-          studentInfoResult.centroEducativo.nombre,
-          studentInfoResult.centroEducativo.codigo,
-          studentInfoResult.centroEducativo.direccion,
-          studentInfoResult.centroEducativo.ultimoGradoCursado,
-          studentInfoResult.centroEducativo.gradoActual,
-          studentInfoResult.centroEducativo.seccion,
-          studentInfoResult.centroEducativo.docenteOrientador,
-          studentInfoResult.centroEducativo.correoOrientador,
-          studentInfoResult.centroEducativo.telefonoOrientador[0],
-        ],
-      };
-      // #####################
-      console.log('Guardian result is ', guardiansResult);
-      this.guardianControlData = guardiansResult.map(guardian => {
-        return {
-          id: guardian.grupo_familiar_pk,
-          parentesco: guardian.parentesco,
-          ocupacion: guardian.ocupacion,
-          nivelEducativo: guardian.nivel_educativo,
-          nombreCompleto: `${guardian.primer_nombre} ${guardian.segundo_nombre} ${guardian.primer_apellido} ${guardian.segundo_apellido}`,
-        } as unknown as FormTablePariente;
-      });
-
       this.pageLoading = false;
     });
-
-    /*.then(result => {
-      this.studentInfo = result.estudiante;
-      this.generalInformation = {
-        ...this.generalInformation,
-        values: [
-          result.estudiante.nombreCompleto,
-          result.estudiante.nie,
-          result.estudiante.fechaNacimiento,
-          result.estudiante.direccion,
-          result.estudiante.telefono[0],
-          result.estudiante.correo,
-        ],
-      };
-      this.institutionalInfo = {
-        ...this.institutionalInfo,
-        values: [
-          result.centroEducativo.nombre,
-          result.centroEducativo.codigo,
-          result.centroEducativo.direccion,
-          result.centroEducativo.ultimoGradoCursado,
-          result.centroEducativo.gradoActual,
-          result.centroEducativo.seccion,
-          result.centroEducativo.docenteOrientador,
-          result.centroEducativo.correoOrientador,
-          result.centroEducativo.telefonoOrientador[0],
-        ],
-      };
-    });*/
 
     this.init();
   }

@@ -24,12 +24,10 @@ export class EstudianteDeiInformeCualitativoComponent extends DeiBaseComponent {
   protected readonly ButtonStyle = ButtonStyle;
   protected readonly IconCompoment = IconComponent;
 
-  userMessage: UserMessage = userMessageInit;
 
   inputNIE = '';
   cnResult = 0;
-  showTable = true;
-  pageLoading = false;
+  showTable = false;
 
   constructor(
     @Inject(DOCUMENT) protected document: Document,
@@ -54,7 +52,6 @@ export class EstudianteDeiInformeCualitativoComponent extends DeiBaseComponent {
   async toggleTable() {
     this.userMessage.showMessage = false;
     this.pageLoading = true;
-    console.log('load toggle table');
     if (this.inputNIE) {
       try {
         const result = await this.catalogoServiceCOR.getStudentInfo(
@@ -68,14 +65,22 @@ export class EstudianteDeiInformeCualitativoComponent extends DeiBaseComponent {
           type: MessageType.SUCCESS,
         };
         this.showTable = true;
-
-
       } catch (e) {
         const error = e as ResponseError;
         if (error.status === 401) {
           console.log('back to login', error.message);
         }
+
+        this.userMessage = {
+          showMessage: true,
+          message: error.message,
+          type: MessageType.DANGER,
+        };
+
+        this.showTable = false;
       }
+
+      this.pageLoading = false
     }
   }
   cleanInput() {

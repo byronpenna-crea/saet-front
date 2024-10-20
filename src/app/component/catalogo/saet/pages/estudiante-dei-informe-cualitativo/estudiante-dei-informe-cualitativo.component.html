@@ -1,18 +1,20 @@
 <p-tabView (onChange)="onTabChange($event)">
   <p-tabPanel header="Informe cualitativo">
+    <app-saet-loading [isLoading]="pageLoading" />
+
     <div class="form-container">
       <p class="title">Escribe el NIE del estudiante.</p>
       <app-saet-input
         testId="input-nie"
         [inputArgs]="{ text: inputNIE }"
         [value]="inputNIE"
-        [disabled]="!showTable"
+        [disabled]="showTable"
         (inputChange)="onInputChange($event)"
       />
       <div class="button-container">
         <app-saet-button
           testId="btn-buscar"
-          [disabled]="!showTable"
+          [disabled]="showTable"
           [buttonArgs]="{
             text: 'Buscar',
             buttonStyle: ButtonStyle.BLUE,
@@ -28,6 +30,12 @@
           limpiar búsqueda
         </button>
       </div>
+      <app-saet-mensaje-usuario
+        [show]="userMessage.showMessage"
+        [message]="userMessage.message"
+        [title]="userMessage.titleMessage"
+        [messageType]="userMessage.type"
+      />
       <div *ngIf="showTable">
         <app-saet-underlined-title>
           <div style="display: flex; flex-direction: row">

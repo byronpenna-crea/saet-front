@@ -80,16 +80,7 @@ export class BaseComponent {
     return result;
   }
   protected populateStudentInformation(studentResponse: StudentInfoResponse) {
-    console.log('',{
-      values: [
-        studentResponse.estudiante.nombreCompleto,
-        studentResponse.estudiante.nie,
-        studentResponse.estudiante.fechaNacimiento,
-        studentResponse.estudiante.direccion,
-        "studentResponse.estudiante.telefono[0]",
-        "studentResponse.estudiante.correo",
-      ],
-    });
+
     const studentPhone = studentResponse.estudiante.telefono !== undefined &&
       studentResponse.estudiante.telefono.length > 0 ?  studentResponse.estudiante.telefono[0] : '';
     const teachePhone =  studentResponse.centroEducativo.telefonoOrientador !== undefined &&

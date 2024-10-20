@@ -4,13 +4,13 @@
     <p-tabPanel header="Informe cuantitativo" [selected]="true">
       <div style="display: flex; gap: 25px; margin-bottom: 25px">
         <app-saet-tarjeta-informe
-          [numero]="3"
+          [numero]="corCount"
           titulo="Total de miembros"
           descripcion="Centro de Orientación y Recursos (COR)"
           [style]="style.BLUE"
         />
         <app-saet-tarjeta-informe
-          [numero]="15"
+          [numero]="daiCount"
           titulo="Total de miembros"
           descripcion="Docente de Apoyo a la Inclusion (DAI)"
         />
@@ -37,11 +37,11 @@
                   <div class="filter-cell">
                     <label>Centro Educativo</label>
                     <p-dropdown
-                      [options]="[]"
+                      [options]="schools"
                       id="centro-educativo-global"
-                      optionLabel="centro_label"
+                      optionLabel="sed_nombre"
                       placeholder="Selecciona"
-                      optionValue="centro_value"
+                      optionValue="sed_pk"
                     />
                   </div>
                   <div class="filter-cell">
