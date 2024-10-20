@@ -13,7 +13,7 @@ import {
   CatalogoServiceCor,
   ResponseError,
 } from '../../../../../services/catalogo/catalogo.service.cor';
-import { Router } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-estudiante-dei-informe-cualitativo',
@@ -34,9 +34,18 @@ export class EstudianteDeiInformeCualitativoComponent extends DeiBaseComponent {
   constructor(
     @Inject(DOCUMENT) protected document: Document,
     protected catalogoServiceCOR: CatalogoServiceCor,
+    private route: ActivatedRoute,
     protected override router: Router
   ) {
     super(router);
+    this.route.paramMap.subscribe(params => {
+      const nie = params.get('nie');
+      if (nie) {
+        this.nie = nie;
+        this.inputNIE = nie;
+        this.toggleTable();
+      }
+    })
   }
 
   onInputChange(keyValue: KeyValue) {
@@ -45,7 +54,7 @@ export class EstudianteDeiInformeCualitativoComponent extends DeiBaseComponent {
   async toggleTable() {
     this.userMessage.showMessage = false;
     this.pageLoading = true;
-
+    console.log('load toggle table');
     if (this.inputNIE) {
       try {
         const result = await this.catalogoServiceCOR.getStudentInfo(
@@ -59,6 +68,8 @@ export class EstudianteDeiInformeCualitativoComponent extends DeiBaseComponent {
           type: MessageType.SUCCESS,
         };
         this.showTable = true;
+
+
       } catch (e) {
         const error = e as ResponseError;
         if (error.status === 401) {

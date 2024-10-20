@@ -105,23 +105,35 @@ const routes: Routes = [
         path: 'saet-caracterizacion-iniciar/:nie/:mode',
         component: EstudianteCaracterizacionIniciarComponent,
       },
-
+      // INFORME CUALITATIVO
+      {
+        path: 'dei/informe-cualitativo/:nie',
+        component: EstudianteDeiInformeCualitativoComponent,
+      },
       {
         path: 'dei/informe-cualitativo',
         component: EstudianteDeiInformeCualitativoComponent,
+      },
+      // INFORME CUANTITATIVO
+      {
+        path: 'dei/informe-cuantitativo/:nie',
+        component: EstudianteDeiInformeCuantitativoComponent,
       },
       {
         path: 'dei/informe-cuantitativo',
         component: EstudianteDeiInformeCuantitativoComponent,
       },
-      {
-        path: 'dei/informe-trimestral',
-        component: EstudianteDeiInformeTrimestralComponent,
-      },
+      // INFORME TRIMESTRAL
       {
         path: 'dei/informe-trimestral/:nie',
         component: EstudianteDeiInformeTrimestralComponent,
       },
+      {
+        path: 'dei/informe-trimestral',
+        component: EstudianteDeiInformeTrimestralComponent,
+      },
+
+      // -----------------------
       {
         path: 'saet-lenguaje-habla/:nie',
         component: EstudianteCuestionarioLenguajeComponent,

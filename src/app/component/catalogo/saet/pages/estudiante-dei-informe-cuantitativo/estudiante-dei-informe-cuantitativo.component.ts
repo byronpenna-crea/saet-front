@@ -8,7 +8,7 @@ import { ThemeService } from '../../../../../services/ThemeService';
 import { CatalogoServiceDai } from '../../../../../services/catalogo/catalogo.service.dai';
 import { CatalogoServiceDei } from '../../../../../services/catalogo/catalogo.service.dei';
 
-import { Router } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { DeiBaseComponent } from '../../DeiBaseComponent';
 import {
   catalgoZona,
@@ -89,10 +89,19 @@ export class EstudianteDeiInformeCuantitativoComponent
     private deiService: CatalogoServiceDei,
     @Inject(DOCUMENT) private document: Document,
     private themeService: ThemeService,
+    private route: ActivatedRoute,
     router: Router
   ) {
     super(router);
+    this.route.paramMap.subscribe(params => {
+      const nie = params.get('nie');
+      if (nie) {
+        this.nie = nie;
+        //this.toggleTable();
+      }
+    })
   }
+
   ngOnInit(): void {
     this.deiService
       .getAllDepartamentos()

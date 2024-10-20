@@ -50,6 +50,9 @@ export class EstudianteDatosGeneralesComponent extends CorBaseComponent {
     this.pageLoading = true;
     this.loadStudentInfo()
       .then(estudiante => {
+        console.log('--------------------------');
+        console.log('ESTUDIANTE: ', estudiante);
+        console.log('--------------------------');
         const { generalInformation, institutionalInfo, trustedAdultInfo } =
           this.populateStudentInformation(estudiante);
 

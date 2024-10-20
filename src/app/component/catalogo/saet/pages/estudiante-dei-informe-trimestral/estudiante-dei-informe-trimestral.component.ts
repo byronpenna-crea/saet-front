@@ -29,9 +29,18 @@ export class EstudianteDeiInformeTrimestralComponent extends DeiBaseComponent {
   constructor(
     @Inject(DOCUMENT) protected document: Document,
     protected catalogoServiceCOR: CatalogoServiceCor,
+    private route: ActivatedRoute,
     protected override router: Router
   ) {
     super(router);
+    this.route.paramMap.subscribe(params => {
+      const nie = params.get('nie');
+      if (nie) {
+        this.nie = nie;
+        this.inputNIE = nie;
+        this.toggleTable();
+      }
+    })
   }
 
   inputNIE = '';
