@@ -70,7 +70,9 @@ app-saet-button {
   background-color: white;
   border-style: none;
 }
-
+:host ::ng-deep .p-tabview-nav{
+  padding-bottom: 1px;
+}
 /**/
 .container {
   width: 80%;
@@ -149,3 +151,4 @@ hr {
 .view-report-btn .icon {
   font-size: 14px;
 }
+

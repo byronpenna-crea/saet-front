@@ -1,7 +1,6 @@
 <p-tabView (onChange)="onTabChange($event)">
   <p-tabPanel header="Informe cualitativo">
     <app-saet-loading [isLoading]="pageLoading" />
-
     <div class="form-container">
       <p class="title">Escribe el NIE del estudiante.</p>
       <app-saet-input
@@ -135,7 +134,7 @@
 
                 <tr>
                   <td>Consejería Escolar (CE)</td>
-                  <td>Atendido</td>
+                  <td>Sin atención</td>
                   <td>
                     <app-saet-button
                       testId="btn-buscar-ce"
@@ -145,10 +144,57 @@
                         buttonStyle: ButtonStyle.WHITE,
                         buttonIcon: IconCompoment.EYE
                       }"
-                      (onClick)="generateReport(inputNIE)"
+                    />
+                  </td>
+
+                <tr>
+                  <td>Escuela de Educación Especial (EEE)</td>
+                  <td>Sin atención</td>
+                  <td>
+                    <app-saet-button
+                      testId="btn-buscar-ce"
+                      [disabled]="true"
+                      [buttonArgs]="{
+                        text: 'Ver informe',
+                        buttonStyle: ButtonStyle.WHITE,
+                        buttonIcon: IconCompoment.EYE
+                      }"
                     />
                   </td>
                 </tr>
+
+                <tr>
+                  <td>Comité Departamental de Apoyo a la Inclusión (CODAI)</td>
+                  <td>Sin atención</td>
+                  <td>
+                    <app-saet-button
+                      testId="btn-buscar-ce"
+                      [disabled]="true"
+                      [buttonArgs]="{
+                        text: 'Ver informe',
+                        buttonStyle: ButtonStyle.WHITE,
+                        buttonIcon: IconCompoment.EYE
+                      }"
+                    />
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>Centro de Recursos de Inclusión Educativa (CRIE-DV)</td>
+                  <td>Sin atención</td>
+                  <td>
+                    <app-saet-button
+                      testId="btn-buscar-ce"
+                      [disabled]="true"
+                      [buttonArgs]="{
+                        text: 'Ver informe',
+                        buttonStyle: ButtonStyle.WHITE,
+                        buttonIcon: IconCompoment.EYE
+                      }"
+                    />
+                  </td>
+                </tr>
+
               </tbody>
             </table>
           </div>
