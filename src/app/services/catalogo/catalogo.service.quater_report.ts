@@ -11,6 +11,7 @@ export interface IGetQuarterReport {
   respuestas: iQuestion[];
 }
 export interface ISaveQuarterReport {
+  id_informe_pk?: number;
   id_estudiante_fk: number;
   respuestas: iQuestionSave[];
 }
@@ -37,6 +38,21 @@ export class CatalogoServiceQuarterReport extends CatalogoServiceSaet {
     cookieService: CookieService
   ) {
     super(cookieService);
+  }
+
+  public async update(
+    cuestionario: ISaveQuarterReport
+  ){
+    const url = `${this.API_SERVER_URL}/informe_trimestral/cor`;
+    try {
+      return await this.putRequest<ISaveQuarterReport, ISaveQuarterReport>(
+        url,
+        cuestionario
+      );
+    } catch (e) {
+      console.log('error ---- ', e);
+      throw e;
+    }
   }
   public async save(
     cuestionario: ISaveQuarterReport

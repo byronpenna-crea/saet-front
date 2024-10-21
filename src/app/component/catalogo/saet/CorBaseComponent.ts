@@ -92,7 +92,14 @@ export class CorBaseComponent extends BaseComponent implements OnInit {
     const dui = localStorage.getItem('dui') ?? '';
     if (dui !== '') {
       this.catalogoServiceCOR.getPersonaApoyoByDui(dui).then(persona => {
+        console.log('--------- persona apoyo cor base ------------')
+        console.log(persona);
+        console.log(persona.rol_pk.rol);
+        console.log(persona.sub_rol_fk.subcategoria);
+        console.log('--------- persona apoyo cor base ------------')
         localStorage.setItem('id_persona', persona.per_fk.per_pk.toString());
+        localStorage.setItem('especialidad', persona.sub_rol_fk.subcategoria);
+        localStorage.setItem('rolApoyo', persona.rol_pk.rol);
       });
     } else {
       this.router.navigate(['/login']);

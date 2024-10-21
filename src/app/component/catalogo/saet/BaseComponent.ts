@@ -21,7 +21,6 @@ export class BaseComponent {
 
   getAnswerObject(data: IValuesForm): IQuestionaryAnswer[] {
     const result: IQuestionaryAnswer[] = [];
-
     const keys = Object.keys(data);
     console.log('-----------------');
     console.log('keys', keys);

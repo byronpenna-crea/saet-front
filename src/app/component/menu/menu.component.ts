@@ -37,6 +37,8 @@ export class MenuComponent {
   menuOpcionesMenu!: Sgp_menus_opciones_menus;
   item!: MenuItem;
   nombre_usuario!: string | null;
+  rolApoyo?: string;
+  subRolApoyo?: string;
   @ViewChild('drawer') drawer!: MatDrawer;
   isMobileMenuVisible: boolean = false;
   opcion_menu!: string | null;
@@ -147,7 +149,8 @@ export class MenuComponent {
 ngOnInit() {
   this.updateMobileMenuVisibility();
   this.nombre_usuario = localStorage.getItem('nombre');
-
+  this.rolApoyo = localStorage.getItem('rolApoyo') ?? undefined;
+  this.subRolApoyo = localStorage.getItem('especialidad') ?? undefined;
   const menuMap = new Map();
   this.opcion_menu=this.cookieService.get('opcionMenuPrincipal');
 

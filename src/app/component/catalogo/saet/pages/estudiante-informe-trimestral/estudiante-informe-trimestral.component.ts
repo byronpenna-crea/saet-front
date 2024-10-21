@@ -42,6 +42,8 @@ export class EstudianteInformeTrimestralComponent
   async btnRegresar() {
     await this.router.navigate(['menu/saet-buscar']);
   }
+  reportId = 0;
+  mainButtonText = 'Guardar y continuar';
   respuestasToValues(respuestas: iQuestion[]) {
     const values: IValuesForm = {};
     respuestas.forEach(respuesta => {
@@ -67,17 +69,16 @@ export class EstudianteInformeTrimestralComponent
       this.inputNIE = this.nie;
       if (this.nie) {
         this.toggleTable();
-
-        /*
-         */
-
-        console.log('stored values in constructor ', this.values);
-        const questionPromise = catalogoServiceQuarterReport.getQuestions();
+        //const questionPromise = catalogoServiceQuarterReport.getQuestions();
+        console.log(this.nie);
         const answerPromise = catalogoServiceQuarterReport.getByNie(this.nie);
-        Promise.all([questionPromise, answerPromise]).then(
-          ([questionResult, answerPromise]) => {
-            console.log('Qeustion result ', questionResult);
-            console.log('answerPromise ', answerPromise.respuestas);
+        Promise.all([answerPromise]).then(
+          ([answerPromise]) => {
+            console.log('answer -------------------');
+            console.log(answerPromise);
+            console.log('answer -------------------');
+            this.reportId = answerPromise.id_informe_pk;
+            this.mainButtonText = 'Actualizar y continuar';
             const respuestas = this.respuestasToValues(
               answerPromise.respuestas ?? []
             );
@@ -86,7 +87,9 @@ export class EstudianteInformeTrimestralComponent
               ...respuestas,
             };
           }
-        );
+        ).catch(([answerCatch]) => {
+          console.log('Answer catch --------------',answerCatch);
+        });
         const storedValues = localStorage.getItem(
           `${this.localStorageKey}-${this.nie}`
         );
@@ -102,7 +105,6 @@ export class EstudianteInformeTrimestralComponent
     await this.router.navigate(['menu/saet-buscar/', this.nie]);
   }
   async save() {
-    console.log('to save xxxx----');
     const respuestas = this.getAnswerObject(this.values);
     console.log('respuestas here ', respuestas);
     const studentId = this.studentInfo?.id_est_pk ?? 0;
@@ -114,11 +116,15 @@ export class EstudianteInformeTrimestralComponent
     }
 
     const objToSave: ISaveQuarterReport = {
+      id_informe_pk: this.reportId,
       id_estudiante_fk: studentId,
       respuestas: respuestas,
     };
-    await this.catalogoServiceQuarterReport.save(objToSave);
-    console.log('respuestas to save', objToSave);
+    if(this.reportId !== 0){
+      await this.catalogoServiceQuarterReport.update(objToSave);
+    }else{
+      await this.catalogoServiceQuarterReport.save(objToSave);
+    }
   }
   values: { [key: string]: string } = {};
   onInputNIEChange(keyValue: KeyValue) {

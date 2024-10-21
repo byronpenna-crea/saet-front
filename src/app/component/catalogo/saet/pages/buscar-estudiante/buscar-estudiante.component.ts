@@ -134,7 +134,7 @@ export class BuscarEstudianteComponent
     {
       col1: 'Escuela de Educación Especial (EEE)',
       col2: 'Sin atención',
-      col3: '/menu/saet-pdf/referencia',
+      col3: '',
       href: '',
     },
     {

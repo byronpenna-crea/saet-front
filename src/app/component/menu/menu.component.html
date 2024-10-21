@@ -1,4 +1,3 @@
-
 <!--p>
 
   <!--mat-toolbar  color = "primary">
@@ -27,54 +26,66 @@
 
   </mat-toolbar-->
 
-  <div style="display: flex; flex-direction: column; height: 100vh;">
-
+<div style="display: flex; flex-direction: column; height: 100vh">
   <p>
     <mat-toolbar color="primary" mat-mini-toolbar class="main-toolbar">
-      <button mat-icon-button class="menu-icon toolbar-item" (click)="toggleMobileMenu()" aria-label="Ejemplo de icono-botón con icono de menú">
+      <button
+        mat-icon-button
+        class="menu-icon toolbar-item"
+        (click)="toggleMobileMenu()"
+        aria-label="Ejemplo de icono-botón con icono de menú"
+      >
         <mat-icon>menu</mat-icon>
       </button>
       <span class="app-title toolbar-item">
-        <img src="assets/logo-sistema.png" alt="Logo">
-    </span>
-  
-  
+        <img src="assets/logo-sistema.png" alt="Logo" />
+      </span>
 
-    <span class="welcome-message">Hola, bienvenido(a): {{ nombre_usuario }}</span>
+      <span class="welcome-message"
+        >Hola, bienvenido(a): {{ nombre_usuario }}
+        <span *ngIf="subRolApoyo !== undefined || rolApoyo !== undefined">
+          |
+        </span>
+        {{ subRolApoyo }}
+        {{ rolApoyo }}
+      </span>
 
-    <button mat-button class="logout-button" (click)="cerrarSesion()">
-      <mat-icon>exit_to_app</mat-icon>
-      <span class="logout-button">Cerrar sesión</span>
-    </button>
-    
+      <button mat-button class="logout-button" (click)="cerrarSesion()">
+        <mat-icon>exit_to_app</mat-icon>
+        <span class="logout-button">Cerrar sesión</span>
+      </button>
     </mat-toolbar>
-  
   </p>
-  
-  <div style="display: flex;margin-top:-12px ">
-    <div style="background-color: #8cc63f; width: 25%; height: 5px;"></div>
-    <div style="background-color: #f1c40f; width: 25%; height: 5px;"></div>
-    <div style="background-color: #be2857; width: 25%; height: 5px;"></div>
-    <div style="background-color: #29abe2; width: 25%; height: 5px;"></div>
+
+  <div style="display: flex; margin-top: -12px">
+    <div style="background-color: #8cc63f; width: 25%; height: 5px"></div>
+    <div style="background-color: #f1c40f; width: 25%; height: 5px"></div>
+    <div style="background-color: #be2857; width: 25%; height: 5px"></div>
+    <div style="background-color: #29abe2; width: 25%; height: 5px"></div>
   </div>
-  
+
   <mat-drawer-container class="example-container">
-    <mat-drawer #drawer mode="side" [opened]="isMobileMenuVisible" [ngClass]="{'show-menu': isMobileMenuVisible}" class="menu-panel">
+    <mat-drawer
+      #drawer
+      mode="side"
+      [opened]="isMobileMenuVisible"
+      [ngClass]="{ 'show-menu': isMobileMenuVisible }"
+      class="menu-panel"
+    >
       <mat-selection-list #shoes [multiple]="false">
-        <p-panelMenu [model]="gfgv3" [style]="{'width':'200px'}"></p-panelMenu>
+        <p-panelMenu [model]="gfgv3" [style]="{ width: '200px' }"></p-panelMenu>
       </mat-selection-list>
     </mat-drawer>
-  
+
     <router-outlet></router-outlet>
-
-    
-
   </mat-drawer-container>
-<div class="footer-content" style="height: 7.7%;">
-  <!-- Aquí puedes agregar tu contenido del footer -->
-  <p style="float: center;">&copy; Dirección de Innovación y Tecnología - Ministerio de Educación</p>
-<p style="float: right;margin-top:-1%">Versión: 1.0.0 Ambiente: Producción</p>
-  
-</div>
-
+  <div class="footer-content" style="height: 7.7%">
+    <!-- Aquí puedes agregar tu contenido del footer -->
+    <p style="float: center">
+      &copy; Dirección de Innovación y Tecnología - Ministerio de Educación
+    </p>
+    <p style="float: right; margin-top: -1%">
+      Versión: 1.0.0 Ambiente: Producción
+    </p>
+  </div>
 </div>

@@ -20,6 +20,15 @@ export interface PersonaApoyo {
     per_nombre_busqueda: string,
     per_email: string
   },
+  rol_pk: {
+    rol_pk: number,
+    rol: string,
+    description: string
+  },
+  sub_rol_fk: {
+    sub_rol_pk: number,
+    subcategoria: string
+  }
   nombre_completo: string,
   dui: string,
   correo: string

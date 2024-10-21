@@ -316,6 +316,13 @@
       </div>
     </app-tabs>
   </div>
+
+  <app-saet-mensaje-usuario
+    [show]="userMessage.showMessage"
+    [message]="userMessage.message"
+    [title]="userMessage.titleMessage"
+    [messageType]="userMessage.type"
+  />
   <div class="actionsButton" style="margin-top: 5%">
     <app-saet-button
       (click)="salir()"
@@ -329,7 +336,7 @@
       <app-saet-button
         (onClick)="save()"
         [buttonArgs]="{
-          text: 'Guardar y continuar',
+          text: mainButtonText,
           buttonStyle: btnStyle.BLUE,
           buttonIcon: IconComponent.SAVE
         }"
