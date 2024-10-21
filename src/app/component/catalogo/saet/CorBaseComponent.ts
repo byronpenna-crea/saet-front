@@ -27,6 +27,9 @@ export class CorBaseComponent extends BaseComponent implements OnInit {
   readOnlyEvaluaciones = true;
   readOnlyPaei = true;
   async ngOnInit() {
+    console.log('init');
+  }
+  public async initCaracterizacion(){
     try {
       if (this.nie === '') {
         console.log('here xxy');
@@ -34,8 +37,8 @@ export class CorBaseComponent extends BaseComponent implements OnInit {
       }
       const response = await this.catalogoServiceCOR.getCaracterizacionPorNIE(
         this.nie
-      );
-      console.log('caracterizacion por nie');
+      )
+
       this.caracterizacion = response;
       if (response.id_caracterizacion !== 0) {
         this.readOnlyPaei = false;
@@ -58,22 +61,6 @@ export class CorBaseComponent extends BaseComponent implements OnInit {
       console.log('error ex base ', error.status);
     }
   }
-  /*getFormModeFromString(formModeString:string | null) {
-    switch (formModeString){
-      case null:
-        return FormMode.CREATE;
-        break;
-      case 'view':
-        return FormMode.VIEW;
-        break;
-      case 'edit':
-        return FormMode.EDIT;
-        break;
-      default:
-        return undefined;
-        break;
-    }
-  }*/
   constructor(
     @Inject(DOCUMENT) protected document: Document,
     protected catalogoServiceCOR: CatalogoServiceCor,
@@ -87,6 +74,7 @@ export class CorBaseComponent extends BaseComponent implements OnInit {
         this.nie = nie;
         console.log('la url es ', this.router.url);
         this.loadStudentInfo();
+        this.initCaracterizacion();
       }
     });
     const dui = localStorage.getItem('dui') ?? '';

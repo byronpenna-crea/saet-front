@@ -35,12 +35,6 @@ export class EstudianteCaracterizacionComponent
   }
   override ngOnInit = async () => {
     await super.ngOnInit();
-    if (
-      this.caracterizacion &&
-      this.caracterizacion?.id_caracterizacion !== 0
-    ) {
-      this.nombreUsuario = this.caracterizacion.especialista_responsable;
-    }
   };
 
   constructor(
@@ -60,17 +54,27 @@ export class EstudianteCaracterizacionComponent
     });
 
     this.nombreUsuario = localStorage.getItem('nombre') ?? '';
-    this.especialidad = localStorage.getItem('especialidad')
-      ? `Especialista en ${localStorage.getItem('especialidad')} - COR`
-      : '';
+    this.initCaracterizacion().then(() => {
+      console.log('caracterizacion here ', this.caracterizacion);
+      if (
+        this.caracterizacion &&
+        this.caracterizacion?.id_caracterizacion !== 0
+      ) {
+        this.nombreUsuario = this.caracterizacion.especialista_responsable;
+      }
+      this.especialidad = localStorage.getItem('especialidad')
+        ? `Especialista en ${localStorage.getItem('especialidad')} - ${localStorage.getItem('rolApoyo')}`
+        : '';
 
-    catalogoServiceCOR
-      .getStudentInfo(this.nie)
-      .then(result => {
-        this.studentInfo = result.estudiante;
-      })
-      .finally(() => {
-        this.pageLoading = false;
-      });
+      catalogoServiceCOR
+        .getStudentInfo(this.nie)
+        .then(result => {
+          this.studentInfo = result.estudiante;
+        })
+        .finally(() => {
+          this.pageLoading = false;
+        });
+    });
+
   }
 }
