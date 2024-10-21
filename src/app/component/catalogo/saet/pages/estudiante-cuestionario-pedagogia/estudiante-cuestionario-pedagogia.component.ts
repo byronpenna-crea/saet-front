@@ -44,19 +44,26 @@ export class EstudianteCuestionarioPedagogiaComponent
       especialidadTarget
     );
     this.pageLoading = true;
-    this.catalogoServiceCOR
-      .getTipoDeEvaluacion(this.nie, TIPO_EVALUACION.logopeda_perfil)
-      .then(response => {
-        this.handleMode(
-          response.id_evaluacion,
-          'menu/saet-pedagogia',
-          this.formMode
-        );
-      });
-    catalogoServiceCOR.getLenguajeHablaQuestions().then(result => {
-      this.corSurveys.push(...result.cuestionarios);
-    });
-    this.pageLoading = false;
+    const tipoEvaluacionPromise = this.catalogoServiceCOR
+      .getTipoDeEvaluacion(this.nie, TIPO_EVALUACION.pedagogo_perfil);
+    const questionPromise = catalogoServiceCOR.getPedagogiaQuestions();
+    Promise.all([tipoEvaluacionPromise,questionPromise]).then(([tipoEvaluacionResponse, questionResponse]) => {
+      console.log('questionResponse', questionResponse)
+      this.corSurveys.push(...questionResponse.cuestionarios);
+
+      this.handleMode(
+        tipoEvaluacionResponse.id_evaluacion,
+        'menu/saet-pedagogia',
+        this.formMode
+      );
+    }).catch((e) => {
+      console.log('error in promise -----------zzzz ----- ', e);
+    }).finally(() => {
+      this.pageLoading = false;
+    })
+
+
+
   }
   save() {
     console.log('to save')

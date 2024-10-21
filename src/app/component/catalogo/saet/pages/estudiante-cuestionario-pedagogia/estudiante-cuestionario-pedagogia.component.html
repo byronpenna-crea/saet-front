@@ -1,3 +1,4 @@
+<app-saet-loading [isLoading]="pageLoading" />
 <app-saet-global-header
   [nie]="nie"
   [nombreCompleto]="studentInfo?.nombreCompleto ?? ''"
@@ -10,7 +11,6 @@
   [message]="userMessage.message"
   [title]="userMessage.titleMessage"
 />
-<app-saet-loading [isLoading]="pageLoading" />
 <div class="form-container">
   <ng-container *ngFor="let corSurvey of corSurveys">
     <div style="margin-top: 5%">
