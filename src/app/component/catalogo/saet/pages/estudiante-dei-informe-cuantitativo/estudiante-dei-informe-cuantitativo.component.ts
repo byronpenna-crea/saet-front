@@ -6,9 +6,12 @@ import { SeguridadService } from '../../../../../services/seguridad.service';
 import { DOCUMENT } from '@angular/common';
 import { ThemeService } from '../../../../../services/ThemeService';
 import { CatalogoServiceDai } from '../../../../../services/catalogo/catalogo.service.dai';
-import {CatalogoServiceDei, Schools} from '../../../../../services/catalogo/catalogo.service.dei';
+import {
+  CatalogoServiceDei,
+  Schools,
+} from '../../../../../services/catalogo/catalogo.service.dei';
 
-import {ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DeiBaseComponent } from '../../DeiBaseComponent';
 import {
   catalgoZona,
@@ -89,8 +92,6 @@ export class EstudianteDeiInformeCuantitativoComponent
   corCount = 0;
   daiCount = 0;
 
-
-
   constructor(
     private deiService: CatalogoServiceDei,
     @Inject(DOCUMENT) private document: Document,
@@ -108,14 +109,14 @@ export class EstudianteDeiInformeCuantitativoComponent
       }
     });
 
-    deiService.getAllSchools().then((x) => {
+    deiService.getAllSchools().then(x => {
       this.schools = x;
       console.log('schools here', this.schools);
     });
-    deiService.getCorCount().then((x) => {
+    deiService.getCorCount().then(x => {
       this.corCount = x;
     });
-    deiService.getDaiCount().then((x) => {
+    deiService.getDaiCount().then(x => {
       this.daiCount = x;
     });
     this.pageLoading = false;

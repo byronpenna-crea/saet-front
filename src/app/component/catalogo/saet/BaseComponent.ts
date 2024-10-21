@@ -80,13 +80,17 @@ export class BaseComponent {
     return result;
   }
   protected populateStudentInformation(studentResponse: StudentInfoResponse) {
-
-    const studentPhone = studentResponse.estudiante.telefono !== undefined &&
-      studentResponse.estudiante.telefono.length > 0 ?  studentResponse.estudiante.telefono[0] : '';
-    const teachePhone =  studentResponse.centroEducativo.telefonoOrientador !== undefined &&
-                          studentResponse.centroEducativo.telefonoOrientador !== null &&
-                          studentResponse.centroEducativo.telefonoOrientador.length > 0 ?
-      studentResponse.centroEducativo.telefonoOrientador[0] : '';
+    const studentPhone =
+      studentResponse.estudiante.telefono !== undefined &&
+      studentResponse.estudiante.telefono.length > 0
+        ? studentResponse.estudiante.telefono[0]
+        : '';
+    const teachePhone =
+      studentResponse.centroEducativo.telefonoOrientador !== undefined &&
+      studentResponse.centroEducativo.telefonoOrientador !== null &&
+      studentResponse.centroEducativo.telefonoOrientador.length > 0
+        ? studentResponse.centroEducativo.telefonoOrientador[0]
+        : '';
 
     const generalInformation: informationTabBody = {
       values: [
