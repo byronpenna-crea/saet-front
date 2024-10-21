@@ -204,10 +204,24 @@ export class CatalogoServiceCor extends CatalogoServiceSaet {
     cuestionario: ISaveQuestionary,
     especialidadEvaluacion: iEspecialidadEvaluacion
   ) {
+    const especialidadMap: Record<iEspecialidadEvaluacion, string> = {
+      [iEspecialidadEvaluacion.LENGUAJE]: 'lenguaje_habla',
+      [iEspecialidadEvaluacion.PSICOLOGIA]: 'psicologia',
+      [iEspecialidadEvaluacion.PEDAGOGIA]: 'pedagogia'
+    };
+
+    const especialidad = especialidadMap[especialidadEvaluacion as iEspecialidadEvaluacion];
+
+    if (!especialidad) {
+      throw new Error(`Especialidad no válida: ${especialidadEvaluacion}`);
+    }
+    /*
     const especialidad =
       especialidadEvaluacion === iEspecialidadEvaluacion.LENGUAJE
         ? 'lenguaje_habla'
-        : especialidadEvaluacion;
+        : especialidadEvaluacion === iEspecialidadEvaluacion.PSICOLOGIA ? 'psicologia'
+        :
+        especialidadEvaluacion;*/
     const url = `${this.API_SERVER_URL}/evaluacion/cor/${especialidad}/`;
     try {
       return await this.postRequest<ISaveQuestionary, ISaveQuestionary>(

@@ -7,7 +7,7 @@ export enum HttpMethod {
   PATCH = 'PATCH',
 }
 export enum iEspecialidadEvaluacion {
-  PSICOLOGIA = 'psicologia',
+  PSICOLOGIA = 'psicologo',
   PEDAGOGIA = 'pedagogia',
   LENGUAJE = 'lenguaje',
 }

@@ -84,7 +84,7 @@ export class EstudianteEvaluacionesComponent
   readOnlyTab = true;
   agendaTabs: TabInput[] = [];
 
-  especialidad: iEspecialidadEvaluacion;
+  especialidad?: iEspecialidadEvaluacion;
   idPersona = 0;
 
   especialidades = ['Psicologia', 'Lenguaje y habla', 'Pedagogía'];
@@ -98,8 +98,7 @@ export class EstudianteEvaluacionesComponent
     super(document, catalogoServiceCOR, route, router);
     this.pageLoading = true;
     this.userMessage.showMessage = false;
-
-    console.log('constructor -----------');
+    console.log('idEspecialidad evaluacion ', iEspecialidadEvaluacion);
     Object.values(iEspecialidadEvaluacion).forEach(especialidad => {
       this.agendado[especialidad] = false;
     });
@@ -110,6 +109,8 @@ export class EstudianteEvaluacionesComponent
         this.nie = nie;
       }
     });
+    this.initCaracterizacion().then(() => {
+
 
     catalogoServiceCOR
       .getStudentInfo(this.nie)
@@ -124,7 +125,6 @@ export class EstudianteEvaluacionesComponent
       'especialidad'
     ) as iEspecialidadEvaluacion;
     console.log('especialidad logueado ', this.especialidad);
-
     const idPersonaStr = localStorage.getItem('id_persona') ?? '0';
     this.idPersona = isNaN(parseInt(idPersonaStr, 10))
       ? 0
@@ -149,31 +149,39 @@ export class EstudianteEvaluacionesComponent
     this.catalogoServiceCOR
       .getTipoDeEvaluacion(this.nie, enumEspecialidad)
       .then(response => {
-        if (response.id_evaluacion !== 0) {
-          this.psicologiaEspecilistaAgendado =
-            response.especialista_responsable;
-
-          if (indexEspecialidad) {
-            this.especialista[indexEspecialidad] = {
-              nombreCompleto: response.especialista_responsable,
-              dui: '',
-            };
-            this.agendaId[indexEspecialidad] = response.id_evaluacion;
-          }
-          this.psicologiaEvaluationId = response.id_evaluacion;
-          this.updateTab(this.especialidad, true);
+        console.log('response getTipoEvaluacion ', response);
+        if (response.id_evaluacion === 0) {
+          this.userMessage.showMessage = true;
+          this.userMessage.message = 'Evaluacion obtenida no es valida ';
+          return;
         }
+
+        this.psicologiaEspecilistaAgendado =
+          response.especialista_responsable;
+
+        if (indexEspecialidad) {
+          this.especialista[indexEspecialidad] = {
+            nombreCompleto: response.especialista_responsable,
+            dui: '',
+          };
+          console.log("------> ",this.especialista[indexEspecialidad]);
+          this.agendaId[indexEspecialidad] = response.id_evaluacion;
+        }
+        this.psicologiaEvaluationId = response.id_evaluacion;
+        this.especialidad && this.updateTab(this.especialidad, true);
+
       })
       .catch((ex: ResponseError) => {
-        console.log('error ex', ex.status);
+        console.log('------- error ex --------', ex.status);
       });
 
     catalogoServiceCOR
       .getCorEspecialistas(this.nie)
       .then(response => {
+        console.log('response getCorEspecialistas ', response);
         response.forEach(especialista => {
           if (this.especialidades.includes(especialista.especialidad)) {
-            if (especialista.especialidad === 'Psicologia') {
+            if (especialista.especialidad === 'Psicologo') {
               this.agendado[iEspecialidadEvaluacion.PSICOLOGIA] = true;
               this.especialista[iEspecialidadEvaluacion.PSICOLOGIA] = {
                 nombreCompleto: especialista.nombre_completo,
@@ -204,6 +212,7 @@ export class EstudianteEvaluacionesComponent
       .finally(() => {
         this.pageLoading = false;
       });
+    })
   }
   onMessage(event: {
     title: string;
@@ -218,11 +227,11 @@ export class EstudianteEvaluacionesComponent
   getIndexEspecialidad(
     especialidad: string
   ): iEspecialidadEvaluacion | undefined {
-    return this.especialidad === 'psicologia'
+    return especialidad === 'psicologo'
       ? iEspecialidadEvaluacion.PSICOLOGIA
-      : this.especialidad === 'lenguaje'
+      : especialidad === 'lenguaje'
         ? iEspecialidadEvaluacion.LENGUAJE
-        : this.especialidad === 'pedagogia'
+        : especialidad === 'pedagogia'
           ? iEspecialidadEvaluacion.PEDAGOGIA
           : undefined;
   }
@@ -297,11 +306,11 @@ export class EstudianteEvaluacionesComponent
     return tab !== undefined ? [tab] : [];
   }
   updateTab(name: string, agendado: boolean) {
-    if (name === 'psicologia') {
+    if (name === 'psicologo') {
       this.agendado[iEspecialidadEvaluacion.PSICOLOGIA] = agendado;
     }
     if (name === 'lenguaje') {
-      this.lenguajeHablaAgendada = agendado;
+      this.agendado[iEspecialidadEvaluacion.LENGUAJE] = agendado;
     }
     if (name === 'pedagogia') {
       this.agendado[iEspecialidadEvaluacion.PEDAGOGIA] = agendado;
@@ -422,14 +431,13 @@ export class EstudianteEvaluacionesComponent
 
     const obj: ISaveQuestionary = {
       id_estudiante_fk: this.studentInfo?.id_est_pk,
-      id_especialista: 2, //this.idPersona,
+      id_especialista: this.idPersona,
       id_tipo_evaluacion: event.tipoEvaluacion,
       fecha: dateToSave,
       hora: timeToSave,
       id_evaluacion: null,
       respuestas: [],
     };
-
     if (event.especialidad === undefined) {
       this.userMessage.showMessage = true;
       this.userMessage.message = 'No existe especilidad para ser guardada';
@@ -440,10 +448,14 @@ export class EstudianteEvaluacionesComponent
     }
 
     try {
+
       const respuesta = await this.catalogoServiceCOR.saveEvaluacion(
         obj,
         event.especialidad
       );
+      if(this.especialidad === undefined){
+        throw new Error('Debe definir la especialidad');
+      }
       if (respuesta.id_evaluacion !== 0) {
         this.agendaId[this.especialidad] = respuesta.id_evaluacion ?? 0;
         const nombreCompleto = `${localStorage.getItem('primer_nombre')} ${localStorage.getItem('primer_apellido')}`;

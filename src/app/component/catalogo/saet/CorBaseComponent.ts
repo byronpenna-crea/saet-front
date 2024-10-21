@@ -53,10 +53,10 @@ export class CorBaseComponent extends BaseComponent implements OnInit {
           this.router.url.includes('/menu/saet-paei-detalle/') ||
           this.router.url.includes('/menu/saet-paei/'))
       ) {
-        // await this.router.navigate([
-        //   '/menu/saet-caracterizacion-estudiante',
-        //   this.nie,
-        // ]);
+        await this.router.navigate([
+          '/menu/saet-caracterizacion-estudiante',
+          this.nie,
+        ]);
       }
       console.log('error ex base ', error.status);
     }

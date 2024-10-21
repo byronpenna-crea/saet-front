@@ -33,7 +33,8 @@ export class EstudianteCuestionarioPedagogiaComponent
     router: Router,
     confirmationService: ConfirmationService
   ) {
-    const especialidadTarget: string = 'pedagogia';
+
+    const especialidadTarget = 'pedagogia';
     super(
       document,
       catalogoServiceCOR,
@@ -42,7 +43,7 @@ export class EstudianteCuestionarioPedagogiaComponent
       confirmationService,
       especialidadTarget
     );
-
+    this.pageLoading = true;
     this.catalogoServiceCOR
       .getTipoDeEvaluacion(this.nie, TIPO_EVALUACION.logopeda_perfil)
       .then(response => {
@@ -52,10 +53,12 @@ export class EstudianteCuestionarioPedagogiaComponent
           this.formMode
         );
       });
-
     catalogoServiceCOR.getLenguajeHablaQuestions().then(result => {
       this.corSurveys.push(...result.cuestionarios);
     });
+    this.pageLoading = false;
   }
-  save() {}
+  save() {
+    console.log('to save')
+  }
 }
