@@ -52,31 +52,38 @@ export class EstudianteCuestionarioLenguajeComponent
       confirmationService,
       especialidadTarget
     );
+    this.pageLoading = true;
+    const tipoEvaluacionPromise = this.catalogoServiceCOR
+      .getTipoDeEvaluacion(this.nie, TIPO_EVALUACION.logopeda_perfil);
+    const questionPromise = catalogoServiceCOR.getLenguajeHablaQuestions();
 
-    this.catalogoServiceCOR
-      .getTipoDeEvaluacion(this.nie, TIPO_EVALUACION.logopeda_perfil)
-      .then(response => {
-        this.idEvaluacion = response.id_evaluacion;
+    Promise.all([tipoEvaluacionPromise, questionPromise])
+      .then(([tipoEvaluacionResponse, resultQuestions]) => {
+        this.idEvaluacion = tipoEvaluacionResponse.id_evaluacion;
         this.handleMode(
-          response.id_evaluacion,
+          tipoEvaluacionResponse.id_evaluacion,
           'menu/saet-lenguaje-habla',
           this.formMode
         );
-        console.log('Evaluacion here ', response);
+        console.log('Evaluacion here ', tipoEvaluacionResponse);
         console.log('values here ', this.values);
-        console.log('transformed response ', this.responseToValues(response));
-
+        console.log('transformed response ', this.responseToValues(tipoEvaluacionResponse));
         this.values = {
           ...this.values,
-          ...this.responseToValues(response),
+          ...this.responseToValues(tipoEvaluacionResponse),
         };
         console.log('this values ... ', this.values);
-      });
 
-    catalogoServiceCOR.getLenguajeHablaQuestions().then(result => {
-      this.showActionButtons = true;
-      this.corSurveys.push(...result.cuestionarios);
-    });
+
+        this.showActionButtons = true;
+        this.corSurveys.push(...resultQuestions.cuestionarios);
+      })
+      .catch(ex => {
+        console.log('ex here', ex);
+      })
+      .finally(() => {
+        this.pageLoading = false;
+      });
   }
 
   onCheckboxChange(keyValues: KeyValue[]) {
@@ -84,11 +91,19 @@ export class EstudianteCuestionarioLenguajeComponent
     this.values[keyValues[0].key] = selectedValues.toString();
     localStorage.setItem('values', JSON.stringify(this.values));
   }
-  save() {
+  async save() {
+    this.pageLoading = true;
     const objToSave: ISaveQuestionary = this.getQuestionaryObject();
     console.log('obj to save', objToSave);
     objToSave.id_evaluacion = this.idEvaluacion;
-    const x = this.catalogoServiceCOR.updateLenguaje(objToSave);
+    try {
+      const resp = await this.catalogoServiceCOR.updateLenguaje(objToSave);
+      console.log('Actualizado ', resp);
+    } catch (e) {
+      console.log('Error ---- ', e);
+    } finally {
+      this.pageLoading = false;
+    }
   }
   override salirEditMode(): string {
     const url = super.salirEditMode();

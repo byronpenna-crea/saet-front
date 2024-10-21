@@ -280,7 +280,6 @@ export class CatalogoServiceCor extends CatalogoServiceSaet {
   // update
   evaluacionURL = `${this.API_SERVER_URL}/evaluacion/cor/`;
   public updatePsicologia(cuestionarioPsicologia: ISaveQuestionary) {
-    //const tipo = TIPO_EVALUACION.psicologo_perfil;
     console.log('update psicologia ----- ');
     return this.putRequest<ISaveQuestionary, ISaveQuestionary>(
       `${this.evaluacionURL}psicologia/`,
@@ -288,16 +287,14 @@ export class CatalogoServiceCor extends CatalogoServiceSaet {
     );
   }
   public updatePedagogia(cuestionarioPedagogia: ISaveQuestionary) {
-    //const tipo = TIPO_EVALUACION.pedagogo_perfil;
     return this.putRequest<ISaveQuestionary, ISaveQuestionary>(
       `${this.evaluacionURL}pedagogia/`,
       cuestionarioPedagogia
     );
   }
   public updateLenguaje(cuestionarioLenguaje: ISaveQuestionary) {
-    const tipo = TIPO_EVALUACION.logopeda_perfil;
     return this.postRequest<ISaveQuestionary, ISaveQuestionary>(
-      this.evaluacionURL,
+      `${this.evaluacionURL}pedagogia/`,
       cuestionarioLenguaje
     );
   }
