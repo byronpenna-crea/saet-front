@@ -15,6 +15,7 @@ import {
 } from '../../../../../services/catalogo/catalogo.service.quater_report';
 import { iQuestion, iQuestionSave } from '../../shared/survey';
 import { IValuesForm } from '../../QuestionsComponent';
+import { ButtonStyle } from '../../component/saet-button/saet-button.component';
 
 @Component({
   selector: 'app-estudiante-informe-trimestral',
@@ -29,6 +30,18 @@ export class EstudianteInformeTrimestralComponent
   inputNIE = '';
   cnResult = 0;
   localStorageKey = 'quarter-values';
+  tableData: {
+    number: string;
+    tableHeaderStudentName: string;
+    tableHeaderStudentSex: string;
+    tableHeaderStudentAge: number;
+    tableHeaderStudentGrade: number;
+    tableHeaderStudentSchool: string;
+    tableHeaderStudentCity: string;
+  }[] = [];
+  async btnRegresar() {
+    await this.router.navigate(['menu/saet-buscar']);
+  }
   respuestasToValues(respuestas: iQuestion[]) {
     const values: IValuesForm = {};
     respuestas.forEach(respuesta => {
@@ -127,13 +140,43 @@ export class EstudianteInformeTrimestralComponent
   }
   async toggleTable() {
     this.userMessage.showMessage = false;
+    if (localStorage.getItem('dui') === null) {
+      this.router.navigate(['/login']);
+    }
     if (this.inputNIE) {
       try {
         this.pageLoading = true;
         const result = await this.catalogoServiceQuarterReport.getStudentInfo(
           this.inputNIE
         );
-        console.log('result here ', result);
+        const atentidos =
+          await this.catalogoServiceQuarterReport.getAtendidosByDui(
+            localStorage.getItem('dui') ?? ''
+          );
+        console.log('result here ', atentidos);
+        this.tableData = [
+          {
+            number: '1',
+            tableHeaderStudentName: 'Byron Aldair Pena',
+            tableHeaderStudentSex: 'M',
+            tableHeaderStudentAge: 30,
+            tableHeaderStudentGrade: 9,
+            tableHeaderStudentSchool: 'Ricaldone',
+            tableHeaderStudentCity: 'Soyapango',
+          },
+        ];
+        console.log('atendidos map ----------', atentidos);
+        this.tableData = atentidos.map(atendido => {
+          return {
+            number: atendido.per_nie.toString(),
+            tableHeaderStudentName: atendido.nombre_completo,
+            tableHeaderStudentSex: '',
+            tableHeaderStudentAge: 0,
+            tableHeaderStudentGrade: 9,
+            tableHeaderStudentSchool: '',
+            tableHeaderStudentCity: '',
+          };
+        });
         this.cnResult = 1;
         this.showTable = true;
       } catch (e: unknown) {
@@ -162,4 +205,6 @@ export class EstudianteInformeTrimestralComponent
   }
 
   protected readonly IconComponent = IconComponent;
+  protected readonly IconCompoment = IconComponent;
+  protected readonly ButtonStyle = ButtonStyle;
 }

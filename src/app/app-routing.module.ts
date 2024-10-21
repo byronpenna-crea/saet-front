@@ -125,7 +125,7 @@ const routes: Routes = [
       },
       // INFORME TRIMESTRAL
       {
-        path: 'dei/informe-trimestral/:nie',
+        path: 'dei/informe-trimestral/:dui',
         component: EstudianteDeiInformeTrimestralComponent,
       },
       {

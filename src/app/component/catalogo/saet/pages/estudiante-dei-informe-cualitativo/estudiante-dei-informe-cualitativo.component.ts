@@ -13,8 +13,8 @@ import {
   CatalogoServiceCor,
   ResponseError,
 } from '../../../../../services/catalogo/catalogo.service.cor';
-import {ActivatedRoute, Router} from '@angular/router';
-import jsPDF from "jspdf";
+import { ActivatedRoute, Router } from '@angular/router';
+import jsPDF from 'jspdf';
 
 @Component({
   selector: 'app-estudiante-dei-informe-cualitativo',
@@ -25,20 +25,23 @@ export class EstudianteDeiInformeCualitativoComponent extends DeiBaseComponent {
   protected readonly ButtonStyle = ButtonStyle;
   protected readonly IconCompoment = IconComponent;
 
-
   inputNIE = '';
   cnResult = 0;
   showTable = false;
-  student:{
-    Nie: string,
-    Nui: string,
-    nombreCompleto: string,
-    centroEducativo: string
+  student: {
+    Nie: string;
+    Nui: string;
+    nombreCompleto: string;
+    centroEducativo: string;
   } = {
     Nie: '',
     Nui: '',
     centroEducativo: '',
-    nombreCompleto: ''
+    nombreCompleto: '',
+  };
+
+  async btnRegresar() {
+    await this.router.navigate(['menu/saet-buscar', this.nie]);
   }
   async generateReport(nie: string) {
     const doc = new jsPDF();
@@ -83,7 +86,7 @@ export class EstudianteDeiInformeCualitativoComponent extends DeiBaseComponent {
         this.inputNIE = nie;
         this.toggleTable();
       }
-    })
+    });
   }
 
   onInputChange(keyValue: KeyValue) {
@@ -125,7 +128,7 @@ export class EstudianteDeiInformeCualitativoComponent extends DeiBaseComponent {
         this.showTable = false;
       }
 
-      this.pageLoading = false
+      this.pageLoading = false;
     }
   }
   cleanInput() {

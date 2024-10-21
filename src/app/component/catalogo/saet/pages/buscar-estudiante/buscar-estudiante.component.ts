@@ -71,7 +71,7 @@ export class BuscarEstudianteComponent
     super(document, catalogoServiceCOR, route, router);
     try {
       this.pageLoading = true;
-      if(this.nie === ''){
+      if (this.nie === '') {
         this.pageLoading = false;
         return;
       }
@@ -126,10 +126,10 @@ export class BuscarEstudianteComponent
       href: '/menu/dai/saet-datos-estudiante',
     },
     {
-      col1: 'Consejería Escolar (CE)',
+      col1: 'DEI',
       col2: 'Sin atención',
       col3: '',
-      href: '',
+      href: '/menu/dei/informe-cualitativo',
     },
     {
       col1: 'Escuela de Educación Especial (EEE)',

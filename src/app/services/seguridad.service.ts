@@ -430,7 +430,7 @@ const httpOptions = {
     this.datosLogin = { usu_codigo, usu_password };
     return this.httpClient.post(this.API_SERVER_LOGIN, this.datosLogin, { observe: 'response' }).pipe(
       map((response: HttpResponse<any>) => {
-
+        //console.log('validate usuarios ', response);
         const token = response.body.token;
         const nombre = response.body.nombre;
         const dui = response.body.dui;

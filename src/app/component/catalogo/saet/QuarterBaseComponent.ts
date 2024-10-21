@@ -7,10 +7,14 @@ import {
 } from '../../../services/catalogo/catalogo.service.cor';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CatalogoServiceQuarterReport } from '../../../services/catalogo/catalogo.service.quater_report';
+import { environment } from '../../../environments/environment';
+import { PersonaApoyo } from '../../../services/catalogo/catalogo.service.dei';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable()
 export class QuarterBaseComponent extends BaseComponent implements OnInit {
   ngOnInit(): void {}
+
   protected loadStudentInfo(): Promise<StudentInfoResponse> {
     return this.catalogoServiceQuarterReport
       .getStudentInfo(this.nie)

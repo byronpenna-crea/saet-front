@@ -146,6 +146,7 @@
                       }"
                     />
                   </td>
+                </tr>
 
                 <tr>
                   <td>Escuela de Educación Especial (EEE)</td>
@@ -194,11 +195,23 @@
                     />
                   </td>
                 </tr>
-
               </tbody>
             </table>
           </div>
         </div>
+      </div>
+
+      <div>
+        <app-saet-button
+          testId="btn-regresar"
+          [customClasses]="'return-button'"
+          (onClick)="btnRegresar()"
+          [buttonArgs]="{
+            text: 'Regresar',
+            buttonStyle: ButtonStyle.BLUE,
+            buttonIcon: IconCompoment.LEFT_ARROW
+          }"
+        />
       </div>
     </div>
   </p-tabPanel>

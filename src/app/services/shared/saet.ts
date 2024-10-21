@@ -22,6 +22,7 @@ export class CatalogoServiceSaet {
   }
   private API_SERVER_ESTUDIANTE = `${this.API_SERVER_URL}/tempEstudiantesSigesv2/buscarEstudiantePorNIE?nie=[NIE]`;
 
+
   public async getStudentInfo(NIE: string): Promise<StudentInfoResponse> {
     const url = this.API_SERVER_ESTUDIANTE.replace('[NIE]', NIE);
     console.log('url ', url);

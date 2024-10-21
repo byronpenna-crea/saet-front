@@ -15,6 +15,7 @@ import {
 } from '../../../../../services/catalogo/catalogo.service.cor';
 import { ActivatedRoute, Router } from '@angular/router';
 import jsPDF from 'jspdf';
+import { CatalogoServiceDei } from '../../../../../services/catalogo/catalogo.service.dei';
 
 @Component({
   selector: 'app-estudiante-dei-informe-trimestral',
@@ -24,24 +25,33 @@ import jsPDF from 'jspdf';
 export class EstudianteDeiInformeTrimestralComponent extends DeiBaseComponent {
   protected readonly ButtonStyle = ButtonStyle;
   protected readonly IconCompoment = IconComponent;
-
+  async btnRegresar() {
+    await this.router.navigate(['menu/saet-buscar']);
+  }
   constructor(
     @Inject(DOCUMENT) protected document: Document,
-    protected catalogoServiceCOR: CatalogoServiceCor,
+    protected catalogoServiceDei: CatalogoServiceDei,
     private route: ActivatedRoute,
     protected override router: Router
   ) {
     super(router);
     this.route.paramMap.subscribe(params => {
-      const nie = params.get('nie');
-      if (nie) {
-        this.nie = nie;
-        this.inputNIE = nie;
+      const dui = params.get('dui');
+      if (dui) {
+        this.inputDui = dui;
         this.toggleTable();
       }
-    })
+    });
   }
+  persona: {
+    dui: string;
+    nombreCompleto: string;
+  } = {
+    dui: '',
+    nombreCompleto: '',
+  };
 
+  inputDui = '';
   inputNIE = '';
   showTable = false;
   cnResult = 0;
@@ -79,13 +89,15 @@ export class EstudianteDeiInformeTrimestralComponent extends DeiBaseComponent {
   async toggleTable() {
     this.userMessage.showMessage = false;
     this.pageLoading = true;
-
-    if (this.inputNIE) {
+    console.log('toggle trimestral ');
+    if (this.inputDui) {
       try {
-        const result = await this.catalogoServiceCOR.getStudentInfo(
-          this.inputNIE
+        const result = await this.catalogoServiceDei.getPersonaApoyoByDui(
+          this.inputDui
         );
-        result.estudiante.nombreCompleto;
+        console.log('result here ', result);
+        this.persona.dui = result.dui;
+        this.persona.nombreCompleto = result.nombre_completo;
         this.cnResult = 1;
         this.userMessage = {
           showMessage: false,

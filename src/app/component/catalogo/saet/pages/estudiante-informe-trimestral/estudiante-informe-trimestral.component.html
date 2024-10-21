@@ -68,21 +68,9 @@
           {
             key: 'tableHeaderStudentIssue',
             header: 'Dificultad que representa'
-          },
-          { key: 'tableHeaderStudentPaeiStatus', header: 'Estatus PAEI' }
-        ]"
-        [value]="[
-          {
-            number: '1',
-            tableHeaderStudentName: 'Byron Aldair Pena',
-            tableHeaderStudentSex: 'M',
-            tableHeaderStudentAge: 30,
-            tableHeaderStudentGrade: 9,
-            tableHeaderStudentSchool: 'Ricaldone',
-            tableHeaderStudentCity: 'Soyapango',
-            tableHeaderStudentIssue: 'Demasiado bueno'
           }
         ]"
+        [value]="tableData"
       >
         <ng-template pTemplate="header" let-columns>
           <tr>
@@ -117,12 +105,12 @@
             <td>
               {{ rowData['tableHeaderStudentIssue'] }}
             </td>
-            <td>
-              <div style="display: flex; flex-direction: Column; gap: 10px">
-                <app-saet-individual-radio label="Entregado" />
-                <app-saet-individual-radio label="Pendiente" />
-              </div>
-            </td>
+            <!--            <td>-->
+            <!--              <div style="display: flex; flex-direction: Column; gap: 10px">-->
+            <!--                <app-saet-individual-radio label="Entregado" />-->
+            <!--                <app-saet-individual-radio label="Pendiente" />-->
+            <!--              </div>-->
+            <!--            </td>-->
           </tr>
         </ng-template>
       </p-table>
@@ -328,7 +316,7 @@
       </div>
     </app-tabs>
   </div>
-  <div class="actionsButton">
+  <div class="actionsButton" style="margin-top: 5%">
     <app-saet-button
       (click)="salir()"
       [buttonArgs]="{
@@ -348,4 +336,17 @@
       />
     </div>
   </div>
+</div>
+
+<div *ngIf="inputNIE === ''" class="form-container">
+  <app-saet-button
+    testId="btn-regresar"
+    [customClasses]="'return-button'"
+    (onClick)="btnRegresar()"
+    [buttonArgs]="{
+      text: 'Regresar',
+      buttonStyle: ButtonStyle.BLUE,
+      buttonIcon: IconCompoment.LEFT_ARROW
+    }"
+  />
 </div>

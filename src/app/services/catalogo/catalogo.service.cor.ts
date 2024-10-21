@@ -19,6 +19,7 @@ import { IQuestionaryAnswer } from '../../component/catalogo/saet/QuestionsCompo
 import { HttpMethod, iEspecialidadEvaluacion } from '../shared/saet-types';
 import { CatalogoService } from '../catalogo.service';
 import { CatalogoServiceSaet } from '../shared/saet';
+import { PersonaApoyo } from './catalogo.service.dei';
 
 export interface StudentDetail {
   nie: string;
@@ -169,7 +170,30 @@ export class CatalogoServiceCor extends CatalogoServiceSaet {
   ) {
     super(cookieService);
   }
-
+  public getPersonaApoyoByDui(dui: string): Promise<PersonaApoyo> {
+    const url = `${environment.API_SERVER_URL}/tempEstudiantesSigesv2/personaApoyoByDui/${dui}`;
+    return new Promise((resolve, reject) => {
+      fetch(url, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${this.cookieService.get('token')}`,
+          'Content-Type': 'application/json',
+        },
+      })
+        .then(response => {
+          if (response.ok) {
+            resolve(response.json());
+          } else {
+            reject(new Error('No se pudo obtener los datos'));
+          }
+        })
+        .catch(error => {
+          reject(
+            new Error('Hubo un error al obtener los datos: ' + error.message)
+          );
+        });
+    });
+  }
   public agendarPsicologia(obj: IQuestionaryHeader) {
     const url = `${this.API_SERVER_URL}/evaluacion/cor/psicologia/`;
     return this.postRequest<IQuestionaryHeader, IQuestionaryHeader>(url, obj);

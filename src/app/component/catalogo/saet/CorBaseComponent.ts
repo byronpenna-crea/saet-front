@@ -16,6 +16,7 @@ import {
 import { IconComponent } from './shared/component.config';
 import { ButtonStyle } from './component/saet-button/saet-button.component';
 import { BaseComponent } from './BaseComponent';
+import { CatalogoServiceDei } from '../../../services/catalogo/catalogo.service.dei';
 
 export interface informationTabBody {
   values: string[];
@@ -27,7 +28,7 @@ export class CorBaseComponent extends BaseComponent implements OnInit {
   readOnlyPaei = true;
   async ngOnInit() {
     try {
-      if(this.nie === ''){
+      if (this.nie === '') {
         console.log('here xxy');
         return;
       }
@@ -88,6 +89,14 @@ export class CorBaseComponent extends BaseComponent implements OnInit {
         this.loadStudentInfo();
       }
     });
+    const dui = localStorage.getItem('dui') ?? '';
+    if (dui !== '') {
+      this.catalogoServiceCOR.getPersonaApoyoByDui(dui).then(persona => {
+        localStorage.setItem('id_persona', persona.per_fk.per_pk.toString());
+      });
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
   protected loadStudentInfo(): Promise<StudentInfoResponse> {
     return this.catalogoServiceCOR

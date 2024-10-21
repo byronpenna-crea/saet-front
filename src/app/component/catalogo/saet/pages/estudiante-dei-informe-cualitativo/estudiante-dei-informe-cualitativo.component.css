@@ -152,3 +152,10 @@ hr {
   font-size: 14px;
 }
 
+:host ::ng-deep .return-button button{
+  margin-top: 5%;
+}
+:host ::ng-deep .return-button button{
+  min-width: 200px;
+  text-align: center;
+}

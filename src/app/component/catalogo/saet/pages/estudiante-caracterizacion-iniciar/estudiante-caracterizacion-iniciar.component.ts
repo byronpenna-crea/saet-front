@@ -182,9 +182,7 @@ export class EstudianteCaracterizacionIniciarComponent
     });
 
     const corQuestionPromise = catalogoServiceCOR.getCORQuestions();
-    Promise.all([
-      corQuestionPromise
-    ]).then(([corQuestionResult]) => {
+    Promise.all([corQuestionPromise]).then(([corQuestionResult]) => {
       this.corSurveys.push(...corQuestionResult.cuestionarios);
       this.pageLoading = false;
     });
@@ -325,10 +323,14 @@ export class EstudianteCaracterizacionIniciarComponent
     this.pageLoading = true;
     this.loadingMessage = 'Actualizando caracterizacion';
     const respuestas = this.getAnswerObject(this.values);
+    const idPersona = localStorage.getItem('id_persona');
+    if (!idPersona || isNaN(Number(idPersona))) {
+      return;
+    }
     const objToSave: ISaveCaracterizacion = {
       id_caracterizacion: this.caracterizacion?.id_caracterizacion ?? 0,
       id_estudiante_fk: this.studentInfo?.id_est_pk ?? 0,
-      id_especialista: 3,
+      id_especialista: parseInt(idPersona) ?? 0,
       id_docente_apoyo: 0,
       id_modulo: SAET_MODULE.COR,
       respuestas: this.validarPreguntas(respuestas, this.corSurveys),
@@ -356,10 +358,15 @@ export class EstudianteCaracterizacionIniciarComponent
   }
   async save() {
     const respuestas = this.getAnswerObject(this.values);
+    const idPersona = localStorage.getItem('id_persona');
+    if (!idPersona || isNaN(Number(idPersona))) {
+      return;
+    }
+
     const objToSave: ISaveCaracterizacion = {
       id_caracterizacion: null,
       id_estudiante_fk: this.studentInfo?.id_est_pk ?? 0,
-      id_especialista: 3,
+      id_especialista: parseInt(idPersona) ?? 0,
       id_docente_apoyo: 0,
       id_modulo: SAET_MODULE.COR,
       respuestas: this.validarPreguntas(respuestas, this.corSurveys),

@@ -6,9 +6,9 @@
     <div class="form-container">
       <p class="title">DUI del COR.</p>
       <app-saet-input
-        testId="input-nie"
-        [inputArgs]="{ text: inputNIE }"
-        [value]="inputNIE"
+        testId="input-dui-cor-busqueda"
+        [inputArgs]="{ text: inputDui }"
+        [value]="inputDui"
         [disabled]="showTable"
         (inputChange)="onInputChange($event)"
       />
@@ -17,7 +17,7 @@
           testId="btn-buscar"
           [disabled]="showTable"
           [buttonArgs]="{
-            text: 'Buscar',
+            text: 'Buscarxxx',
             buttonStyle: ButtonStyle.BLUE,
             buttonIcon: IconCompoment.SEARCH
           }"
@@ -38,7 +38,6 @@
             <div>{{ cnResult }} elemento(s)</div>
           </div>
         </app-saet-underlined-title>
-
         <div class="container">
           <h2 style="margin: 0">INFORME COR</h2>
           <div style="border: 1px solid #ccc; padding: 20px">
@@ -47,18 +46,20 @@
                 <label>DUI:</label>
                 <app-saet-input
                   name="name"
-                  testId="input-nie"
+                  testId="input-dui"
                   [inputArgs]="{ text: '' }"
-                  [disabled]="!showTable"
+                  [disabled]="true"
+                  [value]="persona.dui"
                 />
               </div>
               <div class="form-group">
                 <label>Nombre completo:</label>
                 <app-saet-input
                   name="name"
-                  testId="input-nie"
+                  testId="input-nombre-completo"
                   [inputArgs]="{ text: '' }"
-                  [disabled]="!showTable"
+                  [disabled]="true"
+                  [value]="persona.nombreCompleto"
                 />
               </div>
             </div>
@@ -95,6 +96,18 @@
             </table>
           </div>
         </div>
+      </div>
+      <div>
+        <app-saet-button
+          testId="btn-regresar"
+          [customClasses]="'return-button'"
+          (onClick)="btnRegresar()"
+          [buttonArgs]="{
+            text: 'Regresar',
+            buttonStyle: ButtonStyle.BLUE,
+            buttonIcon: IconCompoment.LEFT_ARROW
+          }"
+        />
       </div>
     </div>
   </p-tabPanel>

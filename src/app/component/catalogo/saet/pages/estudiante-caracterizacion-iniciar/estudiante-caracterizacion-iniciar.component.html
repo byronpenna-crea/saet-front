@@ -84,13 +84,12 @@
     <div *ngIf="formMode === formModeEnum.EDIT" class="actionsButton">
       <div style="width: 300px">
         <app-saet-button
-          (onClick)="retornarCaracterizacion()"
+          (click)="salir()"
           [buttonArgs]="{
             text: 'Regresar a la caracterización',
             buttonStyle: btnStyle.BLUE,
             buttonIcon: iconCompoment.LEFT_ARROW
           }"
-          customClasses="w-full"
         />
       </div>
 
@@ -116,12 +115,13 @@
 
     <div *ngIf="formMode === formModeEnum.VIEW" class="actionsButton">
       <app-saet-button
-        (click)="salir()"
+        (onClick)="retornarCaracterizacion()"
         [buttonArgs]="{
           text: 'Regresar a la caracterización',
           buttonStyle: btnStyle.BLUE,
           buttonIcon: iconCompoment.LEFT_ARROW
         }"
+        customClasses="w-full"
       />
       <div class="right-buttons">
         <app-saet-button
