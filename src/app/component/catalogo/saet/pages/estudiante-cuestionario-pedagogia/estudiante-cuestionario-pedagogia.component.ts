@@ -6,7 +6,7 @@ import {
   UserMessage,
 } from '../../interfaces/message-component.interface';
 import { DOCUMENT } from '@angular/common';
-import { CatalogoServiceCor } from '../../../../../services/catalogo/catalogo.service.cor';
+import {CatalogoServiceCor, ISaveQuestionary} from '../../../../../services/catalogo/catalogo.service.cor';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
 import { TIPO_EVALUACION } from '../../shared/evaluaciones';
@@ -26,6 +26,7 @@ export class EstudianteCuestionarioPedagogiaComponent
       this.router.navigate(['/menu/saet-caracterizacion-estudiante', this.nie]);
     }
   };
+  idEvaluacion = 0;
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceCOR: CatalogoServiceCor,
@@ -50,7 +51,7 @@ export class EstudianteCuestionarioPedagogiaComponent
     Promise.all([tipoEvaluacionPromise,questionPromise]).then(([tipoEvaluacionResponse, questionResponse]) => {
       console.log('questionResponse', questionResponse)
       this.corSurveys.push(...questionResponse.cuestionarios);
-
+      this.showActionButtons = true;
       this.handleMode(
         tipoEvaluacionResponse.id_evaluacion,
         'menu/saet-pedagogia',
@@ -65,7 +66,22 @@ export class EstudianteCuestionarioPedagogiaComponent
 
 
   }
-  save() {
-    console.log('to save')
+
+  generarPDF() {
+    console.log('Generar PDF');
+  }
+  async save() {
+    this.pageLoading = true;
+    const objToSave: ISaveQuestionary = this.getQuestionaryObject();
+    console.log('obj to save', objToSave);
+    objToSave.id_evaluacion = this.idEvaluacion;
+    try {
+      const resp = await this.catalogoServiceCOR.updatePedagogia(objToSave);
+      console.log('Actualizado ', resp);
+    } catch (e) {
+      console.log('Error ---- ', e);
+    } finally {
+      this.pageLoading = false;
+    }
   }
 }

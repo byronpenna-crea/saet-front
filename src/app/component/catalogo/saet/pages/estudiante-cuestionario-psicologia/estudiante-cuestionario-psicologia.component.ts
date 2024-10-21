@@ -30,12 +30,12 @@ export class EstudianteCuestionarioPsicologiaComponent
   cuestionariosTableMode: number[] = [7, 10, 11, 12, 13];
   override ngOnInit = async () => {
     await super.ngOnInit();
-    if (this.readOnlyEvaluaciones) {
-      await this.router.navigate([
-        '/menu/saet-caracterizacion-estudiante',
-        this.nie,
-      ]);
-    }
+    // if (this.readOnlyEvaluaciones) {
+    //   await this.router.navigate([
+    //     '/menu/saet-caracterizacion-estudiante',
+    //     this.nie,
+    //   ]);
+    // }
   };
   idEvaluacion = 0;
   constructor(

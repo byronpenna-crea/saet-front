@@ -157,7 +157,6 @@ const routes: Routes = [
         path: 'saet-psicologia/:nie/:mode',
         component: EstudianteCuestionarioPsicologiaComponent,
       },
-
       {
         path: 'saet-pedagogia/:nie',
         component: EstudianteCuestionarioPedagogiaComponent,

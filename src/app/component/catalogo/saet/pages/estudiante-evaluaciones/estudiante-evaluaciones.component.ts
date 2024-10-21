@@ -54,6 +54,7 @@ export class EstudianteEvaluacionesComponent
 {
   psicologiaEspecilistaAgendado = '';
   psicologiaEvaluationId = 0;
+
   especialista: { [key in iEspecialidadEvaluacion]: IAgendaEspecialista } = {
     [iEspecialidadEvaluacion.LENGUAJE]: {
       dui: '',
@@ -198,6 +199,7 @@ export class EstudianteEvaluacionesComponent
               this.updateTab(iEspecialidadEvaluacion.PEDAGOGIA, true);
             }
             if (especialista.especialidad === 'Lenguaje y habla') {
+              console.log('################# here inside ###############',especialista);
               this.agendado[iEspecialidadEvaluacion.LENGUAJE] = true;
               this.especialista[iEspecialidadEvaluacion.LENGUAJE] = {
                 nombreCompleto: especialista.nombre_completo,
@@ -255,11 +257,11 @@ export class EstudianteEvaluacionesComponent
     const tabs: TabInput[] = [
       {
         leyend: 'Evaluación Habla y lenguaje',
-        agendado: this.lenguajeHablaAgendada,
+        agendado: this.agendado[iEspecialidadEvaluacion.LENGUAJE],
         readOnly: this.readOnlyTab,
         onAgendar: this.agendar.bind(this),
         onCancelarAgenda: this.cancelar.bind(this),
-        evaluationId: this.psicologiaEvaluationId,
+        evaluationId: 0,
         onIniciar: this.iniciarLenguajeHabla.bind(this),
         especialistaAgendado:
           this.especialista[iEspecialidadEvaluacion.LENGUAJE],
@@ -310,6 +312,7 @@ export class EstudianteEvaluacionesComponent
       this.agendado[iEspecialidadEvaluacion.PSICOLOGIA] = agendado;
     }
     if (name === 'lenguaje') {
+      console.log(' ######## ----- update tab --- #####', this.agendaTabs);
       this.agendado[iEspecialidadEvaluacion.LENGUAJE] = agendado;
     }
     if (name === 'pedagogia') {
@@ -317,6 +320,7 @@ export class EstudianteEvaluacionesComponent
     }
 
     const index = this.agendaTabs.findIndex(tab => tab.name === name);
+    console.log('index _____', index);
     if (index !== -1) {
       const tab = this.getTabs(this.agendaTabs[index].name)[0];
       if (tab) {
@@ -333,8 +337,8 @@ export class EstudianteEvaluacionesComponent
     await this.router.navigate(['/menu/saet-pedagogia/', this.nie]);
   }
   async iniciarLenguajeHabla() {
-    console.log('lenguaje y habla');
-    //await this.router.navigate(['/menu/saet-lenguaje-habla/', this.nie]);
+    //console.log('lenguaje y habla');
+    await this.router.navigate(['/menu/saet-lenguaje-habla/', this.nie]);
   }
 
   // pedagogia

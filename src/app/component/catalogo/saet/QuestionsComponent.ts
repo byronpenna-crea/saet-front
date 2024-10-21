@@ -72,7 +72,7 @@ export class QuestionsComponent extends CorBaseComponent {
     });
     const especialidad = localStorage.getItem('especialidad');
     if (
-      especialidadTarget === 'psicologia' ||
+      especialidadTarget === 'psicologo' ||
       especialidadTarget === 'pedagogia' ||
       especialidadTarget === 'lenguaje'
     ) {
