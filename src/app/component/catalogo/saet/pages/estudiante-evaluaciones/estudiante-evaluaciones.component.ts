@@ -80,8 +80,6 @@ export class EstudianteEvaluacionesComponent
     [iEspecialidadEvaluacion.PSICOLOGIA]: false,
   };
 
-  lenguajeHablaAgendada = false;
-
   readOnlyTab = true;
   agendaTabs: TabInput[] = [];
 
@@ -97,9 +95,11 @@ export class EstudianteEvaluacionesComponent
     router: Router
   ) {
     super(document, catalogoServiceCOR, route, router);
+
     this.pageLoading = true;
     this.userMessage.showMessage = false;
-    console.log('idEspecialidad evaluacion ', iEspecialidadEvaluacion);
+
+    console.log('idEspecialidad evaluacion --> ', iEspecialidadEvaluacion);
     Object.values(iEspecialidadEvaluacion).forEach(especialidad => {
       this.agendado[especialidad] = false;
     });
@@ -117,7 +117,7 @@ export class EstudianteEvaluacionesComponent
           this.studentInfo = result.estudiante;
         })
         .catch(ex => {
-          console.log('error on getStudentInfo', ex);
+          console.log('<--- error on getStudentInfo', ex);
         });
 
       this.especialidad = localStorage.getItem(
@@ -137,6 +137,12 @@ export class EstudianteEvaluacionesComponent
       this.agendaTabs = this.agendaTabs.sort(a =>
         a.name === this.especialidad ? -1 : 1
       );
+      if (tabs !== undefined) {
+        this.agendaTabs = tabs.map(tab => ({
+          ...tab,
+          readOnly: tab.name !== this.especialidad, // Solo habilitar la pestaña correspondiente
+        }));
+      }
       this.agendaTabs[0].readOnly = false;
       const indexEspecialidad: iEspecialidadEvaluacion | undefined =
         this.getIndexEspecialidad(this.especialidad);
@@ -287,7 +293,7 @@ export class EstudianteEvaluacionesComponent
       {
         leyend: 'Evaluación pedagogica',
         agendado: this.agendado[iEspecialidadEvaluacion.PEDAGOGIA],
-        readOnly: this.readOnlyTab,
+        readOnly: true,
         onAgendar: this.agendar.bind(this),
         onCancelarAgenda: this.cancelar.bind(this),
         onIniciar: this.iniciarPedagogia.bind(this),
@@ -340,36 +346,6 @@ export class EstudianteEvaluacionesComponent
     await this.router.navigate(['/menu/saet-lenguaje-habla/', this.nie]);
   }
 
-  // pedagogia
-  /* async agendarPedagogia() {
-    if (this.studentInfo?.id_est_pk === undefined) {
-      console.error('estudiante no encontrado');
-      return;
-    }
-    const obj: ISaveQuestionary = {
-      id_estudiante_fk: this.studentInfo?.id_est_pk,
-      id_especialista: 2,//this.idPersona,
-      id_tipo_evaluacion: TIPO_EVALUACION.pedagogo_perfil,
-      fecha: '12/12/2023',
-      hora: '12:40',
-      id_evaluacion: null,
-      respuestas: [],
-    };
-    const respuesta = await this.catalogoServiceCOR.savePedagogia(obj);
-    if (respuesta.id_evaluacion !== 0) {
-      this.agendado[iEspecialidadEvaluacion.PEDAGOGIA] = true;
-      this.updateTab('pedagogia', true);
-    }
-  } */
-
-  /*cancelarPedagogia() {
-    this.pedagogiaAgendada = false;
-    this.pedagogiaMessage = {
-      ...this.successMessage,
-      show: false,
-    };
-  }*/
-  // psicologia
   async cancelar(event: IOnCancelarAgenda) {
     this.pageLoading = true;
     if (event.evaluationId === 0) {
@@ -475,8 +451,5 @@ export class EstudianteEvaluacionesComponent
       this.userMessage.type = MessageType.DANGER;
     }
     this.pageLoading = false;
-    /*this.psicologyMessage = this.successMessage;
-    this.psicologiaAgendada = true;
-    this.updateTab('psicologia', true);*/
   }
 }

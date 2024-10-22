@@ -34,6 +34,7 @@ export class SaetGlobalHeaderComponent implements OnInit {
       case SAET_MODULE.DAI:
         return 'DAI';
     }
+    return '';
   }
   @Input()
   set readOnlyEvaluaciones(value: boolean) {

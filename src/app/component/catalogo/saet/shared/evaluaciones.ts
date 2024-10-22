@@ -9,4 +9,5 @@ export enum TIPO_EVALUACION {
 export enum SAET_MODULE {
   DAI = 1,
   COR = 2,
+  DEI = 7
 }

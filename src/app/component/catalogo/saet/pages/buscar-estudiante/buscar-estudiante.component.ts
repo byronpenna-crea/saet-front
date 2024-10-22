@@ -20,6 +20,7 @@ import { userMessageInit } from '../../shared/messages.model';
 import { CorBaseComponent } from '../../CorBaseComponent';
 import { DOCUMENT } from '@angular/common';
 import { KeyValue } from '../../component/saet-input/saet-input.component';
+import {SAET_MODULE} from "../../shared/evaluaciones";
 
 interface Estudiante {
   nie: string;
@@ -75,6 +76,10 @@ export class BuscarEstudianteComponent
         this.pageLoading = false;
         return;
       }
+      console.log('id rol apoyo ---> ', localStorage.getItem('idRolApoyo'));
+      console.log((localStorage.getItem('idRolApoyo') as unknown as SAET_MODULE));
+      console.log(SAET_MODULE.COR);
+      console.log((localStorage.getItem('idRolApoyo') as unknown as SAET_MODULE) === SAET_MODULE.COR);
       this.catalogoServiceCOR
         .getStudentInfo(this.nie)
         .then(result => {
@@ -112,18 +117,21 @@ export class BuscarEstudianteComponent
     { key: 'referidoPor', header: 'Referido por' },
     { key: 'verDetalle', header: 'Ver detalle' },
   ];
+
   flowData = [
     {
       col1: 'Centro de Orientación y Recursos (COR)',
       col2: 'Sin atención',
       col3: '',
       href: '/menu/saet-datos-estudiante',
+      enabled: localStorage.getItem('idRolApoyo') !== undefined && (localStorage.getItem('idRolApoyo') as unknown as SAET_MODULE) == SAET_MODULE.COR
     },
     {
       col1: 'Docente de Apoyo a la Inclusión (DAI)',
       col2: 'Sin atención',
       col3: '',
       href: '/menu/dai/saet-datos-estudiante',
+      enabled: localStorage.getItem('idRolApoyo') && (localStorage.getItem('idRolApoyo') as unknown as SAET_MODULE) == SAET_MODULE.DAI
     },
     {
       col1: 'DEI',

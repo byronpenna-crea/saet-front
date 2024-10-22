@@ -32,7 +32,6 @@ export class CorBaseComponent extends BaseComponent implements OnInit {
   public async initCaracterizacion() {
     try {
       if (this.nie === '') {
-        console.log('here xxy');
         return;
       }
       const response = await this.catalogoServiceCOR.getCaracterizacionPorNIE(
@@ -45,7 +44,6 @@ export class CorBaseComponent extends BaseComponent implements OnInit {
         this.readOnlyEvaluaciones = false;
       }
     } catch (ex) {
-      console.log('caracterizacion por nie error');
       const error = ex as ResponseError;
       if (
         error.status === 404 &&
@@ -80,12 +78,11 @@ export class CorBaseComponent extends BaseComponent implements OnInit {
     const dui = localStorage.getItem('dui') ?? '';
     if (dui !== '') {
       this.catalogoServiceCOR.getPersonaApoyoByDui(dui).then(persona => {
-        console.log('--------- persona apoyo cor base ------------');
-        console.log(persona);
-        console.log(persona.rol_pk.rol);
-        console.log(persona.sub_rol_fk.subcategoria);
-        console.log('--------- persona apoyo cor base ------------');
         localStorage.setItem('id_persona', persona.per_fk.per_pk.toString());
+
+        localStorage.setItem('id_especialidad', persona.sub_rol_fk.sub_rol_pk.toString());
+        localStorage.setItem('idRolApoyo', persona.rol_pk.rol_pk.toString());
+
         localStorage.setItem('especialidad', persona.sub_rol_fk.subcategoria);
         localStorage.setItem('rolApoyo', persona.rol_pk.rol);
       });
