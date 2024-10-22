@@ -31,8 +31,9 @@ export class EstudianteDetallePaeiComponent
 {
   cuestionariosTableMode: number[] = [];
   btnIcon = IconComponent;
-
   loadingMessage?: string = undefined;
+  paeiId = 0;
+  idPersona = 0;
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceCOR: CatalogoServiceCor,
@@ -51,6 +52,28 @@ export class EstudianteDetallePaeiComponent
     );
     this.showActionButtons = true;
     this.pageLoading = true;
+    const idPersonaStr = localStorage.getItem('id_persona') ?? '0';
+    this.idPersona = isNaN(parseInt(idPersonaStr, 10))
+      ? 0
+      : parseInt(idPersonaStr, 10)
+    this.route.paramMap.subscribe(params => {
+      const nie = params.get('nie');
+      if (nie) {
+        this.nie = nie;
+        this.catalogoServiceCOR.getPAEIPerNIE(this.nie).then((response) => {
+          console.log('response PAEI ---------- ', response);
+          this.paeiId = response.id_paei;
+          console.log('this.formMode --- > ',this.formMode)
+          this.handleMode(
+            response.id_paei,
+            'menu/saet-paei-detalle',
+            this.formMode
+          );
+        }).catch((ex) => {
+          console.log('ex ---- ', ex);
+        })
+      }
+    });
     this.catalogoServiceCOR.getPAEIQuestions().then(result => {
       this.corSurveys.push(...result.cuestionarios);
       this.pageLoading = false;
@@ -62,11 +85,14 @@ export class EstudianteDetallePaeiComponent
     localStorage.setItem('values', JSON.stringify(this.values));
   }
   async save() {
+    this.pageLoading = true;
     const respuestas: IQuestionaryAnswer[] = this.getAnswerObject(this.values);
     const objToSave: iPaeiSave = {
-      id_paei: null,
+      id_paei: this.paeiId,
       id_estudiante_fk: this.studentInfo?.id_est_pk ?? 0,
-      id_especialista: 2,
+      id_estado: 1,
+      nie: parseInt(this.nie),
+      id_especialista: this.idPersona,
       id_coordinador: 3,
       respuestas: respuestas,
     };
@@ -80,5 +106,6 @@ export class EstudianteDetallePaeiComponent
     } catch (e) {
       console.log('error ---- ', e);
     }
+    this.pageLoading = false;
   }
 }

@@ -37,6 +37,8 @@ export interface iPaeiUpdate {
 export interface iPaeiSave {
   id_paei: number | null;
   id_estudiante_fk: number;
+  id_estado: number;
+  nie?: number,
   id_especialista: number;
   id_coordinador: number;
   respuestas: IQuestionaryAnswer[];
@@ -120,6 +122,10 @@ export interface IUpdateCaracterizacion {
     nivel_educativo: string;
     ocupacion: string;
   }[];
+}
+export interface IPaeiResponse {
+  id_paei: number;
+  respuestas: iQuestionSave[];
 }
 export interface ISaveCaracterizacion {
   id_caracterizacion: number | null;
@@ -441,6 +447,10 @@ export class CatalogoServiceCor extends CatalogoServiceSaet {
   public async savePAEI(cuestionario: iPaeiSave) {
     try {
       const url = `${this.API_SERVER_URL}/paei/`;
+      console.log('cuestionario here', cuestionario);
+      if(cuestionario.id_paei !== 0){
+        return await this.putRequest<iPaeiSave, iPaeiSave>(url, cuestionario);
+      }
       return await this.postRequest<iPaeiSave, iPaeiSave>(url, cuestionario);
     } catch (e: unknown) {
       const error = e as Error;
@@ -448,7 +458,7 @@ export class CatalogoServiceCor extends CatalogoServiceSaet {
       throw new Error(errorDetails.message);
     }
   }
-  public async getPAEIPerNIE(nie: string) {
+  public async getPAEIPerNIE(nie: string): Promise<IPaeiResponse> {
     try {
       const url = `${this.API_SERVER_URL}/paei/${nie}`;
       const response = await this.doRequest<undefined>(

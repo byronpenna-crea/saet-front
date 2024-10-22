@@ -185,6 +185,10 @@ const routes: Routes = [
         component: EstudianteDetallePaeiComponent,
       },
       {
+        path: 'saet-paei-detalle/:nie/:mode',
+        component: EstudianteDetallePaeiComponent,
+      },
+      {
         path: 'persona',
         component: PersonaComponent,
         canActivate: [UserGuardGuard],
