@@ -6,7 +6,7 @@ import {
 } from '../../interfaces/message-component.interface';
 import { DOCUMENT } from '@angular/common';
 import {
-  CatalogoServiceCor,
+  CatalogoServiceCor, IEvaluacionResponse,
   iPaeiSave,
 } from '../../../../../services/catalogo/catalogo.service.cor';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -69,14 +69,25 @@ export class EstudianteDetallePaeiComponent
         this.catalogoServiceCOR
           .getPAEIPerNIE(this.nie)
           .then(response => {
-            console.log('response PAEI ---------- ', response);
+            console.log('paei per nie ---> ', response);
             this.paeiId = response.id_paei;
-            console.log('this.formMode --- > ', this.formMode);
             this.handleMode(
               response.id_paei,
               'menu/saet-paei-detalle',
               this.formMode
             );
+
+            const obj:IEvaluacionResponse = {
+              respuestas: response.respuestas,
+              id_evaluacion: response.id_paei,
+              especialista_responsable: ''
+            }
+            console.log('depurado --> ', this.responseToValues(obj));
+            this.values = {
+              ...this.responseToValues(obj),
+              ...this.values,
+            };
+
           })
           .catch(ex => {
             console.log('ex ---- ', ex);

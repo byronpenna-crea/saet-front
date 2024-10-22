@@ -126,7 +126,7 @@ export class QuestionsComponent extends CorBaseComponent {
 
     response.respuestas.forEach(respuesta => {
       const radioKey = `radio_${respuesta.id_pregunta}`;
-      const inputKey = `input_${respuesta.id_pregunta}`;
+      const inputKey =  `input_${respuesta.id_pregunta}`;
 
       if (respuesta.opcion.length > 0) {
         values[radioKey] =
@@ -134,7 +134,13 @@ export class QuestionsComponent extends CorBaseComponent {
             ? respuesta.opcion[0].opcion_pregunta_pk.toString()
             : '';
       }
-      values[inputKey] = respuesta.respuesta;
+
+      if(respuesta.id_pregunta >= 161 && respuesta.id_pregunta <= 167){
+        // manejo temporal de richtext
+        values[`richtext_${respuesta.id_pregunta}`] = respuesta.respuesta;
+      }else{
+        values[inputKey] = respuesta.respuesta;
+      }
     });
 
     return values;

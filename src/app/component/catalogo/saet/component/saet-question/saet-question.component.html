@@ -2,6 +2,7 @@
   <app-richtext
     (inputChange)="onInputChange($event)"
     [value]="values['richtext_' + idPregunta.toString()]"
+    [disabled]="readonly"
     [name]="'richtext_' + idPregunta.toString()"
   />
 </ng-container>

@@ -18,6 +18,9 @@ export class RichtextComponent {
   @Input() name: string = '';
   @Input() value: string = '';
   @Input() testId: string = '';
+  @Input() disabled: boolean = false;
+
+
   @Output() inputChange = new EventEmitter<KeyValue>();
 
   onInputChange(event: any, name: string) {
