@@ -149,6 +149,7 @@
           }"
         />
         <app-saet-button
+          (onClick)="generatePDF()"
           [buttonArgs]="{
             text: 'Generar PDF',
             buttonIcon: btnIcon.PRINTER,

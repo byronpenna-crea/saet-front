@@ -75,6 +75,5 @@ export class EstudianteCaracterizacionComponent
           this.pageLoading = false;
         });
     });
-
   }
 }

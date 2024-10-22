@@ -111,110 +111,109 @@ export class EstudianteEvaluacionesComponent
       }
     });
     this.initCaracterizacion().then(() => {
-
-
-    catalogoServiceCOR
-      .getStudentInfo(this.nie)
-      .then(result => {
-        this.studentInfo = result.estudiante;
-      })
-      .catch(ex => {
-        console.log('error on getStudentInfo', ex);
-      });
-
-    this.especialidad = localStorage.getItem(
-      'especialidad'
-    ) as iEspecialidadEvaluacion;
-    console.log('especialidad logueado ', this.especialidad);
-    const idPersonaStr = localStorage.getItem('id_persona') ?? '0';
-    this.idPersona = isNaN(parseInt(idPersonaStr, 10))
-      ? 0
-      : parseInt(idPersonaStr, 10);
-
-    const tabs = this.getTabs();
-    if (tabs !== undefined) {
-      this.agendaTabs = tabs;
-    }
-
-    this.agendaTabs = this.agendaTabs.sort(a =>
-      a.name === this.especialidad ? -1 : 1
-    );
-    this.agendaTabs[0].readOnly = false;
-    const indexEspecialidad: iEspecialidadEvaluacion | undefined =
-      this.getIndexEspecialidad(this.especialidad);
-
-    const enumEspecialidad: TIPO_EVALUACION = this.getTipoEvaluacionFromString(
-      this.especialidad
-    );
-
-    this.catalogoServiceCOR
-      .getTipoDeEvaluacion(this.nie, enumEspecialidad)
-      .then(response => {
-        console.log('response getTipoEvaluacion ', response);
-        if (response.id_evaluacion === 0) {
-          this.userMessage.showMessage = true;
-          this.userMessage.message = 'Evaluacion obtenida no es valida ';
-          return;
-        }
-
-        this.psicologiaEspecilistaAgendado =
-          response.especialista_responsable;
-
-        if (indexEspecialidad) {
-          this.especialista[indexEspecialidad] = {
-            nombreCompleto: response.especialista_responsable,
-            dui: '',
-          };
-          console.log("------> ",this.especialista[indexEspecialidad]);
-          this.agendaId[indexEspecialidad] = response.id_evaluacion;
-        }
-        this.psicologiaEvaluationId = response.id_evaluacion;
-        this.especialidad && this.updateTab(this.especialidad, true);
-
-      })
-      .catch((ex: ResponseError) => {
-        console.log('------- error ex --------', ex.status);
-      });
-
-    catalogoServiceCOR
-      .getCorEspecialistas(this.nie)
-      .then(response => {
-        console.log('response getCorEspecialistas ', response);
-        response.forEach(especialista => {
-          if (this.especialidades.includes(especialista.especialidad)) {
-            if (especialista.especialidad === 'Psicologo') {
-              this.agendado[iEspecialidadEvaluacion.PSICOLOGIA] = true;
-              this.especialista[iEspecialidadEvaluacion.PSICOLOGIA] = {
-                nombreCompleto: especialista.nombre_completo,
-                dui: especialista.dui,
-              };
-              this.updateTab('psicologia', true);
-            }
-            if (especialista.especialidad === 'Pedagogía') {
-              this.agendado[iEspecialidadEvaluacion.PEDAGOGIA] = true;
-              this.especialista[iEspecialidadEvaluacion.PEDAGOGIA] = {
-                nombreCompleto: especialista.nombre_completo,
-                dui: especialista.dui,
-              };
-              this.updateTab(iEspecialidadEvaluacion.PEDAGOGIA, true);
-            }
-            if (especialista.especialidad === 'Lenguaje y habla') {
-              console.log('################# here inside ###############',especialista);
-              this.agendado[iEspecialidadEvaluacion.LENGUAJE] = true;
-              this.especialista[iEspecialidadEvaluacion.LENGUAJE] = {
-                nombreCompleto: especialista.nombre_completo,
-                dui: especialista.dui,
-              };
-              this.updateTab(iEspecialidadEvaluacion.LENGUAJE, true);
-            }
-            //
-          }
+      catalogoServiceCOR
+        .getStudentInfo(this.nie)
+        .then(result => {
+          this.studentInfo = result.estudiante;
+        })
+        .catch(ex => {
+          console.log('error on getStudentInfo', ex);
         });
-      })
-      .finally(() => {
-        this.pageLoading = false;
-      });
-    })
+
+      this.especialidad = localStorage.getItem(
+        'especialidad'
+      ) as iEspecialidadEvaluacion;
+      console.log('especialidad logueado ', this.especialidad);
+      const idPersonaStr = localStorage.getItem('id_persona') ?? '0';
+      this.idPersona = isNaN(parseInt(idPersonaStr, 10))
+        ? 0
+        : parseInt(idPersonaStr, 10);
+
+      const tabs = this.getTabs();
+      if (tabs !== undefined) {
+        this.agendaTabs = tabs;
+      }
+
+      this.agendaTabs = this.agendaTabs.sort(a =>
+        a.name === this.especialidad ? -1 : 1
+      );
+      this.agendaTabs[0].readOnly = false;
+      const indexEspecialidad: iEspecialidadEvaluacion | undefined =
+        this.getIndexEspecialidad(this.especialidad);
+
+      const enumEspecialidad: TIPO_EVALUACION =
+        this.getTipoEvaluacionFromString(this.especialidad);
+
+      this.catalogoServiceCOR
+        .getTipoDeEvaluacion(this.nie, enumEspecialidad)
+        .then(response => {
+          console.log('response getTipoEvaluacion ', response);
+          if (response.id_evaluacion === 0) {
+            this.userMessage.showMessage = true;
+            this.userMessage.message = 'Evaluacion obtenida no es valida ';
+            return;
+          }
+
+          this.psicologiaEspecilistaAgendado =
+            response.especialista_responsable;
+
+          if (indexEspecialidad) {
+            this.especialista[indexEspecialidad] = {
+              nombreCompleto: response.especialista_responsable,
+              dui: '',
+            };
+            console.log('------> ', this.especialista[indexEspecialidad]);
+            this.agendaId[indexEspecialidad] = response.id_evaluacion;
+          }
+          this.psicologiaEvaluationId = response.id_evaluacion;
+          this.especialidad && this.updateTab(this.especialidad, true);
+        })
+        .catch((ex: ResponseError) => {
+          console.log('------- error ex --------', ex.status);
+        });
+
+      catalogoServiceCOR
+        .getCorEspecialistas(this.nie)
+        .then(response => {
+          console.log('response getCorEspecialistas ', response);
+          response.forEach(especialista => {
+            if (this.especialidades.includes(especialista.especialidad)) {
+              if (especialista.especialidad === 'Psicologo') {
+                this.agendado[iEspecialidadEvaluacion.PSICOLOGIA] = true;
+                this.especialista[iEspecialidadEvaluacion.PSICOLOGIA] = {
+                  nombreCompleto: especialista.nombre_completo,
+                  dui: especialista.dui,
+                };
+                this.updateTab('psicologia', true);
+              }
+              if (especialista.especialidad === 'Pedagogía') {
+                this.agendado[iEspecialidadEvaluacion.PEDAGOGIA] = true;
+                this.especialista[iEspecialidadEvaluacion.PEDAGOGIA] = {
+                  nombreCompleto: especialista.nombre_completo,
+                  dui: especialista.dui,
+                };
+                this.updateTab(iEspecialidadEvaluacion.PEDAGOGIA, true);
+              }
+              if (especialista.especialidad === 'Lenguaje y habla') {
+                console.log(
+                  '################# here inside ###############',
+                  especialista
+                );
+                this.agendado[iEspecialidadEvaluacion.LENGUAJE] = true;
+                this.especialista[iEspecialidadEvaluacion.LENGUAJE] = {
+                  nombreCompleto: especialista.nombre_completo,
+                  dui: especialista.dui,
+                };
+                this.updateTab(iEspecialidadEvaluacion.LENGUAJE, true);
+              }
+              //
+            }
+          });
+        })
+        .finally(() => {
+          this.pageLoading = false;
+        });
+    });
   }
   onMessage(event: {
     title: string;
@@ -452,12 +451,11 @@ export class EstudianteEvaluacionesComponent
     }
 
     try {
-
       const respuesta = await this.catalogoServiceCOR.saveEvaluacion(
         obj,
         event.especialidad
       );
-      if(this.especialidad === undefined){
+      if (this.especialidad === undefined) {
         throw new Error('Debe definir la especialidad');
       }
       if (respuesta.id_evaluacion !== 0) {

@@ -241,10 +241,7 @@ export class EstudianteCaracterizacionIniciarComponent
                 : concatOptions;
             return [respuesta.pregunta, strResponse];
           }) ?? [];
-      console.log('repsuestas', respuestas);
-      console.log('repsuestas 2', this.caracterizacion?.respuestas);
-      console.log('cuestionario', cuestionario);
-      console.log('----------');
+
       if (respuestas.length > 0) {
         // Agrega el título del cuestionario como encabezado
         doc.text(cuestionario.titulo, 8, currentY);

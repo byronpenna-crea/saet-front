@@ -29,7 +29,13 @@ export class BaseComponent {
     const groupedData = keys.reduce<
       Record<
         string,
-        { radio?: string; input?: string; check?: string; richtext?: string; textarea?:string }
+        {
+          radio?: string;
+          input?: string;
+          check?: string;
+          richtext?: string;
+          textarea?: string;
+        }
       >
     >((acc, key) => {
       const [type, id] = key.split('_');
@@ -39,7 +45,12 @@ export class BaseComponent {
       if (!acc[id]) {
         acc[id] = {};
       }
-      if (type === 'radio' || type === 'input' || type === 'richtext' || type === 'textarea') {
+      if (
+        type === 'radio' ||
+        type === 'input' ||
+        type === 'richtext' ||
+        type === 'textarea'
+      ) {
         acc[id][type] = data[key];
       }
       return acc;

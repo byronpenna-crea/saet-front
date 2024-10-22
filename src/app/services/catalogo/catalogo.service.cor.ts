@@ -38,7 +38,7 @@ export interface iPaeiSave {
   id_paei: number | null;
   id_estudiante_fk: number;
   id_estado: number;
-  nie?: number,
+  nie?: number;
   id_especialista: number;
   id_coordinador: number;
   respuestas: IQuestionaryAnswer[];
@@ -213,10 +213,11 @@ export class CatalogoServiceCor extends CatalogoServiceSaet {
     const especialidadMap: Record<iEspecialidadEvaluacion, string> = {
       [iEspecialidadEvaluacion.LENGUAJE]: 'lenguaje_habla',
       [iEspecialidadEvaluacion.PSICOLOGIA]: 'psicologia',
-      [iEspecialidadEvaluacion.PEDAGOGIA]: 'pedagogia'
+      [iEspecialidadEvaluacion.PEDAGOGIA]: 'pedagogia',
     };
 
-    const especialidad = especialidadMap[especialidadEvaluacion as iEspecialidadEvaluacion];
+    const especialidad =
+      especialidadMap[especialidadEvaluacion as iEspecialidadEvaluacion];
 
     if (!especialidad) {
       throw new Error(`Especialidad no válida: ${especialidadEvaluacion}`);
@@ -448,7 +449,7 @@ export class CatalogoServiceCor extends CatalogoServiceSaet {
     try {
       const url = `${this.API_SERVER_URL}/paei/`;
       console.log('cuestionario here', cuestionario);
-      if(cuestionario.id_paei !== 0){
+      if (cuestionario.id_paei !== 0) {
         return await this.putRequest<iPaeiSave, iPaeiSave>(url, cuestionario);
       }
       return await this.postRequest<iPaeiSave, iPaeiSave>(url, cuestionario);

@@ -6,7 +6,10 @@ import {
   UserMessage,
 } from '../../interfaces/message-component.interface';
 import { DOCUMENT } from '@angular/common';
-import {CatalogoServiceCor, ISaveQuestionary} from '../../../../../services/catalogo/catalogo.service.cor';
+import {
+  CatalogoServiceCor,
+  ISaveQuestionary,
+} from '../../../../../services/catalogo/catalogo.service.cor';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
 import { TIPO_EVALUACION } from '../../shared/evaluaciones';
@@ -34,7 +37,6 @@ export class EstudianteCuestionarioPedagogiaComponent
     router: Router,
     confirmationService: ConfirmationService
   ) {
-
     const especialidadTarget = 'pedagogia';
     super(
       document,
@@ -45,26 +47,28 @@ export class EstudianteCuestionarioPedagogiaComponent
       especialidadTarget
     );
     this.pageLoading = true;
-    const tipoEvaluacionPromise = this.catalogoServiceCOR
-      .getTipoDeEvaluacion(this.nie, TIPO_EVALUACION.pedagogo_perfil);
+    const tipoEvaluacionPromise = this.catalogoServiceCOR.getTipoDeEvaluacion(
+      this.nie,
+      TIPO_EVALUACION.pedagogo_perfil
+    );
     const questionPromise = catalogoServiceCOR.getPedagogiaQuestions();
-    Promise.all([tipoEvaluacionPromise,questionPromise]).then(([tipoEvaluacionResponse, questionResponse]) => {
-      console.log('questionResponse', questionResponse)
-      this.corSurveys.push(...questionResponse.cuestionarios);
-      this.showActionButtons = true;
-      this.handleMode(
-        tipoEvaluacionResponse.id_evaluacion,
-        'menu/saet-pedagogia',
-        this.formMode
-      );
-    }).catch((e) => {
-      console.log('error in promise -----------zzzz ----- ', e);
-    }).finally(() => {
-      this.pageLoading = false;
-    })
-
-
-
+    Promise.all([tipoEvaluacionPromise, questionPromise])
+      .then(([tipoEvaluacionResponse, questionResponse]) => {
+        console.log('questionResponse', questionResponse);
+        this.corSurveys.push(...questionResponse.cuestionarios);
+        this.showActionButtons = true;
+        this.handleMode(
+          tipoEvaluacionResponse.id_evaluacion,
+          'menu/saet-pedagogia',
+          this.formMode
+        );
+      })
+      .catch(e => {
+        console.log('error in promise -----------zzzz ----- ', e);
+      })
+      .finally(() => {
+        this.pageLoading = false;
+      });
   }
 
   generarPDF() {

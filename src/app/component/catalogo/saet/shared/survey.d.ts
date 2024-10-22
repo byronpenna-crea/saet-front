@@ -13,6 +13,7 @@ export interface iQuestionSave2 {
 export interface iQuestionSave {
   id_pregunta: number;
   opcion: { id_opcion: number; opcion: string; opcion_pregunta_pk?: number }[];
+  pregunta?: string;
   respuesta: string;
 }
 export interface iSurvey {

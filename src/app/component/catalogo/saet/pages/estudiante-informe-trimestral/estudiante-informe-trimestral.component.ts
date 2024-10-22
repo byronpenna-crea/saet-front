@@ -72,8 +72,8 @@ export class EstudianteInformeTrimestralComponent
         //const questionPromise = catalogoServiceQuarterReport.getQuestions();
         console.log(this.nie);
         const answerPromise = catalogoServiceQuarterReport.getByNie(this.nie);
-        Promise.all([answerPromise]).then(
-          ([answerPromise]) => {
+        Promise.all([answerPromise])
+          .then(([answerPromise]) => {
             console.log('answer -------------------');
             console.log(answerPromise);
             console.log('answer -------------------');
@@ -86,10 +86,10 @@ export class EstudianteInformeTrimestralComponent
               ...this.values,
               ...respuestas,
             };
-          }
-        ).catch(([answerCatch]) => {
-          console.log('Answer catch --------------',answerCatch);
-        });
+          })
+          .catch(([answerCatch]) => {
+            console.log('Answer catch --------------', answerCatch);
+          });
         const storedValues = localStorage.getItem(
           `${this.localStorageKey}-${this.nie}`
         );
@@ -120,9 +120,9 @@ export class EstudianteInformeTrimestralComponent
       id_estudiante_fk: studentId,
       respuestas: respuestas,
     };
-    if(this.reportId !== 0){
+    if (this.reportId !== 0) {
       await this.catalogoServiceQuarterReport.update(objToSave);
-    }else{
+    } else {
       await this.catalogoServiceQuarterReport.save(objToSave);
     }
   }

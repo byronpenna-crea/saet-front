@@ -53,8 +53,10 @@ export class EstudianteCuestionarioLenguajeComponent
       especialidadTarget
     );
     this.pageLoading = true;
-    const tipoEvaluacionPromise = this.catalogoServiceCOR
-      .getTipoDeEvaluacion(this.nie, TIPO_EVALUACION.logopeda_perfil);
+    const tipoEvaluacionPromise = this.catalogoServiceCOR.getTipoDeEvaluacion(
+      this.nie,
+      TIPO_EVALUACION.logopeda_perfil
+    );
     const questionPromise = catalogoServiceCOR.getLenguajeHablaQuestions();
 
     Promise.all([tipoEvaluacionPromise, questionPromise])
@@ -67,13 +69,15 @@ export class EstudianteCuestionarioLenguajeComponent
         );
         console.log('Evaluacion here ', tipoEvaluacionResponse);
         console.log('values here ', this.values);
-        console.log('transformed response ', this.responseToValues(tipoEvaluacionResponse));
+        console.log(
+          'transformed response ',
+          this.responseToValues(tipoEvaluacionResponse)
+        );
         this.values = {
           ...this.values,
           ...this.responseToValues(tipoEvaluacionResponse),
         };
         console.log('this values ... ', this.values);
-
 
         this.showActionButtons = true;
         this.corSurveys.push(...resultQuestions.cuestionarios);
