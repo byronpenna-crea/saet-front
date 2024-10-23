@@ -5,6 +5,8 @@ import {
   UserMessage,
 } from '../../interfaces/message-component.interface';
 import { DOCUMENT } from '@angular/common';
+// @ts-ignore
+import * as htmlToPdfmake from 'html-to-pdfmake';
 import {
   CatalogoServiceCor, IEvaluacionResponse,
   iPaeiSave,
@@ -126,7 +128,6 @@ export class EstudianteDetallePaeiComponent
   }
   async generatePDF() {
     this.pageLoading = true;
-
     let logoBase64 = '';
     try {
       logoBase64 = await this.getBase64Image('/assets/logo.png');
@@ -135,9 +136,7 @@ export class EstudianteDetallePaeiComponent
     }
 
     (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
-    const paeiRespuestas = await this.catalogoServiceCOR.getPAEIPerNIE(
-      this.nie
-    );
+    const paeiRespuestas = await this.catalogoServiceCOR.getPAEIPerNIE(this.nie);
     console.log('paei respuestas ', paeiRespuestas);
 
     const docDefinition: TDocumentDefinitions = {
@@ -176,16 +175,26 @@ export class EstudianteDetallePaeiComponent
       style: 'header',
     });
 
+    // Procesar las respuestas para incluir contenido HTML
     paeiRespuestas.respuestas.forEach((respuestaObj, index) => {
       console.log('respuestaObj --------- #########', respuestaObj);
+
+      // Agregar la pregunta como subheader
       (docDefinition.content as Content[]).push({
         text: respuestaObj.pregunta ?? '',
         style: 'subheader',
       });
 
+      // Convertir la respuesta a contenido HTML usando html-to-pdfmake
+      const convertedHtml = htmlToPdfmake(respuestaObj.respuesta, {
+        // @ts-ignore
+        window: window,
+      });
+
+      // Agregar el contenido HTML convertido al documento
       (docDefinition.content as Content[]).push({
-        text: respuestaObj.respuesta.replace(/<[^>]+>/g, ''), // Eliminar etiquetas HTML para texto limpio
-        style: 'normal',
+        stack: [convertedHtml],
+        margin: [0, 0, 0, 20],
       });
 
       if (index < paeiRespuestas.respuestas.length - 1) {
@@ -196,9 +205,7 @@ export class EstudianteDetallePaeiComponent
       }
     });
 
-    pdfMake
-      .createPdf(docDefinition)
-      .download(`paei-estudiante-${this.nie}.pdf`);
+    pdfMake.createPdf(docDefinition).download(`paei-estudiante-${this.nie}.pdf`);
     this.pageLoading = false;
   }
   onCheckboxChange(keyValues: KeyValue[]) {
