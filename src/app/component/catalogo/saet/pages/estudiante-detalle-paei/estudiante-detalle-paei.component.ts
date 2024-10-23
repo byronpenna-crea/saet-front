@@ -126,6 +126,35 @@ export class EstudianteDetallePaeiComponent
       img.onerror = err => reject(err);
     });
   }
+  ajustarTamanoImagenes(htmlContent: string): string {
+    const div = document.createElement('div');
+    div.innerHTML = htmlContent;
+
+    // Buscar todas las imágenes en el contenido HTML
+    const imgs = div.getElementsByTagName('img');
+    for (let img of imgs) {
+      const width = img.width;
+      const height = img.height;
+
+      // Calcular la relación de aspecto
+      const aspectRatio = width / height;
+
+      // Ajustar la dimensión mayor a 200 px, manteniendo la proporción
+      if (width > height) {
+        img.width = 200;
+        img.height = 200 / aspectRatio;
+      } else {
+        img.height = 200;
+        img.width = 200 * aspectRatio;
+      }
+
+      // Asegurarse de que ninguna dimensión supere 200 px
+      img.width = Math.min(img.width, 200);
+      img.height = Math.min(img.height, 200);
+    }
+
+    return div.innerHTML;
+  }
   async generatePDF() {
     this.pageLoading = true;
     let logoBase64 = '';
@@ -138,6 +167,9 @@ export class EstudianteDetallePaeiComponent
     (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
     const paeiRespuestas = await this.catalogoServiceCOR.getPAEIPerNIE(this.nie);
     console.log('paei respuestas ', paeiRespuestas);
+
+    // Importar html-to-pdfmake dinámicamente
+    const htmlToPdfmake = (await import('html-to-pdfmake')).default;
 
     const docDefinition: TDocumentDefinitions = {
       content: [] as Content[],
@@ -185,11 +217,13 @@ export class EstudianteDetallePaeiComponent
         style: 'subheader',
       });
 
-      // Convertir la respuesta a contenido HTML usando html-to-pdfmake
-      const convertedHtml = htmlToPdfmake(respuestaObj.respuesta, {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // Ajustar las dimensiones de las imágenes en el contenido HTML
+      const htmlContent = this.ajustarTamanoImagenes(respuestaObj.respuesta);
+
+      // Convertir el contenido HTML a formato pdfMake
+      const convertedHtml = htmlToPdfmake(htmlContent, {
         // @ts-ignore
-        window: window,
+        window: window as Window,
       });
 
       // Agregar el contenido HTML convertido al documento
