@@ -23,6 +23,9 @@ import { CatalogoServiceDai } from '../../../../../services/catalogo/catalogo.se
 import { SAET_MODULE } from '../../shared/evaluaciones';
 import {handleMode} from "../../shared/forms";
 
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+
 @Component({
   selector: 'app-estudiante-dai-caracterizacion',
   templateUrl: './estudiante-dai-caracterizacion.component.html',
@@ -83,6 +86,8 @@ export class EstudianteDaiCaracterizacionComponent
       };
     });
   }
+
+  loadingMessage?: string = undefined;
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceDai: CatalogoServiceDai,
@@ -92,6 +97,7 @@ export class EstudianteDaiCaracterizacionComponent
   ) {
     super(document, catalogoServiceDai, route, router);
     this.pageLoading = true;
+
     const storedValues = localStorage.getItem('values');
     if (storedValues) {
       this.values = JSON.parse(storedValues);
@@ -200,7 +206,12 @@ export class EstudianteDaiCaracterizacionComponent
   //     this.nie,
   //   ]);
   // }
-  async entrarEditMode() {}
+  async entrarEditMode() {
+    const currentUrl = this.router.url;
+    const newUrl = currentUrl.replace('/view', '/edit');
+    this.formMode = FormMode.EDIT;
+    this.router.navigateByUrl(newUrl);
+  }
   validarPreguntas(respuestas: IQuestionaryAnswer[], cuestionarios: iSurvey[]) {
     const idsValidos = new Set();
     cuestionarios.forEach(cuestionario => {
@@ -268,8 +279,153 @@ export class EstudianteDaiCaracterizacionComponent
 
   }
   async retornarCaracterizacion() {}
-  async update() {}
-  async generatePDF() {}
+  async update() {
+    this.pageLoading = true;
+    this.loadingMessage = 'Actualizando caracterizacion';
+    const respuestas = this.getAnswerObject(this.values);
+    console.log('caracterizacion ', this.caracterizacion);
+    if(
+      this.caracterizacion === undefined ||
+      this.caracterizacion?.id_caracterizacion === 0){
+
+      this.userMessage.message = 'Caracterizacion no fue cargada correctamente, no es posible actualizar';
+      this.userMessage.showMessage = true;
+      this.userMessage.titleMessage = 'Advertencia';
+      this.userMessage.type = MessageType.WARNING;
+    }
+    const idPersona = localStorage.getItem('id_persona');
+    if (!idPersona || isNaN(Number(idPersona))) {
+      this.userMessage.message = 'Problemas encontrando especialista responsable, prueba cerrar sesion e iniciar de nuevo';
+      this.userMessage.showMessage = true;
+      this.userMessage.titleMessage = 'Advertencia';
+      this.userMessage.type = MessageType.WARNING;
+      return;
+    }
+
+    const objToSave: ISaveCaracterizacionDAI = {
+      id_caracterizacion: this.caracterizacion?.id_caracterizacion ?? 0,
+      id_estudiante_fk: this.studentInfo?.id_est_pk ?? 0,
+      id_docente_apoyo: parseInt(idPersona) ?? 0,
+      id_modulo: SAET_MODULE.COR,
+      respuestas: this.validarPreguntas(respuestas, this.corSurveys)
+    };
+
+    try {
+      const resp = await this.catalogoServiceDai.updateCaracterizacion(objToSave);
+      console.log('respuesta actualizacion ', resp);
+      console.log('url here ', this.baseUrl);
+      this.router.navigate([this.baseUrl, this.nie, 'view']);
+    } catch (e) {
+      console.log('error e', e);
+      const error = e as Error;
+      const errorDetails = JSON.parse(error.message);
+
+      this.userMessage = {
+        showMessage: true,
+        message: errorDetails.message,
+        titleMessage: 'Error',
+        type: MessageType.DANGER,
+      };
+    } finally {
+      this.pageLoading = false;
+      this.loadingMessage = undefined;
+    }
+  }
+  async generatePDF() {
+
+    console.log('caracterizacion aca --------------- >', this.caracterizacion);
+    /*this.pageLoading = true;
+    const doc = new jsPDF();
+    let currentY = 30;
+    const title = 'Caracterización hecha por DAI del estudiante';
+    const studentName = `${this.studentInfo?.nombreCompleto} | ${this.studentInfo?.nie}` || 'Nombre del estudiante no disponible';
+
+    const titleWidth = doc.getTextWidth(title);
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const titleX = (pageWidth - titleWidth) / 2;
+
+    const logoPath = '/assets/logo.png';
+
+    const loadImage = (url: string): Promise<HTMLImageElement> => {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = url;
+        img.onload = () => resolve(img);
+        img.onerror = err => reject(err);
+      });
+    };
+    const logo = await loadImage(logoPath);
+    console.log('logo ', logo);
+    doc.text(title, titleX, currentY);
+    currentY += 10;
+
+    doc.setFontSize(12);
+    const studentNameWidth = doc.getTextWidth(studentName);
+    const studentNameX = (pageWidth - studentNameWidth) / 2;
+    doc.text(studentName, studentNameX, currentY);
+    currentY += 10; // Espacio debajo del nombre del estudiante
+
+    doc.setFontSize(15);
+    let pageNumber = 0;
+    const respuestasFormulario = this.getAnswerObject(this.values);
+    console.log('respuesta formulario en pdf ', respuestasFormulario);
+    this.corSurveys.forEach(cuestionario => {
+      const respuestas =
+        this.caracterizacion?.respuestas
+          .filter((respuesta: iQuestion) =>
+            cuestionario.preguntas.some(
+              p => p.id_pregunta === respuesta.id_pregunta
+            )
+          )
+          .map((respuesta: iQuestion) => {
+            const concatOptions = respuesta.opcion.reduce((acc, current) => {
+              return acc ? `${acc}, ${current.opcion}` : current.opcion;
+            }, '');
+            console.log('concat options ', concatOptions);
+            const strResponse =
+              respuesta?.respuesta !== undefined && respuesta?.respuesta !== ''
+                ? respuesta?.respuesta
+                : concatOptions;
+            return [respuesta.pregunta, strResponse];
+          }) ?? [];
+
+      if (respuestas.length > 0) {
+        // Agrega el título del cuestionario como encabezado
+        doc.text(cuestionario.titulo, 8, currentY);
+        currentY += 10; // Espacio debajo del título del cuestionario
+
+        // Agrega la tabla para este cuestionario
+        autoTable(doc, {
+          head: [['Pregunta', 'Respuesta']],
+          body: respuestas,
+          startY: currentY,
+          didDrawPage: data => {
+            console.log('did draw ', data);
+            doc.setFontSize(10);
+            if (data.pageNumber !== pageNumber) {
+              doc.text(
+                `Página ${data.pageNumber}`,
+                pageWidth - 40,
+                pageHeight - 10
+              );
+              pageNumber = data.pageNumber;
+            }
+            doc.addImage(logo, 'PNG', 10, pageHeight - 30, 50, 20);
+            pageNumber++;
+          },
+        });
+        currentY = (doc as any).lastAutoTable.finalY + 10;
+      }
+
+      return false;
+    });
+
+    console.log('Respuestas ---- ', this.caracterizacion?.respuestas);
+    doc.save(`Caracterizacion-dai-estudiante-${this.nie}.pdf`);
+
+    this.pageLoading = false;*/
+  }
 
   protected readonly SAET_MODULE = SAET_MODULE;
 }
