@@ -1,0 +1,187 @@
+.form-container {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  width: 84%;
+  margin: 3% auto 0;
+  margin-top: 1%;
+}
+
+.flex {
+  display: flex;
+}
+
+.wrap {
+  flex-wrap: wrap;
+}
+
+.actionsButton {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.right-buttons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.margin-top {
+  margin-top: 2%;
+}
+
+.first-column {
+  flex: 1 1 50%;
+  display: flex;
+  align-items: center;
+}
+
+.first-item {
+  flex: 0 0 30%;
+  text-align: right;
+  margin-right: 10px;
+}
+
+.second-column {
+  flex: 1 1 50%;
+  display: flex;
+  align-items: center;
+}
+
+.second-item {
+  width: 200px;
+}
+
+.link-text {
+  cursor: pointer;
+  user-select: none;
+  text-decoration: underline;
+  color: #00498d;
+}
+
+@media screen and (max-width: 1920px) {
+  .form-container {
+    width: 77%;
+    margin-left: 8%;
+  }
+}
+
+/* TAB */
+.flex {
+  display: flex;
+}
+
+.wrap {
+  flex-wrap: wrap;
+}
+
+.fieldset-auto-width {
+  display: inline-block;
+}
+
+.actionsButton {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.right-buttons {
+  display: flex;
+  gap: 60px;
+  align-items: center;
+}
+
+.margin-top {
+  margin-top: 2%;
+}
+
+.first-column {
+  flex: 1 1 50%;
+  display: flex;
+  align-items: center;
+}
+
+.first-item {
+  flex: 0 0 30%;
+  text-align: right;
+  margin-right: 10px;
+}
+
+.second-column {
+  flex: 1 1 50%;
+  display: flex;
+  align-items: center;
+}
+
+.second-item {
+  width: 200px;
+}
+
+.link-text {
+  cursor: pointer;
+  user-select: none;
+  text-decoration: underline;
+  color: #00498d;
+  vertical-align: middle;
+}
+
+::ng-deep .second-item-time .p-calendar {
+  width: 300px;
+}
+
+.read-only .agendaBody {
+  /*background: #dee2e6;*/
+}
+
+@media screen and (max-width: 1920px) {
+  .actionsButton {
+    padding-right: 7.7em;
+    padding-top: 10px;
+  }
+}
+
+@media screen and (max-width: 1600px) {
+  .actionsButton {
+    padding-right: 2.5em;
+    padding-top: 10px;
+  }
+
+  ::ng-deep .second-item-time .p-calendar {
+    width: 295px;
+  }
+}
+
+@media (min-width: 1000px) and (max-width: 1440px) {
+  .actionsButton {
+    padding-right: 0em;
+    padding-top: 10px;
+  }
+
+  ::ng-deep .second-item-time .p-calendar {
+    width: 295px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .first-column {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  .second-column {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+
+  ::ng-deep .second-item-time .p-calendar {
+    width: 200px;
+  }
+
+  .actionsButton {
+    padding-right: 65px;
+    padding-top: 10px;
+  }
+}

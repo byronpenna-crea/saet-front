@@ -1,0 +1,58 @@
+<app-saet-global-header
+  [nie]="nie"
+  [nombreCompleto]="studentInfo?.nombreCompleto ?? ''"
+  selectedTab="planDeAccion"
+  [readOnlyEvaluaciones]="false"
+  [readOnlyPaei]="false"
+  [module]="SAET_MODULE.DAI"
+  [breadcrumb]="[
+    { href: '#/menu/saet-buscar', text: 'Buscar estudiante' },
+    { href: '#/menu/saet-buscar/' + nie, text: nie },
+    {
+      href: '#/menu/dai/saet-datos-estudiante/' + nie,
+      text: 'DAI'
+    },
+    {
+      href: '#/menu/dai/saet-plan-accion/' + nie,
+      text: 'Plan de accion'
+    },
+    { href: '', text: 'Edición' }
+  ]"
+/>
+<app-saet-loading [isLoading]="pageLoading" />
+<app-saet-confirm
+  acceptButtonText="Continuar editando"
+  cancelButtonText="Salir sin guardar"
+  title="¡Estás a punto de salir del modo de edición!"
+  (onAccept)="acceptConfirmDialog()"
+  (onReject)="rejectConfirmDialog()"
+  [acceptIcon]="iconCompoment.SAVE"
+  [rejectIcon]="iconCompoment.CLOSE"
+/>
+<div class="form-container">
+  <ng-container *ngFor="let corSurvey of corSurveys">
+    <div style="margin-top: 5%">
+      <app-tabs [legend]="corSurvey.titulo">
+        <div
+        >
+          <ng-container *ngFor="let pregunta of corSurvey.preguntas">
+            <app-tab-item [label]="pregunta.pregunta ?? ''">
+              <app-saet-question
+                (onChange)="onchangeQuestions($event)"
+                [type]="getQuestionType(pregunta.tipoPregunta)"
+                [idPregunta]="pregunta.id_pregunta"
+                [value]="values[pregunta.id_pregunta.toString()]"
+                [values]="values"
+                [testId]="pregunta.id_pregunta.toString()"
+                [name]="getName(pregunta.pregunta)"
+                [options]="getOptions(pregunta.opcion)"
+                (checkboxChange)="onCheckboxChange($event)"
+                [readonly]="formMode === formModeEnum.VIEW"
+              />
+            </app-tab-item>
+          </ng-container>
+        </div>
+      </app-tabs>
+    </div>
+  </ng-container>
+</div>

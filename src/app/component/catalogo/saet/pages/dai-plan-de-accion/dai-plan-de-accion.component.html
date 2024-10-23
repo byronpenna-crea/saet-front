@@ -1,0 +1,101 @@
+<app-saet-global-header
+  [nie]="nie"
+  [nombreCompleto]="studentInfo?.nombreCompleto ?? ''"
+  selectedTab="planDeAccion"
+  [readOnlyEvaluaciones]="false"
+  [readOnlyPaei]="false"
+  [module]="SAET_MODULE.DAI"
+  [breadcrumb]="[
+    { href: '#/menu/saet-buscar', text: 'Buscar estudiante' },
+    { href: '#/menu/saet-buscar/' + nie, text: nie },
+    {
+      href: '#/menu/dai/saet-datos-estudiante/' + nie,
+      text: 'DAI'
+    },
+    {
+      href: '#/menu/dai/saet-plan-accion/' + nie,
+      text: 'Plan de accion'
+    },
+    { href: '', text: 'Edición' }
+  ]"
+/>
+<app-saet-loading [isLoading]="pageLoading" />
+<app-saet-confirm
+  acceptButtonText="Continuar editando"
+  cancelButtonText="Salir sin guardar"
+  title="¡Estás a punto de salir del modo de edición!"
+  (onAccept)="acceptConfirmDialog()"
+  (onReject)="rejectConfirmDialog()"
+  [acceptIcon]="iconCompoment.SAVE"
+  [rejectIcon]="iconCompoment.CLOSE"
+/>
+<!--{-->
+<!--href: '#/menu/dai/saet-caracterizacion-estudiante/' + nie,-->
+<!--text: 'Atencion personalizada'-->
+<!--},-->
+<app-saet-loading [isLoading]="pageLoading" />
+<app-saet-confirm
+  acceptButtonText="Continuar editando"
+  cancelButtonText="Salir sin guardar"
+  title="¡Estás a punto de salir del modo de edición!"
+  (onAccept)="acceptConfirmDialog()"
+  (onReject)="rejectConfirmDialog()"
+  [acceptIcon]="iconCompoment.SAVE"
+  [rejectIcon]="iconCompoment.CLOSE"
+/>
+<div class="form-container">
+  <app-saet-tab  leyend="leyend">
+    <p-tabView>
+      <p-tabPanel header="Acciones">
+        <div>
+          <app-tab-item
+            marginTop="3%"
+            label="Especialista responsable de agendar"
+          >
+            <app-saet-input
+              [disabled]="true"
+              value=""
+            />
+            <div>
+              <app-tab-item label="">
+                | Docente
+              </app-tab-item>
+            </div>
+          </app-tab-item>
+        </div>
+
+        <div>
+          <div
+            style="
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 3%;
+          "
+          >
+            <div></div>
+            <div class="right-buttons">
+              <div style="display: flex">
+              <span
+                data-testId="btn-clean"
+                class="link-text"
+              >Cancelar agenda</span
+              >
+              </div>
+              <app-saet-button
+                (onClick)="iniciar()"
+                [buttonArgs]="{
+                buttonIcon: buttonIcon.PLUS,
+                buttonStyle: buttonStyle.WHITE,
+                text: 'Ver acciones'
+              }"
+              />
+            </div>
+          </div>
+        </div>
+      </p-tabPanel>
+      <p-tabPanel header="Realizar referencia">
+      </p-tabPanel>
+    </p-tabView>
+  </app-saet-tab>
+</div>
