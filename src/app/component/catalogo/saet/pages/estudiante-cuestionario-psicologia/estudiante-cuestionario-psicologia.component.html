@@ -11,11 +11,7 @@
   [readOnlyEvaluaciones]="readOnlyEvaluaciones"
   [readOnlyPaei]="readOnlyPaei"
 />
-<app-saet-mensaje-usuario
-  [show]="userMessage.showMessage"
-  [message]="userMessage.message"
-  [title]="userMessage.titleMessage"
-/>
+
 <app-saet-loading [isLoading]="pageLoading" />
 <app-saet-confirm
   acceptButtonText="Continuar editando"
@@ -27,6 +23,11 @@
   [rejectIcon]="iconCompoment.CLOSE"
 />
 <div class="form-container">
+  <app-saet-mensaje-usuario
+    [show]="userMessage.showMessage"
+    [message]="userMessage.message"
+    [title]="userMessage.titleMessage"
+  />
   <ng-container *ngFor="let corSurvey of corSurveys">
     <div style="margin-top: 5%">
       <app-tabs [legend]="corSurvey.titulo">

@@ -216,7 +216,6 @@ export class EstudianteCuestionarioPsicologiaComponent
     console.log('obj to save', objToSave);
     objToSave.id_evaluacion = this.idEvaluacion;
     try {
-
       const resp = await this.catalogoServiceCOR.updatePsicologia(objToSave);
       if (resp.id_evaluacion === 0) {
         this.userMessage.showMessage = true;
