@@ -10,6 +10,7 @@ import {
   IUpdateCaracterizacion,
   IUpdateCaracterizacionDAI
 } from "./catalogo.service.cor";
+import {HttpMethod} from "../shared/saet-types";
 
 @Injectable({
   providedIn: 'root',
@@ -39,6 +40,29 @@ export class CatalogoServiceDai extends CatalogoServiceSaet {
         respuestas: caracterizacion.respuestas
       }
     );
+  }
+
+  public async getPlanAccionQuestion(): Promise<SurveyResponse>{
+    try {
+      const url = `${this.API_SERVER_URL}/dai/plan_accion/preguntas`;
+      const response = await this.doRequest<undefined>(
+        url,
+        undefined,
+        HttpMethod.GET
+      );
+      console.log('response get ', response);
+
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(JSON.stringify(errorResponse));
+      }
+
+      return response.json();
+    } catch (e: unknown) {
+      const error = e as Error;
+      const errorDetails = JSON.parse(error.message);
+      throw new Error(errorDetails.message);
+    }
   }
   public getDaiCaracterizacionQuestion(): Promise<SurveyResponse> {
     return this.getSurveyQuestions(

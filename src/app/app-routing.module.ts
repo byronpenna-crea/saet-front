@@ -41,6 +41,15 @@ import {
 import {
   DaiEstudianteDatosGeneralesComponent
 } from "./component/catalogo/saet/pages/dai-estudiante-datos-generales/dai-estudiante-datos-generales.component";
+import {
+  DaiPlanDeAccionComponent
+} from "./component/catalogo/saet/pages/dai-plan-de-accion/dai-plan-de-accion.component";
+import {
+  DaiAtencionPersonalizadaComponent
+} from "./component/catalogo/saet/pages/dai-atencion-personalizada/dai-atencion-personalizada.component";
+import {
+  DaiPlanDeAccionIniciarComponent
+} from "./component/catalogo/saet/pages/dai-plan-de-accion-iniciar/dai-plan-de-accion-iniciar.component";
 
 /*
 const routes: Routes = [
@@ -94,6 +103,30 @@ const routes: Routes = [
       {
         path: 'dai/saet-caracterizacion-estudiante/:nie',
         component: EstudianteDaiCaracterizacionComponent,
+      },
+      {
+        path: 'dai/saet-plan-accion/:nie',
+        component: DaiPlanDeAccionComponent,
+      },
+      {
+        path: 'dai/saet-plan-accion/:nie/:mode',
+        component: DaiPlanDeAccionComponent,
+      },
+      {
+        path: 'dai/saet-plan-accion-iniciar/:nie',
+        component: DaiPlanDeAccionIniciarComponent,
+      },
+      {
+        path: 'dai/plan-accion-iniciar/:nie/:mode',
+        component: DaiPlanDeAccionIniciarComponent,
+      },
+      {
+        path: 'dai/saet-atencion-personalizada/:nie',
+        component: DaiAtencionPersonalizadaComponent,
+      },
+      {
+        path: 'dai/saet-atencion-personalizada/:nie/:mode',
+        component: DaiAtencionPersonalizadaComponent,
       },
       { path: 'saet-pdf/:name', component: EstudiantePdfComponent },
 

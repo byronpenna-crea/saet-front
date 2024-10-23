@@ -26,7 +26,7 @@ interface IUserMessage {
   title: string;
   message: string;
 }
-interface TabInput {
+export interface TabInput {
   agendado: boolean;
   readOnly: boolean;
   leyend: string;

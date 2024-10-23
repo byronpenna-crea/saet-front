@@ -110,6 +110,9 @@ import { SaetIndividualRadioComponent } from './component/catalogo/saet/componen
 import { SaetLoadingComponent } from './component/catalogo/saet/component/saet-loading/saet-loading.component';
 import { SaetFormTableComponent } from './component/catalogo/saet/component/saet-form-table/saet-form-table.component';
 import { DaiEstudianteDatosGeneralesComponent } from './component/catalogo/saet/pages/dai-estudiante-datos-generales/dai-estudiante-datos-generales.component';
+import { DaiPlanDeAccionComponent } from './component/catalogo/saet/pages/dai-plan-de-accion/dai-plan-de-accion.component';
+import { DaiAtencionPersonalizadaComponent } from './component/catalogo/saet/pages/dai-atencion-personalizada/dai-atencion-personalizada.component';
+import { DaiPlanDeAccionIniciarComponent } from './component/catalogo/saet/pages/dai-plan-de-accion-iniciar/dai-plan-de-accion-iniciar.component';
 
 @NgModule({
   declarations: [
@@ -177,6 +180,9 @@ import { DaiEstudianteDatosGeneralesComponent } from './component/catalogo/saet/
     SaetLoadingComponent,
     SaetFormTableComponent,
     DaiEstudianteDatosGeneralesComponent,
+    DaiPlanDeAccionComponent,
+    DaiAtencionPersonalizadaComponent,
+    DaiPlanDeAccionIniciarComponent,
   ],
   imports: [
     BrowserModule,

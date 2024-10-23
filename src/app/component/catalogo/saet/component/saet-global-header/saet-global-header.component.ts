@@ -74,6 +74,20 @@ export class SaetGlobalHeaderComponent implements OnInit {
         readOnly: false,
         testId: 'tab-caracterizacion',
       },
+      {
+        name: 'planDeAccion',
+        url: `#/menu/dai/saet-plan-accion/${this.nie}`,
+        text: 'Plan de accion',
+        readOnly: false,
+        testId: 'tab-plan-de-accion',
+      },
+      {
+        name: 'atencionPersonalizada',
+        url: `#/menu/dai/saet-atencion-personalizada/${this.nie}`,
+        text: 'Atencion personalizada',
+        readOnly: false,
+        testId: 'tab-atencion-personalizada',
+      },
     ];
   }
   generateCORTabs() {
