@@ -96,11 +96,26 @@ export class EstudianteDaiCaracterizacionComponent
     if (storedValues) {
       this.values = JSON.parse(storedValues);
     }
+    const caracterizacionNiePromise = this.catalogoServiceDai.getCaracterizacionPorNIE(
+      this.nie
+    );
+    const questionPromise = catalogoServiceDai.getDaiCaracterizacionQuestion();
+    Promise.all([caracterizacionNiePromise, questionPromise]).then(([caracterizacionNieResult,questionResult]) => {
+      this.caracterizacion = caracterizacionNieResult;
+      this.corSurveys.push(...questionResult.cuestionarios);
 
-    catalogoServiceDai.getDaiCaracterizacionQuestion().then(result => {
-      this.corSurveys.push(...result.cuestionarios);
+      const storedValues = localStorage.getItem(`dai-caracterizacion-${this.nie}`);
+      if (storedValues) {
+        this.values = JSON.parse(storedValues);
+      }
+      this.values = {
+        ...this.values,
+        ...this.respuestasToValues(this.caracterizacion?.respuestas ?? []),
+      };
       this.pageLoading = false;
-    });
+    })
+
+
     this.init();
   }
   formMode: FormMode = FormMode.CREATE;
@@ -200,6 +215,7 @@ export class EstudianteDaiCaracterizacionComponent
     return respuestasValidas;
   }
   async save() {
+    this.pageLoading = true;
     const respuestas = this.getAnswerObject(this.values);
     const idPersona = localStorage.getItem('id_persona');
 

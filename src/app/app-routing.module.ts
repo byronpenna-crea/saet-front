@@ -105,6 +105,10 @@ const routes: Routes = [
         component: EstudianteDaiCaracterizacionComponent,
       },
       {
+        path: 'dai/saet-caracterizacion-estudiante/:nie/:mode',
+        component: EstudianteDaiCaracterizacionComponent,
+      },
+      {
         path: 'dai/saet-plan-accion/:nie',
         component: DaiPlanDeAccionComponent,
       },

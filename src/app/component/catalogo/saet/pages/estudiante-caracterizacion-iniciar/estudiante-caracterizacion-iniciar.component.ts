@@ -91,7 +91,6 @@ export class EstudianteCaracterizacionIniciarComponent
         this.values = this.respuestasToValues(
           this.caracterizacion?.respuestas ?? []
         );
-        console.log('here 1');
         return;
       }
       this.values = {

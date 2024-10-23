@@ -5,10 +5,11 @@ import {Router} from "@angular/router";
 import {CookieService} from "ngx-cookie-service";
 import {SurveyResponse} from "../../component/catalogo/saet/shared/survey";
 import {
+  IGetCaracterizacion,
   ISaveCaracterizacion,
   ISaveCaracterizacionDAI,
   IUpdateCaracterizacion,
-  IUpdateCaracterizacionDAI
+  IUpdateCaracterizacionDAI, ResponseError
 } from "./catalogo.service.cor";
 import {HttpMethod} from "../shared/saet-types";
 
@@ -22,6 +23,26 @@ export class CatalogoServiceDai extends CatalogoServiceSaet {
     cookieService: CookieService
   ) {
     super(cookieService);
+  }
+  public async getCaracterizacionPorNIE(
+    nie: string
+  ): Promise<IGetCaracterizacion> {
+    const url = `${this.API_SERVER_URL}/caracterizacion/dai/${nie}`;
+    try {
+      const response = await this.doRequest<undefined>(
+        url,
+        undefined,
+        HttpMethod.GET
+      );
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(JSON.stringify(errorResponse));
+      }
+      return response.json();
+    } catch (e: unknown) {
+      const error = e as ResponseError;
+      throw error;
+    }
   }
   public saveCaracterizacion(caracterizacion: ISaveCaracterizacionDAI) {
     const url = `${this.API_SERVER_URL}/caracterizacion/dai`;
