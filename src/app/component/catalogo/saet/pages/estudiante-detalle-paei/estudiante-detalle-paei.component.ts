@@ -187,6 +187,7 @@ export class EstudianteDetallePaeiComponent
 
       // Convertir la respuesta a contenido HTML usando html-to-pdfmake
       const convertedHtml = htmlToPdfmake(respuestaObj.respuesta, {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-ignore
         window: window,
       });
