@@ -19,12 +19,25 @@
   margin-top: 2%;
 }
 
+.tabButton,
+.tabSeletectedButton {
+  border-radius: 0px;
+  background: white;
+  border: solid 1px #00498d;
+  color: #00498d;
+}
+
+.tabSeletectedButton {
+  background: #00498d;
+  color: white;
+}
+
 .form-container {
   display: flex;
   flex-direction: column;
   padding: 10px;
-  width: 90%;
-  margin: 3% auto 0;
+  width: 77%;
+  margin-left: 8%;
   margin-top: 1%;
 }
 
@@ -36,6 +49,10 @@
   margin: 3% auto 0;
   margin-bottom: 1%;
   font-weight: bold;
+}
+
+.button-container a {
+  text-decoration: none;
 }
 
 /***/
