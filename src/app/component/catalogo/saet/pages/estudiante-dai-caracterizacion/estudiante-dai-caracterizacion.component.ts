@@ -1,22 +1,27 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { CorBaseComponent } from '../../CorBaseComponent';
 import {
-  IMessageComponent,
+  IMessageComponent, MessageType,
   UserMessage,
 } from '../../interfaces/message-component.interface';
 import { userMessageInit } from '../../shared/messages.model';
 import { DOCUMENT } from '@angular/common';
-import { CatalogoServiceCor } from '../../../../../services/catalogo/catalogo.service.cor';
+import {
+  CatalogoServiceCor,
+  ISaveCaracterizacion,
+  ISaveCaracterizacionDAI
+} from '../../../../../services/catalogo/catalogo.service.cor';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
-import { iSurvey } from '../../shared/survey';
+import {iQuestion, iSurvey} from '../../shared/survey';
 import { QuestionType } from '../../shared/component.config';
 import { KeyValue } from '../../component/saet-input/saet-input.component';
-import { FormMode } from '../../QuestionsComponent';
+import {FormMode, IQuestionaryAnswer, IValuesForm} from '../../QuestionsComponent';
 import { BaseComponent } from '../../BaseComponent';
 import { DaiBaseComponent } from '../../DaiBaseComponent';
 import { CatalogoServiceDai } from '../../../../../services/catalogo/catalogo.service.dai';
 import { SAET_MODULE } from '../../shared/evaluaciones';
+import {handleMode} from "../../shared/forms";
 
 @Component({
   selector: 'app-estudiante-dai-caracterizacion',
@@ -30,6 +35,54 @@ export class EstudianteDaiCaracterizacionComponent
   @ViewChild('cd') confirmDialog: any;
   values: { [key: string]: string } = {};
   corSurveys: iSurvey[] = [];
+  baseUrl = '/menu/dai/saet-caracterizacion-estudiante';
+  respuestasToValues(respuestas: iQuestion[]) {
+    const values: IValuesForm = {};
+    respuestas.forEach(respuesta => {
+      const radioKey = `radio_${respuesta.id_pregunta}`;
+      const inputKey = `input_${respuesta.id_pregunta}`;
+
+      if (respuesta.opcion.length > 0) {
+        values[radioKey] = respuesta.opcion[0].opcion_pregunta_pk.toString();
+      }
+      values[inputKey] = respuesta.respuesta ?? '';
+    });
+    return values;
+  }
+  init() {
+    this.route.paramMap.subscribe(params => {
+      const storedValues = localStorage.getItem(`dai-caracterizacion-${this.nie}`);
+      if (storedValues) {
+        this.values = JSON.parse(storedValues);
+      }
+      const formMode = params.get('mode');
+      console.log('form mode on init', formMode);
+      switch (formMode) {
+        case null:
+          this.formMode = FormMode.CREATE;
+          break;
+        case 'view':
+          this.formMode = FormMode.VIEW;
+          break;
+        case 'edit':
+          this.formMode = FormMode.EDIT;
+          break;
+      }
+      console.log('form mode updated ', this.formMode);
+      console.log('caracterizacion updated ', this.caracterizacion);
+      if (this.formMode === FormMode.VIEW) {
+        this.values = this.respuestasToValues(
+          this.caracterizacion?.respuestas ?? []
+        );
+        console.log('here 1');
+        return;
+      }
+      this.values = {
+        ...this.values,
+        ...this.respuestasToValues(this.caracterizacion?.respuestas ?? []),
+      };
+    });
+  }
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceDai: CatalogoServiceDai,
@@ -39,25 +92,20 @@ export class EstudianteDaiCaracterizacionComponent
   ) {
     super(document, catalogoServiceDai, route, router);
     this.pageLoading = true;
+    const storedValues = localStorage.getItem('values');
+    if (storedValues) {
+      this.values = JSON.parse(storedValues);
+    }
+
     catalogoServiceDai.getDaiCaracterizacionQuestion().then(result => {
       this.corSurveys.push(...result.cuestionarios);
       this.pageLoading = false;
     });
+    this.init();
   }
   formMode: FormMode = FormMode.CREATE;
   formModeEnum = FormMode;
 
-  // override ngOnInit = async () => {
-  //   await super.ngOnInit();
-  //   this.route.paramMap.subscribe(params => {
-  //     const storedValues = localStorage.getItem(
-  //       `dai-caracterizacion-${this.nie}`
-  //     );
-  //     if (storedValues) {
-  //       this.values = JSON.parse(storedValues);
-  //     }
-  //   });
-  // };
 
   onCheckboxChange(keyValues: KeyValue[]) {
     const selectedValues = keyValues.map(e => e.value);
@@ -138,8 +186,70 @@ export class EstudianteDaiCaracterizacionComponent
   //   ]);
   // }
   async entrarEditMode() {}
+  validarPreguntas(respuestas: IQuestionaryAnswer[], cuestionarios: iSurvey[]) {
+    const idsValidos = new Set();
+    cuestionarios.forEach(cuestionario => {
+      cuestionario.preguntas.forEach(pregunta => {
+        idsValidos.add(pregunta.id_pregunta);
+      });
+    });
+
+    const respuestasValidas = respuestas.filter(respuesta => {
+      return idsValidos.has(respuesta.id_pregunta);
+    });
+    return respuestasValidas;
+  }
   async save() {
-    console.log('saaveee');
+    const respuestas = this.getAnswerObject(this.values);
+    const idPersona = localStorage.getItem('id_persona');
+
+    if (!idPersona || isNaN(Number(idPersona))) {
+      this.userMessage.message = 'DAI no fue cargado correctamente, por favor recargar pagina';
+      this.userMessage.titleMessage = 'Advertencia';
+      this.userMessage.type = MessageType.WARNING;
+      return;
+    }
+    const objToSave: ISaveCaracterizacionDAI = {
+      id_caracterizacion: null,
+      id_estudiante_fk: this.studentInfo?.id_est_pk ?? 0,
+      id_docente_apoyo: parseInt(idPersona) ?? 0,
+      id_modulo: SAET_MODULE.COR,
+      respuestas: this.validarPreguntas(respuestas, this.corSurveys)
+    };
+
+    try {
+      const response = await this.catalogoServiceDai.saveCaracterizacion(objToSave);
+      console.log('response ', response);
+      if (response.id_caracterizacion !== 0) {
+        this.userMessage = {
+          showMessage: true,
+          message: '¡Los datos han sido guardados exitosamente!',
+          titleMessage: 'Datos guardados',
+          type: MessageType.SUCCESS,
+        };
+        handleMode(
+          response.id_caracterizacion ?? 0,
+          this.baseUrl,
+          FormMode.VIEW,
+          this.nie,
+          this.router
+        );
+      }
+    } catch (e) {
+      console.log('error e', e);
+      const error = e as Error;
+      const errorDetails = JSON.parse(error.message);
+
+      this.userMessage = {
+        showMessage: true,
+        message: errorDetails.message,
+        titleMessage: 'Error',
+        type: MessageType.DANGER,
+      };
+    } finally {
+      this.pageLoading = false;
+    }
+
   }
   async retornarCaracterizacion() {}
   async update() {}

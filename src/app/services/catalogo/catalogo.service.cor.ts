@@ -105,6 +105,11 @@ export interface ISaveQuestionary extends IQuestionaryHeader {
   id_evaluacion: number | null;
   respuestas: iQuestionSave[];
 }
+export interface IUpdateCaracterizacionDAI {
+  id_caracterizacion: number | null;
+  id_docente_apoyo: number;
+  respuestas: iQuestionSave[];
+}
 export interface IUpdateCaracterizacion {
   id_caracterizacion: number | null;
   respuestas: iQuestionSave[];
@@ -125,6 +130,13 @@ export interface IUpdateCaracterizacion {
 }
 export interface IPaeiResponse {
   id_paei: number;
+  respuestas: iQuestionSave[];
+}
+export interface ISaveCaracterizacionDAI {
+  id_caracterizacion: number | null;
+  id_docente_apoyo: number;
+  id_estudiante_fk: number;
+  id_modulo: number;
   respuestas: iQuestionSave[];
 }
 export interface ISaveCaracterizacion {

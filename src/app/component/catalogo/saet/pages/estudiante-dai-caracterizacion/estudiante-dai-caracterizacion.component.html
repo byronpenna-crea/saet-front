@@ -36,8 +36,6 @@
     [title]="userMessage.titleMessage"
     [messageType]="userMessage.type"
   />
-</div>
-<div class="form-container">
   <ng-container *ngFor="let corSurvey of corSurveys">
     <div style="margin-top: 5%">
       <app-tabs [legend]="corSurvey.titulo">
@@ -60,6 +58,12 @@
       </app-tabs>
     </div>
   </ng-container>
+  <app-saet-mensaje-usuario
+    [show]="userMessage.showMessage"
+    [message]="userMessage.message"
+    [title]="userMessage.titleMessage"
+    [messageType]="userMessage.type"
+  />
   <div style="margin-top: 20px">
     <div *ngIf="formMode === formModeEnum.CREATE" class="actionsButton">
       <app-saet-button

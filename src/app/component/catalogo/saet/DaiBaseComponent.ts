@@ -2,7 +2,7 @@ import { Inject, Injectable, OnInit } from '@angular/core';
 import { BaseComponent } from './BaseComponent';
 import { DOCUMENT } from '@angular/common';
 import {
-  CatalogoServiceCor,
+  CatalogoServiceCor, IGetCaracterizacion,
   StudentInfoResponse,
 } from '../../../services/catalogo/catalogo.service.cor';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -10,6 +10,8 @@ import { CatalogoServiceDai } from '../../../services/catalogo/catalogo.service.
 
 @Injectable()
 export class DaiBaseComponent extends BaseComponent implements OnInit {
+  caracterizacion: IGetCaracterizacion | undefined;
+
   protected loadStudentInfo(): Promise<StudentInfoResponse> {
     return this.catalogoServiceDai
       .getStudentInfo(this.nie)
