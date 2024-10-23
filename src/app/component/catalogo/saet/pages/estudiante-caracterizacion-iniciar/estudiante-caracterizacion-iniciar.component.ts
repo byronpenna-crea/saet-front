@@ -5,13 +5,11 @@ import {
   ISaveCaracterizacion,
 } from '../../../../../services/catalogo/catalogo.service.cor';
 import { ActivatedRoute, Router } from '@angular/router';
-import { IconComponent, QuestionType } from '../../shared/component.config';
+import { QuestionType } from '../../shared/component.config';
 import {
   IMessageComponent,
   MessageType,
-  UserMessage,
 } from '../../interfaces/message-component.interface';
-import { userMessageInit } from '../../shared/messages.model';
 import { KeyValue } from '../../component/saet-input/saet-input.component';
 import { iQuestion } from '../../shared/survey';
 import { ConfirmationService } from 'primeng/api';
@@ -25,9 +23,7 @@ import {
   IValuesForm,
 } from '../../QuestionsComponent';
 import { handleMode } from '../../shared/forms';
-import { ButtonStyle } from '../../component/saet-button/saet-button.component';
 import { SAET_MODULE } from '../../shared/evaluaciones';
-import { PrintPdf } from '../../shared/PrintPdf';
 import { FormTablePariente } from '../../component/saet-form-table/saet-form-table.component';
 
 interface IinformationTab {
@@ -54,36 +50,9 @@ export class EstudianteCaracterizacionIniciarComponent
   loadingMessage?: string = undefined;
   corSurveys: iSurvey[] = [];
   formModeEnum = FormMode;
+  baseUrl = '/menu/saet-caracterizacion-iniciar';
 
-  generalInformation: IinformationTab = {
-    isActive: false,
-    legend: 'Datos personales del estudiante',
-    labels: [
-      'Nombre completo:',
-      'NIE:',
-      'Fecha de nacimiento:',
-      'Dirección:',
-      'Teléfono:',
-      'Correo electrónico:',
-    ],
-    values: [],
-  };
-  institutionalInfo: IinformationTab = {
-    isActive: false,
-    legend: 'Datos institucionales',
-    labels: [
-      'Centro Escolar al que pertenece:',
-      'Código de Centro Escolar:',
-      'Dirección de Centro Escolar:',
-      'Último grado cursado:',
-      'Grado actual:',
-      'Sección:',
-      'Docente de aula responsable:',
-      'Correo electrónico de docente:',
-      'Teléfono de docente:',
-    ],
-    values: [],
-  };
+
   respuestasToValues(respuestas: iQuestion[]) {
     const values: IValuesForm = {};
     respuestas.forEach(respuesta => {
@@ -132,13 +101,7 @@ export class EstudianteCaracterizacionIniciarComponent
     });
   }
   override async ngOnInit() {
-    console.log('before --------------- xx ');
     await super.ngOnInit();
-    console.log('init --------------- xx ');
-    const url = '/menu/saet-caracterizacion-iniciar';
-    const idCaracterizacion: number =
-      this.caracterizacion?.id_caracterizacion ?? 0;
-    handleMode(idCaracterizacion, url, this.formMode, this.nie, this.router);
     this.init();
   }
   formMode: FormMode = FormMode.CREATE;
@@ -152,42 +115,55 @@ export class EstudianteCaracterizacionIniciarComponent
   ) {
     super(document, catalogoServiceCOR, route, router);
     this.pageLoading = true;
+    // this.userMessage.showMessage = true;
+    // this.userMessage.message = 'test';
     const storedValues = localStorage.getItem('values');
     if (storedValues) {
       this.values = JSON.parse(storedValues);
     }
 
-    this.route.paramMap.subscribe(params => {
-      const nie = params.get('nie');
-      const formMode = params.get('mode');
+    this.caracterizacionLoaded.then(() => {
 
-      if (nie) {
-        this.nie = nie;
-      }
+      this.route.paramMap.subscribe(params => {
+        const nie = params.get('nie');
+        const formMode = params.get('mode');
+        if (nie) {
+          this.nie = nie;
+        }
 
-      switch (formMode) {
-        case null:
-          this.formMode = FormMode.CREATE;
-          break;
-        case 'view':
-          this.formMode = FormMode.VIEW;
-          break;
-        case 'edit':
-          this.formMode = FormMode.EDIT;
-          break;
-        default:
-          router.navigate(['menu/saet-evaluaciones', this.nie]);
-          break;
-      }
+        switch (formMode) {
+          case null:
+            this.formMode = FormMode.CREATE;
+            break;
+          case 'view':
+            this.formMode = FormMode.VIEW;
+            break;
+          case 'edit':
+            this.formMode = FormMode.EDIT;
+            break;
+          default:
+            router.navigate(['menu/saet-evaluaciones', this.nie]);
+            break;
+        }
+
+        if(
+          this.caracterizacion !== undefined
+          && this.caracterizacion?.id_caracterizacion !== 0
+          && this.formMode === FormMode.CREATE
+        ){
+          router.navigate([this.baseUrl, nie, 'view']);
+        }
+        // handleMode(idCaracterizacion, url, this.formMode, this.nie, this.router);
+      });
+
+      const corQuestionPromise = catalogoServiceCOR.getCORQuestions();
+      Promise.all([corQuestionPromise]).then(([corQuestionResult]) => {
+        this.corSurveys.push(...corQuestionResult.cuestionarios);
+        this.pageLoading = false;
+      });
+
+      this.init();
     });
-
-    const corQuestionPromise = catalogoServiceCOR.getCORQuestions();
-    Promise.all([corQuestionPromise]).then(([corQuestionResult]) => {
-      this.corSurveys.push(...corQuestionResult.cuestionarios);
-      this.pageLoading = false;
-    });
-
-    this.init();
   }
 
   QuestionType = QuestionType;
@@ -320,10 +296,27 @@ export class EstudianteCaracterizacionIniciarComponent
     this.pageLoading = true;
     this.loadingMessage = 'Actualizando caracterizacion';
     const respuestas = this.getAnswerObject(this.values);
+
+    console.log('caracterizacion ', this.caracterizacion);
+    if(
+      this.caracterizacion === undefined ||
+      this.caracterizacion?.id_caracterizacion === 0){
+
+      this.userMessage.message = 'Caracterizacion no fue cargada correctamente, no es posible actualizar';
+      this.userMessage.showMessage = true;
+      this.userMessage.titleMessage = 'Advertencia';
+      this.userMessage.type = MessageType.WARNING;
+    }
+
     const idPersona = localStorage.getItem('id_persona');
     if (!idPersona || isNaN(Number(idPersona))) {
+      this.userMessage.message = 'Problemas encontrando especialista responsable, prueba cerrar sesion e iniciar de nuevo';
+      this.userMessage.showMessage = true;
+      this.userMessage.titleMessage = 'Advertencia';
+      this.userMessage.type = MessageType.WARNING;
       return;
     }
+
     const objToSave: ISaveCaracterizacion = {
       id_caracterizacion: this.caracterizacion?.id_caracterizacion ?? 0,
       id_estudiante_fk: this.studentInfo?.id_est_pk ?? 0,
@@ -334,9 +327,10 @@ export class EstudianteCaracterizacionIniciarComponent
       grupoFamiliar: [],
     };
     try {
-      const resp =
-        await this.catalogoServiceCOR.updateCaracterizacion(objToSave);
-      console.log('respuesta de actualizar ', resp);
+      const resp = await this.catalogoServiceCOR.updateCaracterizacion(objToSave);
+      console.log('respuesta actualizacion ', resp);
+      console.log('url here ', this.baseUrl);
+      this.router.navigate([this.baseUrl, this.nie, 'view']);
     } catch (e) {
       console.log('error e', e);
       const error = e as Error;
@@ -356,7 +350,11 @@ export class EstudianteCaracterizacionIniciarComponent
   async save() {
     const respuestas = this.getAnswerObject(this.values);
     const idPersona = localStorage.getItem('id_persona');
+
     if (!idPersona || isNaN(Number(idPersona))) {
+      this.userMessage.message = 'Especialista no fue cargado correctamente, por favor recargar pagina';
+      this.userMessage.titleMessage = 'Advertencia';
+      this.userMessage.type = MessageType.WARNING;
       return;
     }
 
@@ -378,8 +376,6 @@ export class EstudianteCaracterizacionIniciarComponent
       };
       return;
     }
-    console.log('values ', this.values);
-    console.log('obj to save', objToSave);
 
     try {
       const response =
@@ -396,12 +392,11 @@ export class EstudianteCaracterizacionIniciarComponent
         handleMode(
           response.id_caracterizacion ?? 0,
           url,
-          this.formMode,
+          FormMode.VIEW,
           this.nie,
           this.router
         );
       }
-      console.log('try ');
     } catch (e) {
       console.log('error e', e);
       const error = e as Error;

@@ -71,6 +71,12 @@ export class BuscarEstudianteComponent
   ) {
     super(document, catalogoServiceCOR, route, router);
     try {
+
+      console.log('-----------------');
+      console.log('rol apoyo ',localStorage.getItem('rolApoyo') ?? '') ;
+      console.log('especialidad ', localStorage.getItem('especialidad') ?? undefined);
+      console.log(localStorage.getItem('idRolApoyo') !== undefined && (localStorage.getItem('idRolApoyo') as unknown as SAET_MODULE) == SAET_MODULE.COR);
+      console.log('------------------');
       this.pageLoading = true;
       if (this.nie === '') {
         this.pageLoading = false;
@@ -117,7 +123,6 @@ export class BuscarEstudianteComponent
     { key: 'referidoPor', header: 'Referido por' },
     { key: 'verDetalle', header: 'Ver detalle' },
   ];
-
   flowData = [
     {
       col1: 'Centro de Orientación y Recursos (COR)',
