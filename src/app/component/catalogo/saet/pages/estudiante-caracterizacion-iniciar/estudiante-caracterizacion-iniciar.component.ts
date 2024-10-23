@@ -176,12 +176,14 @@ export class EstudianteCaracterizacionIniciarComponent
     let currentY = 30;
 
     const title = 'Caracterización de estudiante';
+    const studentName = `${this.studentInfo?.nombreCompleto} | ${this.studentInfo?.nie}` || 'Nombre del estudiante no disponible';
+
     const titleWidth = doc.getTextWidth(title);
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
     const titleX = (pageWidth - titleWidth) / 2;
 
-    const logoPath = '/assets/logo.png'; // Cambia esto a la ruta de tu archivo de logo
+    const logoPath = '/assets/logo.png';
 
     const loadImage = (url: string): Promise<HTMLImageElement> => {
       return new Promise((resolve, reject) => {
@@ -195,6 +197,15 @@ export class EstudianteCaracterizacionIniciarComponent
     console.log('logo ', logo);
     doc.text(title, titleX, currentY);
     currentY += 10; // Espacio debajo del título principal
+
+    // Nombre del estudiante
+    doc.setFontSize(12);
+    const studentNameWidth = doc.getTextWidth(studentName);
+    const studentNameX = (pageWidth - studentNameWidth) / 2;
+    doc.text(studentName, studentNameX, currentY);
+    currentY += 10; // Espacio debajo del nombre del estudiante
+
+    doc.setFontSize(15);
     let pageNumber = 0;
     const respuestasFormulario = this.getAnswerObject(this.values);
     console.log('respuesta formulario en pdf ', respuestasFormulario);
