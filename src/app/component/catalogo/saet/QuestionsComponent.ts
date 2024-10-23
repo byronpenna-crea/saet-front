@@ -29,6 +29,7 @@ export enum FormMode {
 export interface IQuestionaryAnswer {
   id_pregunta: number;
   opcion: IAnswerOption[];
+  pregunta?: string;
   respuesta: string;
 }
 @Injectable()

@@ -348,18 +348,29 @@ export class EstudianteEvaluacionesComponent
 
   async cancelar(event: IOnCancelarAgenda) {
     this.pageLoading = true;
+
+    console.log('especialidad en este evento ', event.especialidad);
     if (event.evaluationId === 0) {
       this.userMessage.showMessage = true;
       this.userMessage.titleMessage = 'Atencion';
-      this.userMessage.message = 'No hay un id de evaluacion';
+      this.userMessage.message = 'No existe una evaluacion para cancelar';
       this.userMessage.type = MessageType.WARNING;
     }
-    await this.catalogoServiceCOR.deleteEvaluacionCor(
-      event.evaluationId.toString()
-    );
-    this.agendado[iEspecialidadEvaluacion.PSICOLOGIA] = false;
-    this.updateTab(event.especialidad, false);
-    this.pageLoading = true;
+    try{
+      await this.catalogoServiceCOR.deleteEvaluacionCor(
+        event.evaluationId.toString()
+      );
+      this.agendado[event.especialidad] = false;
+      this.updateTab(event.especialidad, false);
+    }catch (ex: unknown){
+      const error = ex as ResponseError;
+      this.userMessage.showMessage = true;
+      this.userMessage.titleMessage = 'Error';
+      this.userMessage.message = error.message;
+      this.userMessage.type = MessageType.DANGER;
+    }
+
+    this.pageLoading = false;
   }
   formatDateToDDMMYYYY(date: Date) {
     const day = String(date.getDate()).padStart(2, '0');
@@ -417,6 +428,7 @@ export class EstudianteEvaluacionesComponent
       id_evaluacion: null,
       respuestas: [],
     };
+
     if (event.especialidad === undefined) {
       this.userMessage.showMessage = true;
       this.userMessage.message = 'No existe especilidad para ser guardada';
@@ -425,18 +437,23 @@ export class EstudianteEvaluacionesComponent
       this.pageLoading = false;
       return;
     }
-
+    if (this.especialidad === undefined) {
+      this.userMessage.showMessage = true;
+      this.userMessage.message = 'Problema con la session del usuario, cierrela y vuelvala a iniciar';
+      this.userMessage.titleMessage = '¡Atención!';
+      this.userMessage.type = MessageType.DANGER;
+      this.pageLoading = false;
+      return;
+    }
     try {
       const respuesta = await this.catalogoServiceCOR.saveEvaluacion(
         obj,
         event.especialidad
       );
-      if (this.especialidad === undefined) {
-        throw new Error('Debe definir la especialidad');
-      }
+      console.log('respuesta agregando ---->', respuesta);
       if (respuesta.id_evaluacion !== 0) {
         this.agendaId[this.especialidad] = respuesta.id_evaluacion ?? 0;
-        const nombreCompleto = `${localStorage.getItem('primer_nombre')} ${localStorage.getItem('primer_apellido')}`;
+        const nombreCompleto = `${localStorage.getItem('nombre') ?? ''}`;
         this.especialista[this.especialidad] = {
           nombreCompleto: nombreCompleto,
           dui: localStorage.getItem('dui') ?? '',

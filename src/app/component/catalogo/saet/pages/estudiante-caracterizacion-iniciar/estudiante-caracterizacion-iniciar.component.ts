@@ -172,6 +172,7 @@ export class EstudianteCaracterizacionIniciarComponent
   }
 
   async generatePDF() {
+    this.pageLoading = true;
     const doc = new jsPDF();
     let currentY = 30;
 
@@ -196,9 +197,8 @@ export class EstudianteCaracterizacionIniciarComponent
     const logo = await loadImage(logoPath);
     console.log('logo ', logo);
     doc.text(title, titleX, currentY);
-    currentY += 10; // Espacio debajo del título principal
+    currentY += 10;
 
-    // Nombre del estudiante
     doc.setFontSize(12);
     const studentNameWidth = doc.getTextWidth(studentName);
     const studentNameX = (pageWidth - studentNameWidth) / 2;
@@ -262,6 +262,9 @@ export class EstudianteCaracterizacionIniciarComponent
 
     console.log('Respuestas ---- ', this.caracterizacion?.respuestas);
     doc.save(`Caracterizacion-estudiante-${this.nie}.pdf`);
+
+    this.pageLoading = false;
+
   }
   async retornarCaracterizacion() {
     await this.router.navigate([
