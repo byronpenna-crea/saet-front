@@ -3,20 +3,13 @@ import {
   CatalogoServiceCor,
   IGetCaracterizacion,
   ResponseError,
-  StudentDetail,
   StudentInfoResponse,
 } from '../../../services/catalogo/catalogo.service.cor';
 import { DOCUMENT } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  FormMode,
-  IQuestionaryAnswer,
-  IValuesForm,
-} from './QuestionsComponent';
-import { IconComponent } from './shared/component.config';
-import { ButtonStyle } from './component/saet-button/saet-button.component';
 import { BaseComponent } from './BaseComponent';
-import { CatalogoServiceDei } from '../../../services/catalogo/catalogo.service.dei';
+import { handleMode } from './shared/forms';
+import { FormMode } from './QuestionsComponent';
 
 export interface informationTabBody {
   values: string[];
@@ -27,7 +20,31 @@ export class CorBaseComponent extends BaseComponent implements OnInit {
   readOnlyEvaluaciones = true;
   readOnlyPaei = true;
   async ngOnInit() {
-    console.log('init');
+    const dui = localStorage.getItem('dui') ?? '';
+    console.log('dui en constructor es ', dui);
+    if (dui !== '') {
+      this.catalogoServiceCOR.getPersonaApoyoByDui(dui).then(persona => {
+
+        console.log('persona logueada ', persona);
+        localStorage.setItem('id_persona', persona.per_fk.per_pk.toString());
+
+        if(persona.sub_rol_fk !== null){
+          localStorage.setItem('id_especialidad', persona.sub_rol_fk.sub_rol_pk.toString());
+          localStorage.setItem('especialidad', persona.sub_rol_fk.subcategoria);
+        }else{
+          localStorage.setItem('id_especialidad', '');
+          localStorage.setItem('especialidad', '');
+        }
+        if(persona.rol_pk !== null){
+          localStorage.setItem('idRolApoyo', persona.rol_pk.rol_pk.toString());
+          localStorage.setItem('rolApoyo', persona.rol_pk.rol);
+        }else{
+          this.router.navigate(['/inicio'])
+        }
+      });
+    } else {
+      this.router.navigate(['/login']);
+    }
   }
   public async initCaracterizacion() {
     try {
@@ -59,6 +76,7 @@ export class CorBaseComponent extends BaseComponent implements OnInit {
       console.log('error ex base ', error.status);
     }
   }
+  caracterizacionLoaded;
   constructor(
     @Inject(DOCUMENT) protected document: Document,
     protected catalogoServiceCOR: CatalogoServiceCor,
@@ -66,29 +84,21 @@ export class CorBaseComponent extends BaseComponent implements OnInit {
     protected router: Router
   ) {
     super();
-    this.route.paramMap.subscribe(params => {
-      const nie = params.get('nie');
-      if (nie) {
-        this.nie = nie;
-        console.log('la url es ', this.router.url);
-        this.loadStudentInfo();
-        this.initCaracterizacion();
-      }
-    });
-    const dui = localStorage.getItem('dui') ?? '';
-    if (dui !== '') {
-      this.catalogoServiceCOR.getPersonaApoyoByDui(dui).then(persona => {
-        localStorage.setItem('id_persona', persona.per_fk.per_pk.toString());
-
-        localStorage.setItem('id_especialidad', persona.sub_rol_fk.sub_rol_pk.toString());
-        localStorage.setItem('idRolApoyo', persona.rol_pk.rol_pk.toString());
-
-        localStorage.setItem('especialidad', persona.sub_rol_fk.subcategoria);
-        localStorage.setItem('rolApoyo', persona.rol_pk.rol);
+    this.caracterizacionLoaded = new Promise<void>((resolve) => {
+      this.route.paramMap.subscribe(params => {
+        const nie = params.get('nie');
+        if (nie) {
+          this.nie = nie;
+          console.log('la url es ', this.router.url);
+          this.loadStudentInfo();
+          this.initCaracterizacion().then(() => {
+            console.log('id caracterizacion on base --- ', this.caracterizacion?.id_caracterizacion);
+            resolve(); // Resolvemos la promesa cuando 'id_caracterizacion' está disponible
+          });
+        }
       });
-    } else {
-      this.router.navigate(['/login']);
-    }
+    });
+
   }
   protected loadStudentInfo(): Promise<StudentInfoResponse> {
     return this.catalogoServiceCOR

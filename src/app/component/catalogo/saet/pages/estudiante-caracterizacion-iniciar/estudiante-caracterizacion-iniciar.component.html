@@ -81,6 +81,15 @@
         }"
       />
     </div>
+    <div style="margin-bottom: 3%">
+      <app-saet-mensaje-usuario
+        [show]="userMessage.showMessage"
+        [message]="userMessage.message"
+        [title]="userMessage.titleMessage"
+        [messageType]="userMessage.type"
+      />
+    </div>
+
     <div *ngIf="formMode === formModeEnum.EDIT" class="actionsButton">
       <div style="width: 300px">
         <app-saet-button
