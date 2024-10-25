@@ -8,9 +8,8 @@ describe('DaiAtencionPersonalizadaComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DaiAtencionPersonalizadaComponent ]
-    })
-    .compileComponents();
+      declarations: [DaiAtencionPersonalizadaComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(DaiAtencionPersonalizadaComponent);
     component = fixture.componentInstance;

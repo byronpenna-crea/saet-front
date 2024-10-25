@@ -356,13 +356,13 @@ export class EstudianteEvaluacionesComponent
       this.userMessage.message = 'No existe una evaluacion para cancelar';
       this.userMessage.type = MessageType.WARNING;
     }
-    try{
+    try {
       await this.catalogoServiceCOR.deleteEvaluacionCor(
         event.evaluationId.toString()
       );
       this.agendado[event.especialidad] = false;
       this.updateTab(event.especialidad, false);
-    }catch (ex: unknown){
+    } catch (ex: unknown) {
       const error = ex as ResponseError;
       this.userMessage.showMessage = true;
       this.userMessage.titleMessage = 'Error';
@@ -439,7 +439,8 @@ export class EstudianteEvaluacionesComponent
     }
     if (this.especialidad === undefined) {
       this.userMessage.showMessage = true;
-      this.userMessage.message = 'Problema con la session del usuario, cierrela y vuelvala a iniciar';
+      this.userMessage.message =
+        'Problema con la session del usuario, cierrela y vuelvala a iniciar';
       this.userMessage.titleMessage = '¡Atención!';
       this.userMessage.type = MessageType.DANGER;
       this.pageLoading = false;

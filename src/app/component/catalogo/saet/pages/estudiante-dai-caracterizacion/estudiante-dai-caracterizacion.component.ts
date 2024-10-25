@@ -1,7 +1,8 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { CorBaseComponent } from '../../CorBaseComponent';
 import {
-  IMessageComponent, MessageType,
+  IMessageComponent,
+  MessageType,
   UserMessage,
 } from '../../interfaces/message-component.interface';
 import { userMessageInit } from '../../shared/messages.model';
@@ -9,22 +10,27 @@ import { DOCUMENT } from '@angular/common';
 import {
   CatalogoServiceCor,
   ISaveCaracterizacion,
-  ISaveCaracterizacionDAI
+  ISaveCaracterizacionDAI,
 } from '../../../../../services/catalogo/catalogo.service.cor';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
-import {iQuestion, iSurvey} from '../../shared/survey';
+import { iQuestion, iSurvey } from '../../shared/survey';
 import { QuestionType } from '../../shared/component.config';
 import { KeyValue } from '../../component/saet-input/saet-input.component';
-import {FormMode, IQuestionaryAnswer, IValuesForm} from '../../QuestionsComponent';
+import {
+  FormMode,
+  IQuestionaryAnswer,
+  IValuesForm,
+} from '../../QuestionsComponent';
 import { BaseComponent } from '../../BaseComponent';
 import { DaiBaseComponent } from '../../DaiBaseComponent';
 import { CatalogoServiceDai } from '../../../../../services/catalogo/catalogo.service.dai';
 import { SAET_MODULE } from '../../shared/evaluaciones';
-import {handleMode} from "../../shared/forms";
+import { handleMode } from '../../shared/forms';
 
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import { ButtonStyle } from '../../component/saet-button/saet-button.component';
 
 @Component({
   selector: 'app-estudiante-dai-caracterizacion',
@@ -54,7 +60,9 @@ export class EstudianteDaiCaracterizacionComponent
   }
   init() {
     this.route.paramMap.subscribe(params => {
-      const storedValues = localStorage.getItem(`dai-caracterizacion-${this.nie}`);
+      const storedValues = localStorage.getItem(
+        `dai-caracterizacion-${this.nie}`
+      );
       if (storedValues) {
         this.values = JSON.parse(storedValues);
       }
@@ -71,13 +79,10 @@ export class EstudianteDaiCaracterizacionComponent
           this.formMode = FormMode.EDIT;
           break;
       }
-      console.log('form mode updated ', this.formMode);
-      console.log('caracterizacion updated ', this.caracterizacion);
       if (this.formMode === FormMode.VIEW) {
         this.values = this.respuestasToValues(
           this.caracterizacion?.respuestas ?? []
         );
-        console.log('here 1');
         return;
       }
       this.values = {
@@ -102,40 +107,49 @@ export class EstudianteDaiCaracterizacionComponent
     if (storedValues) {
       this.values = JSON.parse(storedValues);
     }
-    const caracterizacionNiePromise = this.catalogoServiceDai.getCaracterizacionPorNIE(
-      this.nie
-    );
+    const caracterizacionNiePromise =
+      this.catalogoServiceDai.getCaracterizacionPorNIE(this.nie);
     const questionPromise = catalogoServiceDai.getDaiCaracterizacionQuestion();
 
-    Promise.all([caracterizacionNiePromise]).then(([caracterizacionNieResult]) => {
-      console.log('caracterizacion result ----> ', caracterizacionNieResult);
-      this.caracterizacion = caracterizacionNieResult;
-    }).catch(() => {
+    Promise.all([caracterizacionNiePromise])
+      .then(async ([caracterizacionNieResult]) => {
+        console.log('caracterizacion result ----> ', caracterizacionNieResult);
+        this.caracterizacion = caracterizacionNieResult;
 
-    })
+        if (
+          this.caracterizacion !== undefined &&
+          this.caracterizacion?.id_caracterizacion !== 0 &&
+          this.formMode === FormMode.CREATE
+        ) {
+          await router.navigate([this.baseUrl, this.nie, 'view']);
+        }
+      })
+      .catch(e => {
+        console.log('Error cargando la caracterizacion dai', e);
+      });
 
-    Promise.all([questionPromise]).then(([questionResult]) => {
-      this.corSurveys.push(...questionResult.cuestionarios);
-
-    }).catch(() =>{
-
-    }).finally(() => {
-
-      const storedValues = localStorage.getItem(`dai-caracterizacion-${this.nie}`);
-      if (storedValues) {
-        this.values = JSON.parse(storedValues);
-      }
-      this.values = {
-        ...this.values,
-        ...this.respuestasToValues(this.caracterizacion?.respuestas ?? []),
-      };
-      this.pageLoading = false;
-    })
+    Promise.all([questionPromise])
+      .then(([questionResult]) => {
+        this.corSurveys.push(...questionResult.cuestionarios);
+      })
+      .catch(() => {})
+      .finally(() => {
+        const storedValues = localStorage.getItem(
+          `dai-caracterizacion-${this.nie}`
+        );
+        if (storedValues) {
+          this.values = JSON.parse(storedValues);
+        }
+        this.values = {
+          ...this.values,
+          ...this.respuestasToValues(this.caracterizacion?.respuestas ?? []),
+        };
+        this.pageLoading = false;
+      });
 
     this.init();
   }
   formModeEnum = FormMode;
-
 
   onCheckboxChange(keyValues: KeyValue[]) {
     const selectedValues = keyValues.map(e => e.value);
@@ -170,23 +184,6 @@ export class EstudianteDaiCaracterizacionComponent
   getQuestionType(type: string): QuestionType {
     return QuestionType[type as keyof typeof QuestionType];
   }
-  // onCheckboxChange(keyValues: KeyValue[]) {
-  //   const selectedValues = keyValues.map(e => e.value);
-  //   this.values[keyValues[0].key] = selectedValues.toString();
-  //   localStorage.setItem(
-  //     `dai-caracterizacion-${this.nie}`,
-  //     JSON.stringify(this.values)
-  //   );
-  // }
-  // onchange(keyValue: KeyValue) {
-  //   console.log('onchange triggered', keyValue);
-  //   this.values[keyValue.key] = keyValue.value;
-  //   console.log('onchange triggered values', this.values);
-  //   localStorage.setItem(
-  //     `dai-caracterizacion-${this.nie}`,
-  //     JSON.stringify(this.values)
-  //   );
-  // }
   acceptConfirmDialog() {
     this.confirmationService.close();
   }
@@ -240,7 +237,8 @@ export class EstudianteDaiCaracterizacionComponent
     const idPersona = localStorage.getItem('id_persona');
 
     if (!idPersona || isNaN(Number(idPersona))) {
-      this.userMessage.message = 'DAI no fue cargado correctamente, por favor recargar pagina';
+      this.userMessage.message =
+        'DAI no fue cargado correctamente, por favor recargar pagina';
       this.userMessage.titleMessage = 'Advertencia';
       this.userMessage.type = MessageType.WARNING;
       return;
@@ -250,11 +248,12 @@ export class EstudianteDaiCaracterizacionComponent
       id_estudiante_fk: this.studentInfo?.id_est_pk ?? 0,
       id_docente_apoyo: parseInt(idPersona) ?? 0,
       id_modulo: SAET_MODULE.COR,
-      respuestas: this.validarPreguntas(respuestas, this.corSurveys)
+      respuestas: this.validarPreguntas(respuestas, this.corSurveys),
     };
 
     try {
-      const response = await this.catalogoServiceDai.saveCaracterizacion(objToSave);
+      const response =
+        await this.catalogoServiceDai.saveCaracterizacion(objToSave);
       console.log('response ', response);
       if (response.id_caracterizacion !== 0) {
         this.userMessage = {
@@ -285,7 +284,6 @@ export class EstudianteDaiCaracterizacionComponent
     } finally {
       this.pageLoading = false;
     }
-
   }
   async retornarCaracterizacion() {}
   async update() {
@@ -293,18 +291,20 @@ export class EstudianteDaiCaracterizacionComponent
     this.loadingMessage = 'Actualizando caracterizacion';
     const respuestas = this.getAnswerObject(this.values);
     console.log('caracterizacion ', this.caracterizacion);
-    if(
+    if (
       this.caracterizacion === undefined ||
-      this.caracterizacion?.id_caracterizacion === 0){
-
-      this.userMessage.message = 'Caracterizacion no fue cargada correctamente, no es posible actualizar';
+      this.caracterizacion?.id_caracterizacion === 0
+    ) {
+      this.userMessage.message =
+        'Caracterizacion no fue cargada correctamente, no es posible actualizar';
       this.userMessage.showMessage = true;
       this.userMessage.titleMessage = 'Advertencia';
       this.userMessage.type = MessageType.WARNING;
     }
     const idPersona = localStorage.getItem('id_persona');
     if (!idPersona || isNaN(Number(idPersona))) {
-      this.userMessage.message = 'Problemas encontrando especialista responsable, prueba cerrar sesion e iniciar de nuevo';
+      this.userMessage.message =
+        'Problemas encontrando especialista responsable, prueba cerrar sesion e iniciar de nuevo';
       this.userMessage.showMessage = true;
       this.userMessage.titleMessage = 'Advertencia';
       this.userMessage.type = MessageType.WARNING;
@@ -316,11 +316,12 @@ export class EstudianteDaiCaracterizacionComponent
       id_estudiante_fk: this.studentInfo?.id_est_pk ?? 0,
       id_docente_apoyo: parseInt(idPersona) ?? 0,
       id_modulo: SAET_MODULE.COR,
-      respuestas: this.validarPreguntas(respuestas, this.corSurveys)
+      respuestas: this.validarPreguntas(respuestas, this.corSurveys),
     };
 
     try {
-      const resp = await this.catalogoServiceDai.updateCaracterizacion(objToSave);
+      const resp =
+        await this.catalogoServiceDai.updateCaracterizacion(objToSave);
       console.log('respuesta actualizacion ', resp);
       console.log('url here ', this.baseUrl);
       this.router.navigate([this.baseUrl, this.nie, 'view']);
@@ -341,13 +342,14 @@ export class EstudianteDaiCaracterizacionComponent
     }
   }
   async generatePDF() {
-
     console.log('caracterizacion aca --------------- >', this.caracterizacion);
     this.pageLoading = true;
     const doc = new jsPDF();
     let currentY = 30;
     const title = 'Caracterización hecha por DAI del estudiante';
-    const studentName = `${this.studentInfo?.nombreCompleto} | ${this.studentInfo?.nie}` || 'Nombre del estudiante no disponible';
+    const studentName =
+      `${this.studentInfo?.nombreCompleto} | ${this.studentInfo?.nie}` ||
+      'Nombre del estudiante no disponible';
 
     const titleWidth = doc.getTextWidth(title);
     const pageWidth = doc.internal.pageSize.getWidth();
@@ -437,4 +439,5 @@ export class EstudianteDaiCaracterizacionComponent
   }
 
   protected readonly SAET_MODULE = SAET_MODULE;
+  protected readonly ButtonStyle = ButtonStyle;
 }

@@ -24,22 +24,24 @@ export class CorBaseComponent extends BaseComponent implements OnInit {
     console.log('dui en constructor es ', dui);
     if (dui !== '') {
       this.catalogoServiceCOR.getPersonaApoyoByDui(dui).then(persona => {
-
         console.log('persona logueada ', persona);
         localStorage.setItem('id_persona', persona.per_fk.per_pk.toString());
 
-        if(persona.sub_rol_fk !== null){
-          localStorage.setItem('id_especialidad', persona.sub_rol_fk.sub_rol_pk.toString());
+        if (persona.sub_rol_fk !== null) {
+          localStorage.setItem(
+            'id_especialidad',
+            persona.sub_rol_fk.sub_rol_pk.toString()
+          );
           localStorage.setItem('especialidad', persona.sub_rol_fk.subcategoria);
-        }else{
+        } else {
           localStorage.setItem('id_especialidad', '');
           localStorage.setItem('especialidad', '');
         }
-        if(persona.rol_pk !== null){
+        if (persona.rol_pk !== null) {
           localStorage.setItem('idRolApoyo', persona.rol_pk.rol_pk.toString());
           localStorage.setItem('rolApoyo', persona.rol_pk.rol);
-        }else{
-          this.router.navigate(['/inicio'])
+        } else {
+          this.router.navigate(['/inicio']);
         }
       });
     } else {
@@ -84,7 +86,7 @@ export class CorBaseComponent extends BaseComponent implements OnInit {
     protected router: Router
   ) {
     super();
-    this.caracterizacionLoaded = new Promise<void>((resolve) => {
+    this.caracterizacionLoaded = new Promise<void>(resolve => {
       this.route.paramMap.subscribe(params => {
         const nie = params.get('nie');
         if (nie) {
@@ -92,13 +94,15 @@ export class CorBaseComponent extends BaseComponent implements OnInit {
           console.log('la url es ', this.router.url);
           this.loadStudentInfo();
           this.initCaracterizacion().then(() => {
-            console.log('id caracterizacion on base --- ', this.caracterizacion?.id_caracterizacion);
+            console.log(
+              'id caracterizacion on base --- ',
+              this.caracterizacion?.id_caracterizacion
+            );
             resolve(); // Resolvemos la promesa cuando 'id_caracterizacion' está disponible
           });
         }
       });
     });
-
   }
   protected loadStudentInfo(): Promise<StudentInfoResponse> {
     return this.catalogoServiceCOR

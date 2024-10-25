@@ -12,11 +12,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
 import { IconComponent, QuestionType } from '../../shared/component.config';
 import { KeyValue } from '../../component/saet-input/saet-input.component';
-import {FormMode, IValuesForm} from '../../QuestionsComponent';
+import { FormMode, IValuesForm } from '../../QuestionsComponent';
 import {
   IEvaluacionResponse,
   ISavePlanAccion,
-  ISaveQuestionary, IUpdatePlanAccion,
+  ISaveQuestionary,
+  IUpdatePlanAccion,
 } from '../../../../../services/catalogo/catalogo.service.cor';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
@@ -171,7 +172,7 @@ export class DaiPlanDeAccionIniciarComponent
       style: 'header',
     });
 
-    planAccionRespuesta.respuestas.forEach(async(respuestaObj, index) => {
+    planAccionRespuesta.respuestas.forEach(async (respuestaObj, index) => {
       (docDefinition.content as Content[]).push({
         text: respuestaObj.pregunta ?? '',
         style: 'subheader',
@@ -220,7 +221,8 @@ export class DaiPlanDeAccionIniciarComponent
     };
     console.log('----------- obj to UPDATE--------', updatePlanDeAccion);
     try {
-      const resp = await this.catalogoServiceDai.updatePlanDeAccion(updatePlanDeAccion);
+      const resp =
+        await this.catalogoServiceDai.updatePlanDeAccion(updatePlanDeAccion);
       console.log('saved ', resp);
       /*if (resp.plan_accion_pk === 0) {
         this.userMessage.showMessage = true;
@@ -381,15 +383,18 @@ export class DaiPlanDeAccionIniciarComponent
             const evaluation: IEvaluacionResponse = {
               respuestas: resp.respuestas,
               id_evaluacion: resp.plan_accion_pk,
-              especialista_responsable: ''
-            }
+              especialista_responsable: '',
+            };
             console.log('depurados ', this.responseToValues(evaluation));
             this.values = {
               ...this.responseToValues(evaluation),
               ...this.values,
             };
 
-            if (this.formMode === FormMode.CREATE && resp.plan_accion_pk !== 0){
+            if (
+              this.formMode === FormMode.CREATE &&
+              resp.plan_accion_pk !== 0
+            ) {
               this.router.navigate([this.baseUrl, this.nie, 'view']);
             }
           })
@@ -413,7 +418,7 @@ export class DaiPlanDeAccionIniciarComponent
 
     response.respuestas.forEach(respuesta => {
       const radioKey = `radio_${respuesta.id_pregunta}`;
-      const inputKey =  `input_${respuesta.id_pregunta}`;
+      const inputKey = `input_${respuesta.id_pregunta}`;
 
       if (respuesta.opcion.length > 0) {
         values[radioKey] =
@@ -422,10 +427,10 @@ export class DaiPlanDeAccionIniciarComponent
             : '';
       }
 
-      if(respuesta.id_pregunta >= 161 && respuesta.id_pregunta <= 167){
+      if (respuesta.id_pregunta >= 161 && respuesta.id_pregunta <= 167) {
         // manejo temporal de richtext
         values[`richtext_${respuesta.id_pregunta}`] = respuesta.respuesta;
-      }else{
+      } else {
         values[inputKey] = respuesta.respuesta;
       }
     });

@@ -8,7 +8,8 @@ import { DOCUMENT } from '@angular/common';
 // @ts-ignore
 import * as htmlToPdfmake from 'html-to-pdfmake';
 import {
-  CatalogoServiceCor, IEvaluacionResponse,
+  CatalogoServiceCor,
+  IEvaluacionResponse,
   iPaeiSave,
 } from '../../../../../services/catalogo/catalogo.service.cor';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -79,17 +80,16 @@ export class EstudianteDetallePaeiComponent
               this.formMode
             );
 
-            const obj:IEvaluacionResponse = {
+            const obj: IEvaluacionResponse = {
               respuestas: response.respuestas,
               id_evaluacion: response.id_paei,
-              especialista_responsable: ''
-            }
+              especialista_responsable: '',
+            };
             console.log('depurado --> ', this.responseToValues(obj));
             this.values = {
               ...this.responseToValues(obj),
               ...this.values,
             };
-
           })
           .catch(ex => {
             console.log('ex ---- ', ex);
@@ -165,7 +165,9 @@ export class EstudianteDetallePaeiComponent
     }
 
     (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
-    const paeiRespuestas = await this.catalogoServiceCOR.getPAEIPerNIE(this.nie);
+    const paeiRespuestas = await this.catalogoServiceCOR.getPAEIPerNIE(
+      this.nie
+    );
     console.log('paei respuestas ', paeiRespuestas);
 
     // Importar html-to-pdfmake dinámicamente
@@ -240,7 +242,9 @@ export class EstudianteDetallePaeiComponent
       }
     });
 
-    pdfMake.createPdf(docDefinition).download(`paei-estudiante-${this.nie}.pdf`);
+    pdfMake
+      .createPdf(docDefinition)
+      .download(`paei-estudiante-${this.nie}.pdf`);
     this.pageLoading = false;
   }
   onCheckboxChange(keyValues: KeyValue[]) {

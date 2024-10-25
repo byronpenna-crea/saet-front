@@ -128,13 +128,15 @@
           buttonIcon: iconCompoment.LEFT_ARROW
         }"
       />
+
       <div class="right-buttons">
         <app-saet-button
           (onClick)="entrarEditMode()"
-          [buttonArgs]="{ text: 'Editar', buttonStyle: 1 }"
+          [buttonArgs]="{ text: 'Editar', buttonStyle: ButtonStyle.BLUE }"
         />
         <app-saet-button
-          [buttonArgs]="{ text: 'Generar PDF', buttonStyle: 1 }"
+          (onClick)="generatePDF()"
+          [buttonArgs]="{ text: 'Generar PDF', buttonStyle: ButtonStyle.BLUE }"
         />
       </div>
     </div>

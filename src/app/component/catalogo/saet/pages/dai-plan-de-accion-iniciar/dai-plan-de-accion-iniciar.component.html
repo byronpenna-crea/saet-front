@@ -33,8 +33,7 @@
   <ng-container *ngFor="let corSurvey of corSurveys">
     <div style="margin-top: 5%">
       <app-tabs [legend]="corSurvey.titulo">
-        <div
-        >
+        <div>
           <ng-container *ngFor="let pregunta of corSurvey.preguntas">
             <app-tab-item [label]="pregunta.pregunta ?? ''">
               <app-saet-question

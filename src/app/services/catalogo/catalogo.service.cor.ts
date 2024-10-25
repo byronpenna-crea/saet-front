@@ -133,9 +133,9 @@ export interface IUpdateCaracterizacion {
   }[];
 }
 export interface IPlanAccionResponse {
-  id_responsable: number,
-  plan_accion_pk: number,
-  responsable_plan_accion: string
+  id_responsable: number;
+  plan_accion_pk: number;
+  responsable_plan_accion: string;
   respuestas: iQuestionSave[];
 }
 export interface IPaeiResponse {
@@ -143,8 +143,8 @@ export interface IPaeiResponse {
   respuestas: iQuestionSave[];
 }
 export interface ISavePlanAccion {
-  id_estudiante_fk: number,
-  id_docente_apoyo: number,
+  id_estudiante_fk: number;
+  id_docente_apoyo: number;
   respuestas: iQuestionSave[];
 }
 export interface IRespPlanAccion extends ISavePlanAccion {

@@ -2,12 +2,13 @@ import { Inject, Injectable, OnInit } from '@angular/core';
 import { BaseComponent } from './BaseComponent';
 import { DOCUMENT } from '@angular/common';
 import {
-  CatalogoServiceCor, IGetCaracterizacion,
+  CatalogoServiceCor,
+  IGetCaracterizacion,
   StudentInfoResponse,
 } from '../../../services/catalogo/catalogo.service.cor';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CatalogoServiceDai } from '../../../services/catalogo/catalogo.service.dai';
-import {FormMode} from "./QuestionsComponent";
+import { FormMode } from './QuestionsComponent';
 
 @Injectable()
 export class DaiBaseComponent extends BaseComponent implements OnInit {

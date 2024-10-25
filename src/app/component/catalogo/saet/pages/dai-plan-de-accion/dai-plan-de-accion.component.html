@@ -40,7 +40,7 @@
   [rejectIcon]="iconCompoment.CLOSE"
 />
 <div class="form-container">
-  <app-saet-tab  leyend="Plan de acción">
+  <app-saet-tab leyend="Plan de acción">
     <p-tabView>
       <p-tabPanel header="Acciones">
         <div>
@@ -54,7 +54,7 @@
             />
             <div>
               <app-tab-item label="">
-                {{especialistaAgendado.dui}} | Docente
+                {{ especialistaAgendado.dui }} | Docente
               </app-tab-item>
             </div>
           </app-tab-item>
@@ -63,28 +63,27 @@
         <div>
           <div
             style="
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            margin-top: 3%;
-          "
+              display: flex;
+              justify-content: space-between;
+              align-items: flex-end;
+              margin-top: 3%;
+            "
           >
             <div></div>
             <div class="right-buttons">
               <app-saet-button
                 (onClick)="iniciar()"
                 [buttonArgs]="{
-                buttonIcon: buttonIcon.PLUS,
-                buttonStyle: buttonStyle.BLUE,
-                text: 'Reportar acciones'
-              }"
+                  buttonIcon: buttonIcon.PLUS,
+                  buttonStyle: buttonStyle.BLUE,
+                  text: 'Reportar acciones'
+                }"
               />
             </div>
           </div>
         </div>
       </p-tabPanel>
-      <p-tabPanel header="Realizar referencia">
-      </p-tabPanel>
+      <p-tabPanel header="Realizar referencia"> </p-tabPanel>
     </p-tabView>
   </app-saet-tab>
 </div>

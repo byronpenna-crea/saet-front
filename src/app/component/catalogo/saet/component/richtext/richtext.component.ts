@@ -20,7 +20,6 @@ export class RichtextComponent {
   @Input() testId: string = '';
   @Input() disabled: boolean = false;
 
-
   @Output() inputChange = new EventEmitter<KeyValue>();
 
   onInputChange(event: any, name: string) {
@@ -28,7 +27,6 @@ export class RichtextComponent {
     this.text = newValue;
     this.filterImagesFromURLs();
     this.emitInputChange(newValue, name);
-
   }
 
   setupEditor() {
@@ -60,7 +58,7 @@ export class RichtextComponent {
     const editorElement = document.querySelector('.ql-editor');
     if (editorElement) {
       const images = editorElement.querySelectorAll('img');
-      images.forEach((img) => {
+      images.forEach(img => {
         const src = img.getAttribute('src');
         if (src && (src.startsWith('http') || src.startsWith('https'))) {
           img.remove(); // Eliminar la imagen del contenido

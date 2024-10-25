@@ -104,7 +104,9 @@ export class EstudianteCuestionarioPsicologiaComponent
     console.log('respuestas guardadas --- > ', respuestasServer);
 
     const title = 'Perfil psicológico de estudiante';
-    const studentName = `${this.studentInfo?.nombreCompleto} | ${this.studentInfo?.nie}` || 'Nombre del estudiante no disponible';
+    const studentName =
+      `${this.studentInfo?.nombreCompleto} | ${this.studentInfo?.nie}` ||
+      'Nombre del estudiante no disponible';
 
     const titleWidth = doc.getTextWidth(title);
     const pageWidth = doc.internal.pageSize.getWidth();
@@ -151,12 +153,15 @@ export class EstudianteCuestionarioPsicologiaComponent
     );
 
     if (respuestasConOpciones.length > 0) {
-      const respuestasTablaConOpciones = respuestasConOpciones.map((respuesta: any) => {
-        const opcionesConcat = respuesta.opcion[0].opcion;
-        const strResponse = respuesta.respuesta !== '' ? respuesta.respuesta : 'Ninguna';
+      const respuestasTablaConOpciones = respuestasConOpciones.map(
+        (respuesta: any) => {
+          const opcionesConcat = respuesta.opcion[0].opcion;
+          const strResponse =
+            respuesta.respuesta !== '' ? respuesta.respuesta : 'Ninguna';
 
-        return [respuesta.pregunta, opcionesConcat, strResponse];
-      });
+          return [respuesta.pregunta, opcionesConcat, strResponse];
+        }
+      );
 
       autoTable(doc, {
         head: [['Pregunta', 'Opción', 'Observaciones']],
@@ -180,9 +185,11 @@ export class EstudianteCuestionarioPsicologiaComponent
     }
 
     if (respuestasSinOpciones.length > 0) {
-      const respuestasTablaSinOpciones = respuestasSinOpciones.map((respuesta) => {
-        return [respuesta.pregunta, respuesta.respuesta] as any;
-      });
+      const respuestasTablaSinOpciones = respuestasSinOpciones.map(
+        respuesta => {
+          return [respuesta.pregunta, respuesta.respuesta] as any;
+        }
+      );
 
       autoTable(doc, {
         head: [['Pregunta', 'Respuesta']],
@@ -220,7 +227,8 @@ export class EstudianteCuestionarioPsicologiaComponent
       if (resp.id_evaluacion === 0) {
         this.userMessage.showMessage = true;
         this.userMessage.type = MessageType.DANGER;
-        this.userMessage.message = 'Ocurrio un error guardando el perfil psicologico';
+        this.userMessage.message =
+          'Ocurrio un error guardando el perfil psicologico';
         this.userMessage.titleMessage = 'Error';
         return;
       }

@@ -52,7 +52,6 @@ export class EstudianteCaracterizacionIniciarComponent
   formModeEnum = FormMode;
   baseUrl = '/menu/saet-caracterizacion-iniciar';
 
-
   respuestasToValues(respuestas: iQuestion[]) {
     const values: IValuesForm = {};
     respuestas.forEach(respuesta => {
@@ -114,15 +113,12 @@ export class EstudianteCaracterizacionIniciarComponent
   ) {
     super(document, catalogoServiceCOR, route, router);
     this.pageLoading = true;
-    // this.userMessage.showMessage = true;
-    // this.userMessage.message = 'test';
     const storedValues = localStorage.getItem('values');
     if (storedValues) {
       this.values = JSON.parse(storedValues);
     }
 
     this.caracterizacionLoaded.then(() => {
-
       this.route.paramMap.subscribe(params => {
         const nie = params.get('nie');
         const formMode = params.get('mode');
@@ -145,11 +141,11 @@ export class EstudianteCaracterizacionIniciarComponent
             break;
         }
 
-        if(
-          this.caracterizacion !== undefined
-          && this.caracterizacion?.id_caracterizacion !== 0
-          && this.formMode === FormMode.CREATE
-        ){
+        if (
+          this.caracterizacion !== undefined &&
+          this.caracterizacion?.id_caracterizacion !== 0 &&
+          this.formMode === FormMode.CREATE
+        ) {
           router.navigate([this.baseUrl, nie, 'view']);
         }
         // handleMode(idCaracterizacion, url, this.formMode, this.nie, this.router);
@@ -176,7 +172,9 @@ export class EstudianteCaracterizacionIniciarComponent
     let currentY = 30;
 
     const title = 'Caracterización de estudiante';
-    const studentName = `${this.studentInfo?.nombreCompleto} | ${this.studentInfo?.nie}` || 'Nombre del estudiante no disponible';
+    const studentName =
+      `${this.studentInfo?.nombreCompleto} | ${this.studentInfo?.nie}` ||
+      'Nombre del estudiante no disponible';
 
     const titleWidth = doc.getTextWidth(title);
     const pageWidth = doc.internal.pageSize.getWidth();
@@ -263,7 +261,6 @@ export class EstudianteCaracterizacionIniciarComponent
     doc.save(`Caracterizacion-estudiante-${this.nie}.pdf`);
 
     this.pageLoading = false;
-
   }
   async retornarCaracterizacion() {
     await this.router.navigate([
@@ -311,11 +308,12 @@ export class EstudianteCaracterizacionIniciarComponent
     const respuestas = this.getAnswerObject(this.values);
 
     console.log('caracterizacion ', this.caracterizacion);
-    if(
+    if (
       this.caracterizacion === undefined ||
-      this.caracterizacion?.id_caracterizacion === 0){
-
-      this.userMessage.message = 'Caracterizacion no fue cargada correctamente, no es posible actualizar';
+      this.caracterizacion?.id_caracterizacion === 0
+    ) {
+      this.userMessage.message =
+        'Caracterizacion no fue cargada correctamente, no es posible actualizar';
       this.userMessage.showMessage = true;
       this.userMessage.titleMessage = 'Advertencia';
       this.userMessage.type = MessageType.WARNING;
@@ -323,7 +321,8 @@ export class EstudianteCaracterizacionIniciarComponent
 
     const idPersona = localStorage.getItem('id_persona');
     if (!idPersona || isNaN(Number(idPersona))) {
-      this.userMessage.message = 'Problemas encontrando especialista responsable, prueba cerrar sesion e iniciar de nuevo';
+      this.userMessage.message =
+        'Problemas encontrando especialista responsable, prueba cerrar sesion e iniciar de nuevo';
       this.userMessage.showMessage = true;
       this.userMessage.titleMessage = 'Advertencia';
       this.userMessage.type = MessageType.WARNING;
@@ -340,7 +339,8 @@ export class EstudianteCaracterizacionIniciarComponent
       grupoFamiliar: [],
     };
     try {
-      const resp = await this.catalogoServiceCOR.updateCaracterizacion(objToSave);
+      const resp =
+        await this.catalogoServiceCOR.updateCaracterizacion(objToSave);
       console.log('respuesta actualizacion ', resp);
       console.log('url here ', this.baseUrl);
       this.router.navigate([this.baseUrl, this.nie, 'view']);
@@ -365,7 +365,8 @@ export class EstudianteCaracterizacionIniciarComponent
     const idPersona = localStorage.getItem('id_persona');
 
     if (!idPersona || isNaN(Number(idPersona))) {
-      this.userMessage.message = 'Especialista no fue cargado correctamente, por favor recargar pagina';
+      this.userMessage.message =
+        'Especialista no fue cargado correctamente, por favor recargar pagina';
       this.userMessage.titleMessage = 'Advertencia';
       this.userMessage.type = MessageType.WARNING;
       return;

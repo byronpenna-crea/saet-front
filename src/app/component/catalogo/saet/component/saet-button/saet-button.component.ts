@@ -9,8 +9,8 @@ import {
 import { getIconClass, IconComponent } from '../../shared/component.config';
 
 export enum ButtonStyle {
-  WHITE,
-  BLUE,
+  WHITE = 0,
+  BLUE = 1,
 }
 
 export interface SaetButtonArgs {

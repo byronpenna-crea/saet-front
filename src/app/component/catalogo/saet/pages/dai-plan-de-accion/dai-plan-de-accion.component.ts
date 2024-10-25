@@ -1,22 +1,22 @@
-import {Component, Inject, ViewChild} from '@angular/core';
-import {DaiBaseComponent} from "../../DaiBaseComponent";
-import {IMessageComponent} from "../../interfaces/message-component.interface";
-import {iQuestion, iSurvey} from "../../shared/survey";
-import {IValuesForm} from "../../QuestionsComponent";
-import {SAET_MODULE} from "../../shared/evaluaciones";
-import {DOCUMENT} from "@angular/common";
-import {CatalogoServiceDai} from "../../../../../services/catalogo/catalogo.service.dai";
-import {ActivatedRoute, Router} from "@angular/router";
-import {ConfirmationService} from "primeng/api";
-import {TabInput} from "../estudiante-evaluaciones/estudiante-evaluaciones.component";
-import {ButtonStyle} from "../../component/saet-button/saet-button.component";
-import {IconComponent} from "../../shared/component.config";
-import {IAgendaEspecialista} from "../../component/saet-tab-agenda/saet-tab-agenda.component";
+import { Component, Inject, ViewChild } from '@angular/core';
+import { DaiBaseComponent } from '../../DaiBaseComponent';
+import { IMessageComponent } from '../../interfaces/message-component.interface';
+import { iQuestion, iSurvey } from '../../shared/survey';
+import { IValuesForm } from '../../QuestionsComponent';
+import { SAET_MODULE } from '../../shared/evaluaciones';
+import { DOCUMENT } from '@angular/common';
+import { CatalogoServiceDai } from '../../../../../services/catalogo/catalogo.service.dai';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ConfirmationService } from 'primeng/api';
+import { TabInput } from '../estudiante-evaluaciones/estudiante-evaluaciones.component';
+import { ButtonStyle } from '../../component/saet-button/saet-button.component';
+import { IconComponent } from '../../shared/component.config';
+import { IAgendaEspecialista } from '../../component/saet-tab-agenda/saet-tab-agenda.component';
 
 @Component({
   selector: 'app-dai-plan-de-accion',
   templateUrl: './dai-plan-de-accion.component.html',
-  styleUrls: ['./dai-plan-de-accion.component.css']
+  styleUrls: ['./dai-plan-de-accion.component.css'],
 })
 export class DaiPlanDeAccionComponent
   extends DaiBaseComponent
@@ -50,8 +50,8 @@ export class DaiPlanDeAccionComponent
     this.especialistaAgendado = {
       nombreCompleto: nombreCompleto,
       dui: dui,
-      especialidad: ""
-    }
+      especialidad: '',
+    };
     console.log('obtener especialista');
     this.pageLoading = false;
   }

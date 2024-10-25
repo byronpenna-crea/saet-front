@@ -8,9 +8,8 @@ describe('DaiPlanDeAccionIniciarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DaiPlanDeAccionIniciarComponent ]
-    })
-    .compileComponents();
+      declarations: [DaiPlanDeAccionIniciarComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(DaiPlanDeAccionIniciarComponent);
     component = fixture.componentInstance;

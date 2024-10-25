@@ -17,8 +17,8 @@ import { TIPO_EVALUACION } from '../../shared/evaluaciones';
 import { KeyValue } from '../../component/saet-input/saet-input.component';
 import { ButtonStyle } from '../../component/saet-button/saet-button.component';
 import { IconComponent } from '../../shared/component.config';
-import jsPDF from "jspdf";
-import autoTable from "jspdf-autotable";
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-estudiante-cuestionario-lenguaje',
@@ -113,7 +113,9 @@ export class EstudianteCuestionarioLenguajeComponent
     console.log('respuestas guardadas --- > ', respuestasServer);
 
     const title = 'Perfil lenguaje y habla de estudiante';
-    const studentName = `${this.studentInfo?.nombreCompleto} | ${this.studentInfo?.nie}` || 'Nombre del estudiante no disponible';
+    const studentName =
+      `${this.studentInfo?.nombreCompleto} | ${this.studentInfo?.nie}` ||
+      'Nombre del estudiante no disponible';
 
     const titleWidth = doc.getTextWidth(title);
     const pageWidth = doc.internal.pageSize.getWidth();
@@ -160,12 +162,15 @@ export class EstudianteCuestionarioLenguajeComponent
     );
 
     if (respuestasConOpciones.length > 0) {
-      const respuestasTablaConOpciones = respuestasConOpciones.map((respuesta: any) => {
-        const opcionesConcat = respuesta.opcion[0].opcion;
-        const strResponse = respuesta.respuesta !== '' ? respuesta.respuesta : 'Ninguna';
+      const respuestasTablaConOpciones = respuestasConOpciones.map(
+        (respuesta: any) => {
+          const opcionesConcat = respuesta.opcion[0].opcion;
+          const strResponse =
+            respuesta.respuesta !== '' ? respuesta.respuesta : 'Ninguna';
 
-        return [respuesta.pregunta, opcionesConcat, strResponse];
-      });
+          return [respuesta.pregunta, opcionesConcat, strResponse];
+        }
+      );
 
       autoTable(doc, {
         head: [['Pregunta', 'Opción', 'Observaciones']],
@@ -189,9 +194,11 @@ export class EstudianteCuestionarioLenguajeComponent
     }
 
     if (respuestasSinOpciones.length > 0) {
-      const respuestasTablaSinOpciones = respuestasSinOpciones.map((respuesta) => {
-        return [respuesta.pregunta, respuesta.respuesta] as any;
-      });
+      const respuestasTablaSinOpciones = respuestasSinOpciones.map(
+        respuesta => {
+          return [respuesta.pregunta, respuesta.respuesta] as any;
+        }
+      );
 
       autoTable(doc, {
         head: [['Pregunta', 'Respuesta']],
@@ -228,7 +235,8 @@ export class EstudianteCuestionarioLenguajeComponent
       if (resp.id_evaluacion === 0) {
         this.userMessage.showMessage = true;
         this.userMessage.type = MessageType.DANGER;
-        this.userMessage.message = 'Ocurrio un error guardando el perfil lenguaje y habla';
+        this.userMessage.message =
+          'Ocurrio un error guardando el perfil lenguaje y habla';
         this.userMessage.titleMessage = 'Error';
         return;
       }
