@@ -182,6 +182,23 @@ export class EstudianteDaiCaracterizacionComponent
       },
     });
   }
+  async salirViewMode() {
+    await this.router.navigate([
+      'menu/dai/saet-datos-estudiante',
+      this.nie,
+    ]);
+    /*this.confirmationService.confirm({
+      message:
+        'Al darle click en <b>Salir de edición sin guardar</b> perderá todo el progreso de edición realizado.',
+      icon: 'pi pi-exclamation-triangle',
+      accept: () => {
+        console.log('acept');
+      },
+      reject: () => {
+        console.log('reject');
+      },
+    });*/
+  }
 
   getQuestionType(type: string): QuestionType {
     return QuestionType[type as keyof typeof QuestionType];
@@ -191,7 +208,7 @@ export class EstudianteDaiCaracterizacionComponent
   }
   async rejectConfirmDialog() {
     await this.router.navigate([
-      'menu/saet-caracterizacion-estudiante',
+      'menu/dai/saet-datos-estudiante',
       this.nie,
     ]);
   }

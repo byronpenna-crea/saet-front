@@ -123,9 +123,9 @@
 
     <div *ngIf="formMode === formModeEnum.VIEW" class="actionsButton">
       <app-saet-button
-        (click)="salir()"
+        (click)="salirViewMode()"
         [buttonArgs]="{
-          text: 'Regresar a la caracterización',
+          text: 'Regresar a datos generales',
           buttonStyle: btnStyle.BLUE,
           buttonIcon: iconCompoment.LEFT_ARROW
         }"
