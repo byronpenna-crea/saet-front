@@ -7,11 +7,13 @@ import {
 } from '../../../services/catalogo/catalogo.service.cor';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CatalogoServiceDai } from '../../../services/catalogo/catalogo.service.dai';
+import {FormMode} from "./QuestionsComponent";
 
 @Injectable()
 export class DaiBaseComponent extends BaseComponent implements OnInit {
   caracterizacion: IGetCaracterizacion | undefined;
-
+  idPersona = 0;
+  formMode: FormMode = FormMode.CREATE;
   protected loadStudentInfo(): Promise<StudentInfoResponse> {
     return this.catalogoServiceDai
       .getStudentInfo(this.nie)

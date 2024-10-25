@@ -105,6 +105,10 @@ export interface ISaveQuestionary extends IQuestionaryHeader {
   id_evaluacion: number | null;
   respuestas: iQuestionSave[];
 }
+export interface IUpdatePlanAccion {
+  id_plan_accion: number | null;
+  respuestas: iQuestionSave[];
+}
 export interface IUpdateCaracterizacionDAI {
   id_caracterizacion: number | null;
   id_docente_apoyo: number;
@@ -128,10 +132,36 @@ export interface IUpdateCaracterizacion {
     ocupacion: string;
   }[];
 }
+export interface IPlanAccionResponse {
+  id_responsable: number,
+  plan_accion_pk: number,
+  responsable_plan_accion: string
+  respuestas: iQuestionSave[];
+}
 export interface IPaeiResponse {
   id_paei: number;
   respuestas: iQuestionSave[];
 }
+export interface ISavePlanAccion {
+  id_estudiante_fk: number,
+  id_docente_apoyo: number,
+  respuestas: iQuestionSave[];
+}
+export interface IRespPlanAccion extends ISavePlanAccion {
+  plan_accion_pk: number;
+}
+/*
+id_docente_apoyo
+:
+6846823
+id_estudiante_fk
+:
+4542303
+
+:
+3
+* */
+
 export interface ISaveCaracterizacionDAI {
   id_caracterizacion: number | null;
   id_docente_apoyo: number;

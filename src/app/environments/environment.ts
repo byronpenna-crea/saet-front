@@ -4,5 +4,6 @@ export const environment = {
   API_SERVER_PORT: '443',
   production: false,
   API_SERVER_URL: `https://crea.ritsasv.com/sgpa_saet-0.0.1-SNAPSHOT`,
+  //API_SERVER_URL: `http://192.168.1.12:8085`,
   API_SERVER_URL_SEGURIDAD: `https://www.clases.edu.sv/apiseguridad`,
 };

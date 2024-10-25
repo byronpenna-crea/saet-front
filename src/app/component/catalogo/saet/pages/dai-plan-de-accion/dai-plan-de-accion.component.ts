@@ -11,6 +11,7 @@ import {ConfirmationService} from "primeng/api";
 import {TabInput} from "../estudiante-evaluaciones/estudiante-evaluaciones.component";
 import {ButtonStyle} from "../../component/saet-button/saet-button.component";
 import {IconComponent} from "../../shared/component.config";
+import {IAgendaEspecialista} from "../../component/saet-tab-agenda/saet-tab-agenda.component";
 
 @Component({
   selector: 'app-dai-plan-de-accion',
@@ -25,6 +26,10 @@ export class DaiPlanDeAccionComponent
   values: { [key: string]: string } = {};
   corSurveys: iSurvey[] = [];
   baseUrl = '/menu/dai/plan-accion';
+  especialistaAgendado: IAgendaEspecialista = {
+    dui: '',
+    nombreCompleto: '',
+  };
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceDai: CatalogoServiceDai,
@@ -34,6 +39,20 @@ export class DaiPlanDeAccionComponent
   ) {
     super(document, catalogoServiceDai, route, router);
     this.pageLoading = true;
+
+    const storedValues = localStorage.getItem(`plan-accion-${this.nie}`);
+    if (storedValues) {
+      this.values = JSON.parse(storedValues);
+    }
+
+    const nombreCompleto = `${localStorage.getItem('nombre') ?? ''}`;
+    const dui = localStorage.getItem('dui') ?? '';
+    this.especialistaAgendado = {
+      nombreCompleto: nombreCompleto,
+      dui: dui,
+      especialidad: ""
+    }
+    console.log('obtener especialista');
     this.pageLoading = false;
   }
   respuestasToValues(respuestas: iQuestion[]) {
@@ -52,7 +71,8 @@ export class DaiPlanDeAccionComponent
 
   protected readonly SAET_MODULE = SAET_MODULE;
   async iniciar() {
-    await this.router.navigate(['/menu/saet-lenguaje-habla/', this.nie]);
+    console.log('iniciar --->');
+    await this.router.navigate(['menu/dai/saet-plan-accion-iniciar', this.nie]);
   }
   acceptConfirmDialog() {
     this.confirmationService.close();

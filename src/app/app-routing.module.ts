@@ -93,47 +93,83 @@ const routes: Routes = [
         component: EstudianteDatosGeneralesComponent,
       },
       {
-        path: 'dai/saet-datos-estudiante/:nie',
-        component: DaiEstudianteDatosGeneralesComponent,
-      },
-      {
         path: 'saet-caracterizacion-estudiante/:nie',
         component: EstudianteCaracterizacionComponent,
       },
       {
-        path: 'dai/saet-caracterizacion-estudiante/:nie',
-        component: EstudianteDaiCaracterizacionComponent,
+        path: 'dai',
+        children: [
+          {
+            path: 'saet-datos-estudiante/:nie',
+            component: DaiEstudianteDatosGeneralesComponent,
+          },
+          {
+            path: 'saet-caracterizacion-estudiante/:nie',
+            component: EstudianteDaiCaracterizacionComponent,
+          },
+          {
+            path: 'saet-caracterizacion-estudiante/:nie/:mode',
+            component: EstudianteDaiCaracterizacionComponent,
+          },
+          {
+            path: 'saet-plan-accion/:nie',
+            component: DaiPlanDeAccionComponent,
+          },
+          {
+            path: 'saet-plan-accion/:nie/:mode',
+            component: DaiPlanDeAccionComponent,
+          },
+          {
+            path: 'saet-plan-accion-iniciar/:nie',
+            component: DaiPlanDeAccionIniciarComponent,
+          },
+          {
+            path: 'plan-accion-iniciar/:nie/:mode',
+            component: DaiPlanDeAccionIniciarComponent,
+          },
+          {
+            path: 'atencion-personalizada/:nie',
+            component: DaiAtencionPersonalizadaComponent,
+          },
+          {
+            path: 'atencion-personalizada/:nie/:mode',
+            component: DaiAtencionPersonalizadaComponent,
+          }
+        ]
       },
       {
-        path: 'dai/saet-caracterizacion-estudiante/:nie/:mode',
-        component: EstudianteDaiCaracterizacionComponent,
-      },
-      {
-        path: 'dai/saet-plan-accion/:nie',
-        component: DaiPlanDeAccionComponent,
-      },
-      {
-        path: 'dai/saet-plan-accion/:nie/:mode',
-        component: DaiPlanDeAccionComponent,
-      },
-      {
-        path: 'dai/saet-plan-accion-iniciar/:nie',
-        component: DaiPlanDeAccionIniciarComponent,
-      },
-      {
-        path: 'dai/plan-accion-iniciar/:nie/:mode',
-        component: DaiPlanDeAccionIniciarComponent,
-      },
-      {
-        path: 'dai/saet-atencion-personalizada/:nie',
-        component: DaiAtencionPersonalizadaComponent,
-      },
-      {
-        path: 'dai/saet-atencion-personalizada/:nie/:mode',
-        component: DaiAtencionPersonalizadaComponent,
+        path: 'dei',
+        children: [
+          // INFORME CUALITATIVO
+          {
+            path: 'informe-cualitativo/:nie',
+            component: EstudianteDeiInformeCualitativoComponent,
+          },
+          {
+            path: 'informe-cualitativo',
+            component: EstudianteDeiInformeCualitativoComponent,
+          },
+          // INFORME CUANTITATIVO
+          {
+            path: 'informe-cuantitativo/:nie',
+            component: EstudianteDeiInformeCuantitativoComponent,
+          },
+          {
+            path: 'informe-cuantitativo',
+            component: EstudianteDeiInformeCuantitativoComponent,
+          },
+          // INFORME TRIMESTRAL
+          {
+            path: 'informe-trimestral/:dui',
+            component: EstudianteDeiInformeTrimestralComponent,
+          },
+          {
+            path: 'informe-trimestral',
+            component: EstudianteDeiInformeTrimestralComponent,
+          },
+        ]
       },
       { path: 'saet-pdf/:name', component: EstudiantePdfComponent },
-
       {
         path: 'saet-caracterizacion-iniciar/:nie',
         component: EstudianteCaracterizacionIniciarComponent,
@@ -141,33 +177,6 @@ const routes: Routes = [
       {
         path: 'saet-caracterizacion-iniciar/:nie/:mode',
         component: EstudianteCaracterizacionIniciarComponent,
-      },
-      // INFORME CUALITATIVO
-      {
-        path: 'dei/informe-cualitativo/:nie',
-        component: EstudianteDeiInformeCualitativoComponent,
-      },
-      {
-        path: 'dei/informe-cualitativo',
-        component: EstudianteDeiInformeCualitativoComponent,
-      },
-      // INFORME CUANTITATIVO
-      {
-        path: 'dei/informe-cuantitativo/:nie',
-        component: EstudianteDeiInformeCuantitativoComponent,
-      },
-      {
-        path: 'dei/informe-cuantitativo',
-        component: EstudianteDeiInformeCuantitativoComponent,
-      },
-      // INFORME TRIMESTRAL
-      {
-        path: 'dei/informe-trimestral/:dui',
-        component: EstudianteDeiInformeTrimestralComponent,
-      },
-      {
-        path: 'dei/informe-trimestral',
-        component: EstudianteDeiInformeTrimestralComponent,
       },
 
       // -----------------------

@@ -105,7 +105,7 @@ export class EstudianteDetallePaeiComponent
   getBase64Image(url: string): Promise<string> {
     return new Promise((resolve, reject) => {
       const img = new Image();
-      img.crossOrigin = 'Anonymous'; // Permitir carga de imágenes de diferentes orígenes
+      img.crossOrigin = 'Anonymous';
       img.src = url;
       img.onload = () => {
         const canvas = document.createElement('canvas');

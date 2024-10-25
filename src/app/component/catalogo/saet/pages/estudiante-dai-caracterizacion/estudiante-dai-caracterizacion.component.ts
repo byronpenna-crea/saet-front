@@ -106,9 +106,20 @@ export class EstudianteDaiCaracterizacionComponent
       this.nie
     );
     const questionPromise = catalogoServiceDai.getDaiCaracterizacionQuestion();
-    Promise.all([caracterizacionNiePromise, questionPromise]).then(([caracterizacionNieResult,questionResult]) => {
+
+    Promise.all([caracterizacionNiePromise]).then(([caracterizacionNieResult]) => {
+      console.log('caracterizacion result ----> ', caracterizacionNieResult);
       this.caracterizacion = caracterizacionNieResult;
+    }).catch(() => {
+
+    })
+
+    Promise.all([questionPromise]).then(([questionResult]) => {
       this.corSurveys.push(...questionResult.cuestionarios);
+
+    }).catch(() =>{
+
+    }).finally(() => {
 
       const storedValues = localStorage.getItem(`dai-caracterizacion-${this.nie}`);
       if (storedValues) {
@@ -121,10 +132,8 @@ export class EstudianteDaiCaracterizacionComponent
       this.pageLoading = false;
     })
 
-
     this.init();
   }
-  formMode: FormMode = FormMode.CREATE;
   formModeEnum = FormMode;
 
 
@@ -334,7 +343,7 @@ export class EstudianteDaiCaracterizacionComponent
   async generatePDF() {
 
     console.log('caracterizacion aca --------------- >', this.caracterizacion);
-    /*this.pageLoading = true;
+    this.pageLoading = true;
     const doc = new jsPDF();
     let currentY = 30;
     const title = 'Caracterización hecha por DAI del estudiante';
@@ -424,7 +433,7 @@ export class EstudianteDaiCaracterizacionComponent
     console.log('Respuestas ---- ', this.caracterizacion?.respuestas);
     doc.save(`Caracterizacion-dai-estudiante-${this.nie}.pdf`);
 
-    this.pageLoading = false;*/
+    this.pageLoading = false;
   }
 
   protected readonly SAET_MODULE = SAET_MODULE;

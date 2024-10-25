@@ -5,13 +5,14 @@ import {Router} from "@angular/router";
 import {CookieService} from "ngx-cookie-service";
 import {SurveyResponse} from "../../component/catalogo/saet/shared/survey";
 import {
-  IGetCaracterizacion,
+  IGetCaracterizacion, IPaeiResponse, IPlanAccionResponse, IRespPlanAccion,
   ISaveCaracterizacion,
-  ISaveCaracterizacionDAI,
+  ISaveCaracterizacionDAI, ISavePlanAccion, ISaveQuestionary,
   IUpdateCaracterizacion,
-  IUpdateCaracterizacionDAI, ResponseError
+  IUpdateCaracterizacionDAI, IUpdatePlanAccion, ResponseError
 } from "./catalogo.service.cor";
 import {HttpMethod} from "../shared/saet-types";
+import {PersonaApoyo} from "./catalogo.service.dei";
 
 @Injectable({
   providedIn: 'root',
@@ -51,6 +52,23 @@ export class CatalogoServiceDai extends CatalogoServiceSaet {
       caracterizacion
     );
   }
+  public  savePlanAccion(cuestionarioPsicologia: ISavePlanAccion): Promise<IRespPlanAccion>  {
+    const url = `${this.API_SERVER_URL}/dai/plan_accion`;
+    return this.postRequest<ISavePlanAccion, IRespPlanAccion>(
+      url,
+      cuestionarioPsicologia
+    );
+  }
+  public updatePlanDeAccion(plan: IUpdatePlanAccion){ //: Promise<PersonaApoyo>
+    const url = `${this.API_SERVER_URL}/dai/plan_accion`;
+    return this.putRequest<IUpdatePlanAccion, IUpdatePlanAccion>(
+      url,
+      {
+        id_plan_accion: plan.id_plan_accion,
+        respuestas: plan.respuestas
+      }
+    );
+  }
   public updateCaracterizacion(caracterizacion: ISaveCaracterizacionDAI) {
     const url = `${this.API_SERVER_URL}/caracterizacion/dai/preguntas`;
     return this.putRequest<IUpdateCaracterizacionDAI, IUpdateCaracterizacionDAI>(
@@ -62,7 +80,28 @@ export class CatalogoServiceDai extends CatalogoServiceSaet {
       }
     );
   }
+  public async getPlanAccionPerNIE(nie:string): Promise<IPlanAccionResponse> {
+    try {
+      const url = `${this.API_SERVER_URL}/dai/plan_accion/preguntas/${nie}`;
+      const response = await this.doRequest<undefined>(
+        url,
+        undefined,
+        HttpMethod.GET
+      );
+      console.log('response get ', response);
 
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(JSON.stringify(errorResponse));
+      }
+
+      return response.json();
+    } catch (e: unknown) {
+      const error = e as Error;
+      const errorDetails = JSON.parse(error.message);
+      throw new Error(errorDetails.message);
+    }
+  }
   public async getPlanAccionQuestion(): Promise<SurveyResponse>{
     try {
       const url = `${this.API_SERVER_URL}/dai/plan_accion/preguntas`;
