@@ -12,8 +12,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
 import { IconComponent, QuestionType } from '../../shared/component.config';
 import { KeyValue } from '../../component/saet-input/saet-input.component';
-import { FormMode } from '../../QuestionsComponent';
+import {FormMode, IValuesForm} from '../../QuestionsComponent';
 import {
+  IEvaluacionResponse,
   ISavePlanAccion,
   ISaveQuestionary, IUpdatePlanAccion,
 } from '../../../../../services/catalogo/catalogo.service.cor';
@@ -377,6 +378,17 @@ export class DaiPlanDeAccionIniciarComponent
           .then(resp => {
             console.log('plan de accion por nie -------> ', resp);
             this.idEvaluacion = resp.plan_accion_pk;
+            const evaluation: IEvaluacionResponse = {
+              respuestas: resp.respuestas,
+              id_evaluacion: resp.plan_accion_pk,
+              especialista_responsable: ''
+            }
+            console.log('depurados ', this.responseToValues(evaluation));
+            this.values = {
+              ...this.responseToValues(evaluation),
+              ...this.values,
+            };
+
             if (this.formMode === FormMode.CREATE && resp.plan_accion_pk !== 0){
               this.router.navigate([this.baseUrl, this.nie, 'view']);
             }
@@ -396,7 +408,30 @@ export class DaiPlanDeAccionIniciarComponent
       }
     });
   }
+  responseToValues(response: IEvaluacionResponse): IValuesForm {
+    const values: IValuesForm = {};
 
+    response.respuestas.forEach(respuesta => {
+      const radioKey = `radio_${respuesta.id_pregunta}`;
+      const inputKey =  `input_${respuesta.id_pregunta}`;
+
+      if (respuesta.opcion.length > 0) {
+        values[radioKey] =
+          respuesta.opcion[0].opcion_pregunta_pk !== undefined
+            ? respuesta.opcion[0].opcion_pregunta_pk.toString()
+            : '';
+      }
+
+      if(respuesta.id_pregunta >= 161 && respuesta.id_pregunta <= 167){
+        // manejo temporal de richtext
+        values[`richtext_${respuesta.id_pregunta}`] = respuesta.respuesta;
+      }else{
+        values[inputKey] = respuesta.respuesta;
+      }
+    });
+
+    return values;
+  }
   onchangeQuestions(keyValue: KeyValue) {
     console.log('onchange ', keyValue);
     this.values[keyValue.key] = keyValue.value;
