@@ -59,7 +59,7 @@ export class CatalogoServiceDai extends CatalogoServiceSaet {
       cuestionarioPsicologia
     );
   }
-  public updatePlanDeAccion(plan: IUpdatePlanAccion){ //: Promise<PersonaApoyo>
+  public updatePlanDeAccion(plan: IUpdatePlanAccion): Promise<IUpdatePlanAccion>{
     const url = `${this.API_SERVER_URL}/dai/plan_accion`;
     return this.putRequest<IUpdatePlanAccion, IUpdatePlanAccion>(
       url,

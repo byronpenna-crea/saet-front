@@ -55,6 +55,8 @@ export class EstudianteDaiCaracterizacionComponent
     });
     return values;
   }
+
+  stringBreadCrumbAction = '';
   init() {
     this.route.paramMap.subscribe(params => {
       const storedValues = localStorage.getItem(
@@ -68,12 +70,15 @@ export class EstudianteDaiCaracterizacionComponent
       switch (formMode) {
         case null:
           this.formMode = FormMode.CREATE;
+          this.stringBreadCrumbAction = '';
           break;
         case 'view':
           this.formMode = FormMode.VIEW;
+          this.stringBreadCrumbAction = 'Vista';
           break;
         case 'edit':
           this.formMode = FormMode.EDIT;
+          this.stringBreadCrumbAction = 'Edición';
           break;
       }
       if (this.formMode === FormMode.VIEW) {
@@ -213,7 +218,7 @@ export class EstudianteDaiCaracterizacionComponent
     const currentUrl = this.router.url;
     const newUrl = currentUrl.replace('/view', '/edit');
     this.formMode = FormMode.EDIT;
-    this.router.navigateByUrl(newUrl);
+    await this.router.navigateByUrl(newUrl);
   }
   validarPreguntas(respuestas: IQuestionaryAnswer[], cuestionarios: iSurvey[]) {
     const idsValidos = new Set();
@@ -282,7 +287,14 @@ export class EstudianteDaiCaracterizacionComponent
       this.pageLoading = false;
     }
   }
-  async retornarCaracterizacion() {}
+  async salirEditMode() {
+    this.userMessage.showMessage = false;
+
+    const currentUrl = this.router.url;
+    const newUrl = currentUrl.replace('/edit', '/view');
+    this.formMode = FormMode.CREATE;
+    await this.router.navigateByUrl(newUrl);
+  }
   async update() {
     this.pageLoading = true;
     this.userMessage.showMessage = false;

@@ -13,11 +13,7 @@
 />
 <app-saet-loading [isLoading]="pageLoading" [message]="loadingMessage" />
 
-<app-saet-mensaje-usuario
-  [show]="userMessage.showMessage"
-  [message]="userMessage.message"
-  [title]="userMessage.titleMessage"
-/>
+
 <app-saet-confirm
   acceptButtonText="Continuar editando"
   cancelButtonText="Salir sin guardar"
@@ -28,6 +24,12 @@
   [rejectIcon]="iconCompoment.CLOSE"
 />
 <div class="form-container">
+  <app-saet-mensaje-usuario
+    [show]="userMessage.showMessage"
+    [message]="userMessage.message"
+    [title]="userMessage.titleMessage"
+  />
+
   <ng-container *ngFor="let corSurvey of corSurveys">
     <div style="margin-top: 5%">
       <app-tabs [legend]="corSurvey.titulo">
@@ -96,6 +98,12 @@
       </app-tabs>
     </div>
   </ng-container>
+
+  <app-saet-mensaje-usuario
+    [show]="userMessage.showMessage"
+    [message]="userMessage.message"
+    [title]="userMessage.titleMessage"
+  />
   <div *ngIf="showActionButtons" style="margin-top: 30px">
     <div *ngIf="formMode === formModeEnum.CREATE" class="actionsButton">
       <app-saet-button
@@ -111,6 +119,14 @@
         (onClick)="save()"
         [buttonArgs]="{ text: 'Guardar', buttonStyle: btnStyle.BLUE }"
       />
+      <app-saet-button
+        (onClick)="generatePDF()"
+        [buttonArgs]="{
+            text: 'Generar PDF',
+            buttonIcon: btnIcon.PRINTER,
+            buttonStyle: btnStyle.BLUE
+          }"
+      />
     </div>
     <div *ngIf="formMode === formModeEnum.EDIT" class="actionsButton">
       <app-saet-button
@@ -122,13 +138,25 @@
         }"
       />
 
-      <app-saet-button
-        (onClick)="save()"
-        [buttonArgs]="{
+      <div class="right-buttons">
+
+        <app-saet-button
+          (onClick)="save()"
+          [buttonArgs]="{
           text: 'Actualizar registro',
           buttonStyle: btnStyle.BLUE
         }"
-      />
+        />
+        <app-saet-button
+          (onClick)="generatePDF()"
+          [buttonArgs]="{
+            text: 'Generar PDF',
+            buttonIcon: btnIcon.PRINTER,
+            buttonStyle: btnStyle.BLUE
+          }"
+        />
+      </div>
+
     </div>
     <div *ngIf="formMode === formModeEnum.VIEW" class="actionsButton">
       <app-saet-button

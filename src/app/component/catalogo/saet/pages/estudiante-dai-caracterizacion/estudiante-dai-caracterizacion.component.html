@@ -91,7 +91,7 @@
     <div *ngIf="formMode === formModeEnum.EDIT" class="actionsButton">
       <div style="width: 300px">
         <app-saet-button
-          (onClick)="retornarCaracterizacion()"
+          (onClick)="salirEditMode()"
           [buttonArgs]="{
             text: 'Regresar a la caracterización',
             buttonStyle: btnStyle.BLUE,

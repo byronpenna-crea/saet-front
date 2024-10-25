@@ -30,6 +30,12 @@
   [rejectIcon]="iconCompoment.CLOSE"
 />
 <div class="form-container">
+  <app-saet-mensaje-usuario
+    [show]="userMessage.showMessage"
+    [message]="userMessage.message"
+    [title]="userMessage.titleMessage"
+    [messageType]="userMessage.type"
+  />
   <ng-container *ngFor="let corSurvey of corSurveys">
     <div style="margin-top: 5%">
       <app-tabs [legend]="corSurvey.titulo">
@@ -54,7 +60,12 @@
       </app-tabs>
     </div>
   </ng-container>
-
+  <app-saet-mensaje-usuario
+    [show]="userMessage.showMessage"
+    [message]="userMessage.message"
+    [title]="userMessage.titleMessage"
+    [messageType]="userMessage.type"
+  />
   <div *ngIf="showActionButtons" style="margin-top: 30px">
     <div *ngIf="formMode === formModeEnum.CREATE" class="actionsButton">
       <app-saet-button
@@ -80,13 +91,23 @@
           buttonIcon: btnIcon.CLOSE
         }"
       />
-      <app-saet-button
-        (onClick)="update()"
-        [buttonArgs]="{
-          text: 'Actualizar registro',
-          buttonStyle: btnStyle.BLUE
-        }"
-      />
+      <div class="right-buttons">
+        <app-saet-button
+          (onClick)="update()"
+          [buttonArgs]="{
+            text: 'Actualizar registro',
+            buttonStyle: btnStyle.BLUE
+          }"
+        />
+        <app-saet-button
+          (onClick)="generatePDF()"
+          [buttonArgs]="{
+              text: 'Generar PDF',
+              buttonIcon: btnIcon.PRINTER,
+              buttonStyle: btnStyle.BLUE
+            }"
+        />
+      </div>
     </div>
     <div *ngIf="formMode === formModeEnum.VIEW" class="actionsButton">
       <app-saet-button

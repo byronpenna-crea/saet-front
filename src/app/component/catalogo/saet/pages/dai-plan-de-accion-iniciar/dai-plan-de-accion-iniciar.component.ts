@@ -251,13 +251,19 @@ export class DaiPlanDeAccionIniciarComponent
       const resp =
         await this.catalogoServiceDai.updatePlanDeAccion(updatePlanDeAccion);
         console.log('saved ', resp);
-      /*if (resp.plan_accion_pk === 0) {
-        this.userMessage.showMessage = true;
-        this.userMessage.type = MessageType.DANGER;
-        this.userMessage.message = 'Ocurrio un error al guardar plan de accion';
-        this.userMessage.titleMessage = 'Error';
-        return;
-      }*/
+        if (resp.id_plan_accion === 0) {
+          this.userMessage.showMessage = true;
+          this.userMessage.type = MessageType.DANGER;
+          this.userMessage.message = 'Ocurrio un error al guardar plan de accion';
+          this.userMessage.titleMessage = 'Error';
+          return;
+        }
+
+      this.userMessage.showMessage = true;
+      this.userMessage.type = MessageType.SUCCESS;
+      this.userMessage.message = '¡Los datos han sido guardados exitosamente!';
+      this.userMessage.titleMessage = 'Datos guardados';
+
       //await this.router.navigate([this.baseUrl, this.nie, 'view']);
     } catch (e) {
       console.log('Error ---- ', e);
@@ -315,7 +321,7 @@ export class DaiPlanDeAccionIniciarComponent
     }
   }
   async salirEditMode() {
-    console.log('saliendo de modo edicion ----------');
+    this.userMessage.showMessage = false;
     const currentUrl = this.router.url;
     const newUrl = currentUrl.replace('/edit', '/view');
     this.updateStoredValues(this.valuesKey);
@@ -344,6 +350,7 @@ export class DaiPlanDeAccionIniciarComponent
     };
   }
   salir() {
+    this.userMessage.showMessage = false;
     this.confirmationService.confirm({
       message:
         'Al darle click en <b>Salir de edición sin guardar</b> perderá todo el progreso de edición realizado.',

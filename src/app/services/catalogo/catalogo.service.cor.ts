@@ -105,6 +105,10 @@ export interface ISaveQuestionary extends IQuestionaryHeader {
   id_evaluacion: number | null;
   respuestas: iQuestionSave[];
 }
+export interface IUpdatePlanAccionResponse {
+  id_plan_accion: number | null;
+  respuestas: iQuestionSave[];
+}
 export interface IUpdatePlanAccion {
   id_plan_accion: number | null;
   respuestas: iQuestionSave[];

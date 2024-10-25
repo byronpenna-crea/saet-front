@@ -254,6 +254,7 @@ export class EstudianteDetallePaeiComponent
   }
   async save() {
     this.pageLoading = true;
+    this.userMessage.showMessage = false;
     const respuestas: IQuestionaryAnswer[] = this.getAnswerObject(this.values);
     const objToSave: iPaeiSave = {
       id_paei: this.paeiId,
@@ -267,10 +268,21 @@ export class EstudianteDetallePaeiComponent
     console.log('obj to save', objToSave);
     try {
       const resp = await this.catalogoServiceCOR.savePAEI(objToSave);
-      console.log('saved ', resp);
-      this.userMessage.titleMessage = '';
-      this.userMessage.message = '';
-      this.userMessage.type = MessageType.SUCCESS;
+      if(resp.id_paei === 0){
+        this.userMessage = {
+          showMessage: true,
+          message: 'Ocurrio un error guardando el paei',
+          titleMessage: 'Advertencia',
+          type: MessageType.SUCCESS,
+        };
+        return;
+      }
+      this.userMessage = {
+        showMessage: true,
+        message: '¡Los datos han sido guardados exitosamente!',
+        titleMessage: 'Datos guardados',
+        type: MessageType.SUCCESS,
+      };
     } catch (e) {
       console.log('error ---- ', e);
     }

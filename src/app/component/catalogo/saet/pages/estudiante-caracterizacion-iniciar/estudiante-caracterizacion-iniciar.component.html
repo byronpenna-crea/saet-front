@@ -11,7 +11,7 @@
       href: '#/menu/saet-caracterizacion-estudiante/' + nie,
       text: 'Caracterización'
     },
-    { href: '', text: 'Edición' }
+    { href: '', text: stringBreadCrumbAction }
   ]"
 />
 
@@ -34,7 +34,7 @@
 </div>
 <div class="form-container">
   <app-saet-loading [isLoading]="pageLoading" [message]="loadingMessage" />
-  <app-saet-form-table [data]="guardianControlData" />
+<!--  <app-saet-form-table [data]="guardianControlData" />-->
   <ng-container *ngIf="!pageLoading">
     <ng-container *ngFor="let corSurvey of corSurveys">
       <div style="margin-top: 5%">
@@ -95,7 +95,7 @@
         <app-saet-button
           (click)="salir()"
           [buttonArgs]="{
-            text: 'Regresar a la caracterización',
+            text: 'Salir modo edicion',
             buttonStyle: btnStyle.BLUE,
             buttonIcon: iconCompoment.LEFT_ARROW
           }"
@@ -135,11 +135,11 @@
       <div class="right-buttons">
         <app-saet-button
           (onClick)="entrarEditMode()"
-          [buttonArgs]="{ text: 'Editar', buttonStyle: 1 }"
+          [buttonArgs]="{ text: 'Editar', buttonStyle: ButtonStyle.BLUE }"
         />
         <app-saet-button
           (onClick)="generatePDF()"
-          [buttonArgs]="{ text: 'Generar PDF', buttonStyle: 1 }"
+          [buttonArgs]="{ text: 'Generar PDF', buttonStyle: ButtonStyle.BLUE }"
         />
       </div>
     </div>

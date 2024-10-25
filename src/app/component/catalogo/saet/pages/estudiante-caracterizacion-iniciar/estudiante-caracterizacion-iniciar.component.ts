@@ -25,6 +25,7 @@ import {
 import { handleMode } from '../../shared/forms';
 import { SAET_MODULE } from '../../shared/evaluaciones';
 import { FormTablePariente } from '../../component/saet-form-table/saet-form-table.component';
+import {ButtonStyle} from "../../component/saet-button/saet-button.component";
 
 interface IinformationTab {
   labels: string[];
@@ -51,7 +52,7 @@ export class EstudianteCaracterizacionIniciarComponent
   corSurveys: iSurvey[] = [];
   formModeEnum = FormMode;
   baseUrl = '/menu/saet-caracterizacion-iniciar';
-
+  stringBreadCrumbAction = '';
   respuestasToValues(respuestas: iQuestion[]) {
     const values: IValuesForm = {};
     respuestas.forEach(respuesta => {
@@ -72,16 +73,18 @@ export class EstudianteCaracterizacionIniciarComponent
         this.values = JSON.parse(storedValues);
       }
       const formMode = params.get('mode');
-      console.log('form mode on init', formMode);
       switch (formMode) {
         case null:
           this.formMode = FormMode.CREATE;
+          this.stringBreadCrumbAction = '';
           break;
         case 'view':
           this.formMode = FormMode.VIEW;
+          this.stringBreadCrumbAction = 'Vista';
           break;
         case 'edit':
           this.formMode = FormMode.EDIT;
+          this.stringBreadCrumbAction = 'Edición';
           break;
       }
       console.log('form mode updated ', this.formMode);
@@ -276,7 +279,13 @@ export class EstudianteCaracterizacionIniciarComponent
     this.router.navigateByUrl(newUrl);
   }
   async salir() {
-    this.confirmationService.confirm({
+    this.userMessage.showMessage = false;
+    const currentUrl = this.router.url;
+    const newUrl = currentUrl.replace('/edit', '/view');
+    this.formMode = FormMode.VIEW;
+    //this.updateStoredValues(`${this.targetEspecialidad}_values`);
+    await this.router.navigateByUrl(newUrl);
+    /*this.confirmationService.confirm({
       message:
         'Al darle click en <b>Salir de edición sin guardar</b> perderá todo el progreso de edición realizado.',
       icon: 'pi pi-exclamation-triangle',
@@ -286,7 +295,7 @@ export class EstudianteCaracterizacionIniciarComponent
       reject: () => {
         console.log('reject');
       },
-    });
+    });*/
   }
   validarPreguntas(respuestas: IQuestionaryAnswer[], cuestionarios: iSurvey[]) {
     const idsValidos = new Set();
@@ -305,6 +314,8 @@ export class EstudianteCaracterizacionIniciarComponent
   async update() {
     this.pageLoading = true;
     this.loadingMessage = 'Actualizando caracterizacion';
+    this.userMessage.showMessage = false;
+
     const respuestas = this.getAnswerObject(this.values);
 
     console.log('caracterizacion ', this.caracterizacion);
@@ -338,12 +349,24 @@ export class EstudianteCaracterizacionIniciarComponent
       respuestas: this.validarPreguntas(respuestas, this.corSurveys),
       grupoFamiliar: [],
     };
+    console.log('obj to save', objToSave);
     try {
       const resp =
         await this.catalogoServiceCOR.updateCaracterizacion(objToSave);
       console.log('respuesta actualizacion ', resp);
-      console.log('url here ', this.baseUrl);
-      this.router.navigate([this.baseUrl, this.nie, 'view']);
+      if(resp.id_caracterizacion === 0){
+        this.userMessage.showMessage = true;
+        this.userMessage.type = MessageType.DANGER;
+        this.userMessage.message = 'Ocurrio un error al guardar caracterizacion';
+        this.userMessage.titleMessage = 'Error';
+        return;
+      }
+
+      this.userMessage.showMessage = true;
+      this.userMessage.type = MessageType.SUCCESS;
+      this.userMessage.message = '¡Los datos han sido guardados exitosamente!';
+      this.userMessage.titleMessage = 'Datos guardados';
+      //this.router.navigate([this.baseUrl, this.nie, 'view']);
     } catch (e) {
       console.log('error e', e);
       const error = e as Error;
@@ -378,7 +401,7 @@ export class EstudianteCaracterizacionIniciarComponent
       id_especialista: parseInt(idPersona) ?? 0,
       id_docente_apoyo: 0,
       id_modulo: SAET_MODULE.COR,
-      respuestas: this.validarPreguntas(respuestas, this.corSurveys),
+      respuestas: this.getAnswerObject(this.values),
       grupoFamiliar: [],
     };
     if (objToSave.respuestas.length === 0) {
@@ -462,4 +485,6 @@ export class EstudianteCaracterizacionIniciarComponent
         }) as KeyValue
     );
   }
+
+  protected readonly ButtonStyle = ButtonStyle;
 }
