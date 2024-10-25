@@ -69,7 +69,7 @@ export class BaseComponent {
       const studentNameX = (pageWidth - studentNameWidth) / 2;
       doc.text(studentName, studentNameX, currentY);
       currentY += 20; // Espacio debajo del nombre del estudiante
-
+      let currentPage = 1;
       survey.forEach(cuestionario => {
         const respuestas =
           answers
@@ -106,13 +106,16 @@ export class BaseComponent {
             startY: currentY,
             margin: { bottom: 30 }, // Espacio inferior para el logo y número de página
             didDrawPage: data => {
-              // Añadir el logo en la esquina inferior izquierda
+
+              if (data.pageNumber > currentPage) {
+                currentPage = data.pageNumber;
+              }
+
               doc.addImage(logo, 'PNG', 10, pageHeight - 30, 50, 20);
 
-              // Añadir el número de página en la esquina inferior derecha
               doc.setFontSize(10);
               doc.text(
-                `Página ${data.pageNumber}`,
+                `Página ${currentPage}`,
                 pageWidth - 40,
                 pageHeight - 10
               );

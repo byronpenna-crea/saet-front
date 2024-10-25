@@ -22,14 +22,11 @@ import {
   IQuestionaryAnswer,
   IValuesForm,
 } from '../../QuestionsComponent';
-import { BaseComponent } from '../../BaseComponent';
 import { DaiBaseComponent } from '../../DaiBaseComponent';
 import { CatalogoServiceDai } from '../../../../../services/catalogo/catalogo.service.dai';
 import { SAET_MODULE } from '../../shared/evaluaciones';
 import { handleMode } from '../../shared/forms';
 
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
 import { ButtonStyle } from '../../component/saet-button/saet-button.component';
 
 @Component({
