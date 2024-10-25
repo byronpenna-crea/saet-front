@@ -11,7 +11,7 @@ import {
   MessageType,
 } from '../../interfaces/message-component.interface';
 import { KeyValue } from '../../component/saet-input/saet-input.component';
-import { iQuestion } from '../../shared/survey';
+import {iQuestion, iSurvey} from '../../shared/survey';
 import { ConfirmationService } from 'primeng/api';
 import { CorBaseComponent } from '../../CorBaseComponent';
 
@@ -33,10 +33,7 @@ interface IinformationTab {
   legend: string;
   isActive: boolean;
 }
-interface iSurvey {
-  titulo: string;
-  preguntas: iQuestion[];
-}
+
 @Component({
   selector: 'app-estudiante-caracterizacion-iniciar',
   templateUrl: './estudiante-caracterizacion-iniciar.component.html',
@@ -171,7 +168,14 @@ export class EstudianteCaracterizacionIniciarComponent
 
   async generatePDF() {
     this.pageLoading = true;
-    const doc = new jsPDF();
+    await this.generateTextPdf({
+      survey: this.corSurveys,
+      studentNie: this.nie,
+      title: 'Caracterización COR del estudiante',
+      answers: this.caracterizacion?.respuestas ?? [],
+      studentFullName: this.studentInfo?.nombreCompleto ?? ''
+    });
+    /*const doc = new jsPDF();
     let currentY = 30;
 
     const title = 'Caracterización de estudiante';
@@ -263,7 +267,7 @@ export class EstudianteCaracterizacionIniciarComponent
     console.log('Respuestas ---- ', this.caracterizacion?.respuestas);
     doc.save(`Caracterizacion-estudiante-${this.nie}.pdf`);
 
-    this.pageLoading = false;
+    this.pageLoading = false;*/
   }
   async retornarCaracterizacion() {
     await this.router.navigate([
@@ -366,6 +370,8 @@ export class EstudianteCaracterizacionIniciarComponent
       this.userMessage.type = MessageType.SUCCESS;
       this.userMessage.message = '¡Los datos han sido guardados exitosamente!';
       this.userMessage.titleMessage = 'Datos guardados';
+
+      this.caracterizacion = await this.catalogoServiceCOR.getCaracterizacionPorNIE(this.nie);
       //this.router.navigate([this.baseUrl, this.nie, 'view']);
     } catch (e) {
       console.log('error e', e);
@@ -418,22 +424,25 @@ export class EstudianteCaracterizacionIniciarComponent
       const response =
         await this.catalogoServiceCOR.saveCaracterizacion(objToSave);
       console.log('response ', response);
-      if (response.id_caracterizacion !== 0) {
+
+      if (response.id_caracterizacion === null ||
+        response.id_caracterizacion === undefined ||
+        response.id_caracterizacion === 0) {
         this.userMessage = {
-          showMessage: true,
-          message: '¡Los datos han sido guardados exitosamente!',
-          titleMessage: 'Datos guardados',
-          type: MessageType.SUCCESS,
+          showMessage: false,
+          message: 'Error guardando caracterizacion',
+          titleMessage: 'Error',
+          type: MessageType.DANGER,
         };
-        const url = '/menu/saet-caracterizacion-iniciar';
-        handleMode(
-          response.id_caracterizacion ?? 0,
-          url,
-          FormMode.VIEW,
-          this.nie,
-          this.router
-        );
+        return;
       }
+      this.userMessage = {
+        showMessage: true,
+        message: '¡Los datos han sido guardados exitosamente!',
+        titleMessage: 'Datos guardados',
+        type: MessageType.SUCCESS,
+      };
+      this.caracterizacion = await this.catalogoServiceCOR.getCaracterizacionPorNIE(this.nie);
     } catch (e) {
       console.log('error e', e);
       const error = e as Error;
