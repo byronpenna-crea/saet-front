@@ -114,6 +114,11 @@ export interface IUpdateCaracterizacionDAI {
   id_docente_apoyo: number;
   respuestas: iQuestionSave[];
 }
+export interface IUpdateCaracterizacionDAIResponse {
+  id_caracterizacion: number | null;
+  id_docente_apoyo: number;
+  respuestas: iQuestion[];
+}
 export interface IUpdateCaracterizacion {
   id_caracterizacion: number | null;
   respuestas: iQuestionSave[];

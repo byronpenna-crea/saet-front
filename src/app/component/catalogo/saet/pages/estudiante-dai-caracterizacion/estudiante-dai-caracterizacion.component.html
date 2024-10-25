@@ -19,7 +19,9 @@
     { href: '', text: 'Edición' }
   ]"
 />
-<app-saet-loading [isLoading]="pageLoading" />
+<app-saet-loading [isLoading]="pageLoading"
+  [message]="loadingMessage"
+/>
 <app-saet-confirm
   acceptButtonText="Continuar editando"
   cancelButtonText="Salir sin guardar"

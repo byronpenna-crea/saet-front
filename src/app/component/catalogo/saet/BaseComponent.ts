@@ -78,6 +78,8 @@ export class BaseComponent {
                 ? groupedData[id].input ?? ''
                 : (groupedData[id].richtext ?? '') !== ''
                   ? groupedData[id].richtext ?? ''
+                  : (groupedData[id].textarea ?? '') !== ''
+                    ? groupedData[id].textarea ?? ''
                   : '',
           });
         console.log(

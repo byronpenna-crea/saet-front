@@ -9,7 +9,7 @@ import {
   ISaveCaracterizacion,
   ISaveCaracterizacionDAI, ISavePlanAccion, ISaveQuestionary,
   IUpdateCaracterizacion,
-  IUpdateCaracterizacionDAI, IUpdatePlanAccion, ResponseError
+  IUpdateCaracterizacionDAI, IUpdateCaracterizacionDAIResponse, IUpdatePlanAccion, ResponseError
 } from "./catalogo.service.cor";
 import {HttpMethod} from "../shared/saet-types";
 import {PersonaApoyo} from "./catalogo.service.dei";
@@ -71,7 +71,7 @@ export class CatalogoServiceDai extends CatalogoServiceSaet {
   }
   public updateCaracterizacion(caracterizacion: ISaveCaracterizacionDAI) {
     const url = `${this.API_SERVER_URL}/caracterizacion/dai/preguntas`;
-    return this.putRequest<IUpdateCaracterizacionDAI, IUpdateCaracterizacionDAI>(
+    return this.putRequest<IUpdateCaracterizacionDAI, IUpdateCaracterizacionDAIResponse>(
       url,
       {
         id_caracterizacion: caracterizacion?.id_caracterizacion ?? 0,

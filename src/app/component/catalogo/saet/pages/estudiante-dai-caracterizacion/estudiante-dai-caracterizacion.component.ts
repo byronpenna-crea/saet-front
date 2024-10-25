@@ -288,9 +288,11 @@ export class EstudianteDaiCaracterizacionComponent
   async retornarCaracterizacion() {}
   async update() {
     this.pageLoading = true;
+    this.userMessage.showMessage = false;
     this.loadingMessage = 'Actualizando caracterizacion';
+
     const respuestas = this.getAnswerObject(this.values);
-    console.log('caracterizacion ', this.caracterizacion);
+    console.log('obj to save caracterizacion ------->', this.caracterizacion);
     if (
       this.caracterizacion === undefined ||
       this.caracterizacion?.id_caracterizacion === 0
@@ -322,9 +324,22 @@ export class EstudianteDaiCaracterizacionComponent
     try {
       const resp =
         await this.catalogoServiceDai.updateCaracterizacion(objToSave);
-      console.log('respuesta actualizacion ', resp);
+      console.log('<------- respuesta actualizacion --------->', resp);
       console.log('url here ', this.baseUrl);
-      this.router.navigate([this.baseUrl, this.nie, 'view']);
+      if(resp.id_caracterizacion === null || resp.id_caracterizacion === 0){
+        this.userMessage.message = 'Algo salio mal en el proceso de guardado';
+        this.userMessage.showMessage = true;
+        this.userMessage.titleMessage = 'Advertencia';
+        this.userMessage.type = MessageType.DANGER;
+        return;
+      }
+      this.caracterizacion = await this.catalogoServiceDai.getCaracterizacionPorNIE(this.nie);
+      // success message
+      this.userMessage.message = '¡Los datos han sido guardados exitosamente!';
+      this.userMessage.showMessage = true;
+      this.userMessage.titleMessage = 'Datos guardados';
+      this.userMessage.type = MessageType.SUCCESS;
+      return;
     } catch (e) {
       console.log('error e', e);
       const error = e as Error;
