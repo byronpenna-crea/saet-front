@@ -16,7 +16,7 @@
       href: '#/menu/dai/saet-plan-accion/' + nie,
       text: 'Plan de accion'
     },
-    { href: '', text: 'Edición' }
+    { href: '', text: stringBreadCrumbAction }
   ]"
 />
 <app-saet-loading [isLoading]="pageLoading" />
@@ -67,7 +67,7 @@
       />
 
       <app-saet-button
-        (onClick)="save()"
+        (onClick)="this.idEvaluacion === 0 ? save(): update()"
         [buttonArgs]="{ text: 'Guardar', buttonStyle: btnStyle.BLUE }"
       />
     </div>

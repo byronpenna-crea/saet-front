@@ -12,7 +12,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService } from 'primeng/api';
 import { IconComponent, QuestionType } from '../../shared/component.config';
 import { KeyValue } from '../../component/saet-input/saet-input.component';
-import { FormMode, IValuesForm } from '../../QuestionsComponent';
+import {FormMode, IQuestionaryAnswer, IValuesForm} from '../../QuestionsComponent';
 import {
   IEvaluacionResponse,
   ISavePlanAccion,
@@ -132,9 +132,9 @@ export class DaiPlanDeAccionIniciarComponent
     }
 
     (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
-    const planAccionRespuesta =
-      await this.catalogoServiceDai.getPlanAccionPerNIE(this.nie);
+    const planAccionRespuesta = await this.catalogoServiceDai.getPlanAccionPerNIE(this.nie);
     console.log('plan accion respuesta ---->', planAccionRespuesta);
+
     const htmlToPdfmake = (await import('html-to-pdfmake')).default;
     const docDefinition: TDocumentDefinitions = {
       content: [] as Content[],
@@ -156,58 +156,84 @@ export class DaiPlanDeAccionIniciarComponent
           margin: [0, 0, 0, 20],
         },
       },
+      footer: (currentPage: number, pageCount: number) => {
+        return {
+          columns: [
+            {
+              text: `Página ${currentPage} de ${pageCount}`,
+              alignment: 'center',
+              fontSize: 10,
+              margin: [0, 0, 0, 20],
+            }
+          ]
+        };
+      }
     };
 
-    if (logoBase64) {
-      (docDefinition.content as Content[]).push({
-        image: `data:image/png;base64,${logoBase64}`,
-        width: 100,
-        alignment: 'left',
-        margin: [0, 0, 0, 10], // Margen debajo del logo
-      });
-    }
-
+    // Título del documento
     (docDefinition.content as Content[]).push({
       text: 'Plan de accion de estudiante',
       style: 'header',
     });
+    (docDefinition.content as Content[]).push({
+      text: '',
+      margin: [0, 10, 0, 10],
+    });
+    (docDefinition.content as Content[]).push({
+      text: `${this.studentInfo?.nombreCompleto} | ${this.nie}`,
+      style: 'header',
+      fontSize: 12
+    });
 
-    planAccionRespuesta.respuestas.forEach(async (respuestaObj, index) => {
+    // Iterar por las preguntas y respuestas intercaladas
+    for (let index = 0; index < planAccionRespuesta.respuestas.length; index++) {
+      const respuestaObj = planAccionRespuesta.respuestas[index];
+
+      // Agregar la pregunta
       (docDefinition.content as Content[]).push({
         text: respuestaObj.pregunta ?? '',
         style: 'subheader',
       });
 
+      // Ajustar las imágenes en la respuesta y convertirlas a base64
       let htmlContent = this.ajustarTamanoImagenes(respuestaObj.respuesta);
       htmlContent = await this.convertImagesToBase64(htmlContent);
 
+      // Convertir el HTML a un contenido compatible con PDF
       const convertedHtml = htmlToPdfmake(htmlContent, {
         // @ts-ignore
         window: window as Window,
       });
 
+      // Agregar la respuesta
       (docDefinition.content as Content[]).push({
         stack: [convertedHtml],
         margin: [0, 0, 0, 20],
       });
 
+      // Insertar un salto de página después de cada par pregunta-respuesta
       if (index < planAccionRespuesta.respuestas.length - 1) {
         (docDefinition.content as Content[]).push({
           text: '',
           pageBreak: 'after',
         });
       }
-    });
+    }
 
+    // Crear y descargar el PDF
     pdfMake
       .createPdf(docDefinition)
       .download(`plan-accion-estudiante-${this.nie}.pdf`);
+
     this.pageLoading = false;
   }
   async update() {
     this.pageLoading = true;
-    const objToSave: ISaveQuestionary = this.getQuestionaryObject();
-    if (objToSave.respuestas.length === 0) {
+    this.userMessage.showMessage = false;
+
+    console.log('before 1', this.values);
+    const objToSave = this.getAnswerObject(this.values);
+    if (objToSave.length === 0) {
       this.userMessage.showMessage = true;
       this.userMessage.type = MessageType.WARNING;
       this.userMessage.message =
@@ -215,15 +241,16 @@ export class DaiPlanDeAccionIniciarComponent
       this.userMessage.titleMessage = 'Advertencia';
       return;
     }
+    console.log('obj to save before', objToSave);
     const updatePlanDeAccion: IUpdatePlanAccion = {
       id_plan_accion: this.idEvaluacion,
-      respuestas: objToSave.respuestas,
+      respuestas: objToSave,
     };
     console.log('----------- obj to UPDATE--------', updatePlanDeAccion);
     try {
       const resp =
         await this.catalogoServiceDai.updatePlanDeAccion(updatePlanDeAccion);
-      console.log('saved ', resp);
+        console.log('saved ', resp);
       /*if (resp.plan_accion_pk === 0) {
         this.userMessage.showMessage = true;
         this.userMessage.type = MessageType.DANGER;
@@ -247,6 +274,7 @@ export class DaiPlanDeAccionIniciarComponent
       this.userMessage.message =
         'Debes proveer al menos una respuesta para continuar';
       this.userMessage.titleMessage = 'Advertencia';
+      this.pageLoading = false;
       return;
     }
     const savePlanAccion: ISavePlanAccion = {
@@ -265,7 +293,12 @@ export class DaiPlanDeAccionIniciarComponent
         this.userMessage.titleMessage = 'Error';
         return;
       }
-      await this.router.navigate([this.baseUrl, this.nie, 'view']);
+      this.userMessage.showMessage = true;
+      this.userMessage.type = MessageType.SUCCESS;
+      this.userMessage.message = '¡Los datos han sido guardados exitosamente!';
+      this.userMessage.titleMessage = 'Datos guardados';
+      this.idEvaluacion = resp.plan_accion_pk;
+      //await this.router.navigate([this.baseUrl, this.nie, 'view']);
     } catch (e) {
       console.log('Error ---- ', e);
     } finally {
@@ -358,21 +391,25 @@ export class DaiPlanDeAccionIniciarComponent
       }
       const nie = params.get('nie');
       const mode = params.get('mode');
+      console.log('mode ', mode);
       switch (mode) {
         case null:
           this.formMode = FormMode.CREATE;
+          this.stringBreadCrumbAction = '';
           break;
         case 'view':
           this.formMode = FormMode.VIEW;
+          this.stringBreadCrumbAction = 'Vista';
           break;
         case 'edit':
           this.formMode = FormMode.EDIT;
+          this.stringBreadCrumbAction = 'Edición';
           break;
         default:
           router.navigate(['menu/dai/saet-datos-estudiante', this.nie]);
           break;
       }
-
+      console.log('@@@@@@@@@@@@@@@@@ form mode constructor @@@@@@@@@@@@@@@@@@@@', this.formMode)
       if (nie) {
         this.nie = nie;
         this.catalogoServiceDai
@@ -385,12 +422,13 @@ export class DaiPlanDeAccionIniciarComponent
               id_evaluacion: resp.plan_accion_pk,
               especialista_responsable: '',
             };
+            console.log('evaluation @@@@@@@@@@', evaluation);
             console.log('depurados ', this.responseToValues(evaluation));
             this.values = {
               ...this.responseToValues(evaluation),
               ...this.values,
             };
-
+            console.log('values constructo --> ', this.values);
             if (
               this.formMode === FormMode.CREATE &&
               resp.plan_accion_pk !== 0
@@ -412,7 +450,11 @@ export class DaiPlanDeAccionIniciarComponent
           });
       }
     });
+
+
+
   }
+  stringBreadCrumbAction = '';
   responseToValues(response: IEvaluacionResponse): IValuesForm {
     const values: IValuesForm = {};
 
@@ -427,7 +469,7 @@ export class DaiPlanDeAccionIniciarComponent
             : '';
       }
 
-      if (respuesta.id_pregunta >= 161 && respuesta.id_pregunta <= 167) {
+      if (respuesta.id_pregunta >= 258 && respuesta.id_pregunta <= 259) {
         // manejo temporal de richtext
         values[`richtext_${respuesta.id_pregunta}`] = respuesta.respuesta;
       } else {
