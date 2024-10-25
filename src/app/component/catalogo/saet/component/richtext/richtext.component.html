@@ -5,5 +5,6 @@
   [style]="{ height: '320px' }"
   [attr.data-testid]="testId"
   [readonly]="disabled"
+  (onInit)="setupEditor()"
 >
 </p-editor>
