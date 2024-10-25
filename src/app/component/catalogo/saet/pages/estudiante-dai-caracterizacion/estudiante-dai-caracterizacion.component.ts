@@ -357,100 +357,14 @@ export class EstudianteDaiCaracterizacionComponent
     }
   }
   async generatePDF() {
-    console.log('caracterizacion aca --------------- >', this.caracterizacion);
     this.pageLoading = true;
-    const doc = new jsPDF();
-    let currentY = 30;
-    const title = 'Caracterización hecha por DAI del estudiante';
-    const studentName =
-      `${this.studentInfo?.nombreCompleto} | ${this.studentInfo?.nie}` ||
-      'Nombre del estudiante no disponible';
-
-    const titleWidth = doc.getTextWidth(title);
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const pageHeight = doc.internal.pageSize.getHeight();
-    const titleX = (pageWidth - titleWidth) / 2;
-
-    const logoPath = '/assets/logo.png';
-
-    const loadImage = (url: string): Promise<HTMLImageElement> => {
-      return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.src = url;
-        img.onload = () => resolve(img);
-        img.onerror = err => reject(err);
-      });
-    };
-    const logo = await loadImage(logoPath);
-    console.log('logo ', logo);
-    doc.text(title, titleX, currentY);
-    currentY += 10;
-
-    doc.setFontSize(12);
-    const studentNameWidth = doc.getTextWidth(studentName);
-    const studentNameX = (pageWidth - studentNameWidth) / 2;
-    doc.text(studentName, studentNameX, currentY);
-    currentY += 10; // Espacio debajo del nombre del estudiante
-
-    doc.setFontSize(15);
-    let pageNumber = 0;
-    const respuestasFormulario = this.getAnswerObject(this.values);
-    console.log('respuesta formulario en pdf ', respuestasFormulario);
-    this.corSurveys.forEach(cuestionario => {
-      const respuestas =
-        this.caracterizacion?.respuestas
-          .filter((respuesta: iQuestion) =>
-            cuestionario.preguntas.some(
-              p => p.id_pregunta === respuesta.id_pregunta
-            )
-          )
-          .map((respuesta: iQuestion) => {
-            const concatOptions = respuesta.opcion.reduce((acc, current) => {
-              return acc ? `${acc}, ${current.opcion}` : current.opcion;
-            }, '');
-            console.log('concat options ', concatOptions);
-            const strResponse =
-              respuesta?.respuesta !== undefined && respuesta?.respuesta !== ''
-                ? respuesta?.respuesta
-                : concatOptions;
-            return [respuesta.pregunta, strResponse];
-          }) ?? [];
-
-      if (respuestas.length > 0) {
-        // Agrega el título del cuestionario como encabezado
-        doc.text(cuestionario.titulo, 8, currentY);
-        currentY += 10; // Espacio debajo del título del cuestionario
-
-        // Agrega la tabla para este cuestionario
-        autoTable(doc, {
-          head: [['Pregunta', 'Respuesta']],
-          body: respuestas,
-          startY: currentY,
-          didDrawPage: data => {
-            console.log('did draw ', data);
-            doc.setFontSize(10);
-            if (data.pageNumber !== pageNumber) {
-              doc.text(
-                `Página ${data.pageNumber}`,
-                pageWidth - 40,
-                pageHeight - 10
-              );
-              pageNumber = data.pageNumber;
-            }
-            doc.addImage(logo, 'PNG', 10, pageHeight - 30, 50, 20);
-            pageNumber++;
-          },
-        });
-        currentY = (doc as any).lastAutoTable.finalY + 10;
-      }
-
-      return false;
+    await this.generateTextPdf({
+      survey: this.corSurveys,
+      studentNie: this.nie,
+      title: 'Caracterización hecha por DAI del estudiante',
+      answers: this.caracterizacion?.respuestas ?? [],
+      studentFullName: this.studentInfo?.nombreCompleto ?? ''
     });
-
-    console.log('Respuestas ---- ', this.caracterizacion?.respuestas);
-    doc.save(`Caracterizacion-dai-estudiante-${this.nie}.pdf`);
-
-    this.pageLoading = false;
   }
 
   protected readonly SAET_MODULE = SAET_MODULE;

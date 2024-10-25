@@ -9,8 +9,18 @@ import { informationTabBody } from './CorBaseComponent';
 import { UserMessage } from './interfaces/message-component.interface';
 import { userMessageInit } from './shared/messages.model';
 import { IQuestionaryAnswer, IValuesForm } from './QuestionsComponent';
-
+import jsPDF from "jspdf";
+import {iQuestion, iSurvey} from "./shared/survey";
+import autoTable from "jspdf-autotable";
+interface IGenerateTextPdf {
+  title: string;
+  studentNie: string;
+  studentFullName: string;
+  survey:iSurvey[];
+  answers: iQuestion[];
+}
 @Injectable()
+
 export class BaseComponent {
   nie = '';
   studentInfo?: StudentDetail;
@@ -18,6 +28,117 @@ export class BaseComponent {
   userMessage: UserMessage = userMessageInit;
   btnStyle = ButtonStyle;
   pageLoading = false;
+
+  async generateTextPdf({title, studentNie,
+                          studentFullName,
+    survey, answers
+    }:IGenerateTextPdf){
+    const doc = new jsPDF();
+    let currentY = 30;
+    const studentName =
+      `${studentFullName} | ${studentNie}` ||
+      'Nombre del estudiante no disponible';
+
+    const titleWidth = doc.getTextWidth(title);
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const titleX = (pageWidth - titleWidth) / 2;
+
+    const logoPath = '/assets/logo.png';
+
+    const loadImage = (url: string): Promise<HTMLImageElement> => {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = url;
+        img.onload = () => resolve(img);
+        img.onerror = err => reject(err);
+      });
+    };
+
+    try {
+      const logo = await loadImage(logoPath);
+
+      // Agregar el título centrado
+      doc.setFontSize(16);
+      doc.text(title, titleX, currentY);
+      currentY += 10;
+
+      // Agregar el nombre del estudiante centrado
+      doc.setFontSize(12);
+      const studentNameWidth = doc.getTextWidth(studentName);
+      const studentNameX = (pageWidth - studentNameWidth) / 2;
+      doc.text(studentName, studentNameX, currentY);
+      currentY += 20; // Espacio debajo del nombre del estudiante
+
+      survey.forEach(cuestionario => {
+        const respuestas =
+          answers
+            .filter((respuesta) =>
+              cuestionario.preguntas.some(
+                p => p.id_pregunta === respuesta.id_pregunta
+              )
+            )
+            .map((respuesta) => {
+              const concatOptions = respuesta.opcion.reduce((acc, current) => {
+                return acc ? `${acc}, ${current.opcion}` : current.opcion;
+              }, '');
+
+              const strResponse =
+                respuesta?.respuesta !== undefined && respuesta?.respuesta !== ''
+                  ? respuesta?.respuesta
+                  : concatOptions;
+              return [
+                respuesta.pregunta || '',
+                strResponse || ''
+              ] as [string, string];
+            }) ?? [];
+
+        if (respuestas !== undefined &&  respuestas.length > 0) {
+          // Título del cuestionario
+          doc.setFontSize(14);
+          doc.text(cuestionario.titulo, 8, currentY);
+          currentY += 10;
+
+          // Añadir tabla
+          autoTable(doc, {
+            head: [['Pregunta', 'Respuesta']],
+            body: respuestas,
+            startY: currentY,
+            margin: { bottom: 30 }, // Espacio inferior para el logo y número de página
+            didDrawPage: data => {
+              // Añadir el logo en la esquina inferior izquierda
+              doc.addImage(logo, 'PNG', 10, pageHeight - 30, 50, 20);
+
+              // Añadir el número de página en la esquina inferior derecha
+              doc.setFontSize(10);
+              doc.text(
+                `Página ${data.pageNumber}`,
+                pageWidth - 40,
+                pageHeight - 10
+              );
+
+              // Restablecer la posición de Y para la nueva página
+              currentY = 30;
+            },
+          });
+
+          // Actualizar la posición Y después de la tabla
+          currentY = (doc as any).lastAutoTable.finalY + 10;
+
+          // Verificar si el contenido se aproxima al margen inferior
+          if (currentY > pageHeight - 40) {
+            doc.addPage();
+            currentY = 30;
+          }
+        }
+      });
+      doc.save(`Caracterizacion-dai-estudiante-${this.nie}.pdf`);
+    } catch (err) {
+      console.error('Error al cargar el logo:', err);
+    } finally {
+      this.pageLoading = false;
+    }
+  }
 
   getAnswerObject(data: IValuesForm): IQuestionaryAnswer[] {
     const result: IQuestionaryAnswer[] = [];

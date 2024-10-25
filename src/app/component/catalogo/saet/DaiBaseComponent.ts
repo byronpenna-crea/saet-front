@@ -27,6 +27,7 @@ export class DaiBaseComponent extends BaseComponent implements OnInit {
         throw e;
       });
   }
+
   constructor(
     @Inject(DOCUMENT) protected document: Document,
     protected catalogoServiceDai: CatalogoServiceDai,
