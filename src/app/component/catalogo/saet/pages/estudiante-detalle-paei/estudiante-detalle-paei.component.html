@@ -13,7 +13,6 @@
 />
 <app-saet-loading [isLoading]="pageLoading" [message]="loadingMessage" />
 
-
 <app-saet-confirm
   acceptButtonText="Continuar editando"
   cancelButtonText="Salir sin guardar"
@@ -122,10 +121,10 @@
       <app-saet-button
         (onClick)="generatePDF()"
         [buttonArgs]="{
-            text: 'Generar PDF',
-            buttonIcon: btnIcon.PRINTER,
-            buttonStyle: btnStyle.BLUE
-          }"
+          text: 'Generar PDF',
+          buttonIcon: btnIcon.PRINTER,
+          buttonStyle: btnStyle.BLUE
+        }"
       />
     </div>
     <div *ngIf="formMode === formModeEnum.EDIT" class="actionsButton">
@@ -139,13 +138,12 @@
       />
 
       <div class="right-buttons">
-
         <app-saet-button
           (onClick)="save()"
           [buttonArgs]="{
-          text: 'Actualizar registro',
-          buttonStyle: btnStyle.BLUE
-        }"
+            text: 'Actualizar registro',
+            buttonStyle: btnStyle.BLUE
+          }"
         />
         <app-saet-button
           (onClick)="generatePDF()"
@@ -156,7 +154,6 @@
           }"
         />
       </div>
-
     </div>
     <div *ngIf="formMode === formModeEnum.VIEW" class="actionsButton">
       <app-saet-button

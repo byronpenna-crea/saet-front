@@ -255,6 +255,7 @@ export class CatalogoServiceCor extends CatalogoServiceSaet {
     const url = `${this.API_SERVER_URL}/evaluacion/cor/psicologia/`;
     return this.postRequest<IQuestionaryHeader, IQuestionaryHeader>(url, obj);
   }
+  //
 
   // save
   public async saveEvaluacion(

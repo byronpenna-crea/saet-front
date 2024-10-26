@@ -182,7 +182,7 @@ export class BaseComponent {
     console.log('grouped data ', groupedData);
 
     for (const id in groupedData) {
-      if (groupedData.hasOwnProperty(id)) {
+      if (Object.prototype.hasOwnProperty.call(groupedData, id)) {
         const idPregunta = parseInt(id, 10);
 
         !isNaN(idPregunta) &&

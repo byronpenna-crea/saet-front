@@ -83,7 +83,43 @@
           </div>
         </div>
       </p-tabPanel>
-      <p-tabPanel header="Realizar referencia"> </p-tabPanel>
+      <p-tabPanel header="Realizar referencia">
+        <app-tab-item label="Selecionar departamento">
+          <p-dropdown
+            [options]="cities"
+            id="departamento-global"
+            optionLabel="nombre_departamento"
+            placeholder="Selecciona departamento"
+            optionValue="codigo_departamento"
+            class="w-full"
+            style="width: 100%"
+          />
+        </app-tab-item>
+        <app-tab-item label="Servicio de apoyo:">
+          <app-saet-input testId="input-nie" [disabled]="true" />
+        </app-tab-item>
+
+        <app-tab-item label="Personal de ejecución:">
+          <app-saet-input testId="input-nie" />
+        </app-tab-item>
+
+        <app-tab-item label="Referencia externa">
+          <app-saet-input testId="input-referencia" [disabled]="true" />
+        </app-tab-item>
+
+        <app-tab-item label="Motivo de referencia">
+          <app-saet-text-area testId="textarea" />
+        </app-tab-item>
+
+        <app-saet-button
+          testId="btn-guardar-referencia"
+          [buttonArgs]="{
+            text: 'Guardar',
+            buttonStyle: btnStyle.WHITE,
+            buttonIcon: iconCompoment.PLUS
+          }"
+        />
+      </p-tabPanel>
     </p-tabView>
   </app-saet-tab>
 </div>

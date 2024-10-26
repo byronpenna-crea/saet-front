@@ -12,6 +12,7 @@ import { TabInput } from '../estudiante-evaluaciones/estudiante-evaluaciones.com
 import { ButtonStyle } from '../../component/saet-button/saet-button.component';
 import { IconComponent } from '../../shared/component.config';
 import { IAgendaEspecialista } from '../../component/saet-tab-agenda/saet-tab-agenda.component';
+import {catalogoDepartamento} from "../../shared/dei";
 
 @Component({
   selector: 'app-dai-plan-de-accion',
@@ -55,23 +56,9 @@ export class DaiPlanDeAccionComponent
     console.log('obtener especialista');
     this.pageLoading = false;
   }
-  respuestasToValues(respuestas: iQuestion[]) {
-    const values: IValuesForm = {};
-    respuestas.forEach(respuesta => {
-      const radioKey = `radio_${respuesta.id_pregunta}`;
-      const inputKey = `input_${respuesta.id_pregunta}`;
-
-      if (respuesta.opcion.length > 0) {
-        values[radioKey] = respuesta.opcion[0].opcion_pregunta_pk.toString();
-      }
-      values[inputKey] = respuesta.respuesta ?? '';
-    });
-    return values;
-  }
 
   protected readonly SAET_MODULE = SAET_MODULE;
   async iniciar() {
-    console.log('iniciar --->');
     await this.router.navigate(['menu/dai/saet-plan-accion-iniciar', this.nie]);
   }
   acceptConfirmDialog() {
@@ -88,4 +75,5 @@ export class DaiPlanDeAccionComponent
   protected readonly IconComponent = IconComponent;
   protected readonly buttonStyle = ButtonStyle;
   protected readonly buttonIcon = IconComponent;
+  protected readonly cities = catalogoDepartamento;
 }

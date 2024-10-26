@@ -37,14 +37,6 @@ interface flowTableInterface {
   verDetalle: string;
   referidoPor: string;
 }
-/*interface tableInterface {
-  cor: string;
-  dai: string;
-  ce: string;
-  eee: string;
-  codai: string;
-  criedv: string
-}*/
 
 @Component({
   selector: 'app-buscar-estudiante',
@@ -71,30 +63,12 @@ export class BuscarEstudianteComponent
   ) {
     super(document, catalogoServiceCOR, route, router);
     try {
-      console.log('-----------------');
-      console.log('rol apoyo ', localStorage.getItem('rolApoyo') ?? '');
-      console.log(
-        'especialidad ',
-        localStorage.getItem('especialidad') ?? undefined
-      );
-      console.log(
-        localStorage.getItem('idRolApoyo') !== undefined &&
-          (localStorage.getItem('idRolApoyo') as unknown as SAET_MODULE) ==
-            SAET_MODULE.COR
-      );
-      console.log('------------------');
       this.pageLoading = true;
       if (this.nie === '') {
         this.pageLoading = false;
         return;
       }
-      console.log('id rol apoyo ---> ', localStorage.getItem('idRolApoyo'));
-      console.log(localStorage.getItem('idRolApoyo') as unknown as SAET_MODULE);
-      console.log(SAET_MODULE.COR);
-      console.log(
-        (localStorage.getItem('idRolApoyo') as unknown as SAET_MODULE) ===
-          SAET_MODULE.COR
-      );
+
       this.catalogoServiceCOR
         .getStudentInfo(this.nie)
         .then(result => {
@@ -172,7 +146,7 @@ export class BuscarEstudianteComponent
       href: '',
     },
     {
-      col1: 'Centro de Recursos de Inclusión Educativa (CRIE-DV)',
+      col1: 'Centro de Recursos de Inclusión Educativa (CRIEDV)',
       col2: 'Sin atención',
       col3: '',
       href: '',

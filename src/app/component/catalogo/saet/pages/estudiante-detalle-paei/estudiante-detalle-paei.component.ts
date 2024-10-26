@@ -155,6 +155,28 @@ export class EstudianteDetallePaeiComponent
 
     return div.innerHTML;
   }
+
+  calcularEdad(fechaNacimiento:string) {
+    if(fechaNacimiento === ''){
+      return 0;
+    }
+    try{
+      const [dia, mes, anio] = fechaNacimiento.split('-').map(num => parseInt(num, 10));
+      const fechaNac = new Date(anio, mes - 1, dia);
+      const fechaActual = new Date();
+      let edad = fechaActual.getFullYear() - fechaNac.getFullYear();
+      const cumpleanosEsteAnio = new Date(fechaActual.getFullYear(), fechaNac.getMonth(), fechaNac.getDate());
+      if (fechaActual < cumpleanosEsteAnio) {
+        edad--;
+      }
+      return edad;
+
+    }catch (e){
+      return 0;
+    }
+  }
+
+
   async generatePDF() {
     this.pageLoading = true;
     let logoBase64 = '';
@@ -168,7 +190,6 @@ export class EstudianteDetallePaeiComponent
     const paeiRespuestas = await this.catalogoServiceCOR.getPAEIPerNIE(
       this.nie
     );
-    console.log('paei respuestas ', paeiRespuestas);
 
     // Importar html-to-pdfmake dinámicamente
     const htmlToPdfmake = (await import('html-to-pdfmake')).default;
@@ -205,9 +226,137 @@ export class EstudianteDetallePaeiComponent
     }
 
     (docDefinition.content as Content[]).push({
-      text: 'PAEI de estudiante',
-      style: 'header',
+      text: [
+        'CENTROS DE ORIENTACIÓN Y RECURSOS (COR)\n',
+        'PLAN DE ATENCIÓN EDUCATIVO INTEGRAL (PAEI)'
+      ],
+      style: 'subheader',
+      alignment: 'center',
+      lineHeight: 1.1,
+      margin: [0, 5, 0, 10]
     });
+
+    (docDefinition.content as Content[]).push({
+      text: 'El presente Plan de Atención Educativo Integral (PAEI), elaborado por el equipo responsable del Centro de Orientación y Recursos (COR), como resultado del proceso de evaluación psicopedagógica contiene orientaciones pedagógicas para el centro educativo, docentes, madres, padres o responsables de familia. El objetivo principal es contribuir a una educación de calidad con equidad, garantizando el acceso, participación, aprendizaje y permanencia del estudiantado en el sistema educativo. Por tal razón el contenido de este documento es exclusivo para los centros educativos y familias que solicitan el servicio del COR.',
+      alignment: 'justify',
+      fontSize: 12,
+      margin: [0, 10, 0, 20], // Margen alrededor del texto
+    });
+
+    (docDefinition.content as Content[]).push({
+      table: {
+        headerRows: 1, // Número de filas de encabezado
+        widths: [
+          '10%', '10%', '10%', '10%',
+          '10%', '10%', '10%', '10%',
+          '10%', '10%'
+        ],
+        body: [
+          [
+            { text: 'Nombre del estudiante', fontSize: 10, alignment: 'left', colSpan: 3 },
+            {},
+            {},
+            { text: this.studentInfo?.nombreCompleto, fontSize: 9, alignment: 'left', colSpan: 4 },
+            {},
+            {},
+            {},
+            { text: 'Nº expediente', style: 'tableHeader', colSpan: 2 },
+            {},
+            { text: '12', alignment: 'left' },
+          ],
+          [
+            { text: 'Edad:', fontSize: 10, alignment: 'left', colSpan: 2 },
+            {},
+            { text: this.calcularEdad(this.studentInfo?.fechaNacimiento ?? ''), fontSize: 10, alignment: 'left' },
+            { text: 'Grado:', fontSize: 9, alignment: 'left', colSpan: 2 },
+            {},
+            { text: '', fontSize: 9, alignment: 'left'},
+            { text: 'NIE:', fontSize: 9, alignment: 'left' },
+            { text: this.studentInfo?.nie, fontSize: 9, alignment: 'left', colSpan: 3 },
+            {},
+            {}
+          ],
+          [
+            { text: 'Centro educativo de procedencia:', fontSize: 10, alignment: 'left', colSpan: 4 },
+            {},
+            {},
+            {},
+            { text: '', fontSize: 9, alignment: 'left', colSpan: 6 },
+            {},
+            {},
+            {},
+            {},
+            {}
+          ],
+          [
+            { text: 'Nombre del (a) docente del grado:', fontSize: 10, alignment: 'left', colSpan: 4 },
+            {},
+            {},
+            {},
+            { text: '', fontSize: 9, alignment: 'left', colSpan: 6 },
+            {},
+            {},
+            {},
+            {},
+            {}
+          ],
+          [
+            { text: 'Nombre del docente de Apoyo a la Inclusión (si existe en el centro educativo):', fontSize: 10, alignment: 'left', colSpan: 4 },
+            {},
+            {},
+            {},
+            { text: '', fontSize: 9, alignment: 'left',
+              verticalAlignment: 'middle',
+              colSpan: 6 },
+            {},
+            {},
+            {},
+            {},
+            {}
+          ],
+          [
+            { text: 'Familiar responsable:', fontSize: 10, alignment: 'left', colSpan: 4 },
+            {},
+            {},
+            {},
+            { text: '', fontSize: 9, alignment: 'left',
+              verticalAlignment: 'middle',
+              colSpan: 6 },
+            {},
+            {},
+            {},
+            {},
+            {}
+          ],
+          [
+            { text: 'Fecha de entrega:', fontSize: 10, alignment: 'left', colSpan: 4 },
+            {},
+            {},
+            {},
+            { text: '', fontSize: 9, alignment: 'left',
+              verticalAlignment: 'middle',
+              colSpan: 6 },
+            {},
+            {},
+            {},
+            {},
+            {}
+          ]
+        ],
+      },
+      layout: {
+        defaultBorder: true, // Asegura que haya bordes en la tabla
+      },
+      margin: [0, 0, 0, 20], // Margen alrededor de la tabla
+    });
+
+    (docDefinition.content as Content[]).push({
+      text: 'I. DATOS GENERALES DEL ESTUDIANTE.',
+      style: 'subheader',
+      fontSize: 12,
+      margin: [0, 10, 0, 20], // Margen alrededor del texto
+    });
+
 
     // Procesar las respuestas para incluir contenido HTML
     paeiRespuestas.respuestas.forEach((respuestaObj, index) => {
