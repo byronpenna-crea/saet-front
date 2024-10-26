@@ -26,7 +26,7 @@ import jsPDF from 'jspdf';
 import { iQuestion } from '../../shared/survey';
 import autoTable from 'jspdf-autotable';
 import html2canvas from 'html2canvas';
-import { Content, TDocumentDefinitions } from 'pdfmake/interfaces';
+import {Content, Table, TDocumentDefinitions} from 'pdfmake/interfaces';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 @Component({
@@ -176,74 +176,8 @@ export class EstudianteDetallePaeiComponent
     }
   }
 
-
-  async generatePDF() {
-    this.pageLoading = true;
-    let logoBase64 = '';
-    try {
-      logoBase64 = await this.getBase64Image('/assets/logo.png');
-    } catch (err) {
-      console.error('Error al cargar el logo:', err);
-    }
-
-    (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
-    const paeiRespuestas = await this.catalogoServiceCOR.getPAEIPerNIE(
-      this.nie
-    );
-
-    // Importar html-to-pdfmake dinámicamente
-    const htmlToPdfmake = (await import('html-to-pdfmake')).default;
-
-    const docDefinition: TDocumentDefinitions = {
-      content: [] as Content[],
-      pageSize: 'A4',
-      pageMargins: [40, 60, 40, 60],
-      styles: {
-        header: {
-          fontSize: 18,
-          bold: true,
-          alignment: 'center',
-        },
-        subheader: {
-          fontSize: 14,
-          bold: true,
-          margin: [0, 20, 0, 10],
-        },
-        normal: {
-          fontSize: 12,
-          margin: [0, 0, 0, 20],
-        },
-      },
-    };
-
-    if (logoBase64) {
-      (docDefinition.content as Content[]).push({
-        image: `data:image/png;base64,${logoBase64}`,
-        width: 100,
-        alignment: 'left',
-        margin: [0, 0, 0, 10], // Margen debajo del logo
-      });
-    }
-
-    (docDefinition.content as Content[]).push({
-      text: [
-        'CENTROS DE ORIENTACIÓN Y RECURSOS (COR)\n',
-        'PLAN DE ATENCIÓN EDUCATIVO INTEGRAL (PAEI)'
-      ],
-      style: 'subheader',
-      alignment: 'center',
-      lineHeight: 1.1,
-      margin: [0, 5, 0, 10]
-    });
-
-    (docDefinition.content as Content[]).push({
-      text: 'El presente Plan de Atención Educativo Integral (PAEI), elaborado por el equipo responsable del Centro de Orientación y Recursos (COR), como resultado del proceso de evaluación psicopedagógica contiene orientaciones pedagógicas para el centro educativo, docentes, madres, padres o responsables de familia. El objetivo principal es contribuir a una educación de calidad con equidad, garantizando el acceso, participación, aprendizaje y permanencia del estudiantado en el sistema educativo. Por tal razón el contenido de este documento es exclusivo para los centros educativos y familias que solicitan el servicio del COR.',
-      alignment: 'justify',
-      fontSize: 12,
-      margin: [0, 10, 0, 20], // Margen alrededor del texto
-    });
-
-    (docDefinition.content as Content[]).push({
+  getBasicInfoPdfTable(): Content{
+    return {
       table: {
         headerRows: 1, // Número de filas de encabezado
         widths: [
@@ -348,7 +282,75 @@ export class EstudianteDetallePaeiComponent
         defaultBorder: true, // Asegura que haya bordes en la tabla
       },
       margin: [0, 0, 0, 20], // Margen alrededor de la tabla
+    }
+  }
+  async generatePDF() {
+    this.pageLoading = true;
+    let logoBase64 = '';
+    try {
+      logoBase64 = await this.getBase64Image('/assets/logo.png');
+    } catch (err) {
+      console.error('Error al cargar el logo:', err);
+    }
+
+    (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
+    const paeiRespuestas = await this.catalogoServiceCOR.getPAEIPerNIE(
+      this.nie
+    );
+
+    // Importar html-to-pdfmake dinámicamente
+    const htmlToPdfmake = (await import('html-to-pdfmake')).default;
+
+    const docDefinition: TDocumentDefinitions = {
+      content: [] as Content[],
+      pageSize: 'A4',
+      pageMargins: [40, 60, 40, 60],
+      styles: {
+        header: {
+          fontSize: 18,
+          bold: true,
+          alignment: 'center',
+        },
+        subheader: {
+          fontSize: 14,
+          bold: true,
+          margin: [0, 20, 0, 10],
+        },
+        normal: {
+          fontSize: 12,
+          margin: [0, 0, 0, 20],
+        },
+      },
+    };
+
+    if (logoBase64) {
+      (docDefinition.content as Content[]).push({
+        image: `data:image/png;base64,${logoBase64}`,
+        width: 100,
+        alignment: 'left',
+        margin: [0, 0, 0, 10], // Margen debajo del logo
+      });
+    }
+
+    (docDefinition.content as Content[]).push({
+      text: [
+        'CENTROS DE ORIENTACIÓN Y RECURSOS (COR)\n',
+        'PLAN DE ATENCIÓN EDUCATIVO INTEGRAL (PAEI)'
+      ],
+      style: 'subheader',
+      alignment: 'center',
+      lineHeight: 1.1,
+      margin: [0, 5, 0, 10]
     });
+
+    (docDefinition.content as Content[]).push({
+      text: 'El presente Plan de Atención Educativo Integral (PAEI), elaborado por el equipo responsable del Centro de Orientación y Recursos (COR), como resultado del proceso de evaluación psicopedagógica contiene orientaciones pedagógicas para el centro educativo, docentes, madres, padres o responsables de familia. El objetivo principal es contribuir a una educación de calidad con equidad, garantizando el acceso, participación, aprendizaje y permanencia del estudiantado en el sistema educativo. Por tal razón el contenido de este documento es exclusivo para los centros educativos y familias que solicitan el servicio del COR.',
+      alignment: 'justify',
+      fontSize: 12,
+      margin: [0, 10, 0, 20], // Margen alrededor del texto
+    });
+
+    (docDefinition.content as Content[]).push(this.getBasicInfoPdfTable());
 
     (docDefinition.content as Content[]).push({
       text: 'I. DATOS GENERALES DEL ESTUDIANTE.',
@@ -390,6 +392,81 @@ export class EstudianteDetallePaeiComponent
         });
       }
     });
+
+    (docDefinition.content as Content[]).push({
+      text: 'Equipo responsable del COR:',
+      fontSize: 12,
+      bold: true,
+      margin: [0, 20, 0, 30],
+    });
+
+    (docDefinition.content as Content[]).push({
+      columns: [
+        {
+          stack: [
+            {
+              canvas: [
+                { type: 'line', x1: 0, y1: 0, x2: 230, y2: 0, lineWidth: 1 }
+              ],
+              margin: [0, 0, 0, 5]
+            },
+            { text: 'COORDINACIÓN', alignment: 'center', margin: [0, 0, 0, 20] },
+          ],
+          width: '50%'
+        },
+        {
+          stack: [
+            {
+              canvas: [
+                { type: 'line', x1: 0, y1: 0, x2: 230, y2: 0, lineWidth: 1 }
+              ],
+              margin: [0, 0, 0, 5]
+            },
+            { text: 'ÁREA DE PSICOLOGÍA', alignment: 'center', margin: [0, 0, 0, 20] },
+          ],
+          width: '50%'
+        }
+      ],
+      columnGap: 10, // Espacio entre columnas
+      margin: [0, 20, 0, 0] // Margen superior
+    });
+
+
+    (docDefinition.content as Content[]).push({
+      columns: [
+        {
+          stack: [
+            {
+              canvas: [
+                { type: 'line', x1: 0, y1: 0, x2: 230, y2: 0, lineWidth: 1 }
+              ],
+              margin: [0, 0, 0, 5]
+            },
+            { text: 'ÁREA DE PEDAGOGÍA', alignment: 'center', margin: [0, 0, 0, 20] }
+          ],
+          width: '50%'
+        },
+        {
+          stack: [
+            {
+              canvas: [
+                { type: 'line', x1: 0, y1: 0, x2: 230, y2: 0, lineWidth: 1 }
+              ],
+              margin: [0, 0, 0, 5]
+            },
+            { text: 'ÁREA DE HABLA Y LENGUAJE', alignment: 'center', margin: [0, 0, 0, 20] }
+          ],
+          width: '50%'
+        }
+      ],
+      columnGap: 10,
+      margin: [0, 20, 0, 0]
+    });
+
+    /*
+    *
+
+    * */
 
     pdfMake
       .createPdf(docDefinition)
