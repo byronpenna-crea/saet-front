@@ -12,6 +12,7 @@ import { IQuestionaryAnswer, IValuesForm } from './QuestionsComponent';
 import jsPDF from "jspdf";
 import {iQuestion, iSurvey} from "./shared/survey";
 import autoTable from "jspdf-autotable";
+import {SAET_MODULE} from "./shared/evaluaciones";
 interface IGenerateTextPdf {
   title: string;
   studentNie: string;
@@ -28,7 +29,14 @@ export class BaseComponent {
   userMessage: UserMessage = userMessageInit;
   btnStyle = ButtonStyle;
   pageLoading = false;
+  getRolApoyo(): SAET_MODULE | undefined {
+    const rolApoyo =
+      localStorage.getItem('idRolApoyo') !== undefined ?
+      (localStorage.getItem('idRolApoyo') as unknown as SAET_MODULE) : undefined;
 
+
+    return rolApoyo;
+  }
   async generateTextPdf({title, studentNie,
                           studentFullName,
     survey, answers

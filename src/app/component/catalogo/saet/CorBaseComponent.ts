@@ -10,6 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { BaseComponent } from './BaseComponent';
 import { handleMode } from './shared/forms';
 import { FormMode } from './QuestionsComponent';
+import {SAET_MODULE} from "./shared/evaluaciones";
 
 export interface informationTabBody {
   values: string[];
@@ -86,11 +87,20 @@ export class CorBaseComponent extends BaseComponent implements OnInit {
     protected router: Router
   ) {
     super();
+
+
     this.caracterizacionLoaded = new Promise<void>(resolve => {
       this.route.paramMap.subscribe(params => {
         const nie = params.get('nie');
         if (nie) {
           this.nie = nie;
+
+          const rolApoyo:SAET_MODULE | undefined = this.getRolApoyo();
+
+          if (rolApoyo === undefined || rolApoyo != SAET_MODULE.COR) {
+            this.router.navigate(['menu/saet-buscar', this.nie]);
+          }
+
           console.log('la url es ', this.router.url);
           this.loadStudentInfo();
           this.initCaracterizacion().then(() => {

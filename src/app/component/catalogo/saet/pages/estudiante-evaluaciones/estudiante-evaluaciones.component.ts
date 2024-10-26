@@ -99,7 +99,6 @@ export class EstudianteEvaluacionesComponent
     this.pageLoading = true;
     this.userMessage.showMessage = false;
 
-    console.log('idEspecialidad evaluacion --> ', iEspecialidadEvaluacion);
     Object.values(iEspecialidadEvaluacion).forEach(especialidad => {
       this.agendado[especialidad] = false;
     });

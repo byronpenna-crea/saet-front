@@ -2,7 +2,6 @@ import { Component, Inject } from '@angular/core';
 import {
   IMessageComponent,
   MessageType,
-  UserMessage,
 } from '../../interfaces/message-component.interface';
 import { DOCUMENT } from '@angular/common';
 // @ts-ignore
@@ -13,22 +12,18 @@ import {
   iPaeiSave,
 } from '../../../../../services/catalogo/catalogo.service.cor';
 import { ActivatedRoute, Router } from '@angular/router';
-import { userMessageInit } from '../../shared/messages.model';
 import {
   IQuestionaryAnswer,
   QuestionsComponent,
 } from '../../QuestionsComponent';
 import { ConfirmationService } from 'primeng/api';
-import { ButtonStyle } from '../../component/saet-button/saet-button.component';
 import { IconComponent } from '../../shared/component.config';
 import { KeyValue } from '../../component/saet-input/saet-input.component';
-import jsPDF from 'jspdf';
-import { iQuestion } from '../../shared/survey';
-import autoTable from 'jspdf-autotable';
-import html2canvas from 'html2canvas';
-import {Content, Table, TDocumentDefinitions} from 'pdfmake/interfaces';
+import { Content, TDocumentDefinitions } from 'pdfmake/interfaces';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 import * as pdfMake from 'pdfmake/build/pdfmake';
+import { SAET_MODULE } from '../../shared/evaluaciones';
+
 @Component({
   selector: 'app-estudiante-detalle-paei',
   templateUrl: './estudiante-detalle-paei.component.html',
@@ -65,6 +60,13 @@ export class EstudianteDetallePaeiComponent
     this.idPersona = isNaN(parseInt(idPersonaStr, 10))
       ? 0
       : parseInt(idPersonaStr, 10);
+
+    const rolApoyo:SAET_MODULE | undefined = this.getRolApoyo();
+
+    if (rolApoyo === undefined || rolApoyo != SAET_MODULE.COR) {
+      this.router.navigate(['menu/saet-buscar', this.nie]);
+    }
+
     this.route.paramMap.subscribe(params => {
       const nie = params.get('nie');
       if (nie) {
@@ -156,41 +158,63 @@ export class EstudianteDetallePaeiComponent
     return div.innerHTML;
   }
 
-  calcularEdad(fechaNacimiento:string) {
-    if(fechaNacimiento === ''){
+  calcularEdad(fechaNacimiento: string) {
+    if (fechaNacimiento === '') {
       return 0;
     }
-    try{
-      const [dia, mes, anio] = fechaNacimiento.split('-').map(num => parseInt(num, 10));
+    try {
+      const [dia, mes, anio] = fechaNacimiento
+        .split('-')
+        .map(num => parseInt(num, 10));
       const fechaNac = new Date(anio, mes - 1, dia);
       const fechaActual = new Date();
       let edad = fechaActual.getFullYear() - fechaNac.getFullYear();
-      const cumpleanosEsteAnio = new Date(fechaActual.getFullYear(), fechaNac.getMonth(), fechaNac.getDate());
+      const cumpleanosEsteAnio = new Date(
+        fechaActual.getFullYear(),
+        fechaNac.getMonth(),
+        fechaNac.getDate()
+      );
       if (fechaActual < cumpleanosEsteAnio) {
         edad--;
       }
       return edad;
-
-    }catch (e){
+    } catch (e) {
       return 0;
     }
   }
 
-  getBasicInfoPdfTable(): Content{
+  getBasicInfoPdfTable(): Content {
     return {
       table: {
         headerRows: 1, // Número de filas de encabezado
         widths: [
-          '10%', '10%', '10%', '10%',
-          '10%', '10%', '10%', '10%',
-          '10%', '10%'
+          '10%',
+          '10%',
+          '10%',
+          '10%',
+          '10%',
+          '10%',
+          '10%',
+          '10%',
+          '10%',
+          '10%',
         ],
         body: [
           [
-            { text: 'Nombre del estudiante', fontSize: 10, alignment: 'left', colSpan: 3 },
+            {
+              text: 'Nombre del estudiante',
+              fontSize: 10,
+              alignment: 'left',
+              colSpan: 3,
+            },
             {},
             {},
-            { text: this.studentInfo?.nombreCompleto, fontSize: 9, alignment: 'left', colSpan: 4 },
+            {
+              text: this.studentInfo?.nombreCompleto,
+              fontSize: 9,
+              alignment: 'left',
+              colSpan: 4,
+            },
             {},
             {},
             {},
@@ -201,17 +225,31 @@ export class EstudianteDetallePaeiComponent
           [
             { text: 'Edad:', fontSize: 10, alignment: 'left', colSpan: 2 },
             {},
-            { text: this.calcularEdad(this.studentInfo?.fechaNacimiento ?? ''), fontSize: 10, alignment: 'left' },
+            {
+              text: this.calcularEdad(this.studentInfo?.fechaNacimiento ?? ''),
+              fontSize: 10,
+              alignment: 'left',
+            },
             { text: 'Grado:', fontSize: 9, alignment: 'left', colSpan: 2 },
             {},
-            { text: '', fontSize: 9, alignment: 'left'},
+            { text: '', fontSize: 9, alignment: 'left' },
             { text: 'NIE:', fontSize: 9, alignment: 'left' },
-            { text: this.studentInfo?.nie, fontSize: 9, alignment: 'left', colSpan: 3 },
+            {
+              text: this.studentInfo?.nie,
+              fontSize: 9,
+              alignment: 'left',
+              colSpan: 3,
+            },
             {},
-            {}
+            {},
           ],
           [
-            { text: 'Centro educativo de procedencia:', fontSize: 10, alignment: 'left', colSpan: 4 },
+            {
+              text: 'Centro educativo de procedencia:',
+              fontSize: 10,
+              alignment: 'left',
+              colSpan: 4,
+            },
             {},
             {},
             {},
@@ -220,10 +258,15 @@ export class EstudianteDetallePaeiComponent
             {},
             {},
             {},
-            {}
+            {},
           ],
           [
-            { text: 'Nombre del (a) docente del grado:', fontSize: 10, alignment: 'left', colSpan: 4 },
+            {
+              text: 'Nombre del (a) docente del grado:',
+              fontSize: 10,
+              alignment: 'left',
+              colSpan: 4,
+            },
             {},
             {},
             {},
@@ -232,57 +275,84 @@ export class EstudianteDetallePaeiComponent
             {},
             {},
             {},
-            {}
+            {},
           ],
           [
-            { text: 'Nombre del docente de Apoyo a la Inclusión (si existe en el centro educativo):', fontSize: 10, alignment: 'left', colSpan: 4 },
+            {
+              text: 'Nombre del docente de Apoyo a la Inclusión (si existe en el centro educativo):',
+              fontSize: 10,
+              alignment: 'left',
+              colSpan: 4,
+            },
             {},
             {},
             {},
-            { text: '', fontSize: 9, alignment: 'left',
+            {
+              text: '',
+              fontSize: 9,
+              alignment: 'left',
               verticalAlignment: 'middle',
-              colSpan: 6 },
+              colSpan: 6,
+            },
             {},
             {},
             {},
             {},
-            {}
+            {},
           ],
           [
-            { text: 'Familiar responsable:', fontSize: 10, alignment: 'left', colSpan: 4 },
+            {
+              text: 'Familiar responsable:',
+              fontSize: 10,
+              alignment: 'left',
+              colSpan: 4,
+            },
             {},
             {},
             {},
-            { text: '', fontSize: 9, alignment: 'left',
+            {
+              text: '',
+              fontSize: 9,
+              alignment: 'left',
               verticalAlignment: 'middle',
-              colSpan: 6 },
+              colSpan: 6,
+            },
             {},
             {},
             {},
             {},
-            {}
+            {},
           ],
           [
-            { text: 'Fecha de entrega:', fontSize: 10, alignment: 'left', colSpan: 4 },
+            {
+              text: 'Fecha de entrega:',
+              fontSize: 10,
+              alignment: 'left',
+              colSpan: 4,
+            },
             {},
             {},
             {},
-            { text: '', fontSize: 9, alignment: 'left',
+            {
+              text: '',
+              fontSize: 9,
+              alignment: 'left',
               verticalAlignment: 'middle',
-              colSpan: 6 },
+              colSpan: 6,
+            },
             {},
             {},
             {},
             {},
-            {}
-          ]
+            {},
+          ],
         ],
       },
       layout: {
         defaultBorder: true, // Asegura que haya bordes en la tabla
       },
       margin: [0, 0, 0, 20], // Margen alrededor de la tabla
-    }
+    };
   }
   async generatePDF() {
     this.pageLoading = true;
@@ -335,12 +405,12 @@ export class EstudianteDetallePaeiComponent
     (docDefinition.content as Content[]).push({
       text: [
         'CENTROS DE ORIENTACIÓN Y RECURSOS (COR)\n',
-        'PLAN DE ATENCIÓN EDUCATIVO INTEGRAL (PAEI)'
+        'PLAN DE ATENCIÓN EDUCATIVO INTEGRAL (PAEI)',
       ],
       style: 'subheader',
       alignment: 'center',
       lineHeight: 1.1,
-      margin: [0, 5, 0, 10]
+      margin: [0, 5, 0, 10],
     });
 
     (docDefinition.content as Content[]).push({
@@ -358,7 +428,6 @@ export class EstudianteDetallePaeiComponent
       fontSize: 12,
       margin: [0, 10, 0, 20], // Margen alrededor del texto
     });
-
 
     // Procesar las respuestas para incluir contenido HTML
     paeiRespuestas.respuestas.forEach((respuestaObj, index) => {
@@ -406,31 +475,38 @@ export class EstudianteDetallePaeiComponent
           stack: [
             {
               canvas: [
-                { type: 'line', x1: 0, y1: 0, x2: 230, y2: 0, lineWidth: 1 }
+                { type: 'line', x1: 0, y1: 0, x2: 230, y2: 0, lineWidth: 1 },
               ],
-              margin: [0, 0, 0, 5]
+              margin: [0, 0, 0, 5],
             },
-            { text: 'COORDINACIÓN', alignment: 'center', margin: [0, 0, 0, 20] },
+            {
+              text: 'COORDINACIÓN',
+              alignment: 'center',
+              margin: [0, 0, 0, 20],
+            },
           ],
-          width: '50%'
+          width: '50%',
         },
         {
           stack: [
             {
               canvas: [
-                { type: 'line', x1: 0, y1: 0, x2: 230, y2: 0, lineWidth: 1 }
+                { type: 'line', x1: 0, y1: 0, x2: 230, y2: 0, lineWidth: 1 },
               ],
-              margin: [0, 0, 0, 5]
+              margin: [0, 0, 0, 5],
             },
-            { text: 'ÁREA DE PSICOLOGÍA', alignment: 'center', margin: [0, 0, 0, 20] },
+            {
+              text: 'ÁREA DE PSICOLOGÍA',
+              alignment: 'center',
+              margin: [0, 0, 0, 20],
+            },
           ],
-          width: '50%'
-        }
+          width: '50%',
+        },
       ],
       columnGap: 10, // Espacio entre columnas
-      margin: [0, 20, 0, 0] // Margen superior
+      margin: [0, 20, 0, 0], // Margen superior
     });
-
 
     (docDefinition.content as Content[]).push({
       columns: [
@@ -438,29 +514,37 @@ export class EstudianteDetallePaeiComponent
           stack: [
             {
               canvas: [
-                { type: 'line', x1: 0, y1: 0, x2: 230, y2: 0, lineWidth: 1 }
+                { type: 'line', x1: 0, y1: 0, x2: 230, y2: 0, lineWidth: 1 },
               ],
-              margin: [0, 0, 0, 5]
+              margin: [0, 0, 0, 5],
             },
-            { text: 'ÁREA DE PEDAGOGÍA', alignment: 'center', margin: [0, 0, 0, 20] }
+            {
+              text: 'ÁREA DE PEDAGOGÍA',
+              alignment: 'center',
+              margin: [0, 0, 0, 20],
+            },
           ],
-          width: '50%'
+          width: '50%',
         },
         {
           stack: [
             {
               canvas: [
-                { type: 'line', x1: 0, y1: 0, x2: 230, y2: 0, lineWidth: 1 }
+                { type: 'line', x1: 0, y1: 0, x2: 230, y2: 0, lineWidth: 1 },
               ],
-              margin: [0, 0, 0, 5]
+              margin: [0, 0, 0, 5],
             },
-            { text: 'ÁREA DE HABLA Y LENGUAJE', alignment: 'center', margin: [0, 0, 0, 20] }
+            {
+              text: 'ÁREA DE HABLA Y LENGUAJE',
+              alignment: 'center',
+              margin: [0, 0, 0, 20],
+            },
           ],
-          width: '50%'
-        }
+          width: '50%',
+        },
       ],
       columnGap: 10,
-      margin: [0, 20, 0, 0]
+      margin: [0, 20, 0, 0],
     });
 
     /*
@@ -494,7 +578,7 @@ export class EstudianteDetallePaeiComponent
     console.log('obj to save', objToSave);
     try {
       const resp = await this.catalogoServiceCOR.savePAEI(objToSave);
-      if(resp.id_paei === 0){
+      if (resp.id_paei === 0) {
         this.userMessage = {
           showMessage: true,
           message: 'Ocurrio un error guardando el paei',

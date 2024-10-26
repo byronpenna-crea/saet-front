@@ -42,10 +42,10 @@
             <app-tab-item label="">
               {{
                 especialistaAgendado.dui !== ''
-                  ? especialistaAgendado.dui
-                  : 'xxxxxxxx-x'
+                  ? especialistaAgendado.dui + '|'
+                  : ''
               }}
-              | Especialista en {{ especialidad }} - COR
+              Especialista en {{ especialidad }} - COR
             </app-tab-item>
           </div>
         </app-tab-item>
