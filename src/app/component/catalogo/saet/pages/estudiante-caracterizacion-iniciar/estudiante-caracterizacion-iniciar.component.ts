@@ -149,6 +149,13 @@ export class EstudianteCaracterizacionIniciarComponent
         ) {
           router.navigate([this.baseUrl, nie, 'view']);
         }
+        if (
+          this.caracterizacion === undefined ||
+          this.caracterizacion?.id_caracterizacion === 0 &&
+          this.formMode === FormMode.EDIT
+        ) {
+          router.navigate([this.baseUrl, nie]);
+        }
         // handleMode(idCaracterizacion, url, this.formMode, this.nie, this.router);
       });
 
@@ -320,6 +327,8 @@ export class EstudianteCaracterizacionIniciarComponent
 
   async update() {
     this.pageLoading = true;
+    this.userMessage.showMessage = false;
+
     this.loadingMessage = 'Actualizando caracterizacion';
     this.userMessage.showMessage = false;
 
@@ -375,7 +384,10 @@ export class EstudianteCaracterizacionIniciarComponent
       this.userMessage.titleMessage = 'Datos guardados';
 
       this.caracterizacion = await this.catalogoServiceCOR.getCaracterizacionPorNIE(this.nie);
-      //this.router.navigate([this.baseUrl, this.nie, 'view']);
+      if (this.caracterizacion.id_caracterizacion !== 0) {
+        this.readOnlyPaei = false;
+        this.readOnlyEvaluaciones = false;
+      }
     } catch (e) {
       console.log('error e', e);
       const error = e as Error;
@@ -394,6 +406,8 @@ export class EstudianteCaracterizacionIniciarComponent
   }
   async save() {
     this.pageLoading = true;
+    this.userMessage.showMessage = false;
+
     const respuestas = this.getAnswerObject(this.values);
     const idPersona = localStorage.getItem('id_persona');
 
@@ -406,7 +420,7 @@ export class EstudianteCaracterizacionIniciarComponent
     }
 
     const objToSave: ISaveCaracterizacion = {
-      id_caracterizacion: null,
+      id_caracterizacion: this.caracterizacion?.id_caracterizacion ?? 0,
       id_estudiante_fk: this.studentInfo?.id_est_pk ?? 0,
       id_especialista: parseInt(idPersona) ?? 0,
       id_docente_apoyo: 0,
@@ -414,6 +428,7 @@ export class EstudianteCaracterizacionIniciarComponent
       respuestas: this.getAnswerObject(this.values),
       grupoFamiliar: [],
     };
+
     if (objToSave.respuestas.length === 0) {
       this.userMessage = {
         showMessage: true,
@@ -426,7 +441,9 @@ export class EstudianteCaracterizacionIniciarComponent
 
     try {
       const response =
-        await this.catalogoServiceCOR.saveCaracterizacion(objToSave);
+        objToSave.id_caracterizacion !== 0 ?
+          await this.catalogoServiceCOR.updateCaracterizacion(objToSave)
+          : await this.catalogoServiceCOR.saveCaracterizacion(objToSave);
       console.log('response ', response);
 
       if (response.id_caracterizacion === null ||
@@ -447,7 +464,10 @@ export class EstudianteCaracterizacionIniciarComponent
         type: MessageType.SUCCESS,
       };
       this.caracterizacion = await this.catalogoServiceCOR.getCaracterizacionPorNIE(this.nie);
-
+      if (this.caracterizacion.id_caracterizacion !== 0) {
+        this.readOnlyPaei = false;
+        this.readOnlyEvaluaciones = false;
+      }
     } catch (e) {
       console.log('error e', e);
       const error = e as Error;
