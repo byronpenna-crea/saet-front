@@ -113,19 +113,20 @@
           buttonIcon: btnIcon.CLOSE
         }"
       />
-
-      <app-saet-button
-        (onClick)="save()"
-        [buttonArgs]="{ text: 'Guardar', buttonStyle: btnStyle.BLUE }"
-      />
-      <app-saet-button
-        (onClick)="generatePDF()"
-        [buttonArgs]="{
-          text: 'Generar PDF',
-          buttonIcon: btnIcon.PRINTER,
-          buttonStyle: btnStyle.BLUE
-        }"
-      />
+      <div class="right-buttons">
+        <app-saet-button
+          (onClick)="save()"
+          [buttonArgs]="{ text: 'Guardar', buttonStyle: btnStyle.BLUE }"
+        />
+        <app-saet-button
+          (onClick)="generatePDF()"
+          [buttonArgs]="{
+            text: 'Generar PDF',
+            buttonIcon: btnIcon.PRINTER,
+            buttonStyle: btnStyle.BLUE
+          }"
+        />
+      </div>
     </div>
     <div *ngIf="formMode === formModeEnum.EDIT" class="actionsButton">
       <app-saet-button

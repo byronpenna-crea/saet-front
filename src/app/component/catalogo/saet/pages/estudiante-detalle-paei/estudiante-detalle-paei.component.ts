@@ -565,6 +565,7 @@ export class EstudianteDetallePaeiComponent
   async save() {
     this.pageLoading = true;
     this.userMessage.showMessage = false;
+
     const respuestas: IQuestionaryAnswer[] = this.getAnswerObject(this.values);
     const objToSave: iPaeiSave = {
       id_paei: this.paeiId,
@@ -593,6 +594,9 @@ export class EstudianteDetallePaeiComponent
         titleMessage: 'Datos guardados',
         type: MessageType.SUCCESS,
       };
+      const paei = await this.catalogoServiceCOR
+        .getPAEIPerNIE(this.nie);
+      this.paeiId = paei.id_paei;
     } catch (e) {
       console.log('error ---- ', e);
     }
