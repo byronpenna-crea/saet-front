@@ -1,13 +1,10 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import {
-  MessageType,
-  UserMessage,
-} from '../../interfaces/message-component.interface';
-import { ButtonStyle } from '../saet-button/saet-button.component';
-import { IconComponent } from '../../shared/component.config';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {MessageType, UserMessage,} from '../../interfaces/message-component.interface';
+import {ButtonStyle} from '../saet-button/saet-button.component';
+import {IconComponent} from '../../shared/component.config';
 
-import { TIPO_EVALUACION } from '../../shared/evaluaciones';
-import { iEspecialidadEvaluacion } from '../../../../../services/shared/saet-types';
+import {TIPO_EVALUACION} from '../../shared/evaluaciones';
+import {iEspecialidadEvaluacion} from '../../../../../services/shared/saet-types';
 
 export interface IAgendaParams {
   evaluationDate: Date | null;
@@ -61,11 +58,28 @@ export class SaetTabAgendaComponent {
   evaluationDate: Date | null = new Date();
   evaluationTime: Date | null = null;
 
+  getSpecialistLabel(specialist:iEspecialidadEvaluacion){
+    switch (specialist) {
+      case iEspecialidadEvaluacion.PSICOLOGIA: {
+        return "psicólogo";
+      }
+      case iEspecialidadEvaluacion.LENGUAJE:{
+        return "lenguaje y habla";
+      }
+      case iEspecialidadEvaluacion.PEDAGOGIA: {
+        return 'pedagogia';
+      }
+    }
+  }
   onFechaEvaluacionSelect(event: Date) {
     console.log('Fecha de evaluación seleccionada:', event);
     this.evaluationDate = event;
   }
 
+  onHoraEvaluacionChange(event: Date) {
+    console.log('Hora de evaluación seleccionada:');
+    this.evaluationTime = event;
+  }
   onHoraEvaluacionSelect(event: Date) {
     console.log('Hora de evaluación seleccionada:');
     this.evaluationTime = event;
@@ -73,6 +87,8 @@ export class SaetTabAgendaComponent {
 
   agendar() {
     if (!this.readOnly) {
+      console.log('fecha ----> ', this.evaluationDate);
+      console.log('hora ----> ', this.evaluationTime);
       if (this.evaluationDate !== null && this.evaluationTime !== null) {
         this.onAgendar.emit({
           evaluationDate: this.evaluationDate,

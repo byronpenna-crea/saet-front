@@ -10,13 +10,18 @@
     { href: '', text: 'Caracterización' }
   ]"
 />
-<app-saet-mensaje-usuario
-  [show]="userMessage.showMessage"
-  [message]="userMessage.message"
-  [title]="userMessage.titleMessage"
-/>
+
 <app-saet-loading [isLoading]="pageLoading" />
 <div class="form-container">
+  <div style="margin-bottom: 3%">
+    <app-saet-mensaje-usuario
+      [show]="userMessage.showMessage"
+      [message]="userMessage.message"
+      [title]="userMessage.titleMessage"
+      [messageType]="userMessage.type"
+    />
+  </div>
+
   <p-fieldset legend="Caracterización">
     <div className="margin-top" style="display: flex" class="div-container-uno">
       <div style="flex: 1; text-align: left; padding-right: 10px">

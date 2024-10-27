@@ -113,6 +113,7 @@ export class EstudianteCaracterizacionIniciarComponent
   ) {
     super(document, catalogoServiceCOR, route, router);
     this.pageLoading = true;
+    this.userMessage.showMessage = true;
     const storedValues = localStorage.getItem('values');
     if (storedValues) {
       this.values = JSON.parse(storedValues);
@@ -168,11 +169,13 @@ export class EstudianteCaracterizacionIniciarComponent
 
   async generatePDF() {
     this.pageLoading = true;
+    console.log(' to generate pdf ');
+    const answers = await this.catalogoServiceCOR.getCaracterizacionPorNIE(this.nie);
     await this.generateTextPdf({
       survey: this.corSurveys,
       studentNie: this.nie,
       title: 'Caracterización COR del estudiante',
-      answers: this.caracterizacion?.respuestas ?? [],
+      answers: answers.respuestas ?? [],
       studentFullName: this.studentInfo?.nombreCompleto ?? ''
     });
     /*const doc = new jsPDF();
@@ -390,6 +393,7 @@ export class EstudianteCaracterizacionIniciarComponent
     }
   }
   async save() {
+    this.pageLoading = true;
     const respuestas = this.getAnswerObject(this.values);
     const idPersona = localStorage.getItem('id_persona');
 
@@ -443,6 +447,7 @@ export class EstudianteCaracterizacionIniciarComponent
         type: MessageType.SUCCESS,
       };
       this.caracterizacion = await this.catalogoServiceCOR.getCaracterizacionPorNIE(this.nie);
+
     } catch (e) {
       console.log('error e', e);
       const error = e as Error;
@@ -455,6 +460,7 @@ export class EstudianteCaracterizacionIniciarComponent
         type: MessageType.DANGER,
       };
     }
+    this.pageLoading = false;
   }
 
   async rejectConfirmDialog() {

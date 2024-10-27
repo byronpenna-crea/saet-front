@@ -37,12 +37,18 @@ export class BaseComponent {
 
     return rolApoyo;
   }
-  async generateTextPdf({title, studentNie,
+  async generateTextPdf({
+                          title,
+                          studentNie,
                           studentFullName,
-    survey, answers
-    }:IGenerateTextPdf){
+                          survey,
+                          answers,
+                        }: IGenerateTextPdf) {
     const doc = new jsPDF();
-    let currentY = 30;
+    let currentY = 30; // Posición Y actual en la página
+    const footerMargin = 30; // Margen para evitar la superposición con el pie de página
+    let pageNumber = 1; // Inicia en la primera página
+
     const studentName =
       `${studentFullName} | ${studentNie}` ||
       'Nombre del estudiante no disponible';
@@ -77,79 +83,118 @@ export class BaseComponent {
       const studentNameX = (pageWidth - studentNameWidth) / 2;
       doc.text(studentName, studentNameX, currentY);
       currentY += 20; // Espacio debajo del nombre del estudiante
-      let currentPage = 1;
+
+      // Iterar por cada cuestionario
       survey.forEach(cuestionario => {
-        const respuestas =
-          answers
-            .filter((respuesta) =>
-              cuestionario.preguntas.some(
-                p => p.id_pregunta === respuesta.id_pregunta
-              )
+        const respuestas = answers
+          .filter(respuesta =>
+            cuestionario.preguntas.some(
+              p => p.id_pregunta === respuesta.id_pregunta
             )
-            .map((respuesta) => {
-              const concatOptions = respuesta.opcion.reduce((acc, current) => {
-                return acc ? `${acc}, ${current.opcion}` : current.opcion;
-              }, '');
+          )
+          .map(respuesta => {
+            const concatOptions = respuesta.opcion.reduce((acc, current) => {
+              return acc ? `${acc}, ${current.opcion}` : current.opcion;
+            }, '');
 
-              const strResponse =
-                respuesta?.respuesta !== undefined && respuesta?.respuesta !== ''
-                  ? respuesta?.respuesta
-                  : concatOptions;
-              return [
-                respuesta.pregunta || '',
-                strResponse || ''
-              ] as [string, string];
-            }) ?? [];
+            return [
+              respuesta.pregunta || '',
+              respuesta.respuesta || '',
+              concatOptions || '',
+            ] as [string, string, string];
+          });
 
-        if (respuestas !== undefined &&  respuestas.length > 0) {
-          // Título del cuestionario
+        if (respuestas.length > 0) {
+          // Verificar si el contenido se aproxima al margen inferior
+          if (currentY > pageHeight - footerMargin) {
+            doc.addPage();
+            pageNumber++;
+            currentY = 30; // Restablecer Y en la nueva página
+          }
+
+          // Agregar el título del cuestionario
           doc.setFontSize(14);
           doc.text(cuestionario.titulo, 8, currentY);
           currentY += 10;
 
-          // Añadir tabla
-          autoTable(doc, {
-            head: [['Pregunta', 'Respuesta']],
-            body: respuestas,
-            startY: currentY,
-            margin: { bottom: 30 }, // Espacio inferior para el logo y número de página
-            didDrawPage: data => {
+          // Tabla con opciones
+          const respuestasConOpciones = respuestas.filter(
+            respuesta => respuesta[2] !== ''
+          );
 
-              if (data.pageNumber > currentPage) {
-                currentPage = data.pageNumber;
-              }
+          if (respuestasConOpciones.length > 0) {
+            const respuestasTablaConOpciones = respuestasConOpciones.map(
+              respuesta => [respuesta[0], respuesta[2], respuesta[1]]
+            );
 
-              doc.addImage(logo, 'PNG', 10, pageHeight - 30, 50, 20);
+            autoTable(doc, {
+              head: [['Pregunta', 'Opción', 'Observaciones']],
+              body: respuestasTablaConOpciones,
+              startY: currentY,
+              margin: { bottom: footerMargin },
+              didDrawPage: data => {
+                // Ajustar la numeración de página y agregar el pie de página
+                if (data.pageNumber > pageNumber) {
+                  pageNumber = data.pageNumber;
+                }
+                addFooter(doc, logo, pageWidth, pageHeight, pageNumber);
+                currentY = 30; // Restablecer Y en la nueva página
+              },
+            });
+            currentY = (doc as any).lastAutoTable.finalY + 10;
+          }
 
-              doc.setFontSize(10);
-              doc.text(
-                `Página ${currentPage}`,
-                pageWidth - 40,
-                pageHeight - 10
-              );
+          // Tabla sin opciones
+          const respuestasSinOpciones = respuestas.filter(
+            respuesta => respuesta[2] === ''
+          );
 
-              // Restablecer la posición de Y para la nueva página
-              currentY = 30;
-            },
-          });
+          if (respuestasSinOpciones.length > 0) {
+            const respuestasTablaSinOpciones = respuestasSinOpciones.map(
+              respuesta => [respuesta[0], respuesta[1]]
+            );
 
-          // Actualizar la posición Y después de la tabla
-          currentY = (doc as any).lastAutoTable.finalY + 10;
+            autoTable(doc, {
+              head: [['Pregunta', 'Respuesta']],
+              body: respuestasTablaSinOpciones,
+              startY: currentY,
+              margin: { bottom: footerMargin },
+              didDrawPage: data => {
+                // Ajustar la numeración de página y agregar el pie de página
+                if (data.pageNumber > pageNumber) {
+                  pageNumber = data.pageNumber;
+                }
+                addFooter(doc, logo, pageWidth, pageHeight, pageNumber);
+                currentY = 30; // Restablecer Y en la nueva página
+              },
+            });
+            currentY = (doc as any).lastAutoTable.finalY + 10;
+          }
 
           // Verificar si el contenido se aproxima al margen inferior
-          if (currentY > pageHeight - 40) {
+          if (currentY > pageHeight - footerMargin) {
             doc.addPage();
-            currentY = 30;
+            pageNumber++;
+            currentY = 30; // Restablecer Y en la nueva página
           }
         }
       });
-      doc.save(`Caracterizacion-dai-estudiante-${this.nie}.pdf`);
+
+      doc.save(`Caracterizacion-dai-estudiante-${studentNie}.pdf`);
     } catch (err) {
       console.error('Error al cargar el logo:', err);
     } finally {
       this.pageLoading = false;
     }
+
+    // Función para agregar el pie de página y el logo
+    function addFooter(doc: any, logo: any, pageWidth: any, pageHeight: any, pageNumber: any) {
+      doc.addImage(logo, 'PNG', 10, pageHeight - footerMargin, 50, 20);
+      doc.setFontSize(10);
+      doc.text(`Página ${pageNumber}`, pageWidth - 40, pageHeight - 10);
+    }
   }
+
 
   getAnswerObject(data: IValuesForm): IQuestionaryAnswer[] {
     const result: IQuestionaryAnswer[] = [];

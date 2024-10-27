@@ -23,6 +23,8 @@
                 [disabled]="readOnly"
                 (onSelect)="onHoraEvaluacionSelect($event)"
                 [timeOnly]="true"
+                [ngModel]="evaluationTime"
+                (ngModelChange)="onHoraEvaluacionChange($event)"
               />
             </div>
           </div>
@@ -45,7 +47,8 @@
                   ? especialistaAgendado.dui + '|'
                   : ''
               }}
-              Especialista en {{ especialidad }} - COR
+              Evaluador
+              {{ especialidad ? getSpecialistLabel(especialidad) : '' }} - COR
             </app-tab-item>
           </div>
         </app-tab-item>
@@ -92,7 +95,7 @@
               [buttonArgs]="{
                 buttonIcon: buttonIcon.PLUS,
                 buttonStyle: buttonStyle.WHITE,
-                text: 'Iniciar evaluación'
+                text: 'Iniciar perfil'
               }"
             />
           </div>

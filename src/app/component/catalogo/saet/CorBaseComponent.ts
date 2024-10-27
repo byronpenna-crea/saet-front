@@ -8,9 +8,8 @@ import {
 import { DOCUMENT } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BaseComponent } from './BaseComponent';
-import { handleMode } from './shared/forms';
-import { FormMode } from './QuestionsComponent';
-import {SAET_MODULE} from "./shared/evaluaciones";
+import { SAET_MODULE } from './shared/evaluaciones';
+import { MessageType } from './interfaces/message-component.interface';
 
 export interface informationTabBody {
   values: string[];
@@ -21,6 +20,7 @@ export class CorBaseComponent extends BaseComponent implements OnInit {
   readOnlyEvaluaciones = true;
   readOnlyPaei = true;
   async ngOnInit() {
+    this.userMessage.showMessage = false;
     const dui = localStorage.getItem('dui') ?? '';
     console.log('dui en constructor es ', dui);
     if (dui !== '') {
@@ -44,6 +44,11 @@ export class CorBaseComponent extends BaseComponent implements OnInit {
         } else {
           this.router.navigate(['/inicio']);
         }
+      }).catch((e) => {
+        console.log('Especialista no encontrado ', e);
+        this.userMessage.showMessage = true;
+        this.userMessage.message = 'El usuario actual no ha sido definido como especialista'
+        this.userMessage.type = MessageType.WARNING;
       });
     } else {
       this.router.navigate(['/login']);
