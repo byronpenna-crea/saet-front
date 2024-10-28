@@ -7,8 +7,16 @@ import {TIPO_EVALUACION} from '../../shared/evaluaciones';
 import {iEspecialidadEvaluacion} from '../../../../../services/shared/saet-types';
 
 export interface IAgendaParams {
+  profileDate: Date | null;
+  profileTime: Date | null;
+
+  especialidad?: iEspecialidadEvaluacion;
+  tipoEvaluacion: TIPO_EVALUACION;
+}
+export interface IAgendaEvaluationParams {
   evaluationDate: Date | null;
   evaluationTime: Date | null;
+
   especialidad?: iEspecialidadEvaluacion;
   tipoEvaluacion: TIPO_EVALUACION;
 }
@@ -27,9 +35,15 @@ export interface IAgendaEspecialista {
   styleUrls: ['./saet-tab-agenda.component.css'],
 })
 export class SaetTabAgendaComponent {
-  @Input() agendado: boolean = false;
   @Input() especialidad?: iEspecialidadEvaluacion;
+
+  @Input() agendado: boolean = false;
+  @Input() agendadoEvaluacion: boolean = false;
+
+
   @Input() readOnly: boolean = false;
+  @Input() readOnlyEvaluacion: boolean = false;
+
   @Input() leyend: string = '';
   @Input() especialistaAgendado: IAgendaEspecialista = {
     dui: '',
@@ -39,6 +53,7 @@ export class SaetTabAgendaComponent {
   @Input() agendaId: number = 0;
   @Output() onIniciar = new EventEmitter<void>();
   @Output() onAgendar = new EventEmitter<IAgendaParams>();
+  @Output() onEvaluationAgendar = new EventEmitter<IAgendaEvaluationParams>();
   @Output() onCancelarAgenda = new EventEmitter<IOnCancelarAgenda>();
   @Output() onMessage = new EventEmitter<{
     title: string;
@@ -54,6 +69,9 @@ export class SaetTabAgendaComponent {
   @Input() tipoEvaluacion: TIPO_EVALUACION = TIPO_EVALUACION.psicologo_perfil;
   buttonStyle = ButtonStyle;
   buttonIcon = IconComponent;
+
+  profileDate: Date | null = new Date();
+  profileTime: Date | null = null;
 
   evaluationDate: Date | null = new Date();
   evaluationTime: Date | null = null;
@@ -71,28 +89,49 @@ export class SaetTabAgendaComponent {
       }
     }
   }
-  onFechaEvaluacionSelect(event: Date) {
-    console.log('Fecha de evaluación seleccionada:', event);
-    this.evaluationDate = event;
+  // onFechaEvaluacionSelect(event: Date) {
+  //   this.evaluationDate = event;
+  // }
+  onFechaPerfilSelect(event: Date) {
+    this.profileDate = event;
   }
 
-  onHoraEvaluacionChange(event: Date) {
-    console.log('Hora de evaluación seleccionada:');
-    this.evaluationTime = event;
+  onHoraPerfilChange(event: Date) {
+    this.profileTime = event;
   }
-  onHoraEvaluacionSelect(event: Date) {
-    console.log('Hora de evaluación seleccionada:');
-    this.evaluationTime = event;
+  onHoraPerfilSelect(event: Date) {
+    this.profileTime = event;
   }
-
-  agendar() {
-    if (!this.readOnly) {
+  agendarEvaluacion() {
+    if (!this.readOnlyEvaluacion) {
       console.log('fecha ----> ', this.evaluationDate);
       console.log('hora ----> ', this.evaluationTime);
       if (this.evaluationDate !== null && this.evaluationTime !== null) {
-        this.onAgendar.emit({
+        this.onEvaluationAgendar.emit({
           evaluationDate: this.evaluationDate,
           evaluationTime: this.evaluationTime,
+          especialidad: this.especialidad,
+          tipoEvaluacion: this.tipoEvaluacion ?? null,
+        });
+      } else {
+        this.onMessage.emit({
+          message: 'Debes llenar hora y fecha para agendar',
+          messageType: MessageType.WARNING,
+          title: '¡Atención!',
+        });
+      }
+
+
+    }
+  }
+  agendar() {
+    if (!this.readOnly) {
+      console.log('fecha ----> ', this.profileDate);
+      console.log('hora ----> ', this.profileTime);
+      if (this.profileDate !== null && this.profileTime !== null) {
+        this.onAgendar.emit({
+          profileDate: this.profileDate,
+          profileTime: this.profileTime,
           especialidad: this.especialidad,
           tipoEvaluacion: this.tipoEvaluacion ?? null,
         });

@@ -8,10 +8,10 @@
   <app-tab-item label="">
     {{
       especialistaResponsableAgendar.dui !== ''
-        ? especialistaResponsableAgendar.dui
-        : 'xxxxxxxx-x'
+        ? especialistaResponsableAgendar.dui + ' | '
+        : ''
     }}
-    | Especialista - COR
+    Especialista - COR
   </app-tab-item>
 </div>
 
@@ -25,8 +25,8 @@
   <app-tab-item label="">
     {{
       especialistaResponsableEvaluacion.dui !== ''
-        ? especialistaResponsableEvaluacion.dui
-        : 'xxxxxxxx-x'
+        ? especialistaResponsableEvaluacion.dui + ' | '
+        : ''
     }}
     | Especialista
     {{
@@ -67,25 +67,29 @@
 </div>
 <div>
   <app-saet-button
-
+    (onClick)="agendarEvaluacion()"
     [buttonArgs]="{
       buttonIcon: buttonIcon.PLUS,
       buttonStyle: buttonStyle.WHITE,
       text: 'Agendar evaluacion'
     }"
   />
-  <app-saet-button
-    [buttonArgs]="{
-      buttonIcon: buttonIcon.PLUS,
-      buttonStyle: buttonStyle.WHITE,
-      text: 'Agregar otra evaluación'
-    }"
-  />
-  <app-saet-button
-    [buttonArgs]="{
-      buttonIcon: buttonIcon.EYE,
-      buttonStyle: buttonStyle.WHITE,
-      text: 'Ver evaluación'
-    }"
-  />
+  <div style="display: none">
+    <app-saet-button
+      [buttonArgs]="{
+        buttonIcon: buttonIcon.PLUS,
+        buttonStyle: buttonStyle.WHITE,
+        text: 'Agregar otra evaluación'
+      }"
+    />
+    <div class="right-buttons">
+      <app-saet-button
+        [buttonArgs]="{
+          buttonIcon: buttonIcon.EYE,
+          buttonStyle: buttonStyle.WHITE,
+          text: 'Ver evaluación'
+        }"
+      />
+    </div>
+  </div>
 </div>

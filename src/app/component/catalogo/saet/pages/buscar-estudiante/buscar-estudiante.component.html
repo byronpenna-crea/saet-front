@@ -1,5 +1,9 @@
 <div class="form-container divInforme">
-  <a data-testid="aInformeTrimestral" href="#/menu/saet-informe">
+  <a
+    *ngIf="enabledCor"
+    data-testid="aInformeTrimestral"
+    href="#/menu/saet-informe"
+  >
     Informe Trimestral COR
   </a>
 </div>

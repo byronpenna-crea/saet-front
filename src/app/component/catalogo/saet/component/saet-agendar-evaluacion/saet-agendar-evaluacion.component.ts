@@ -1,7 +1,10 @@
-import { Component, Input } from '@angular/core';
-import { IAgendaEspecialista } from '../saet-tab-agenda/saet-tab-agenda.component';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {IAgendaEspecialista, IAgendaParams} from '../saet-tab-agenda/saet-tab-agenda.component';
 import { IconComponent } from '../../shared/component.config';
 import { ButtonStyle } from '../saet-button/saet-button.component';
+import {MessageType} from "../../interfaces/message-component.interface";
+import {iEspecialidadEvaluacion} from "../../../../../services/shared/saet-types";
+import {TIPO_EVALUACION} from "../../shared/evaluaciones";
 
 @Component({
   selector: 'app-saet-agendar-evaluacion',
@@ -18,10 +21,22 @@ export class SaetAgendarEvaluacionComponent {
     dui: '',
     nombreCompleto: '',
   };
+  @Input() especialidad?: iEspecialidadEvaluacion;
+  @Input() tipoEvaluacion?: TIPO_EVALUACION;
 
+  @Output() onAgendar = new EventEmitter<IAgendaParams>();
   evaluationDate: Date | null = null;
   evaluationTime: Date | null = null;
 
   buttonIcon = IconComponent;
   buttonStyle = ButtonStyle;
+
+  agendarEvaluacion() {
+    /*this.tipoEvaluacion && this.onAgendar.emit({
+      evaluationDate: this.evaluationDate,
+      evaluationTime: this.evaluationTime,
+      especialidad: this.especialidad,
+      tipoEvaluacion: this.tipoEvaluacion ?? undefined,
+    });*/
+  }
 }

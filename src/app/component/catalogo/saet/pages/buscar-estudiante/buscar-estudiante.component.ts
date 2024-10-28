@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Inject } from '@angular/core';
+import {ChangeDetectorRef, Component, Inject, OnInit} from '@angular/core';
 import {
   ButtonStyle,
   SaetButtonArgs,
@@ -21,6 +21,7 @@ import { CorBaseComponent } from '../../CorBaseComponent';
 import { DOCUMENT } from '@angular/common';
 import { KeyValue } from '../../component/saet-input/saet-input.component';
 import { SAET_MODULE } from '../../shared/evaluaciones';
+import {Promise} from "cypress/types/cy-bluebird";
 
 interface Estudiante {
   nie: string;
@@ -45,13 +46,17 @@ interface flowTableInterface {
 })
 export class BuscarEstudianteComponent
   extends CorBaseComponent
-  implements IMessageComponent
+  implements IMessageComponent, OnInit
 {
   inputNIE = '';
   cnResult = 0;
   centroEducativo = '';
   onInputChange(keyValue: KeyValue) {
     this.inputNIE = keyValue.value;
+  }
+
+  override async ngOnInit() {
+    super.ngOnInit();
   }
 
   constructor(
@@ -64,11 +69,11 @@ export class BuscarEstudianteComponent
     super(document, catalogoServiceCOR, route, router);
     try {
       this.pageLoading = true;
+
       if (this.nie === '') {
         this.pageLoading = false;
         return;
       }
-
       this.catalogoServiceCOR
         .getStudentInfo(this.nie)
         .then(result => {
@@ -99,7 +104,6 @@ export class BuscarEstudianteComponent
   }
 
   showTable = false;
-
   flowColumns: TableColumn<flowTableInterface>[] = [
     { key: 'responsable', header: 'Responsables' },
     { key: 'estadoApoyo', header: 'Estado de apoyo' },

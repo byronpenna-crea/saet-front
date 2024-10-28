@@ -10,7 +10,7 @@
                 [disabled]="readOnly"
                 [showIcon]="true"
                 dateFormat="dd/mm/yy"
-                (onSelect)="onFechaEvaluacionSelect($event)"
+                (onSelect)="onFechaPerfilSelect($event)"
               >
               </p-calendar>
             </div>
@@ -21,10 +21,10 @@
               <p-calendar
                 inputId="calendar-timeonly"
                 [disabled]="readOnly"
-                (onSelect)="onHoraEvaluacionSelect($event)"
+                (onSelect)="onHoraPerfilSelect($event)"
                 [timeOnly]="true"
-                [ngModel]="evaluationTime"
-                (ngModelChange)="onHoraEvaluacionChange($event)"
+                [ngModel]="profileTime"
+                (ngModelChange)="onHoraPerfilChange($event)"
               />
             </div>
           </div>
@@ -103,7 +103,57 @@
       </div>
     </p-tabPanel>
     <p-tabPanel header="Agendar evaluación">
-      <app-saet-agendar-evaluacion [readOnly]="readOnly" />
+      <div *ngIf="!agendadoEvaluacion">
+        <div class="flex wrap margin-top">
+          <div class="first-column">
+            <label class="first-item">Fecha de evaluación:</label>
+            <div class="second-item">
+              <p-calendar
+                [disabled]="readOnlyEvaluacion"
+                [showIcon]="true"
+                dateFormat="dd/mm/yy"
+                (onSelect)="onFechaPerfilSelect($event)"
+              >
+              </p-calendar>
+            </div>
+          </div>
+          <div class="second-column">
+            <label class="first-item">Hora de evaluación:</label>
+            <div class="second-item-time">
+              <p-calendar
+                inputId="calendar-timeonly"
+                [disabled]="readOnly"
+                (onSelect)="onHoraPerfilSelect($event)"
+                [timeOnly]="true"
+                [ngModel]="profileTime"
+                (ngModelChange)="onHoraPerfilChange($event)"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="!agendado">
+        <div class="actionsButton">
+          <div></div>
+          <div class="right-buttons">
+            <app-saet-button
+              (onClick)="agendarEvaluacion()"
+              [disabled]="readOnly"
+              [buttonArgs]="{
+                buttonIcon: buttonIcon.PLUS,
+                buttonStyle: buttonStyle.WHITE,
+                text: 'Agendar evaluacion'
+              }"
+            />
+          </div>
+        </div>
+      </div>
+      <div *ngIf="agendadoEvaluacion">
+
+      </div>
+
+
+<!--      <app-saet-agendar-evaluacion [readOnly]="readOnly" />-->
     </p-tabPanel>
   </p-tabView>
 </app-saet-tab>

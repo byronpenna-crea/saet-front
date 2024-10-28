@@ -19,6 +19,7 @@ export class CorBaseComponent extends BaseComponent implements OnInit {
   caracterizacion: IGetCaracterizacion | undefined;
   readOnlyEvaluaciones = true;
   readOnlyPaei = true;
+  enabledCor = false;
   async ngOnInit() {
     this.userMessage.showMessage = false;
     const dui = localStorage.getItem('dui') ?? '';
@@ -39,6 +40,11 @@ export class CorBaseComponent extends BaseComponent implements OnInit {
           localStorage.setItem('especialidad', '');
         }
         if (persona.rol_pk !== null) {
+
+          this.enabledCor =
+            (persona.rol_pk.rol_pk as SAET_MODULE) ==
+            SAET_MODULE.COR;
+
           localStorage.setItem('idRolApoyo', persona.rol_pk.rol_pk.toString());
           localStorage.setItem('rolApoyo', persona.rol_pk.rol);
         } else {

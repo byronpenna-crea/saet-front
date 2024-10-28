@@ -15,7 +15,7 @@ import { userMessageInit } from '../../shared/messages.model';
 import { CorBaseComponent } from '../../CorBaseComponent';
 import { TIPO_EVALUACION } from '../../shared/evaluaciones';
 import {
-  IAgendaEspecialista,
+  IAgendaEspecialista, IAgendaEvaluationParams,
   IAgendaParams,
   IOnCancelarAgenda,
 } from '../../component/saet-tab-agenda/saet-tab-agenda.component';
@@ -40,6 +40,7 @@ export interface TabInput {
   agendaId: number;
   onIniciar: () => void;
   onAgendar: (event: IAgendaParams) => void;
+  onEvaluationAgendar: (event: IAgendaEvaluationParams) => void;
   onCancelarAgenda: (event: IOnCancelarAgenda) => void;
   tipoEvaluacion: TIPO_EVALUACION;
 }
@@ -263,7 +264,10 @@ export class EstudianteEvaluacionesComponent
         leyend: 'Evaluación Habla y lenguaje',
         agendado: this.agendado[iEspecialidadEvaluacion.LENGUAJE],
         readOnly: this.readOnlyTab,
+
         onAgendar: this.agendar.bind(this),
+        onEvaluationAgendar: this.agendarEvaluacion.bind(this),
+
         onCancelarAgenda: this.cancelar.bind(this),
         evaluationId: 0,
         onIniciar: this.iniciarLenguajeHabla.bind(this),
@@ -278,7 +282,10 @@ export class EstudianteEvaluacionesComponent
         leyend: 'Evaluación psicologica',
         agendado: this.agendado[iEspecialidadEvaluacion.PSICOLOGIA],
         readOnly: this.readOnlyTab,
+
         onAgendar: this.agendar.bind(this),
+        onEvaluationAgendar: this.agendarEvaluacion.bind(this),
+
         onCancelarAgenda: this.cancelar.bind(this),
         evaluationId: this.psicologiaEvaluationId,
         onIniciar: this.iniciarPsicologia.bind(this),
@@ -293,7 +300,10 @@ export class EstudianteEvaluacionesComponent
         leyend: 'Evaluación pedagogica',
         agendado: this.agendado[iEspecialidadEvaluacion.PEDAGOGIA],
         readOnly: true,
+
         onAgendar: this.agendar.bind(this),
+        onEvaluationAgendar: this.agendarEvaluacion.bind(this),
+
         onCancelarAgenda: this.cancelar.bind(this),
         onIniciar: this.iniciarPedagogia.bind(this),
         especialistaAgendado:
@@ -383,11 +393,9 @@ export class EstudianteEvaluacionesComponent
     const minutes = String(date.getMinutes()).padStart(2, '0');
     return `${hours}:${minutes}`;
   }
-
-  async agendar(event: IAgendaParams) {
+  async agendarEvaluacion(event: IAgendaEvaluationParams){
     this.userMessage.showMessage = false;
     this.pageLoading = true;
-
     if (this.studentInfo?.id_est_pk === undefined) {
       this.userMessage.titleMessage = '¡Atención!';
       this.userMessage.message = 'Estudiante no encontrado';
@@ -405,6 +413,7 @@ export class EstudianteEvaluacionesComponent
     }
 
     const currentDate = new Date();
+
     if (event.evaluationDate < currentDate) {
       this.userMessage.showMessage = true;
       this.userMessage.message =
@@ -417,6 +426,104 @@ export class EstudianteEvaluacionesComponent
 
     const timeToSave = this.formatTimeToHHMM(event.evaluationTime);
     const dateToSave = this.formatDateToDDMMYYYY(event.evaluationDate);
+
+    if (dateToSave === '' || timeToSave === '') {
+      this.userMessage.showMessage = true;
+      this.userMessage.message = 'problema de fecha y hora';
+      this.userMessage.titleMessage = '¡Atención!';
+      this.userMessage.type = MessageType.WARNING;
+      this.pageLoading = false;
+      return;
+    }
+
+    const obj: ISaveQuestionary = {
+      id_estudiante_fk: this.studentInfo?.id_est_pk,
+      id_especialista: this.idPersona,
+      id_tipo_evaluacion: event.tipoEvaluacion,
+      fecha: dateToSave,
+      hora: timeToSave,
+      id_evaluacion: null,
+      respuestas: [],
+    };
+
+    if (event.especialidad === undefined) {
+      this.userMessage.showMessage = true;
+      this.userMessage.message = 'No existe especilidad para ser guardada';
+      this.userMessage.titleMessage = '¡Atención!';
+      this.userMessage.type = MessageType.DANGER;
+      this.pageLoading = false;
+      return;
+    }
+    if (this.especialidad === undefined) {
+      this.userMessage.showMessage = true;
+      this.userMessage.message =
+        'Problema con la session del usuario, cierrela y vuelvala a iniciar';
+      this.userMessage.titleMessage = '¡Atención!';
+      this.userMessage.type = MessageType.DANGER;
+      this.pageLoading = false;
+      return;
+    }
+
+    try {
+      const respuesta = await this.catalogoServiceCOR.saveEvaluacion(
+        obj,
+        event.especialidad
+      );
+
+
+    } catch (ex: unknown) {
+      const error = ex as ResponseError;
+      this.userMessage.showMessage = true;
+      this.userMessage.titleMessage = 'Error';
+      this.userMessage.message = error.message;
+      this.userMessage.type = MessageType.DANGER;
+    }
+    this.pageLoading = false;
+
+  }
+  async agendar(event: IAgendaParams) {
+    this.userMessage.showMessage = false;
+    this.pageLoading = true;
+
+    if (this.studentInfo?.id_est_pk === undefined) {
+      this.userMessage.titleMessage = '¡Atención!';
+      this.userMessage.message = 'Estudiante no encontrado';
+      this.userMessage.type = MessageType.DANGER;
+      console.error('estudiante no encontrado');
+      this.pageLoading = false;
+      return;
+    }
+    if (event.profileTime === null || event.profileDate === null) {
+      this.userMessage.showMessage = true;
+      this.userMessage.message = 'Debes llenar la fecha y hora para agendar';
+      this.userMessage.titleMessage = '¡Atención!';
+      this.pageLoading = false;
+      return;
+    }
+
+    const currentDate = new Date();
+
+    if (event.profileDate < currentDate) {
+      this.userMessage.showMessage = true;
+      this.userMessage.message =
+        'La fecha de la agenda no puede ser menor que la fecha actual';
+      this.userMessage.titleMessage = '¡Atención!';
+      this.userMessage.type = MessageType.DANGER;
+      this.pageLoading = false;
+      return;
+    }
+
+    const timeToSave = this.formatTimeToHHMM(event.profileTime);
+    const dateToSave = this.formatDateToDDMMYYYY(event.profileDate);
+
+    if (dateToSave === '' || timeToSave === '') {
+      this.userMessage.showMessage = true;
+      this.userMessage.message = 'problema de fecha y hora';
+      this.userMessage.titleMessage = '¡Atención!';
+      this.userMessage.type = MessageType.WARNING;
+      this.pageLoading = false;
+      return;
+    }
 
     const obj: ISaveQuestionary = {
       id_estudiante_fk: this.studentInfo?.id_est_pk,
