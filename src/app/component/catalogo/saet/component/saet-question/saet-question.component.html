@@ -21,6 +21,21 @@
 <ng-container *ngIf="type === QuestionType.MULTIPLE_CON_RESPUESTA">
   MULTIPLE_CON_RESPUESTA
 </ng-container>
+<ng-container *ngIf="type === QuestionType.TIME">
+  <div>
+    <div style="margin-bottom: 20px">
+      <p-calendar
+        inputId="calendar-timeonly"
+        [disabled]="readonly"
+        (onSelect)="onTimeChange($event)"
+        [timeOnly]="true"
+        (ngModelChange)="onTimeChange($event)"
+        [ngModel]="values['input_' + idPregunta.toString()]"
+        [name]="'input_' + idPregunta.toString()"
+      />
+    </div>
+  </div>
+</ng-container>
 <ng-container *ngIf="type === QuestionType.OPCION_UNICA_CON_RESPUESTA">
   <div>
     <div style="margin-bottom: 20px">

@@ -24,6 +24,19 @@ export class SaetQuestionComponent {
   onCheckBoxChange(event: KeyValue[]) {
     this.checkboxChange.emit(event);
   }
+  onTimeChange(event: Date){
+    const hours = event.getHours().toString().padStart(2, '0');
+    const minutes = event.getMinutes().toString().padStart(2, '0');
+    const formattedTime = `${hours}:${minutes}`;
+
+    console.log('time changed ', formattedTime);
+    console.log('time changed ', this.idPregunta);
+
+    this.onChange.emit({
+      key: `input_${this.idPregunta.toString()}`,
+      value: formattedTime
+    });
+  }
   onInputChange(event: KeyValue) {
     this.onChange.emit(event);
   }
