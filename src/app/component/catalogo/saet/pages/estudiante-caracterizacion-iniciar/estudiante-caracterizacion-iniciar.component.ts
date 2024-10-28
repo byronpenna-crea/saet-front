@@ -420,7 +420,7 @@ export class EstudianteCaracterizacionIniciarComponent
     }
 
     const objToSave: ISaveCaracterizacion = {
-      id_caracterizacion: this.caracterizacion?.id_caracterizacion ?? 0,
+      id_caracterizacion: this.caracterizacion?.id_caracterizacion ?? null,
       id_estudiante_fk: this.studentInfo?.id_est_pk ?? 0,
       id_especialista: parseInt(idPersona) ?? 0,
       id_docente_apoyo: 0,

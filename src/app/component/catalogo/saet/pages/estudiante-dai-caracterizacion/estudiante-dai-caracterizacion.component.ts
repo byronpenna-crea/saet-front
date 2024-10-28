@@ -125,8 +125,24 @@ export class EstudianteDaiCaracterizacionComponent
         ) {
           await router.navigate([this.baseUrl, this.nie, 'view']);
         }
+
+        if (
+          this.caracterizacion === undefined ||
+          this.caracterizacion?.id_caracterizacion === 0 &&
+          this.formMode === FormMode.EDIT
+        ) {
+          router.navigate([this.baseUrl, this.nie]);
+        }
+
       })
       .catch(e => {
+        if (
+          this.caracterizacion === undefined ||
+          this.caracterizacion?.id_caracterizacion === 0 &&
+          this.formMode === FormMode.CREATE
+        ) {
+          router.navigate([this.baseUrl, this.nie]);
+        }
         console.log('Error cargando la caracterizacion dai', e);
       });
 
@@ -252,6 +268,8 @@ export class EstudianteDaiCaracterizacionComponent
   }
   async save() {
     this.pageLoading = true;
+    this.userMessage.showMessage = false;
+
     const respuestas = this.getAnswerObject(this.values);
     const idPersona = localStorage.getItem('id_persona');
 
@@ -263,32 +281,52 @@ export class EstudianteDaiCaracterizacionComponent
       return;
     }
     const objToSave: ISaveCaracterizacionDAI = {
-      id_caracterizacion: null,
+      id_caracterizacion: this.caracterizacion?.id_caracterizacion ?? null,
       id_estudiante_fk: this.studentInfo?.id_est_pk ?? 0,
       id_docente_apoyo: parseInt(idPersona) ?? 0,
       id_modulo: SAET_MODULE.COR,
       respuestas: this.validarPreguntas(respuestas, this.corSurveys),
     };
-
+    console.log('obj to save dai ', objToSave);
     try {
       const response =
-        await this.catalogoServiceDai.saveCaracterizacion(objToSave);
+        objToSave.id_caracterizacion !== null && objToSave.id_caracterizacion !== 0 ? await this.catalogoServiceDai.updateCaracterizacion(objToSave)
+        : await this.catalogoServiceDai.saveCaracterizacion(objToSave)
+      ;
       console.log('response ', response);
-      if (response.id_caracterizacion !== 0) {
+
+      if (response.id_caracterizacion === null ||
+        response.id_caracterizacion === undefined ||
+        response.id_caracterizacion === 0) {
         this.userMessage = {
-          showMessage: true,
-          message: '¡Los datos han sido guardados exitosamente!',
-          titleMessage: 'Datos guardados',
-          type: MessageType.SUCCESS,
+          showMessage: false,
+          message: 'Error guardando caracterizacion',
+          titleMessage: 'Error',
+          type: MessageType.DANGER,
         };
-        handleMode(
-          response.id_caracterizacion ?? 0,
-          this.baseUrl,
-          FormMode.VIEW,
-          this.nie,
-          this.router
-        );
+        return;
       }
+
+
+
+      this.caracterizacion = await this.catalogoServiceDai.getCaracterizacionPorNIE(this.nie);
+      if (this.caracterizacion.id_caracterizacion === 0) {
+        this.userMessage = {
+          showMessage: false,
+          message: 'Error guardando caracterizacion',
+          titleMessage: 'Error',
+          type: MessageType.DANGER,
+        };
+        return;
+      }
+
+      this.userMessage = {
+        showMessage: true,
+        message: '¡Los datos han sido guardados exitosamente!',
+        titleMessage: 'Datos guardados',
+        type: MessageType.SUCCESS,
+      };
+
     } catch (e) {
       console.log('error e', e);
       const error = e as Error;
@@ -318,7 +356,7 @@ export class EstudianteDaiCaracterizacionComponent
     this.loadingMessage = 'Actualizando caracterizacion';
 
     const respuestas = this.getAnswerObject(this.values);
-    console.log('obj to save caracterizacion ------->', this.caracterizacion);
+    console.log('obj to save caracterizacion ------->', respuestas);
     if (
       this.caracterizacion === undefined ||
       this.caracterizacion?.id_caracterizacion === 0

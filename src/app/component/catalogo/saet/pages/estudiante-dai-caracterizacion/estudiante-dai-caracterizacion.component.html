@@ -19,9 +19,7 @@
     { href: '', text: 'Edición' }
   ]"
 />
-<app-saet-loading [isLoading]="pageLoading"
-  [message]="loadingMessage"
-/>
+<app-saet-loading [isLoading]="pageLoading" [message]="loadingMessage" />
 <app-saet-confirm
   acceptButtonText="Continuar editando"
   cancelButtonText="Salir sin guardar"
@@ -77,16 +75,39 @@
           buttonIcon: iconCompoment.CLOSE
         }"
       />
+      <div class="right-buttons">
+        <app-saet-button
+          (onClick)="save()"
+          testId="btn-guardar"
+          [buttonArgs]="{
+            text:
+              caracterizacion !== undefined &&
+              caracterizacion?.id_caracterizacion !== undefined &&
+              caracterizacion?.id_caracterizacion !== 0
+                ? 'Actualizar'
+                : 'Guardar',
+            buttonStyle: btnStyle.BLUE,
+            buttonIcon: iconCompoment.SAVE
+          }"
+        />
 
-      <app-saet-button
-        (onClick)="save()"
-        testId="btn-guardar"
-        [buttonArgs]="{
-          text: 'Guardar',
-          buttonStyle: btnStyle.BLUE,
-          buttonIcon: iconCompoment.SAVE
-        }"
-      />
+        <div
+          *ngIf="
+            caracterizacion !== undefined &&
+            caracterizacion?.id_caracterizacion !== undefined &&
+            caracterizacion?.id_caracterizacion !== 0
+          "
+        >
+          <app-saet-button
+            (onClick)="generatePDF()"
+            [buttonArgs]="{
+              text: 'Generar PDF',
+              buttonStyle: btnStyle.BLUE,
+              buttonIcon: iconCompoment.PRINTER
+            }"
+          />
+        </div>
+      </div>
     </div>
     <div *ngIf="formMode === formModeEnum.EDIT" class="actionsButton">
       <div style="width: 300px">
