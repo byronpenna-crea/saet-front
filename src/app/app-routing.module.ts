@@ -50,6 +50,7 @@ import {
 import {
   DaiPlanDeAccionIniciarComponent
 } from "./component/catalogo/saet/pages/dai-plan-de-accion-iniciar/dai-plan-de-accion-iniciar.component";
+import { SaetInicioComponent } from './component/catalogo/saet/saet-inicio/saet-inicio.component';
 
 /*
 const routes: Routes = [
@@ -86,6 +87,7 @@ const routes: Routes = [
         canActivate: [UserGuardGuard],
       },
       { path: 'saet', component: SaetComponent },
+      { path: 'saet-inicio', component: SaetInicioComponent },
       { path: 'saet-buscar', component: BuscarEstudianteComponent },
       { path: 'saet-buscar/:nie', component: BuscarEstudianteComponent },
       {

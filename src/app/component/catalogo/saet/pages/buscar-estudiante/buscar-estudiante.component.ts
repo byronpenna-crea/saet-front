@@ -132,7 +132,7 @@ export class BuscarEstudianteComponent
           SAET_MODULE.DAI,
     },
     {
-      col1: 'DEI',
+      col1: 'Docente de Apoyo a la Inclusión Educativa',
       col2: 'Sin atención',
       col3: '',
       href: '/menu/dei/informe-cualitativo',

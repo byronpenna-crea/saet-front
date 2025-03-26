@@ -113,6 +113,7 @@ import { DaiEstudianteDatosGeneralesComponent } from './component/catalogo/saet/
 import { DaiPlanDeAccionComponent } from './component/catalogo/saet/pages/dai-plan-de-accion/dai-plan-de-accion.component';
 import { DaiAtencionPersonalizadaComponent } from './component/catalogo/saet/pages/dai-atencion-personalizada/dai-atencion-personalizada.component';
 import { DaiPlanDeAccionIniciarComponent } from './component/catalogo/saet/pages/dai-plan-de-accion-iniciar/dai-plan-de-accion-iniciar.component';
+import { SaetInicioComponent } from './component/catalogo/saet/saet-inicio/saet-inicio.component';
 
 @NgModule({
   declarations: [
@@ -183,6 +184,7 @@ import { DaiPlanDeAccionIniciarComponent } from './component/catalogo/saet/pages
     DaiPlanDeAccionComponent,
     DaiAtencionPersonalizadaComponent,
     DaiPlanDeAccionIniciarComponent,
+    SaetInicioComponent,
   ],
   imports: [
     BrowserModule,
