@@ -161,7 +161,15 @@ export class EstudianteCaracterizacionIniciarComponent
 
       const corQuestionPromise = catalogoServiceCOR.getCORQuestions();
       Promise.all([corQuestionPromise]).then(([corQuestionResult]) => {
-        this.corSurveys.push(...corQuestionResult.cuestionarios);
+        const cuestionariosOrdenados = corQuestionResult.cuestionarios.map(cuestionario => {
+          const preguntasOrdenadas = [...cuestionario.preguntas].sort((a, b) => a.id_pregunta - b.id_pregunta);
+          return {
+            ...cuestionario,
+            preguntas: preguntasOrdenadas
+          };
+        });
+
+        this.corSurveys.push(...cuestionariosOrdenados);
         this.pageLoading = false;
       });
 
