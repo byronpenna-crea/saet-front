@@ -422,13 +422,24 @@ export class EstudianteDaiCaracterizacionComponent
   }
   async generatePDF() {
     this.pageLoading = true;
-    await this.generateTextPdf({
-      survey: this.corSurveys,
-      studentNie: this.nie,
-      title: 'Caracterización hecha por DAI del estudiante',
-      answers: this.caracterizacion?.respuestas ?? [],
-      studentFullName: this.studentInfo?.nombreCompleto ?? ''
-    });
+    try {
+      await this.generateTextPdf({
+        survey: this.corSurveys,
+        studentNie: this.nie,
+        title: 'Caracterización hecha por DAI del estudiante',
+        answers: this.caracterizacion?.respuestas ?? [],
+        studentFullName: this.studentInfo?.nombreCompleto ?? ''
+      });
+    }catch (e){
+      console.log('Error ', e);
+      this.userMessage = {
+        showMessage: true,
+        message: 'Error no controlado',
+        titleMessage: 'Error en la generacion del pdf',
+        type: MessageType.DANGER,
+      };
+    }
+
   }
 
   protected readonly SAET_MODULE = SAET_MODULE;

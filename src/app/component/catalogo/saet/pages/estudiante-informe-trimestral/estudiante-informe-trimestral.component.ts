@@ -67,35 +67,33 @@ export class EstudianteInformeTrimestralComponent
     super(document, catalogoServiceQuarterReport, route, router);
     try {
       this.inputNIE = this.nie;
-      if (this.nie) {
-        this.toggleTable();
-        //const questionPromise = catalogoServiceQuarterReport.getQuestions();
-        console.log(this.nie);
-        const answerPromise = catalogoServiceQuarterReport.getByNie(this.nie);
-        Promise.all([answerPromise])
-          .then(([answerPromise]) => {
-            console.log('answer -------------------');
-            console.log(answerPromise);
-            console.log('answer -------------------');
-            this.reportId = answerPromise.id_informe_pk;
-            this.mainButtonText = 'Actualizar y continuar';
-            const respuestas = this.respuestasToValues(
-              answerPromise.respuestas ?? []
-            );
-            this.values = {
-              ...this.values,
-              ...respuestas,
-            };
-          })
-          .catch(([answerCatch]) => {
-            console.log('Answer catch --------------', answerCatch);
-          });
-        const storedValues = localStorage.getItem(
-          `${this.localStorageKey}-${this.nie}`
-        );
-        if (storedValues) {
-          this.values = JSON.parse(storedValues);
-        }
+      this.toggleTable();
+      //const questionPromise = catalogoServiceQuarterReport.getQuestions();
+      console.log(this.nie);
+      const answerPromise = catalogoServiceQuarterReport.getByNie(this.nie);
+      Promise.all([answerPromise])
+        .then(([answerPromise]) => {
+          console.log('answer -------------------');
+          console.log(answerPromise);
+          console.log('answer -------------------');
+          this.reportId = answerPromise.id_informe_pk;
+          this.mainButtonText = 'Actualizar y continuar';
+          const respuestas = this.respuestasToValues(
+            answerPromise.respuestas ?? []
+          );
+          this.values = {
+            ...this.values,
+            ...respuestas,
+          };
+        })
+        .catch(([answerCatch]) => {
+          console.log('Answer catch --------------', answerCatch);
+        });
+      const storedValues = localStorage.getItem(
+        `${this.localStorageKey}-${this.nie}`
+      );
+      if (storedValues) {
+        this.values = JSON.parse(storedValues);
       }
     } catch (e) {
       console.log('error en constructor', e);
@@ -149,65 +147,53 @@ export class EstudianteInformeTrimestralComponent
     if (localStorage.getItem('dui') === null) {
       this.router.navigate(['/login']);
     }
-    if (this.inputNIE) {
-      try {
-        this.pageLoading = true;
-        const result = await this.catalogoServiceQuarterReport.getStudentInfo(
-          this.inputNIE
+    try {
+      this.pageLoading = true;
+      const atentidos =
+        await this.catalogoServiceQuarterReport.getAtendidosByDui(
+          localStorage.getItem('dui') ?? ''
         );
-        const atentidos =
-          await this.catalogoServiceQuarterReport.getAtendidosByDui(
-            localStorage.getItem('dui') ?? ''
-          );
-        console.log('result here ', atentidos);
-        this.tableData = [
-          {
-            number: '1',
-            tableHeaderStudentName: 'Byron Aldair Pena',
-            tableHeaderStudentSex: 'M',
-            tableHeaderStudentAge: 30,
-            tableHeaderStudentGrade: 9,
-            tableHeaderStudentSchool: 'Ricaldone',
-            tableHeaderStudentCity: 'Soyapango',
-          },
-        ];
-        console.log('atendidos map ----------', atentidos);
-        this.tableData = atentidos.map(atendido => {
-          return {
-            number: atendido.per_nie.toString(),
-            tableHeaderStudentName: atendido.nombre_completo,
-            tableHeaderStudentSex: '',
-            tableHeaderStudentAge: 0,
-            tableHeaderStudentGrade: 9,
-            tableHeaderStudentSchool: '',
-            tableHeaderStudentCity: '',
-          };
-        });
-        this.cnResult = 1;
-        this.showTable = true;
-      } catch (e: unknown) {
-        const error = e as ResponseError;
-        if (error.status === 401) {
-          console.log('back to login', error.message);
-        }
-        this.userMessage = {
-          showMessage: true,
-          message: error.message,
-          type: MessageType.DANGER,
+      console.log('result here ', atentidos);
+      this.tableData = [
+        {
+          number: '1',
+          tableHeaderStudentName: 'Byron Aldair Pena',
+          tableHeaderStudentSex: 'M',
+          tableHeaderStudentAge: 30,
+          tableHeaderStudentGrade: 9,
+          tableHeaderStudentSchool: 'Ricaldone',
+          tableHeaderStudentCity: 'Soyapango',
+        },
+      ];
+      console.log('atendidos map ----------', atentidos);
+      this.tableData = atentidos.map(atendido => {
+        return {
+          number: atendido.per_nie.toString(),
+          tableHeaderStudentName: atendido.nombre_completo,
+          tableHeaderStudentSex: '',
+          tableHeaderStudentAge: 0,
+          tableHeaderStudentGrade: 9,
+          tableHeaderStudentSchool: '',
+          tableHeaderStudentCity: '',
         };
-      } finally {
-        this.pageLoading = false;
+      });
+      this.cnResult = 1;
+      this.showTable = true;
+    } catch (e: unknown) {
+      console.log('error here --> ',e);
+      const error = e as ResponseError;
+      if (error.status === 401) {
+        console.log('back to login', error.message);
       }
-    } else {
       this.userMessage = {
         showMessage: true,
-        message: 'Escribe el NIE para realizar busqueda',
-        titleMessage: '',
-        type: MessageType.WARNING,
+        message: error.message,
+        type: MessageType.DANGER,
       };
-
-      this.showTable = false;
+    } finally {
+      this.pageLoading = false;
     }
+
   }
 
   protected readonly IconComponent = IconComponent;

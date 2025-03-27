@@ -182,7 +182,8 @@ export class BaseComponent {
 
       doc.save(`Caracterizacion-dai-estudiante-${studentNie}.pdf`);
     } catch (err) {
-      console.error('Error al cargar el logo:', err);
+      console.error('Error al generar pdf:', err);
+      throw err;
     } finally {
       this.pageLoading = false;
     }

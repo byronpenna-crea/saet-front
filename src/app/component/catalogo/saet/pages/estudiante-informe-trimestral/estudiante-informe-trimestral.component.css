@@ -23,14 +23,37 @@
 }
 
 .divInforme {
-  border-bottom: solid 1px black;
-  margin-bottom: 150px;
-  margin-top: 50px;
+  margin-top: 2%;
 }
-
+.divInforme h3 {
+  font-size: 28px;
+}
 .divInforme a {
   text-decoration: none;
-  padding-bottom: 10px;
+}
+.barra-colores {
+  display: flex;
+  height: 5px;
+}
+
+.barra-colores div {
+  flex: 1;
+}
+
+.barra-colores div:nth-child(1) {
+  background-color: #8cc63f;
+}
+
+.barra-colores div:nth-child(2) {
+  background-color: #f1c40f;
+}
+
+.barra-colores div:nth-child(3) {
+  background-color: #be2857;
+}
+
+.barra-colores div:nth-child(4) {
+  background-color: #29abe2;
 }
 
 .selectedOption {

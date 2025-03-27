@@ -1,5 +1,5 @@
 <div class="titlePage">
-  <div>
+  <div class="form-container" style="display: flex;flex-direction: row;gap: 8px">
     <ng-container *ngFor="let item of breadcrumb; let isLast = last">
       <a *ngIf="item.href !== ''" [href]="item.href">{{ item.text }}</a>
       <span style="color: #00498d" *ngIf="item.href === ''">{{
@@ -8,7 +8,16 @@
       <span *ngIf="!isLast"> / </span>
     </ng-container>
   </div>
-  <h2 style="font-size: 1.5rem">{{ getModuleString() }} - Buscar estudiante</h2>
+  <div class="form-container divInforme">
+    <h3>{{ getModuleString() }} - Buscar estudiante</h3>
+    <div class="barra-colores">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
 </div>
 <div class="form-container">
   <app-saet-student-name-header [name]="nombreCompleto" />
