@@ -24,7 +24,8 @@ import jsPDF from 'jspdf';
 export class EstudianteDeiInformeCualitativoComponent extends DeiBaseComponent {
   protected readonly ButtonStyle = ButtonStyle;
   protected readonly IconCompoment = IconComponent;
-
+  atendidoCOR = false;
+  atendidoDAI = false;
   inputNIE = '';
   cnResult = 0;
   showTable = false;
@@ -44,6 +45,9 @@ export class EstudianteDeiInformeCualitativoComponent extends DeiBaseComponent {
     await this.router.navigate(['menu/saet-buscar', this.nie]);
   }
   async generateReport(nie: string) {
+    if(!this.atendidoCOR){
+      return;
+    }
     const doc = new jsPDF();
     const currentY = 30;
 
@@ -79,14 +83,22 @@ export class EstudianteDeiInformeCualitativoComponent extends DeiBaseComponent {
     protected override router: Router
   ) {
     super(router);
+    console.log('contructor ');
+
+
+
     this.route.paramMap.subscribe(params => {
       const nie = params.get('nie');
       if (nie) {
         this.nie = nie;
         this.inputNIE = nie;
-        this.toggleTable();
+        this.toggleTable().then(() => {
+
+        });
       }
     });
+    console.log('finished ');
+
   }
 
   onInputChange(keyValue: KeyValue) {
@@ -95,6 +107,18 @@ export class EstudianteDeiInformeCualitativoComponent extends DeiBaseComponent {
   async toggleTable() {
     this.userMessage.showMessage = false;
     this.pageLoading = true;
+    console.log('here 1 ',this.nie);
+    try{
+      const resp = await this.catalogoServiceCOR
+        .getPAEIPerNIE(this.nie)
+      if(resp.id_paei !== 0){
+        this.atendidoCOR = true;
+      }
+    }catch (e){
+      this.atendidoCOR = false;
+    }
+
+    // this.atendidoCOR = true;
     if (this.inputNIE) {
       try {
         const result = await this.catalogoServiceCOR.getStudentInfo(

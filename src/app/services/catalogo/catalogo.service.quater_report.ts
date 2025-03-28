@@ -12,7 +12,7 @@ export interface IGetQuarterReport {
 }
 export interface ISaveQuarterReport {
   id_informe_pk?: number;
-  id_estudiante_fk: number;
+  id_estudiante_fk?: number;
   respuestas: iQuestionSave[];
 }
 export interface Atendido {
