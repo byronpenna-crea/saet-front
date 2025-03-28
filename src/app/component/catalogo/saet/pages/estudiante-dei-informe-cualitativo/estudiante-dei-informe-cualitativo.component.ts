@@ -40,9 +40,11 @@ export class EstudianteDeiInformeCualitativoComponent extends DeiBaseComponent {
     centroEducativo: '',
     nombreCompleto: '',
   };
-
+  breadcrumb = [
+    { href: '#/menu/saet-inicio', text: 'Inicio' },
+  ]
   async btnRegresar() {
-    await this.router.navigate(['menu/saet-buscar', this.nie]);
+    await this.router.navigate(['menu/saet-inicio']);
   }
   async generateReport(nie: string) {
     if(!this.atendidoCOR){

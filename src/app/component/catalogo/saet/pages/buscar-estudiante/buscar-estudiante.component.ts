@@ -51,6 +51,9 @@ export class BuscarEstudianteComponent
   inputNIE = '';
   cnResult = 0;
   centroEducativo = '';
+  breadcrumb = [
+    { href: '#/menu/saet-inicio', text: 'Inicio' },
+  ]
   onInputChange(keyValue: KeyValue) {
     this.inputNIE = keyValue.value;
   }

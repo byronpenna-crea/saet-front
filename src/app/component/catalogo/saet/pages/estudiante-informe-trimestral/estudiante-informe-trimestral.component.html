@@ -1,3 +1,13 @@
+<div class="form-container" style="display: flex;padding-bottom: 0; flex-direction: row;gap: 8px">
+  <ng-container *ngFor="let item of breadcrumb; let isLast = last">
+    <a *ngIf="item.href !== ''" [href]="item.href">{{ item.text }}</a>
+    <span style="color: #00498d" *ngIf="item.href === ''">{{
+        item.text
+      }}</span>
+    <span *ngIf="!isLast"> / </span>
+  </ng-container>
+</div>
+
 <div class="form-container divInforme">
   <h3
     data-testid="aInformeTrimestral"

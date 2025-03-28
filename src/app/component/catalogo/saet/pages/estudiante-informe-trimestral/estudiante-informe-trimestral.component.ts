@@ -39,6 +39,9 @@ export class EstudianteInformeTrimestralComponent
     tableHeaderStudentSchool: string;
     tableHeaderStudentCity: string;
   }[] = [];
+  breadcrumb = [
+    { href: '#/menu/saet-inicio', text: 'Inicio' },
+  ]
   async btnRegresar() {
     await this.router.navigate(['menu/saet-buscar']);
   }
