@@ -1,3 +1,33 @@
+.trimestre-box {
+  height: 100px;
+  padding: 10px;
+  border: 2px solid black;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s;
+  flex-grow: 1;
+}
+.disabled-trimester {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.trimestre-box:hover {
+  background-color: #f0f0f0;
+}
+
+.selected-trimester {
+  background-color: #00498d;
+  color: white;
+  border-color: #00498d;
+}
+
+
 .mt-2 {
   margin-top: 35px;
 }
@@ -12,6 +42,7 @@
   padding-left: 55px;
   margin-top: 25px;
 }
+
 
 .form-container {
   display: flex;

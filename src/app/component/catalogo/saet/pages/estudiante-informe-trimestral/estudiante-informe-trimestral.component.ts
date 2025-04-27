@@ -39,6 +39,50 @@ export class EstudianteInformeTrimestralComponent
     tableHeaderStudentSchool: string;
     tableHeaderStudentCity: string;
   }[] = [];
+
+  trimestres = [
+    { numero: 1 },
+    { numero: 2 },
+    { numero: 3 },
+    { numero: 4 }
+  ];
+  selectedTrimester = 0;
+  currentTrimester = 0;
+  override ngOnInit(): void {
+    super.initialize();
+    this.setDefaultTrimester();
+  }
+
+  isTrimesterEnabled(numero: number): boolean {
+    return numero <= this.currentTrimester;
+  }
+  onToggleEdit(row: any): void {
+    if (row.editing) {
+      this.onSaveDifficulty(row);
+    }
+    row.editing = !row.editing;
+  }
+
+  onSaveDifficulty(row: any): void {
+    console.log('Guardar dificultad:', row.difficultyDescription);
+  }
+  setDefaultTrimester() {
+    const currentMonth = new Date().getMonth() + 1; // Enero es 0
+    if (currentMonth >= 1 && currentMonth <= 3) {
+      this.selectedTrimester = 1;
+    } else if (currentMonth >= 4 && currentMonth <= 6) {
+      this.selectedTrimester = 2;
+    } else if (currentMonth >= 7 && currentMonth <= 9) {
+      this.selectedTrimester = 3;
+    } else {
+      this.selectedTrimester = 4;
+    }
+    this.currentTrimester = this.selectedTrimester;
+  }
+  async onSelectTrimester(trimestre: number) {
+    this.selectedTrimester = trimestre;
+    await this.loadAnswers();
+  }
   breadcrumb = [
     { href: '#/menu/saet-inicio', text: 'Inicio' },
   ]
@@ -60,6 +104,24 @@ export class EstudianteInformeTrimestralComponent
     });
     return values;
   }
+  async loadAnswers() {
+    try {
+      const answers = await this.catalogoServiceQuarterReport.getAnswers(2025, this.selectedTrimester);
+
+      if (answers && answers.respuestas) {
+        this.reportId = answers.id_informe_pk;
+        this.mainButtonText = 'Actualizar y continuar';
+        this.values = {}; // limpia valores anteriores
+
+        for (const respuesta of answers.respuestas) {
+          const inputKey = `richtext_${respuesta.id_pregunta}`;
+          this.values[inputKey] = respuesta.respuesta ?? '';
+        }
+      }
+    } catch (e) {
+      console.error('Error cargando respuestas:', e);
+    }
+  }
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceQuarterReport: CatalogoServiceQuarterReport,
@@ -69,11 +131,17 @@ export class EstudianteInformeTrimestralComponent
   ) {
     super(document, catalogoServiceQuarterReport, route, router);
     try {
-      this.inputNIE = this.nie;
+      this.setDefaultTrimester();
       this.toggleTable();
-      //const questionPromise = catalogoServiceQuarterReport.getQuestions();
-      console.log(this.nie);
-      const answerPromise = catalogoServiceQuarterReport.getByNie(this.nie);
+      const answerPromise = catalogoServiceQuarterReport.get();
+      try {
+        catalogoServiceQuarterReport.getAnswers(2025,this.selectedTrimester )?.then((data) => {
+          console.log('promise 2 zzz>>', data);
+        });
+      }catch (e){
+        console.log('error en promise 2', e);
+      }
+
       Promise.all([answerPromise])
         .then(([answerPromise]) => {
           console.log('answer -------------------');
@@ -98,6 +166,7 @@ export class EstudianteInformeTrimestralComponent
       if (storedValues) {
         this.values = JSON.parse(storedValues);
       }
+      this.loadAnswers();
     } catch (e) {
       console.log('error en constructor', e);
     }
@@ -108,19 +177,16 @@ export class EstudianteInformeTrimestralComponent
   async save() {
     const respuestas = this.getAnswerObject(this.values);
     console.log('respuestas here ', respuestas);
-    const studentId = this.studentInfo?.id_est_pk ?? 0;
-    if (studentId === 0) {
-      this.userMessage.showMessage = true;
-      this.userMessage.message = 'El estudiante es requerido';
-      this.userMessage.type = MessageType.WARNING;
-      return;
-    }
+
 
     const objToSave: ISaveQuarterReport = {
       id_informe_pk: this.reportId,
-      id_estudiante_fk: studentId,
       respuestas: respuestas,
     };
+    console.log('obj to save ---> ', objToSave);
+    console.log('report id ---> ', this.reportId);
+
+
     if (this.reportId !== 0) {
       await this.catalogoServiceQuarterReport.update(objToSave);
     } else {
@@ -145,10 +211,12 @@ export class EstudianteInformeTrimestralComponent
     this.userMessage.showMessage = false;
     this.showTable = false;
   }
+  dataLoadedWithoutResults = false;
   async toggleTable() {
+    console.log('toggle table ');
     this.userMessage.showMessage = false;
     if (localStorage.getItem('dui') === null) {
-      this.router.navigate(['/login']);
+      await this.router.navigate(['/login']);
     }
     try {
       this.pageLoading = true;
@@ -157,17 +225,7 @@ export class EstudianteInformeTrimestralComponent
           localStorage.getItem('dui') ?? ''
         );
       console.log('result here ', atentidos);
-      this.tableData = [
-        {
-          number: '1',
-          tableHeaderStudentName: 'Byron Aldair Pena',
-          tableHeaderStudentSex: 'M',
-          tableHeaderStudentAge: 30,
-          tableHeaderStudentGrade: 9,
-          tableHeaderStudentSchool: 'Ricaldone',
-          tableHeaderStudentCity: 'Soyapango',
-        },
-      ];
+      this.tableData = [];
       console.log('atendidos map ----------', atentidos);
       this.tableData = atentidos.map(atendido => {
         return {
@@ -187,6 +245,22 @@ export class EstudianteInformeTrimestralComponent
       const error = e as ResponseError;
       if (error.status === 401) {
         console.log('back to login', error.message);
+      }
+      if(error.status === 404){
+        this.showTable = true;
+        /*this.tableData = [
+          {
+            number: '1',
+            tableHeaderStudentName: 'Byron Aldair Pena',
+            tableHeaderStudentSex: 'M',
+            tableHeaderStudentAge: 30,
+            tableHeaderStudentGrade: 9,
+            tableHeaderStudentSchool: 'Ricaldone',
+            tableHeaderStudentCity: 'Soyapango',
+          },
+        ]*/
+        console.log('table data length', this.tableData.length);
+        return;
       }
       this.userMessage = {
         showMessage: true,

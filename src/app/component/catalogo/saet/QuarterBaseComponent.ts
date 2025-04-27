@@ -13,7 +13,12 @@ import { CookieService } from 'ngx-cookie-service';
 
 @Injectable()
 export class QuarterBaseComponent extends BaseComponent implements OnInit {
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.initialize();
+  }
+
+  protected initialize(): void {
+  }
 
   protected loadStudentInfo(): Promise<StudentInfoResponse> {
     return this.catalogoServiceQuarterReport
