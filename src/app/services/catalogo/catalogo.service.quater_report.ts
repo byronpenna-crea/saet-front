@@ -13,6 +13,8 @@ export interface IGetQuarterReport {
 export interface ISaveQuarterReport {
   id_informe_pk?: number;
   id_estudiante_fk?: number;
+  trimester: number;
+  anio: number;
   respuestas: iQuestionSave[];
 }
 export interface Atendido {
@@ -43,7 +45,7 @@ export class CatalogoServiceQuarterReport extends CatalogoServiceSaet {
   public async update(
     cuestionario: ISaveQuarterReport
   ){
-    const url = `${this.API_SERVER_URL}/informe_trimestral/cor`;
+    const url = `${this.API_SERVER_URL}/informe_trimestral/cor/?anio=${cuestionario.anio}&trimestre=${cuestionario.trimester}`;
     try {
       return await this.putRequest<ISaveQuarterReport, ISaveQuarterReport>(
         url,
@@ -72,11 +74,17 @@ export class CatalogoServiceQuarterReport extends CatalogoServiceSaet {
     const url = `${this.API_SERVER_URL}/informe_trimestral/cor`;
     return this.getRequest<IGetQuarterReport[]>(url);
   }
-  public getByNie(nie='') {
-    if(nie === ''){
-      throw new ResponseError(HttpStatusCode.NotFound, 'NIE no definido')
+  public getAnswers(anio:number,trimestre:number) {
+    const url = `${this.API_SERVER_URL}/informe_trimestral/cor/byTrimestre/?anio=${anio}&trimestre=${trimestre}`;
+    try {
+      return this.getRequest<IGetQuarterReport>(url);
+    }catch (e){
+      console.log('error in test ', e);
+      return;
     }
-    const url = `${this.API_SERVER_URL}/informe_trimestral/cor/${nie}`;
+  }
+  public get() {
+    const url = `${this.API_SERVER_URL}/informe_trimestral/cor`;
     return this.getRequest<IGetQuarterReport>(url);
   }
 
@@ -94,7 +102,9 @@ export class CatalogoServiceQuarterReport extends CatalogoServiceSaet {
           if (response.ok) {
             resolve(response.json());
           } else {
-            reject(new Error('No se pudo obtener los datos'));
+            console.log('----------', response);
+            const error = new ResponseError(response.status,response.statusText);
+            reject(error);
           }
         })
         .catch(error => {

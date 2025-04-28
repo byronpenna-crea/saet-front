@@ -1,3 +1,4 @@
+<div #topAnchor style="height: 1px"></div>
 <div
   class="form-container"
   style="display: flex; padding-bottom: 0; flex-direction: row; gap: 8px"
@@ -51,7 +52,7 @@
       </div>
     </app-tabs>
   </div>
-  <div>
+  <div class="mt-2">
     <app-tabs legend="1. Estudiantes atendidos">
       <app-saet-underlined-title>
         Informe trimestral de estudiantes atendidos en el COR
@@ -164,6 +165,7 @@
             name="richtext_1"
             [value]="values['richtext_1']"
             (inputChange)="onInputChange($event)"
+            [disabled]="readOnlyForm"
           />
         </div>
       </div>
@@ -180,6 +182,7 @@
             name="richtext_2"
             [value]="values['quarter-richtext_2']"
             (inputChange)="onInputChange($event)"
+            [disabled]="readOnlyForm"
           />
         </div>
       </div>
@@ -192,7 +195,7 @@
           integración social, hiperactividad.</span
         >
         <div class="container-rich">
-          <app-richtext text="xxx" />
+          <app-richtext text="xxx" [disabled]="readOnlyForm" />
         </div>
       </div>
 
@@ -208,6 +211,7 @@
             name="richtext_3"
             [value]="values['quarter-richtext_3']"
             (inputChange)="onInputChange($event)"
+            [disabled]="readOnlyForm"
           />
         </div>
       </div>
@@ -225,6 +229,7 @@
             name="richtext_4"
             [value]="values['quarter-richtext_4']"
             (inputChange)="onInputChange($event)"
+            [disabled]="readOnlyForm"
           />
         </div>
       </div>
@@ -236,6 +241,7 @@
             name="richtext_5"
             [value]="values['richtext_5']"
             (inputChange)="onInputChange($event)"
+            [disabled]="readOnlyForm"
           />
         </div>
       </div>
@@ -253,6 +259,7 @@
             name="richtext_6"
             [value]="values['richtext_6']"
             (inputChange)="onInputChange($event)"
+            [disabled]="readOnlyForm"
           />
         </div>
       </div>
@@ -265,6 +272,7 @@
             name="richtext_7"
             [value]="values['richtext_7']"
             (inputChange)="onInputChange($event)"
+            [disabled]="readOnlyForm"
           />
         </div>
       </div>
@@ -283,6 +291,7 @@
             name="richtext_8"
             [value]="values['richtext_8']"
             (inputChange)="onInputChange($event)"
+            [disabled]="readOnlyForm"
           />
         </div>
       </div>
@@ -295,6 +304,7 @@
             name="richtext_9"
             [value]="values['richtext_9']"
             (inputChange)="onInputChange($event)"
+            [disabled]="readOnlyForm"
           />
         </div>
       </div>
@@ -313,6 +323,7 @@
             name="richtext_10"
             [value]="values['richtext_10']"
             (inputChange)="onInputChange($event)"
+            [disabled]="readOnlyForm"
           />
         </div>
       </div>
@@ -325,6 +336,7 @@
             name="richtext_11"
             [value]="values['richtext_11']"
             (inputChange)="onInputChange($event)"
+            [disabled]="readOnlyForm"
           />
         </div>
       </div>
@@ -342,12 +354,12 @@
             name="richtext_12"
             [value]="values['richtext_12']"
             (inputChange)="onInputChange($event)"
+            [disabled]="readOnlyForm"
           />
         </div>
       </div>
     </app-tabs>
   </div>
-
   <app-saet-mensaje-usuario
     [show]="userMessage.showMessage"
     [message]="userMessage.message"
@@ -371,20 +383,23 @@
           buttonStyle: btnStyle.BLUE,
           buttonIcon: IconComponent.SAVE
         }"
+        [disabled]="readOnlyForm"
       />
     </div>
   </div>
 </div>
-
-<div *ngIf="inputNIE === ''" class="form-container">
-  <app-saet-button
-    testId="btn-regresar"
-    [customClasses]="'return-button'"
-    (onClick)="btnRegresar()"
-    [buttonArgs]="{
-      text: 'Regresar',
-      buttonStyle: ButtonStyle.BLUE,
-      buttonIcon: IconCompoment.LEFT_ARROW
-    }"
-  />
-</div>
+<button
+  class="scroll-up-btn"
+  (click)="scrollToTop()"
+  pButton
+  icon="pi pi-arrow-up"
+  label=""
+></button>
+<button
+  class="scroll-bottom-btn"
+  (click)="scrollToBottom()"
+  pButton
+  icon="pi pi-arrow-down"
+  label=""
+></button>
+<div #bottomAnchor style="height: 1px"></div>

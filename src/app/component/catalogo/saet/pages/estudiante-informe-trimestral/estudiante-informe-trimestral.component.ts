@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Inject } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import {
   IMessageComponent,
   MessageType,
@@ -30,6 +30,7 @@ export class EstudianteInformeTrimestralComponent
   inputNIE = '';
   cnResult = 0;
   localStorageKey = 'quarter-values';
+  readOnlyForm = true;
   tableData: {
     number: string;
     tableHeaderStudentName: string;
@@ -52,7 +53,18 @@ export class EstudianteInformeTrimestralComponent
     super.initialize();
     this.setDefaultTrimester();
   }
-
+  @ViewChild('bottomAnchor') bottomAnchor!: ElementRef<HTMLDivElement>;
+  @ViewChild('topAnchor') topAnchor!: ElementRef<HTMLDivElement>;
+  scrollToTop(): void {
+    if (this.topAnchor) {
+      this.topAnchor.nativeElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+  scrollToBottom(): void {
+    if (this.bottomAnchor) {
+      this.bottomAnchor.nativeElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
   isTrimesterEnabled(numero: number): boolean {
     return numero <= this.currentTrimester;
   }
@@ -80,8 +92,10 @@ export class EstudianteInformeTrimestralComponent
     this.currentTrimester = this.selectedTrimester;
   }
   async onSelectTrimester(trimestre: number) {
+    this.pageLoading = true;
     this.selectedTrimester = trimestre;
     await this.loadAnswers();
+    this.pageLoading = false;
   }
   breadcrumb = [
     { href: '#/menu/saet-inicio', text: 'Inicio' },
@@ -105,15 +119,29 @@ export class EstudianteInformeTrimestralComponent
     return values;
   }
   async loadAnswers() {
+    this.readOnlyForm = true;
+    Object.keys(this.values).forEach(key => {
+      if (key.startsWith('richtext_')) {
+        this.values[key] = '';
+      }
+    });
+    console.log('selected trimester ', this.selectedTrimester);
+    console.log('current trimester ', this.currentTrimester);
     try {
       const answers = await this.catalogoServiceQuarterReport.getAnswers(2025, this.selectedTrimester);
-
+      if(this.selectedTrimester === this.currentTrimester){
+        this.readOnlyForm = false;
+      }
+      console.log('load answers----> #', answers && answers.respuestas);
+      console.log('load values----> #', this.values);
+      console.log('load values cleaned----> #',this.values);
       if (answers && answers.respuestas) {
         this.reportId = answers.id_informe_pk;
         this.mainButtonText = 'Actualizar y continuar';
         this.values = {}; // limpia valores anteriores
 
         for (const respuesta of answers.respuestas) {
+
           const inputKey = `richtext_${respuesta.id_pregunta}`;
           this.values[inputKey] = respuesta.respuesta ?? '';
         }
@@ -172,9 +200,10 @@ export class EstudianteInformeTrimestralComponent
     }
   }
   async salir() {
-    await this.router.navigate(['menu/saet-buscar/', this.nie]);
+    await this.router.navigate(['menu/saet-inicio']);
   }
   async save() {
+    this.pageLoading = true;
     const respuestas = this.getAnswerObject(this.values);
     console.log('respuestas here ', respuestas);
 
@@ -182,6 +211,8 @@ export class EstudianteInformeTrimestralComponent
     const objToSave: ISaveQuarterReport = {
       id_informe_pk: this.reportId,
       respuestas: respuestas,
+      trimester: this.selectedTrimester,
+      anio: 2025
     };
     console.log('obj to save ---> ', objToSave);
     console.log('report id ---> ', this.reportId);
@@ -192,6 +223,7 @@ export class EstudianteInformeTrimestralComponent
     } else {
       await this.catalogoServiceQuarterReport.save(objToSave);
     }
+    this.pageLoading = false;
   }
   values: { [key: string]: string } = {};
   onInputNIEChange(keyValue: KeyValue) {
@@ -274,6 +306,5 @@ export class EstudianteInformeTrimestralComponent
   }
 
   protected readonly IconComponent = IconComponent;
-  protected readonly IconCompoment = IconComponent;
   protected readonly ButtonStyle = ButtonStyle;
 }
