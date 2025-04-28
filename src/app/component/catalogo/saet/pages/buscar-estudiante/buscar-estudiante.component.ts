@@ -22,6 +22,7 @@ import { DOCUMENT } from '@angular/common';
 import { KeyValue } from '../../component/saet-input/saet-input.component';
 import { SAET_MODULE } from '../../shared/evaluaciones';
 import {Promise} from "cypress/types/cy-bluebird";
+import { CatalogoServiceDai } from '../../../../../services/catalogo/catalogo.service.dai';
 
 interface Estudiante {
   nie: string;
@@ -51,6 +52,8 @@ export class BuscarEstudianteComponent
   inputNIE = '';
   cnResult = 0;
   centroEducativo = '';
+  atendidoCOR = false;
+  atendidoDAI = false;
   breadcrumb = [
     { href: '#/menu/saet-inicio', text: 'Inicio' },
   ]
@@ -65,6 +68,7 @@ export class BuscarEstudianteComponent
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceCOR: CatalogoServiceCor,
+    protected catalogoServiceDai: CatalogoServiceDai,
     private cdr: ChangeDetectorRef,
     route: ActivatedRoute,
     router: Router
@@ -85,6 +89,8 @@ export class BuscarEstudianteComponent
           this.centroEducativo = result.centroEducativo.nombre;
           this.showTable = true;
           this.inputNIE = result.estudiante.nie;
+          console.log('rol apoyo ', localStorage.getItem('idRolApoyo'));
+          this.toggleTable().then(() => {});
         })
         .catch(e => {
           const error = e as ResponseError;
@@ -113,53 +119,64 @@ export class BuscarEstudianteComponent
     { key: 'referidoPor', header: 'Referido por' },
     { key: 'verDetalle', header: 'Ver detalle' },
   ];
-  flowData = [
-    {
-      col1: 'Centro de Orientación y Recursos (COR)',
-      col2: 'Sin atención',
-      col3: '',
-      href: '/menu/saet-datos-estudiante',
-      enabled:
-        localStorage.getItem('idRolApoyo') !== undefined &&
-        (localStorage.getItem('idRolApoyo') as unknown as SAET_MODULE) ==
+  private buildFlowData(): any[] {
+    return [
+      {
+        col1: 'Centro de Orientación y Recursos (COR)',
+        col2: this.atendidoCOR ? `Atendido` : 'Sin atención',
+        col3: '',
+        href: '/menu/saet-datos-estudiante',
+        enabled:
+          localStorage.getItem('idRolApoyo') !== undefined &&
+          (localStorage.getItem('idRolApoyo') as unknown as SAET_MODULE) ==
           SAET_MODULE.COR,
-    },
-    {
-      col1: 'Docente de Apoyo a la Inclusión (DAI)',
-      col2: 'Sin atención',
-      col3: '',
-      href: '/menu/dai/saet-datos-estudiante',
-      enabled:
-        localStorage.getItem('idRolApoyo') &&
-        (localStorage.getItem('idRolApoyo') as unknown as SAET_MODULE) ==
+      },
+      {
+        col1: 'Docente de Apoyo a la Inclusión (DAI)',
+        col2: this.atendidoDAI ? `Atendido` : 'Sin atención',
+        col3: '',
+        href: '/menu/dai/saet-datos-estudiante',
+        enabled:
+          localStorage.getItem('idRolApoyo') &&
+          (localStorage.getItem('idRolApoyo') as unknown as SAET_MODULE) ==
           SAET_MODULE.DAI,
-    },
-    {
-      col1: 'Docente de Apoyo a la Inclusión Educativa',
-      col2: 'Sin atención',
-      col3: '',
-      href: '/menu/dei/informe-cualitativo',
-    },
-    {
-      col1: 'Escuela de Educación Especial (EEE)',
-      col2: 'Sin atención',
-      col3: '',
-      href: '',
-    },
-    {
-      col1: 'Comité Departamental de Apoyo a la Inclusión (CODAI)',
-      col2: 'Sin atención',
-      col3: '',
-      href: '',
-    },
-    {
-      col1: 'Centro de Recursos de Inclusión Educativa (CRIEDV)',
-      col2: 'Sin atención',
-      col3: '',
-      href: '',
-    },
-  ];
+      },
+      {
+        col1: 'Docente de Apoyo a la Inclusión Educativa',
+        col2: 'Sin atención',
+        col3: '',
+        href: '/menu/dei/informe-cualitativo',
+        disabledRow: true,
 
+      },
+      {
+        col1: 'Escuela de Educación Especial (EEE)',
+        col2: 'Sin atención',
+        col3: '',
+        href: '',
+        disabledRow: true,
+
+      },
+      {
+        col1: 'Comité Departamental de Apoyo a la Inclusión (CODAI)',
+        col2: 'Sin atención',
+        col3: '',
+        href: '',
+        disabledRow: true,
+
+      },
+      {
+        col1: 'Centro de Recursos de Inclusión Educativa (CRIEDV)',
+        col2: 'Sin atención',
+        col3: '',
+        href: '',
+        disabledRow: true,
+
+      },
+    ];
+  }
+
+  flowData:any[] = [];
   studentData: Estudiante[] = [
     {
       nie: '1234',
@@ -199,6 +216,31 @@ export class BuscarEstudianteComponent
     this.userMessage.showMessage = false;
 
     this.pageLoading = true;
+    console.log('atendido cor begining');
+    try{
+      const resp = await this.catalogoServiceCOR
+        .getPAEIPerNIE(this.nie)
+      if(resp.id_paei !== 0){
+        this.atendidoCOR = true;
+      }
+    }catch (e){
+      this.atendidoCOR = false;
+    }
+
+    try{
+      const resp = await this.catalogoServiceDai
+        .getPlanAccionPerNIE(this.nie);
+      console.log('here --> ', resp);
+      if(resp.plan_accion_pk !== 0){
+        this.atendidoDAI = true;
+      }
+    }catch (e){
+      this.atendidoDAI = false;
+    }
+
+
+    this.flowData = this.buildFlowData();
+    console.log('atendido cor finished');
     if (this.inputNIE) {
       try {
         const result = await this.catalogoServiceCOR.getStudentInfo(
