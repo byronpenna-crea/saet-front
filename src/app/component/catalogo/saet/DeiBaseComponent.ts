@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { ElementRef, Inject, Injectable, ViewChild } from '@angular/core';
 import { CatalogoServiceDei } from '../../../services/catalogo/catalogo.service.dei';
 import { DOCUMENT } from '@angular/common';
 import { ThemeService } from '../../../services/ThemeService';
@@ -16,6 +16,20 @@ export class DeiBaseComponent {
   btnStyle = ButtonStyle;
   pageLoading = false;
 
+  @ViewChild('bottomAnchor') bottomAnchor!: ElementRef<HTMLDivElement>;
+  @ViewChild('topAnchor') topAnchor!: ElementRef<HTMLDivElement>;
+
+  scrollToTop(): void {
+    if (this.topAnchor) {
+      this.topAnchor.nativeElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+  scrollToBottom(): void {
+    console.log('---------- bottom ',this.bottomAnchor);
+    if (this.bottomAnchor) {
+      this.bottomAnchor.nativeElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
   constructor(protected router: Router) {}
   redirectTo(url: string) {
     this.router.navigate([url]);

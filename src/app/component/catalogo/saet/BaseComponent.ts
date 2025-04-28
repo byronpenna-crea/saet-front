@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { ElementRef, Injectable, ViewChild } from '@angular/core';
 import { IconComponent } from './shared/component.config';
 import { ButtonStyle } from './component/saet-button/saet-button.component';
 import {
@@ -29,6 +29,20 @@ export class BaseComponent {
   userMessage: UserMessage = userMessageInit;
   btnStyle = ButtonStyle;
   pageLoading = false;
+
+  @ViewChild('bottomAnchor') bottomAnchor!: ElementRef<HTMLDivElement>;
+  @ViewChild('topAnchor') topAnchor!: ElementRef<HTMLDivElement>;
+  scrollToTop(): void {
+    if (this.topAnchor) {
+      this.topAnchor.nativeElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+  scrollToBottom(): void {
+    console.log('---------- bottom ',this.bottomAnchor);
+    if (this.bottomAnchor) {
+      this.bottomAnchor.nativeElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
   getRolApoyo(): SAET_MODULE | undefined {
     const rolApoyo =
       localStorage.getItem('idRolApoyo') !== undefined ?

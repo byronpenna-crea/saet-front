@@ -1,3 +1,4 @@
+<div #topAnchor style="height: 1px"></div>
 <div style="width: 100%">
   <p-tabView (onChange)="onTabChange($event)">
     <p-tabPanel header="Informe cualitativo"> </p-tabPanel>
@@ -14,7 +15,6 @@
           titulo="Total de miembros"
           descripcion="Docente de Apoyo a la Inclusion (DAI)"
         />
-
 
         <app-saet-tarjeta-informe
           [numero]="0"
@@ -36,8 +36,7 @@
           titulo="Total de cries"
           descripcion="Centro de recursos para la inclusion de estudiantes con discapacidad visual (CRIEDV)"
         />
-<!--        Comité Departamental de Apoyo a la Inclusión (CODAI)-->
-
+        <!--        Comité Departamental de Apoyo a la Inclusión (CODAI)-->
       </div>
 
       <div style="display: flex; flex-direction: column; gap: 20px">
@@ -314,3 +313,18 @@
     <p-tabPanel header="Informe Trimestral COR"> </p-tabPanel>
   </p-tabView>
 </div>
+<button
+  class="scroll-up-btn"
+  (click)="scrollToTop()"
+  pButton
+  icon="pi pi-arrow-up"
+  label=""
+></button>
+<button
+  class="scroll-bottom-btn"
+  (click)="scrollToBottom()"
+  pButton
+  icon="pi pi-arrow-down"
+  label=""
+></button>
+<div #bottomAnchor style="height: 1px"></div>

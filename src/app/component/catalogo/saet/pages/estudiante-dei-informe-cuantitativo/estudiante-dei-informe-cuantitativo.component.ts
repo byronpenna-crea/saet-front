@@ -1,4 +1,4 @@
-import { Component, Inject, Injectable, OnInit } from '@angular/core';
+import { Component, ElementRef, Inject, Injectable, OnInit, ViewChild } from '@angular/core';
 import { ButtonStyle } from '../../component/saet-button/saet-button.component';
 import { Direction } from '../../component/saet-grafica-barras/saet-grafica-barras.component';
 import { Departamentos } from '../../../../../models/departamentos';
@@ -36,6 +36,10 @@ export class EstudianteDeiInformeCuantitativoComponent
   direction = Direction;
   linearGraphicData = linearMockData;
   filteredCasosAbordadosData = this.getFilteredData(this.linearGraphicData);
+
+  @ViewChild('bottomAnchor') override bottomAnchor!: ElementRef<HTMLDivElement>;
+  @ViewChild('topAnchor') override topAnchor!: ElementRef<HTMLDivElement>;
+
 
   getFilteredData(data: LinearMockDataType) {
     return Object.keys(data).map(departamentoKey => {
