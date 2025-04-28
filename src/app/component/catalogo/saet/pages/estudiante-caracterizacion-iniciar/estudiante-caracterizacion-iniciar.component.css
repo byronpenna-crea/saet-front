@@ -1,3 +1,28 @@
+.scroll-up-btn {
+  position: fixed;
+  right: 24px;
+  bottom: 74px;
+  z-index: 1000;
+  border-radius: 50%;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.scroll-bottom-btn {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 1000;           /* por encima de todo */
+  border-radius: 50%;
+  width: 48px;             /* botón circular */
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .actionsButton {
   display: flex;
   justify-content: space-between;

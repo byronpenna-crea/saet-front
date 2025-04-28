@@ -10,87 +10,92 @@ export interface FormTablePariente {
   nombreCompleto: string;
   parentesco: string;
   nivelEducativo: string;
+  edad: string;
   ocupacion: string;
   action?: string;
 }
+
 @Component({
   selector: 'app-saet-form-table',
   templateUrl: './saet-form-table.component.html',
   styleUrls: ['./saet-form-table.component.css'],
 })
 export class SaetFormTableComponent {
+  /* enums y constantes visuales */
   protected readonly formModeEnum = FormMode;
-  protected readonly ButtonStyle = ButtonStyle;
+  protected readonly ButtonStyle  = ButtonStyle;
   protected readonly IconComponent = IconComponent;
-  cn = 0;
-  canAdd = false;
-  canDelete = true;
-  @Input() data: FormTablePariente[] = [];
-  @Output() formAdd = new EventEmitter<{
-    pariente: FormTablePariente;
-  }>();
 
+  /* -------------------------------------------------- */
+  /*  Inputs / Outputs                                  */
+  /* -------------------------------------------------- */
+  @Input()  data: FormTablePariente[] = [];
+  @Output() dataChange = new EventEmitter<FormTablePariente[]>();
+
+  /* -------------------------------------------------- */
+  /*  Form interno                                      */
+  /* -------------------------------------------------- */
   formData = {
     nombreCompleto: '',
     edad: '',
-    nivelEducativo: '',
     parentesco: '',
+    nivelEducativo: '',
     ocupacion: '',
   };
 
-  eliminarMiembroFamiliar(event: Event, pariente: FormTablePariente) {
-    this.data = this.data.filter(data => {
-      return !(data.id === pariente.id);
-    });
+  canAdd    = false;
+  canDelete = true;
+  private counter = 0;
+
+  /* -------------------------------------------------- */
+  /*  Métodos                                            */
+  /* -------------------------------------------------- */
+  onInputChange({ key, value }: KeyValue, field: keyof typeof this.formData) {
+    this.formData[field] = value;
+    this.canAdd = !!this.formData.nombreCompleto.trim();
   }
-  updateCanAdd() {
-    this.canAdd = !!this.formData.nombreCompleto;
-  }
-  onInputChange(event: KeyValue, field: keyof typeof this.formData) {
-    this.formData[field] = event.value;
-    this.updateCanAdd();
-  }
-  agregarMiembroFamiliar(event: Event) {
-    console.log('pariente to add ');
+
+  agregarMiembroFamiliar(): void {
+    if (!this.canAdd) return;
+
     const pariente: FormTablePariente = {
-      id: `temp-${this.cn}`,
-      nombreCompleto: this.formData.nombreCompleto ?? '',
-      nivelEducativo: this.formData.nivelEducativo ?? '',
-      ocupacion: this.formData.ocupacion ?? '',
-      parentesco: this.formData.parentesco ?? '',
+      id: `tmp-${this.counter++}`,
+      ...this.formData,
     };
-    console.log('pariente to add ', pariente);
-    console.log('data', this.data);
-    this.data !== undefined
-      ? this.data.push(pariente)
-      : (this.data = [pariente]);
-    this.cn++;
-    this.formAdd.emit({ pariente: pariente });
-    this.cleanValues();
+
+    this.data = [...this.data, pariente];      // inmutable
+    this.dataChange.emit(this.data);
+    this.resetForm();
   }
-  cleanValues() {
-    this.formData.nombreCompleto = '';
-    this.formData.edad = '';
-    this.formData.nivelEducativo = '';
-    this.formData.parentesco = '';
-    this.formData.ocupacion = '';
+
+  eliminarMiembroFamiliar(pariente: FormTablePariente): void {
+    this.data = this.data.filter(p => p.id !== pariente.id);
+    this.dataChange.emit(this.data);
   }
+
+  private resetForm(): void {
+    this.formData = {
+      nombreCompleto: '',
+      edad: '',
+      parentesco: '',
+      nivelEducativo: '',
+      ocupacion: '',
+    };
+    this.canAdd = false;
+  }
+
+  /* -------------------------------------------------- */
+  /*  Definición de columnas                             */
+  /* -------------------------------------------------- */
   columns: TableColumn<FormTablePariente>[] = [
-    {
-      key: 'nombreCompleto',
-      header: 'Nombre completo',
-    },
-    {
-      key: 'nivelEducativo',
-      header: 'Nivel educativo',
-    },
-    {
-      key: 'ocupacion',
-      header: 'Ocupacion',
-    },
+    { key: 'nombreCompleto', header: 'Nombre completo' },
+    { key: 'edad',           header: 'Edad' },
+    { key: 'parentesco',     header: 'Parentesco' },
+    { key: 'nivelEducativo', header: 'Nivel educativo' },
+    { key: 'ocupacion',      header: 'Ocupación' },
     {
       key: 'action',
       header: 'Acciones',
-    },
+    }
   ];
 }

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import {
   CatalogoServiceCor,
@@ -44,6 +44,9 @@ export class EstudianteCaracterizacionIniciarComponent
   implements IMessageComponent, OnInit
 {
   @ViewChild('cd') confirmDialog: any;
+
+  @ViewChild('bottomAnchor') override bottomAnchor!: ElementRef<HTMLDivElement>;
+  @ViewChild('topAnchor') override topAnchor!: ElementRef<HTMLDivElement>;
 
   loadingMessage?: string = undefined;
   corSurveys: iSurvey[] = [];
@@ -333,6 +336,63 @@ export class EstudianteCaracterizacionIniciarComponent
     return respuestasValidas;
   }
 
+  onGuardianTableChange(list: FormTablePariente[]) {
+    this.guardianControlData = [...list];
+  }
+  private parseFullName(fullName: string): {
+    primer_nombre:    string;
+    segundo_nombre:   string;
+    tercer_nombre:    string;
+    primer_apellido:  string;
+    segundo_apellido: string;
+    tercer_apellido:  string;
+  } {
+    const clean = fullName.trim().replace(/\s+/g, ' ');
+    if (!clean) {
+      return {
+        primer_nombre: '', segundo_nombre: '', tercer_nombre: '',
+        primer_apellido: '', segundo_apellido: '', tercer_apellido: ''
+      };
+    }
+
+    const parts = clean.split(' ');        // tokeniza por espacios
+    let nombres:   string[] = [];
+    let apellidos: string[] = [];
+
+    switch (parts.length) {
+      case 1:                     // Solo un nombre
+        nombres    = [parts[0]];
+        break;
+      case 2:                     // Nombre + apellido
+        nombres    = [parts[0]];
+        apellidos  = [parts[1]];
+        break;
+      case 3:                     // 2 nombres + 1 apellido   |   1 nombre + 2 apellidos
+        nombres    = [parts[0], parts[1]];
+        apellidos  = [parts[2]];
+        break;
+      case 4:                     // 2 nombres + 2 apellidos
+        nombres    = parts.slice(0, 2);
+        apellidos  = parts.slice(2);
+        break;
+      case 5:                     // 3 nombres + 2 apellidos
+        nombres    = parts.slice(0, 3);
+        apellidos  = parts.slice(3);
+        break;
+      default:                    // 3 nombres + 3 apellidos (o más → se descartan extras)
+        nombres    = parts.slice(0, 3);
+        apellidos  = parts.slice(3, 6);
+    }
+
+    return {
+      primer_nombre:    nombres[0]   ?? '',
+      segundo_nombre:   nombres[1]   ?? '',
+      tercer_nombre:    nombres[2]   ?? '',
+      primer_apellido:  apellidos[0] ?? '',
+      segundo_apellido: apellidos[1] ?? '',
+      tercer_apellido:  apellidos[2] ?? '',
+    };
+  }
   async update() {
     this.pageLoading = true;
     this.userMessage.showMessage = false;
@@ -374,6 +434,19 @@ export class EstudianteCaracterizacionIniciarComponent
       grupoFamiliar: [],
     };
     console.log('obj to save', objToSave);
+    objToSave.grupoFamiliar = this.guardianControlData.map(p => {
+      const parsed = this.parseFullName(p.nombreCompleto);
+
+      return {
+        grupo_familiar_pk: p.id.startsWith('temp-') ? null : Number(p.id),  // null = nuevo
+        ...parsed,
+        edad:            p.edad ? Number(p.edad) : 0,
+        parentesco:      p.parentesco,
+        nivel_educativo: p.nivelEducativo,
+        ocupacion:       p.ocupacion,
+      };
+    });
+
     try {
       const resp =
         await this.catalogoServiceCOR.updateCaracterizacion(objToSave);

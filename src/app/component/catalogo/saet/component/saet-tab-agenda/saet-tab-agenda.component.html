@@ -43,9 +43,10 @@
           <div>
             <app-tab-item label="">
               {{
+                especialistaAgendado.dui !== null &&
                 especialistaAgendado.dui !== ''
-                  ? especialistaAgendado.dui + '|'
-                  : ''
+                  ? especialistaAgendado.dui + ' |'
+                  : 'Nº dui no disponible | '
               }}
               Evaluador
               {{ especialidad ? getSpecialistLabel(especialidad) : '' }} - COR
@@ -148,12 +149,9 @@
           </div>
         </div>
       </div>
-      <div *ngIf="agendadoEvaluacion">
+      <div *ngIf="agendadoEvaluacion"></div>
 
-      </div>
-
-
-<!--      <app-saet-agendar-evaluacion [readOnly]="readOnly" />-->
+      <!--      <app-saet-agendar-evaluacion [readOnly]="readOnly" />-->
     </p-tabPanel>
   </p-tabView>
 </app-saet-tab>

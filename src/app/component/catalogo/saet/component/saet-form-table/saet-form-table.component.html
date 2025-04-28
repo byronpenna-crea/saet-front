@@ -1,4 +1,5 @@
 <div>
+  <!-- Entradas ----------------------------------------------------- -->
   <app-tab-item marginTop="3%" label="Nombre completo">
     <app-saet-input
       testId="input_nombre_completo"
@@ -11,8 +12,8 @@
   <app-tab-item marginTop="3%" label="Edad">
     <app-saet-input
       testId="input_edad"
-      (inputChange)="onInputChange($event, 'edad')"
       [value]="formData.edad"
+      (inputChange)="onInputChange($event, 'edad')"
       name="input_edad"
     />
   </app-tab-item>
@@ -35,54 +36,43 @@
     />
   </app-tab-item>
 
-  <app-tab-item marginTop="3%" label="Ocupacion:">
+  <app-tab-item marginTop="3%" label="Ocupación">
     <app-saet-input
-      testId="input_ocapacion"
+      testId="input_ocupacion"
       [value]="formData.ocupacion"
       (inputChange)="onInputChange($event, 'ocupacion')"
-      name="input_ocapacion"
+      name="input_ocupacion"
     />
   </app-tab-item>
-  <app-saet-underlined-title />
-  <div
-    style="
-      display: flex;
-      flex-direction: column;
-      align-items: flex-end;
-      margin-top: 25px;
-    "
-  >
+
+  <!-- Botón agregar ------------------------------------------------ -->
+  <div class="mt-4 flex justify-end">
     <app-saet-button
       [buttonArgs]="{
         buttonIcon: IconComponent.PLUS,
         buttonStyle: ButtonStyle.WHITE,
-        text: 'Agregar miembros familiares'
+        text: 'Agregar miembro familiar'
       }"
       [disabled]="!canAdd"
-      (onClick)="agregarMiembroFamiliar($event)"
+      (onClick)="agregarMiembroFamiliar()"
     />
   </div>
 
+  <!-- Tabla -------------------------------------------------------- -->
   <p-table data-testid="table-information" [columns]="columns" [value]="data">
-    <ng-template pTemplate="header" let-columns>
+    <ng-template pTemplate="header" let-cols>
       <tr>
-        <th *ngFor="let col of columns">
-          {{ col.header }}
-        </th>
+        <th *ngFor="let col of cols">{{ col.header }}</th>
       </tr>
     </ng-template>
 
-    <ng-template pTemplate="body" let-rowData>
+    <ng-template pTemplate="body" let-row>
       <tr>
-        <td>
-          {{ rowData['nombreCompleto'] }}
-        </td>
-        <td>
-          {{ rowData['nivelEducativo'] }}
-        </td>
-        <td>
-          {{ rowData['ocupacion'] }}
-        </td>
+        <td>{{ row.nombreCompleto }}</td>
+        <td>{{ row.edad }}</td>
+        <td>{{ row.parentesco }}</td>
+        <td>{{ row.nivelEducativo }}</td>
+        <td>{{ row.ocupacion }}</td>
         <td>
           <app-saet-button
             [buttonArgs]="{
@@ -90,8 +80,7 @@
               buttonStyle: ButtonStyle.BLUE,
               buttonIcon: IconComponent.CLOSE
             }"
-            [disabled]="!canDelete"
-            (onClick)="eliminarMiembroFamiliar($event, rowData)"
+            (onClick)="eliminarMiembroFamiliar(row)"
           />
         </td>
       </tr>
