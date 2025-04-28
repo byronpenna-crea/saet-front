@@ -53,18 +53,9 @@ export class EstudianteInformeTrimestralComponent
     super.initialize();
     this.setDefaultTrimester();
   }
-  @ViewChild('bottomAnchor') bottomAnchor!: ElementRef<HTMLDivElement>;
-  @ViewChild('topAnchor') topAnchor!: ElementRef<HTMLDivElement>;
-  scrollToTop(): void {
-    if (this.topAnchor) {
-      this.topAnchor.nativeElement.scrollIntoView({ behavior: 'smooth' });
-    }
-  }
-  scrollToBottom(): void {
-    if (this.bottomAnchor) {
-      this.bottomAnchor.nativeElement.scrollIntoView({ behavior: 'smooth' });
-    }
-  }
+  @ViewChild('bottomAnchor') override bottomAnchor!: ElementRef<HTMLDivElement>;
+  @ViewChild('topAnchor') override topAnchor!: ElementRef<HTMLDivElement>;
+
   isTrimesterEnabled(numero: number): boolean {
     return numero <= this.currentTrimester;
   }
@@ -204,9 +195,9 @@ export class EstudianteInformeTrimestralComponent
   }
   async save() {
     this.pageLoading = true;
-    const respuestas = this.getAnswerObject(this.values);
-    console.log('respuestas here ', respuestas);
+    this.userMessage.showMessage = false;
 
+    const respuestas = this.getAnswerObject(this.values);
 
     const objToSave: ISaveQuarterReport = {
       id_informe_pk: this.reportId,
@@ -223,7 +214,12 @@ export class EstudianteInformeTrimestralComponent
     } else {
       await this.catalogoServiceQuarterReport.save(objToSave);
     }
+
     this.pageLoading = false;
+    this.userMessage.showMessage = true;
+    this.userMessage.type = MessageType.SUCCESS;
+    this.userMessage.message = '¡Los datos han sido guardados exitosamente!';
+    this.userMessage.titleMessage = 'Datos actualizados';
   }
   values: { [key: string]: string } = {};
   onInputNIEChange(keyValue: KeyValue) {

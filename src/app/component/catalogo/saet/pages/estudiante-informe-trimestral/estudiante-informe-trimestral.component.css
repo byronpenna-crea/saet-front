@@ -14,9 +14,9 @@
   position: fixed;
   right: 24px;
   bottom: 24px;
-  z-index: 1000;           /* por encima de todo */
+  z-index: 1000;
   border-radius: 50%;
-  width: 48px;             /* botón circular */
+  width: 48px;
   height: 48px;
   display: flex;
   align-items: center;
@@ -40,10 +40,6 @@
 .disabled-trimester {
   pointer-events: none;
   opacity: 0.5;
-}
-
-.trimestre-box:hover {
-  background-color: #f0f0f0;
 }
 
 .selected-trimester {
