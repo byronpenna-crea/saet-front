@@ -18,7 +18,9 @@ export class DeiBaseComponent {
 
   @ViewChild('bottomAnchor') bottomAnchor!: ElementRef<HTMLDivElement>;
   @ViewChild('topAnchor') topAnchor!: ElementRef<HTMLDivElement>;
-
+  async btnRegresar() {
+    await this.router.navigate(['menu/saet-inicio']);
+  }
   scrollToTop(): void {
     if (this.topAnchor) {
       this.topAnchor.nativeElement.scrollIntoView({ behavior: 'smooth' });

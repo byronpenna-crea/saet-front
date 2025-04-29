@@ -30,6 +30,7 @@ export class SaetFormTableComponent {
   /*  Inputs / Outputs                                  */
   /* -------------------------------------------------- */
   @Input()  data: FormTablePariente[] = [];
+  @Input()  mode: FormMode = FormMode.CREATE;
   @Output() dataChange = new EventEmitter<FormTablePariente[]>();
 
   /* -------------------------------------------------- */
@@ -47,16 +48,21 @@ export class SaetFormTableComponent {
   canDelete = true;
   private counter = 0;
 
+  /* === Helpers de modo ========================================== */
+  get isView(): boolean     { return this.mode === FormMode.VIEW; }
+  get isEditable(): boolean { return !this.isView; }
   /* -------------------------------------------------- */
   /*  Métodos                                            */
   /* -------------------------------------------------- */
-  onInputChange({ key, value }: KeyValue, field: keyof typeof this.formData) {
-    this.formData[field] = value;
+  onInputChange(_: KeyValue, field: keyof typeof this.formData): void {
+    if (this.isView) return;
+
+    this.formData[field] = _?.value ?? '';
     this.canAdd = !!this.formData.nombreCompleto.trim();
   }
 
   agregarMiembroFamiliar(): void {
-    if (!this.canAdd) return;
+    if (this.isView || !this.canAdd) return;
 
     const pariente: FormTablePariente = {
       id: `tmp-${this.counter++}`,
@@ -69,6 +75,8 @@ export class SaetFormTableComponent {
   }
 
   eliminarMiembroFamiliar(pariente: FormTablePariente): void {
+    if (this.isView) return;
+
     this.data = this.data.filter(p => p.id !== pariente.id);
     this.dataChange.emit(this.data);
   }
