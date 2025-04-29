@@ -31,29 +31,56 @@
         </div>
       </div>
 
-      <div *ngIf="agendado">
+      <!-- ────────────────────────────────────────────────────────────────
+     BLOQUE SOLO-LECTURA CUANDO YA EXISTE UNA AGENDA (agendado=true)
+     ────────────────────────────────────────────────────────────────-->
+      <ng-container *ngIf="agendado">
+        <!-- Especialista responsable ----------------------------------- -->
         <app-tab-item
           marginTop="3%"
           label="Especialista responsable de agendar"
         >
           <app-saet-input
+            class="full-width"
             [disabled]="true"
-            [value]="especialistaAgendado.nombreCompleto"
-          />
-          <div>
-            <app-tab-item label="">
-              {{
-                especialistaAgendado.dui !== null &&
-                especialistaAgendado.dui !== ''
-                  ? especialistaAgendado.dui + ' |'
-                  : 'Nº dui no disponible | '
-              }}
-              Evaluador
-              {{ especialidad ? getSpecialistLabel(especialidad) : '' }} - COR
-            </app-tab-item>
-          </div>
+            [value]="
+              especialistaAgendado?.nombreCompleto ||
+              'Especialista no disponible'
+            "
+          >
+          </app-saet-input>
+
+          <small class="agendado-sub">
+            {{
+              especialistaAgendado?.dui
+                ? especialistaAgendado.dui + ' |'
+                : 'Nº dui no disponible | '
+            }}
+            Evaluador
+            {{ especialidad ? getSpecialistLabel(especialidad) : '' }} - COR
+          </small>
         </app-tab-item>
-      </div>
+
+        <hr />
+
+        <!-- Fecha - Hora - Botones (en una sola línea) ----------------- -->
+        <div class="agendado-row">
+          <div class="agendado-tiempo">
+            <label class="agendado-label">Fecha de evaluación:</label>
+            <app-saet-input
+              [disabled]="true"
+              value="fechaPerfil | date: 'dd/MM/yyyy'"
+            >
+            </app-saet-input>
+          </div>
+
+          <div class="agendado-tiempo">
+            <label class="agendado-label">Hora de evaluación:</label>
+            <app-saet-input [disabled]="true" value="horaPerfil">
+            </app-saet-input>
+          </div>
+        </div>
+      </ng-container>
 
       <div *ngIf="!agendado">
         <div class="actionsButton">
