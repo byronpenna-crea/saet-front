@@ -28,7 +28,15 @@ export interface Atendido {
   per_primer_apellido: string,
   per_segundo_apellido: string,
   per_tercer_apellido: string,
-  nombre_completo: string
+  /* new ones */
+  nombre_completo: string,
+  nombres: string,
+  apellidos: string,
+  sexo: string,
+  grado: string,
+  edad: number,
+  municipio: string,
+  centroEducativo: string
 }
 @Injectable({
   providedIn: 'root',

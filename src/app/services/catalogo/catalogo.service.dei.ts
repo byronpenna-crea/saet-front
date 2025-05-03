@@ -11,6 +11,10 @@ export interface Schools {
   sed_nombre: string,
   sed_correo_electronico: string
 }
+export interface PaeiGrafica {
+  departamento: string;
+  total: number;
+}
 export interface PersonaApoyo {
   id: number,
   per_fk: {
@@ -45,7 +49,29 @@ export class CatalogoServiceDei extends CatalogoServiceSaet {
   ) {
     super(cookieService);
   }
-
+  public getPAEIByEstado(estado:number):Promise<PaeiGrafica[]>{
+    console.log('estado', estado)
+    const url = `${environment.API_SERVER_URL}/dei/datos-paei?estadoFinalizado=4`;
+    return new Promise((resolve, reject) => {
+      fetch(url, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${this.cookieService.get('token')}`,
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => {
+          if (response.ok) {
+            resolve(response.json());
+          } else {
+            reject(new Error('No se pudo obtener los datos'));
+          }
+        })
+        .catch(error => {
+          reject(new Error('Hubo un error al obtener los datos: ' + error.message));
+        });
+    });
+  }
   public getPersonaApoyoByDui(dui:string):Promise<PersonaApoyo>{
     const url = `${environment.API_SERVER_URL}/tempEstudiantesSigesv2/personaApoyoByDui/${dui}`;
     return new Promise((resolve, reject) => {

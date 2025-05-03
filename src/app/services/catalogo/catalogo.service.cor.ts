@@ -186,7 +186,7 @@ export interface ISaveCaracterizacion {
   id_modulo: number;
   respuestas: iQuestionSave[];
   grupoFamiliar: {
-    grupo_familiar_pk: number | null;
+    grupo_familiar_pk?: number | null;
     primer_nombre: string;
     segundo_nombre: string;
     tercer_nombre: string;
@@ -446,6 +446,8 @@ export class CatalogoServiceCor extends CatalogoServiceSaet {
       nombre_completo: string;
       especialidad: string;
       dui: string;
+      hora_evaluacion: string;
+      fecha_evaluacion: string;
     }[]
   > {
     const url = `${this.API_SERVER_URL}/evaluacion/cor/especialistas/${nie}`;
