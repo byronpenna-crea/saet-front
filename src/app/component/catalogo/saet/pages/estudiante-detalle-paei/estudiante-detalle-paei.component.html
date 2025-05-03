@@ -1,3 +1,4 @@
+<div #topAnchor style="height: 1px"></div>
 <app-saet-global-header
   [nie]="nie"
   [nombreCompleto]="studentInfo?.nombreCompleto ?? ''"
@@ -5,6 +6,7 @@
   [readOnlyEvaluaciones]="readOnlyEvaluaciones"
   [readOnlyPaei]="readOnlyPaei"
   [breadcrumb]="[
+    { href: '#/menu/saet-inicio', text: 'Inicio' },
     { href: '#/menu/saet-buscar', text: 'Buscar estudiante' },
     { href: '#/menu/saet-buscar/' + nie, text: nie },
     { href: '#/menu/saet-paei/' + nie, text: 'PAEI' },
@@ -186,3 +188,19 @@
     </div>
   </div>
 </div>
+
+<button
+  class="scroll-up-btn"
+  (click)="scrollToTop()"
+  pButton
+  icon="pi pi-arrow-up"
+  label=""
+></button>
+<button
+  class="scroll-bottom-btn"
+  (click)="scrollToBottom()"
+  pButton
+  icon="pi pi-arrow-down"
+  label=""
+></button>
+<div #bottomAnchor style="height: 1px"></div>
