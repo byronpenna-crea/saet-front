@@ -5,6 +5,7 @@
   [readOnlyEvaluaciones]="readOnlyEvaluaciones"
   [readOnlyPaei]="readOnlyPaei"
   [breadcrumb]="[
+    { href: '#/menu/saet-inicio', text: 'Inicio' },
     { href: '#/menu/saet-buscar', text: 'Buscar estudiante' },
     { href: '#/menu/saet-buscar/' + nie, text: nie },
     { href: '', text: 'Evaluaciones' }
@@ -34,6 +35,8 @@
         [readOnly]="tab.readOnly"
         [leyend]="tab.leyend"
         [agendaId]="tab.agendaId"
+        [fechaAgendado]="tab.fechaAgendado ?? ''"
+        [horaAgendado]="tab.horaAgendado ?? ''"
         [especialistaAgendado]="tab.especialistaAgendado"
         [tipoEvaluacion]="tab.tipoEvaluacion"
         [evaluationId]="tab.evaluationId"

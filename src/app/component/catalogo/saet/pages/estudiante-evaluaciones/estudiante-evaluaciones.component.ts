@@ -35,6 +35,8 @@ export interface TabInput {
     nombreCompleto: string;
     dui: string;
   };
+  horaAgendado?: string;
+  fechaAgendado?: string;
   especialidad: iEspecialidadEvaluacion;
   evaluationId: number;
   agendaId: number;
@@ -60,14 +62,20 @@ export class EstudianteEvaluacionesComponent
     [iEspecialidadEvaluacion.LENGUAJE]: {
       dui: '',
       nombreCompleto: '',
+      fechaAgendado: '',
+      horaAgendado: '',
     },
     [iEspecialidadEvaluacion.PSICOLOGIA]: {
       dui: '',
       nombreCompleto: '',
+      fechaAgendado: '',
+      horaAgendado: '',
     },
     [iEspecialidadEvaluacion.PEDAGOGIA]: {
       dui: '',
       nombreCompleto: '',
+      fechaAgendado: '',
+      horaAgendado: '',
     },
   };
   agendaId: { [key in iEspecialidadEvaluacion]: number } = {
@@ -140,13 +148,16 @@ export class EstudianteEvaluacionesComponent
       if (tabs !== undefined) {
         this.agendaTabs = tabs.map(tab => ({
           ...tab,
-          readOnly: tab.name !== this.especialidad, // Solo habilitar la pestaña correspondiente
+          // readOnly: tab.name !== this.especialidad,
+          readOnly: true
         }));
       }
+      console.log('agenda tabs here --> ', this.agendaTabs);
       this.agendaTabs[0].readOnly = false;
       const indexEspecialidad: iEspecialidadEvaluacion | undefined =
         this.getIndexEspecialidad(this.especialidad);
 
+      console.log('-- getTipoEvaluacionFromString --', this.especialidad);
       const enumEspecialidad: TIPO_EVALUACION =
         this.getTipoEvaluacionFromString(this.especialidad);
 
@@ -184,13 +195,22 @@ export class EstudianteEvaluacionesComponent
           console.log('response getCorEspecialistas ', response);
           response.forEach(especialista => {
             if (this.especialidades.includes(especialista.especialidad)) {
-              if (especialista.especialidad === 'Psicologo') {
+              console.log('here includes zzz', especialista);
+              if (especialista.especialidad === 'Psicologia') {
+                console.log('here psicologo ');
                 this.agendado[iEspecialidadEvaluacion.PSICOLOGIA] = true;
                 this.especialista[iEspecialidadEvaluacion.PSICOLOGIA] = {
                   nombreCompleto: especialista.nombre_completo,
                   dui: especialista.dui,
                 };
-                this.updateTab('psicologia', true);
+                console.log('update tab psicologo --> ',{
+                  horaAgendado: especialista.hora_evaluacion,
+                  fechaAgendado: especialista.fecha_evaluacion,
+                })
+                this.updateTab('psicologo', true, {
+                  horaAgendado: especialista.hora_evaluacion,
+                  fechaAgendado: especialista.fecha_evaluacion,
+                });
               }
               if (especialista.especialidad === 'Pedagogía') {
                 this.agendado[iEspecialidadEvaluacion.PEDAGOGIA] = true;
@@ -198,7 +218,11 @@ export class EstudianteEvaluacionesComponent
                   nombreCompleto: especialista.nombre_completo,
                   dui: especialista.dui,
                 };
-                this.updateTab(iEspecialidadEvaluacion.PEDAGOGIA, true);
+                this.updateTab(iEspecialidadEvaluacion.PEDAGOGIA, true,
+                {
+                  horaAgendado: especialista.hora_evaluacion,
+                  fechaAgendado: especialista.fecha_evaluacion,
+                });
               }
               if (especialista.especialidad === 'Lenguaje y habla') {
                 console.log(
@@ -210,7 +234,10 @@ export class EstudianteEvaluacionesComponent
                   nombreCompleto: especialista.nombre_completo,
                   dui: especialista.dui,
                 };
-                this.updateTab(iEspecialidadEvaluacion.LENGUAJE, true);
+                this.updateTab(iEspecialidadEvaluacion.LENGUAJE, true,{
+                  horaAgendado: especialista.hora_evaluacion,
+                  fechaAgendado: especialista.fecha_evaluacion,
+                });
               }
               //
             }
@@ -299,7 +326,7 @@ export class EstudianteEvaluacionesComponent
       {
         leyend: 'Evaluación pedagogica',
         agendado: this.agendado[iEspecialidadEvaluacion.PEDAGOGIA],
-        readOnly: true,
+        readOnly: this.readOnlyTab,
 
         onAgendar: this.agendar.bind(this),
         onEvaluationAgendar: this.agendarEvaluacion.bind(this),
@@ -321,12 +348,14 @@ export class EstudianteEvaluacionesComponent
     const tab = tabs.find(tab => tab.name === name);
     return tab !== undefined ? [tab] : [];
   }
-  updateTab(name: string, agendado: boolean) {
+  updateTab(name: string, agendado: boolean, newTabData?: {
+    horaAgendado?: string;
+    fechaAgendado?: string;
+  }) {
     if (name === 'psicologo') {
       this.agendado[iEspecialidadEvaluacion.PSICOLOGIA] = agendado;
     }
     if (name === 'lenguaje') {
-      console.log(' ######## ----- update tab --- #####', this.agendaTabs);
       this.agendado[iEspecialidadEvaluacion.LENGUAJE] = agendado;
     }
     if (name === 'pedagogia') {
@@ -334,12 +363,19 @@ export class EstudianteEvaluacionesComponent
     }
 
     const index = this.agendaTabs.findIndex(tab => tab.name === name);
-    console.log('index _____', index);
     if (index !== -1) {
       const tab = this.getTabs(this.agendaTabs[index].name)[0];
       if (tab) {
         this.agendaTabs[index] = tab;
         this.agendaTabs[index].readOnly = false;
+        if (newTabData) {
+          this.agendaTabs[index].fechaAgendado = newTabData.fechaAgendado;
+          this.agendaTabs[index].horaAgendado = newTabData.horaAgendado;
+          // this.agendaTabs[index].readOnly = true;
+        }
+        console.log('index --> ', newTabData);
+        console.log('index --> ', index);
+        console.log('here new data --> ', this.agendaTabs);
       }
       this.cdr.detectChanges();
     }
@@ -370,7 +406,10 @@ export class EstudianteEvaluacionesComponent
         event.evaluationId.toString()
       );
       this.agendado[event.especialidad] = false;
-      this.updateTab(event.especialidad, false);
+      this.updateTab(event.especialidad, false,{
+        fechaAgendado: '',
+        horaAgendado: ''
+      });
     } catch (ex: unknown) {
       const error = ex as ResponseError;
       this.userMessage.showMessage = true;
@@ -393,7 +432,7 @@ export class EstudianteEvaluacionesComponent
     const minutes = String(date.getMinutes()).padStart(2, '0');
     return `${hours}:${minutes}`;
   }
-  async agendarEvaluacion(event: IAgendaEvaluationParams){
+  async agendarEvaluacion(event: IAgendaEvaluationParams) {
     this.userMessage.showMessage = false;
     this.pageLoading = true;
     if (this.studentInfo?.id_est_pk === undefined) {
@@ -469,8 +508,6 @@ export class EstudianteEvaluacionesComponent
         obj,
         event.especialidad
       );
-
-
     } catch (ex: unknown) {
       const error = ex as ResponseError;
       this.userMessage.showMessage = true;
@@ -479,7 +516,6 @@ export class EstudianteEvaluacionesComponent
       this.userMessage.type = MessageType.DANGER;
     }
     this.pageLoading = false;
-
   }
   async agendar(event: IAgendaParams) {
     this.userMessage.showMessage = false;
@@ -565,7 +601,10 @@ export class EstudianteEvaluacionesComponent
           nombreCompleto: nombreCompleto,
           dui: localStorage.getItem('dui') ?? '',
         };
-        this.updateTab(this.especialidad, true);
+        this.updateTab(this.especialidad, true,{
+          horaAgendado: respuesta.hora,
+          fechaAgendado: respuesta.fecha
+        });
       }
     } catch (ex: unknown) {
       const error = ex as ResponseError;
