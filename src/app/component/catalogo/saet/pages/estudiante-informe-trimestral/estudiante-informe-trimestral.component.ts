@@ -36,7 +36,7 @@ export class EstudianteInformeTrimestralComponent
     tableHeaderStudentName: string;
     tableHeaderStudentSex: string;
     tableHeaderStudentAge: number;
-    tableHeaderStudentGrade: number;
+    tableHeaderStudentGrade: string;
     tableHeaderStudentSchool: string;
     tableHeaderStudentCity: string;
   }[] = [];
@@ -257,13 +257,13 @@ export class EstudianteInformeTrimestralComponent
       console.log('atendidos map ----------', atentidos);
       this.tableData = atentidos.map(atendido => {
         return {
-          number: atendido.per_nie.toString(),
-          tableHeaderStudentName: atendido.nombre_completo,
-          tableHeaderStudentSex: '',
-          tableHeaderStudentAge: 0,
-          tableHeaderStudentGrade: 9,
-          tableHeaderStudentSchool: '',
-          tableHeaderStudentCity: '',
+          number: '',
+          tableHeaderStudentName: `${atendido.nombres} ${atendido.apellidos}`,
+          tableHeaderStudentSex: atendido.sexo,
+          tableHeaderStudentAge: atendido.edad,
+          tableHeaderStudentGrade: atendido.grado,
+          tableHeaderStudentSchool: atendido.centroEducativo,
+          tableHeaderStudentCity: atendido.municipio,
         };
       });
       this.cnResult = 1;

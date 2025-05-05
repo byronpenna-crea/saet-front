@@ -1,8 +1,10 @@
+<div #topAnchor style="height: 1px"></div>
 <app-saet-global-header
   [nie]="nie"
   [nombreCompleto]="studentInfo?.nombreCompleto ?? ''"
   selectedTab="evaluaciones"
   [breadcrumb]="[
+    { href: '#/menu/saet-inicio', text: 'Inicio' },
     { href: '#/menu/saet-buscar', text: 'Buscar estudiante' },
     { href: '#/menu/saet-buscar/' + nie, text: nie },
     { href: '#/menu/saet-datos-estudiante/' + nie, text: 'Evaluaciones' },
@@ -29,7 +31,7 @@
     [title]="userMessage.titleMessage"
   />
   <ng-container *ngFor="let corSurvey of corSurveys">
-    <div style="margin-top: 5%">
+    <div style="margin-top: 2%">
       <app-tabs [legend]="corSurvey.titulo">
         <div
           *ngIf="!cuestionariosTableMode.includes(corSurvey.id_cuestionario)"
@@ -96,7 +98,11 @@
       </app-tabs>
     </div>
   </ng-container>
-
+  <app-saet-mensaje-usuario
+    [show]="userMessage.showMessage"
+    [message]="userMessage.message"
+    [title]="userMessage.titleMessage"
+  />
   <div *ngIf="showActionButtons" style="margin-top: 30px">
     <div *ngIf="formMode === formModeEnum.CREATE" class="actionsButton">
       <app-saet-button
@@ -117,25 +123,34 @@
       <app-saet-button
         (onClick)="salirEditMode()"
         [buttonArgs]="{
-          text: 'Salir',
+          text: 'Salir modo edición',
           buttonStyle: btnStyle.BLUE,
           buttonIcon: btnIcon.CLOSE
         }"
       />
-
-      <app-saet-button
-        (onClick)="save()"
-        [buttonArgs]="{
-          text: 'Actualizar registro',
-          buttonStyle: btnStyle.BLUE
-        }"
-      />
+      <div class="right-buttons">
+        <app-saet-button
+          (onClick)="save()"
+          [buttonArgs]="{
+            text: 'Actualizar registro',
+            buttonStyle: btnStyle.BLUE
+          }"
+        />
+        <app-saet-button
+          (onClick)="generarPDF()"
+          [buttonArgs]="{
+            text: 'Generar PDF',
+            buttonIcon: btnIcon.PRINTER,
+            buttonStyle: btnStyle.BLUE
+          }"
+        />
+      </div>
     </div>
     <div *ngIf="formMode === formModeEnum.VIEW" class="actionsButton">
       <app-saet-button
         (click)="salir()"
         [buttonArgs]="{
-          text: 'Regresar a la caracterización',
+          text: 'Regresar',
           buttonStyle: btnStyle.BLUE,
           buttonIcon: btnIcon.LEFT_ARROW
         }"
@@ -161,3 +176,19 @@
     </div>
   </div>
 </div>
+
+<button
+  class="scroll-up-btn"
+  (click)="scrollToTop()"
+  pButton
+  icon="pi pi-arrow-up"
+  label=""
+></button>
+<button
+  class="scroll-bottom-btn"
+  (click)="scrollToBottom()"
+  pButton
+  icon="pi pi-arrow-down"
+  label=""
+></button>
+<div #bottomAnchor style="height: 1px"></div>

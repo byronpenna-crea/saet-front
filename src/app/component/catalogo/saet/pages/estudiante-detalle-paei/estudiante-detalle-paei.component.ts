@@ -90,6 +90,7 @@ export class EstudianteDetallePaeiComponent
               respuestas: response.respuestas,
               id_evaluacion: response.id_paei,
               especialista_responsable: '',
+              dui_especialista: ''
             };
             console.log('depurado --> ', this.responseToValues(obj));
             this.values = {

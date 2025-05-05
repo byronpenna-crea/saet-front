@@ -164,7 +164,6 @@ export class EstudianteEvaluacionesComponent
       this.catalogoServiceCOR
         .getTipoDeEvaluacion(this.nie, enumEspecialidad)
         .then(response => {
-          console.log('response getTipoEvaluacion ', response);
           if (response.id_evaluacion === 0) {
             this.userMessage.showMessage = true;
             this.userMessage.message = 'Evaluacion obtenida no es valida ';
@@ -183,7 +182,10 @@ export class EstudianteEvaluacionesComponent
             this.agendaId[indexEspecialidad] = response.id_evaluacion;
           }
           this.psicologiaEvaluationId = response.id_evaluacion;
-          this.especialidad && this.updateTab(this.especialidad, true);
+          this.especialidad && this.updateTab(this.especialidad, true,{
+            horaAgendado: response.hora,
+            fechaAgendado: response.fecha
+          });
         })
         .catch((ex: ResponseError) => {
           console.log('------- error ex --------', ex.status);
@@ -210,6 +212,7 @@ export class EstudianteEvaluacionesComponent
                 this.updateTab('psicologo', true, {
                   horaAgendado: especialista.hora_evaluacion,
                   fechaAgendado: especialista.fecha_evaluacion,
+                  readonly: true
                 });
               }
               if (especialista.especialidad === 'Pedagogía') {
@@ -222,6 +225,7 @@ export class EstudianteEvaluacionesComponent
                 {
                   horaAgendado: especialista.hora_evaluacion,
                   fechaAgendado: especialista.fecha_evaluacion,
+                  readonly: true
                 });
               }
               if (especialista.especialidad === 'Lenguaje y habla') {
@@ -237,6 +241,7 @@ export class EstudianteEvaluacionesComponent
                 this.updateTab(iEspecialidadEvaluacion.LENGUAJE, true,{
                   horaAgendado: especialista.hora_evaluacion,
                   fechaAgendado: especialista.fecha_evaluacion,
+                  readonly: true
                 });
               }
               //
@@ -246,7 +251,11 @@ export class EstudianteEvaluacionesComponent
         .finally(() => {
           this.pageLoading = false;
         });
+
     });
+
+
+    this.pageLoading = false;
   }
   onMessage(event: {
     title: string;
@@ -351,6 +360,7 @@ export class EstudianteEvaluacionesComponent
   updateTab(name: string, agendado: boolean, newTabData?: {
     horaAgendado?: string;
     fechaAgendado?: string;
+    readonly?: boolean;
   }) {
     if (name === 'psicologo') {
       this.agendado[iEspecialidadEvaluacion.PSICOLOGIA] = agendado;
@@ -371,7 +381,7 @@ export class EstudianteEvaluacionesComponent
         if (newTabData) {
           this.agendaTabs[index].fechaAgendado = newTabData.fechaAgendado;
           this.agendaTabs[index].horaAgendado = newTabData.horaAgendado;
-          // this.agendaTabs[index].readOnly = true;
+          this.agendaTabs[index].readOnly = newTabData.readonly ?? false;
         }
         console.log('index --> ', newTabData);
         console.log('index --> ', index);

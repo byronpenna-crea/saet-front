@@ -14,12 +14,19 @@ export interface FormTablePariente {
   ocupacion: string;
   action?: string;
 }
-
+export interface TFormData {
+  nombreCompleto: string,
+  edad: string,
+  parentesco: string,
+  nivelEducativo: string,
+  ocupacion: string,
+}
 @Component({
   selector: 'app-saet-form-table',
   templateUrl: './saet-form-table.component.html',
   styleUrls: ['./saet-form-table.component.css'],
 })
+
 export class SaetFormTableComponent {
   /* enums y constantes visuales */
   protected readonly formModeEnum = FormMode;
@@ -36,7 +43,7 @@ export class SaetFormTableComponent {
   /* -------------------------------------------------- */
   /*  Form interno                                      */
   /* -------------------------------------------------- */
-  formData = {
+  formData:TFormData = {
     nombreCompleto: '',
     edad: '',
     parentesco: '',
@@ -54,7 +61,7 @@ export class SaetFormTableComponent {
   /* -------------------------------------------------- */
   /*  Métodos                                            */
   /* -------------------------------------------------- */
-  onInputChange(_: KeyValue, field: keyof typeof this.formData): void {
+  onInputChange(_: KeyValue, field: keyof TFormData): void {
     if (this.isView) return;
 
     this.formData[field] = _?.value ?? '';

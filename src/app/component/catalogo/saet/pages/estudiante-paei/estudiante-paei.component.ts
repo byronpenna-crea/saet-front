@@ -49,9 +49,10 @@ export class EstudiantePaeiComponent
     this.catalogoServiceCOR
       .getTipoDeEvaluacion(this.nie, TIPO_EVALUACION.psicologo_perfil)
       .then(response => {
+        console.log('response --> ', response);
         this.nombreEspecialista[TIPO_EVALUACION.psicologo_perfil] = {
           nombre: response.especialista_responsable,
-          dui: '',
+          dui: response.dui_especialista ?? 'Nº dui no disponible',
         };
       });
     this.catalogoServiceCOR
@@ -59,7 +60,7 @@ export class EstudiantePaeiComponent
       .then(response => {
         this.nombreEspecialista[TIPO_EVALUACION.pedagogo_perfil] = {
           nombre: response.especialista_responsable,
-          dui: '',
+          dui: response.dui_especialista ?? 'Nº dui no disponible',
         };
       });
     this.catalogoServiceCOR
@@ -67,7 +68,7 @@ export class EstudiantePaeiComponent
       .then(response => {
         this.nombreEspecialista[TIPO_EVALUACION.logopeda_perfil] = {
           nombre: response.especialista_responsable,
-          dui: '',
+          dui: response.dui_especialista ?? 'Nº dui no disponible',
         };
       });
   }

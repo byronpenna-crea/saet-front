@@ -25,9 +25,7 @@ import { CatalogoServiceDei } from '../../../../../services/catalogo/catalogo.se
 export class EstudianteDeiInformeTrimestralComponent extends DeiBaseComponent {
   protected readonly ButtonStyle = ButtonStyle;
   protected readonly IconCompoment = IconComponent;
-  async btnRegresar() {
-    await this.router.navigate(['menu/saet-buscar']);
-  }
+
   constructor(
     @Inject(DOCUMENT) protected document: Document,
     protected catalogoServiceDei: CatalogoServiceDei,

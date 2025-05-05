@@ -33,7 +33,7 @@ export class EstudianteEvaluacionAgendaComponent
     this.values[keyValues[0].key] = selectedValues.toString();
     localStorage.setItem('values', JSON.stringify(this.values));
   }
-  idEvaluacion: number = 0;
+  idEvaluacion = 0;
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceCOR: CatalogoServiceCor,
@@ -41,7 +41,7 @@ export class EstudianteEvaluacionAgendaComponent
     router: Router,
     confirmationService: ConfirmationService
   ) {
-    const especialidadTarget: string = 'psicologia';
+    const especialidadTarget = 'psicologia';
     super(
       document,
       catalogoServiceCOR,
@@ -65,9 +65,9 @@ export class EstudianteEvaluacionAgendaComponent
   }
 
   save() {
-    /*const objToSave:ISaveQuestionary = this.getQuestionaryObject();
+    const objToSave:ISaveQuestionary = this.getQuestionaryObject();
     objToSave.id_evaluacion = this.idEvaluacion;
-    const x = this.catalogoServiceCOR.updatePsicologia(objToSave);*/
+    const x = this.catalogoServiceCOR.updatePsicologia(objToSave);
   }
 
   override salirEditMode(): string {

@@ -6,6 +6,7 @@
   [readOnlyEvaluaciones]="readOnlyEvaluaciones"
   [readOnlyPaei]="readOnlyPaei"
   [breadcrumb]="[
+    { href: '#/menu/saet-inicio', text: 'Inicio' },
     { href: '#/menu/saet-buscar', text: 'Buscar estudiante' },
     { href: '#/menu/saet-buscar/' + nie, text: nie },
     {
@@ -35,9 +36,13 @@
 </div>
 <div class="form-container">
   <app-saet-loading [isLoading]="pageLoading" [message]="loadingMessage" />
-  <app-saet-form-table
-    (dataChange)="onGuardianTableChange($event)"
-    [data]="guardianControlData" />
+  <app-tabs legend="Miembros de grupo familiar">
+    <app-saet-form-table
+      (dataChange)="onGuardianTableChange($event)"
+      [data]="guardianControlData"
+      [mode]="formMode"
+    />
+  </app-tabs>
   <ng-container *ngIf="!pageLoading">
     <ng-container *ngFor="let corSurvey of corSurveys">
       <div style="margin-top: 1%">
@@ -119,7 +124,7 @@
         <app-saet-button
           (click)="salir()"
           [buttonArgs]="{
-            text: 'Salir modo edicion',
+            text: 'Salir modo edición',
             buttonStyle: btnStyle.BLUE,
             buttonIcon: iconCompoment.LEFT_ARROW
           }"

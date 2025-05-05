@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { QuestionsComponent } from '../../QuestionsComponent';
 import {
   IMessageComponent,
@@ -29,6 +29,8 @@ export class EstudianteCuestionarioPsicologiaComponent
 {
   btnIcon = IconComponent;
   cuestionariosTableMode: number[] = [7, 10, 11, 12, 13];
+  @ViewChild('bottomAnchor') override bottomAnchor!: ElementRef<HTMLDivElement>;
+  @ViewChild('topAnchor') override topAnchor!: ElementRef<HTMLDivElement>;
   override ngOnInit = async () => {
     await super.ngOnInit();
   };
@@ -232,7 +234,14 @@ export class EstudianteCuestionarioPsicologiaComponent
         this.userMessage.titleMessage = 'Error';
         return;
       }
-      await this.router.navigate([this.baseUrl, this.nie, 'view']);
+
+
+      this.pageLoading = false;
+      this.userMessage.showMessage = true;
+      this.userMessage.type = MessageType.SUCCESS;
+      this.userMessage.message = '¡Los datos han sido guardados exitosamente!';
+      this.userMessage.titleMessage = 'Datos actualizados';
+      // await this.router.navigate([this.baseUrl, this.nie, 'view']);
     } catch (e) {
       console.log('Error ---- ', e);
     } finally {

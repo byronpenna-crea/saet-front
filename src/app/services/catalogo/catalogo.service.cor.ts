@@ -93,6 +93,9 @@ export interface IEvaluacionResponse {
   id_evaluacion: number;
   especialista_responsable: string;
   respuestas: iQuestionSave[];
+  dui_especialista?: string;
+  fecha?: string;
+  hora?: string;
 }
 export interface IQuestionaryHeader {
   id_estudiante_fk: number;
@@ -229,6 +232,7 @@ export class CatalogoServiceCor extends CatalogoServiceSaet {
   }
   public getPersonaApoyoByDui(dui: string): Promise<PersonaApoyo> {
     const url = `${environment.API_SERVER_URL}/tempEstudiantesSigesv2/personaApoyoByDui/${dui}`;
+    console.log('token is ', this.cookieService.get('token'));
     return new Promise((resolve, reject) => {
       fetch(url, {
         method: 'GET',
@@ -339,7 +343,6 @@ export class CatalogoServiceCor extends CatalogoServiceSaet {
   // update
   evaluacionURL = `${this.API_SERVER_URL}/evaluacion/cor/`;
   public updatePsicologia(cuestionarioPsicologia: ISaveQuestionary) {
-    console.log('update psicologia ----- ');
     return this.putRequest<ISaveQuestionary, ISaveQuestionary>(
       `${this.evaluacionURL}psicologia/`,
       cuestionarioPsicologia

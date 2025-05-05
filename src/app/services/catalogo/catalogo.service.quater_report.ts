@@ -97,7 +97,8 @@ export class CatalogoServiceQuarterReport extends CatalogoServiceSaet {
   }
 
   public getAtendidosByDui(dui:string):Promise<Atendido[]>{
-    const url = `${environment.API_SERVER_URL}/tempEstudiantesSigesv2/personaApoyo/atendidos/${dui}`;
+    const url = `${this.API_SERVER_URL}/tempEstudiantesSigesv2/personaApoyo/atendidos/${dui}`;
+    console.log('token -->', this.cookieService.get('token'));
     return new Promise((resolve, reject) => {
       fetch(url, {
         method: 'GET',
