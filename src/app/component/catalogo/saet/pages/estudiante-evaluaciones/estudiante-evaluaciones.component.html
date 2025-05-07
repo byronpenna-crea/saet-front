@@ -27,6 +27,7 @@
     >
       <app-saet-tab-agenda
         (onAgendar)="tab.onAgendar($event)"
+        [perfilIniciado]="tab.perfilIniciado ?? false"
         (onEvaluationAgendar)="tab.onEvaluationAgendar($event)"
         [especialidad]="tab.especialidad"
         (onCancelarAgenda)="tab.onCancelarAgenda($event)"

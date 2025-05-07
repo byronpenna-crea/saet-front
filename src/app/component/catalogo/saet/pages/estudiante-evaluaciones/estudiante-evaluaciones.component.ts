@@ -45,6 +45,7 @@ export interface TabInput {
   onEvaluationAgendar: (event: IAgendaEvaluationParams) => void;
   onCancelarAgenda: (event: IOnCancelarAgenda) => void;
   tipoEvaluacion: TIPO_EVALUACION;
+  perfilIniciado?: boolean;
 }
 @Component({
   selector: 'app-estudiante-evaluaciones',
@@ -164,6 +165,7 @@ export class EstudianteEvaluacionesComponent
       this.catalogoServiceCOR
         .getTipoDeEvaluacion(this.nie, enumEspecialidad)
         .then(response => {
+          console.log('response ', response);
           if (response.id_evaluacion === 0) {
             this.userMessage.showMessage = true;
             this.userMessage.message = 'Evaluacion obtenida no es valida ';
@@ -178,13 +180,15 @@ export class EstudianteEvaluacionesComponent
               nombreCompleto: response.especialista_responsable,
               dui: '',
             };
-            console.log('------> ', this.especialista[indexEspecialidad]);
             this.agendaId[indexEspecialidad] = response.id_evaluacion;
           }
           this.psicologiaEvaluationId = response.id_evaluacion;
+          console.log('to update tab------> ', response.respuestas.length);
+          console.log('to update ------> ', response.respuestas.length > 0);
           this.especialidad && this.updateTab(this.especialidad, true,{
             horaAgendado: response.hora,
-            fechaAgendado: response.fecha
+            fechaAgendado: response.fecha,
+            perfilIniciado: response.respuestas.length > 0
           });
         })
         .catch((ex: ResponseError) => {
@@ -199,7 +203,6 @@ export class EstudianteEvaluacionesComponent
             if (this.especialidades.includes(especialista.especialidad)) {
               console.log('here includes zzz', especialista);
               if (especialista.especialidad === 'Psicologia') {
-                console.log('here psicologo ');
                 this.agendado[iEspecialidadEvaluacion.PSICOLOGIA] = true;
                 this.especialista[iEspecialidadEvaluacion.PSICOLOGIA] = {
                   nombreCompleto: especialista.nombre_completo,
@@ -361,6 +364,7 @@ export class EstudianteEvaluacionesComponent
     horaAgendado?: string;
     fechaAgendado?: string;
     readonly?: boolean;
+    perfilIniciado?: boolean;
   }) {
     if (name === 'psicologo') {
       this.agendado[iEspecialidadEvaluacion.PSICOLOGIA] = agendado;
@@ -382,6 +386,7 @@ export class EstudianteEvaluacionesComponent
           this.agendaTabs[index].fechaAgendado = newTabData.fechaAgendado;
           this.agendaTabs[index].horaAgendado = newTabData.horaAgendado;
           this.agendaTabs[index].readOnly = newTabData.readonly ?? false;
+          this.agendaTabs[index].perfilIniciado = newTabData.perfilIniciado ?? false;
         }
         console.log('index --> ', newTabData);
         console.log('index --> ', index);
