@@ -2,25 +2,17 @@ import { Component, Inject } from '@angular/core';
 import { ButtonStyle } from '../../component/saet-button/saet-button.component';
 import { KeyValue } from '../../component/saet-input/saet-input.component';
 import { IconComponent } from '../../shared/component.config';
-import {
-  MessageType,
-  UserMessage,
-} from '../../interfaces/message-component.interface';
-import { userMessageInit } from '../../shared/messages.model';
+import { MessageType } from '../../interfaces/message-component.interface';
 import { DeiBaseComponent } from '../../DeiBaseComponent';
 import { DOCUMENT } from '@angular/common';
-import {
-  CatalogoServiceCor,
-  ResponseError,
-} from '../../../../../services/catalogo/catalogo.service.cor';
+import { ResponseError } from '../../../../../services/catalogo/catalogo.service.cor';
 import { ActivatedRoute, Router } from '@angular/router';
-import jsPDF from 'jspdf';
 import { CatalogoServiceDei } from '../../../../../services/catalogo/catalogo.service.dei';
 import { CatalogoServiceQuarterReport } from '../../../../../services/catalogo/catalogo.service.quater_report';
 import { Content, TDocumentDefinitions } from 'pdfmake/interfaces';
 import * as pdfMake from 'pdfmake/build/pdfmake';
-
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
+
 @Component({
   selector: 'app-estudiante-dei-informe-trimestral',
   templateUrl: './estudiante-dei-informe-trimestral.component.html',
@@ -29,7 +21,8 @@ import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 export class EstudianteDeiInformeTrimestralComponent extends DeiBaseComponent {
   protected readonly ButtonStyle = ButtonStyle;
   protected readonly IconCompoment = IconComponent;
-
+  today = new Date();
+  currentYear = this.today.getFullYear();
   constructor(
     @Inject(DOCUMENT) protected document: Document,
     protected catalogoServiceDei: CatalogoServiceDei,
@@ -116,7 +109,25 @@ export class EstudianteDeiInformeTrimestralComponent extends DeiBaseComponent {
     return div.innerHTML;
   }
 
-  async generateReport(nie: string) {
+  statusTrimestres: { [key: number]: 'Atendido' | 'Sin atención' } = {
+    1: 'Sin atención',
+    2: 'Sin atención',
+    3: 'Sin atención',
+    4: 'Sin atención',
+  };
+  private async verificarTrimestres(year: number): Promise<void> {
+    for (let t = 1; t <= 4; t++) {
+      try {
+        const res = await this.catalogoServiceQuarterReport.getAnswers(year, t);
+        if (res && res.respuestas?.length > 0) {
+          this.statusTrimestres[t] = 'Atendido';
+        }
+      } catch (error) {
+        this.statusTrimestres[t] = 'Sin atención';
+      }
+    }
+  }
+  async generateReport(year:number, trimestre: number) {
     /*const doc = new jsPDF();
     const currentY = 30;
 
@@ -178,48 +189,57 @@ export class EstudianteDeiInformeTrimestralComponent extends DeiBaseComponent {
         margin: [0, 0, 0, 10], // Margen debajo del logo
       });
     }
-    const respuestas = await this.catalogoServiceQuarterReport.getAnswers(2025,2);
-    respuestas && respuestas.respuestas.forEach((respuestaObj, index) => {
-      console.log('respuestaObj --------- #########', respuestaObj);
-      const respuesta = respuestaObj.respuesta ?? '';
+    try {
+      const respuestas = await this.catalogoServiceQuarterReport.getAnswers(year,trimestre);
+      console.log('respuestas here --------- #########', respuestas);
+      respuestas && respuestas.respuestas.forEach((respuestaObj, index) => {
+        console.log('respuestaObj --------- #########', respuestaObj);
+        const respuesta = respuestaObj.respuesta ?? '';
 
-      if(respuesta !== ''){
-        // Agregar la pregunta como subheader
-        (docDefinition.content as Content[]).push({
-          text: respuestaObj.pregunta ?? '',
-          style: 'subheader',
-        });
+        if(respuesta !== ''){
+          // Agregar la pregunta como subheader
+          (docDefinition.content as Content[]).push({
+            text: respuestaObj.pregunta ?? '',
+            style: 'subheader',
+          });
 
-        // Ajustar las dimensiones de las imágenes en el contenido HTML
-        const htmlContent = this.ajustarTamanoImagenes(respuesta);
-        console.log('html content', htmlContent);
+          // Ajustar las dimensiones de las imágenes en el contenido HTML
+          const htmlContent = this.ajustarTamanoImagenes(respuesta);
+          console.log('html content', htmlContent);
 
-        // Convertir el contenido HTML a formato pdfMake
-        const convertedHtml = htmlToPdfmake(htmlContent, {
-          // @ts-ignore
-          window: window as Window,
-        });
+          // Convertir el contenido HTML a formato pdfMake
+          const convertedHtml = htmlToPdfmake(htmlContent, {
+            // @ts-ignore
+            window: window as Window,
+          });
 
-        (docDefinition.content as Content[]).push({
-          stack: [convertedHtml],
-          margin: [0, 0, 0, 20],
-        });
-      }
-    });
-    //currentY += 10; // Espacio debajo del título principal
-    //let pageNumber = 0;
-    //doc.save(`informe-trimestral-cor.pdf`);
-    console.log('here ', docDefinition);
+          (docDefinition.content as Content[]).push({
+            stack: [convertedHtml],
+            margin: [0, 0, 0, 20],
+          });
+        }
+      });
+      //currentY += 10; // Espacio debajo del título principal
+      //let pageNumber = 0;
+      //doc.save(`informe-trimestral-cor.pdf`);
+      console.log('here ', docDefinition);
+      pdfMake
+        .createPdf(docDefinition)
+        .download(`informe-trimestral-cor ${trimestre}-${year}.pdf`);
+    }catch (e){
+      const error = e as ResponseError;
+      this.userMessage.message = error.message
+      this.userMessage.showMessage = true;
+      this.userMessage.type = MessageType.DANGER;
+    }
 
-    pdfMake
-      .createPdf(docDefinition)
-      .download(`informe-trimestral-cor.pdf`);
     this.pageLoading = false;
   }
   async toggleTable() {
     this.userMessage.showMessage = false;
     this.pageLoading = true;
-    console.log('toggle trimestral ', this.inputDui);
+    console.log('here')
+    console.log('toggle trimestral ++', this.inputDui);
     try {
       const result = await this.catalogoServiceDei.getPersonaApoyoByDui(
         '050350968'
@@ -234,6 +254,7 @@ export class EstudianteDeiInformeTrimestralComponent extends DeiBaseComponent {
         titleMessage: '',
         type: MessageType.SUCCESS,
       };
+      await this.verificarTrimestres(this.currentYear);
       this.showTable = true;
     } catch (e) {
       const error = e as ResponseError;

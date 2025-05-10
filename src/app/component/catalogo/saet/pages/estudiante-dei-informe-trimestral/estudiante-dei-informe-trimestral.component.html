@@ -64,18 +64,26 @@
               </div>
             </div>
             <hr />
+            <app-saet-mensaje-usuario
+              [show]="userMessage.showMessage"
+              [message]="userMessage.message"
+              [title]="userMessage.titleMessage"
+              [messageType]="userMessage.type"
+            />
             <table class="report-table">
               <thead>
                 <tr>
-                  <th>Responsables</th>
-                  <th>Estado del informe</th>
+                  <th>Año</th>
+                  <th>Trimestre</th>
+                  <th>Estado</th>
                   <th>Ver informe Trimestral</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td>Centro de Orientación y Recursos (COR)</td>
-                  <td>Realizado</td>
+                  <td>{{ currentYear }}</td>
+                  <td>01</td>
+                  <td>{{ statusTrimestres[1] }}</td>
                   <td>
                     <app-saet-button
                       testId="btn-buscar"
@@ -85,11 +93,59 @@
                         buttonStyle: ButtonStyle.WHITE,
                         buttonIcon: IconCompoment.EYE
                       }"
-                      (onClick)="generateReport(inputNIE)"
+                      (onClick)="generateReport(currentYear, 1)"
                     />
-                    <!--                    <button class="view-report-btn">-->
-                    <!--                      <span class="icon">⏺</span> Ver informe-->
-                    <!--                    </button>-->
+                  </td>
+                </tr>
+                <tr>
+                  <td>{{ currentYear }}</td>
+                  <td>02</td>
+                  <td>{{ statusTrimestres[2] }}</td>
+                  <td>
+                    <app-saet-button
+                      testId="btn-buscar"
+                      [disabled]="!showTable"
+                      [buttonArgs]="{
+                        text: 'Ver informe',
+                        buttonStyle: ButtonStyle.WHITE,
+                        buttonIcon: IconCompoment.EYE
+                      }"
+                      (onClick)="generateReport(currentYear, 2)"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>{{ currentYear }}</td>
+                  <td>03</td>
+                  <td>{{ statusTrimestres[3] }}</td>
+                  <td>
+                    <app-saet-button
+                      testId="btn-buscar"
+                      [disabled]="!showTable"
+                      [buttonArgs]="{
+                        text: 'Ver informe',
+                        buttonStyle: ButtonStyle.WHITE,
+                        buttonIcon: IconCompoment.EYE
+                      }"
+                      (onClick)="generateReport(currentYear, 3)"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td>{{ currentYear }}</td>
+                  <td>04</td>
+                  <td>{{ statusTrimestres[4] }}</td>
+                  <td>
+                    <app-saet-button
+                      testId="btn-buscar"
+                      [disabled]="!showTable"
+                      [buttonArgs]="{
+                        text: 'Ver informe',
+                        buttonStyle: ButtonStyle.WHITE,
+                        buttonIcon: IconCompoment.EYE
+                      }"
+                      (onClick)="generateReport(currentYear, 4)"
+                    />
                   </td>
                 </tr>
               </tbody>

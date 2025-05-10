@@ -234,6 +234,11 @@ export class EstudianteInformeTrimestralComponent
     if (this.reportId !== 0) {
       const updated = await this.catalogoServiceQuarterReport.update(objToSave);
       console.log('updated obj', updated);
+      for (const respuesta of updated.respuestas) {
+        const inputKey = `richtext_${respuesta.id_pregunta}`;
+        this.storedValues[inputKey] = respuesta.respuesta ?? '';
+      }
+      this.updateHighlights();
     } else {
       await this.catalogoServiceQuarterReport.save(objToSave);
     }
