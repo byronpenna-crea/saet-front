@@ -122,18 +122,6 @@
                 </td>
                 <td>
                   {{ rowData['tableHeaderStudentIssue'] }}
-                  <textarea
-                    [readonly]="!rowData.editing"
-                    [(ngModel)]="rowData.difficultyDescription"
-                    rows="3"
-                    style="width: 100%; margin-bottom: 8px"
-                  ></textarea>
-                  <button
-                    pButton
-                    [label]="rowData.editing ? 'Guardar' : 'Editar'"
-                    (click)="onToggleEdit(rowData)"
-                    class="p-button-sm"
-                  ></button>
                 </td>
                 <!--            <td>-->
                 <!--              <div style="display: flex; flex-direction: Column; gap: 10px">-->
@@ -163,6 +151,7 @@
           <app-richtext
             testId="richtext_1"
             name="richtext_1"
+            [isHighlight]="highlight['richtext_1']"
             [value]="values['richtext_1']"
             (inputChange)="onInputChange($event)"
             [disabled]="readOnlyForm"
@@ -180,7 +169,8 @@
           <app-richtext
             testId="richtext_2"
             name="richtext_2"
-            [value]="values['quarter-richtext_2']"
+            [isHighlight]="highlight['richtext_2']"
+            [value]="values['richtext_2']"
             (inputChange)="onInputChange($event)"
             [disabled]="readOnlyForm"
           />
@@ -188,16 +178,20 @@
       </div>
 
       <app-saet-underlined-title></app-saet-underlined-title>
-      <div class="mt-2 mb-2 parent-rich">
-        <span
-          >Dificultades de memoria, atención, percepción, Dificultades de
-          lenguaje receptivo, expresivo, dislalias entre otros.pensamiento de
-          integración social, hiperactividad.</span
-        >
-        <div class="container-rich">
-          <app-richtext text="xxx" [disabled]="readOnlyForm" />
-        </div>
-      </div>
+<!--      <div class="mt-2 mb-2 parent-rich">-->
+<!--        <span-->
+<!--          >Dificultades de memoria, atención, percepción, Dificultades de-->
+<!--          lenguaje receptivo, expresivo, dislalias entre otros.pensamiento de-->
+<!--          integración social, hiperactividad.</span-->
+<!--        >-->
+<!--        <div class="container-rich">-->
+<!--          <app-richtext-->
+<!--            text="xxx"-->
+<!--            [isHighlight]="highlight['richtext_1']"-->
+<!--            [disabled]="readOnlyForm"-->
+<!--          />-->
+<!--        </div>-->
+<!--      </div>-->
 
       <app-saet-underlined-title></app-saet-underlined-title>
       <div class="mt-2 mb-2">
@@ -209,7 +203,8 @@
           <app-richtext
             testId="richtext_3"
             name="richtext_3"
-            [value]="values['quarter-richtext_3']"
+            [value]="values['richtext_3']"
+            [isHighlight]="highlight['richtext_3']"
             (inputChange)="onInputChange($event)"
             [disabled]="readOnlyForm"
           />
@@ -227,7 +222,8 @@
           <app-richtext
             testId="richtext_4"
             name="richtext_4"
-            [value]="values['quarter-richtext_4']"
+            [value]="values['richtext_4']"
+            [isHighlight]="highlight['richtext_4']"
             (inputChange)="onInputChange($event)"
             [disabled]="readOnlyForm"
           />
@@ -240,6 +236,7 @@
             testId="richtext_5"
             name="richtext_5"
             [value]="values['richtext_5']"
+            [isHighlight]="highlight['richtext_5']"
             (inputChange)="onInputChange($event)"
             [disabled]="readOnlyForm"
           />
@@ -258,6 +255,7 @@
             testId="richtext_6"
             name="richtext_6"
             [value]="values['richtext_6']"
+            [isHighlight]="highlight['richtext_6']"
             (inputChange)="onInputChange($event)"
             [disabled]="readOnlyForm"
           />
@@ -271,6 +269,7 @@
             testId="richtext_7"
             name="richtext_7"
             [value]="values['richtext_7']"
+            [isHighlight]="highlight['richtext_7']"
             (inputChange)="onInputChange($event)"
             [disabled]="readOnlyForm"
           />
@@ -290,6 +289,7 @@
             testId="richtext_8"
             name="richtext_8"
             [value]="values['richtext_8']"
+            [isHighlight]="highlight['richtext_8']"
             (inputChange)="onInputChange($event)"
             [disabled]="readOnlyForm"
           />
@@ -303,6 +303,7 @@
             testId="richtext_9"
             name="richtext_9"
             [value]="values['richtext_9']"
+            [isHighlight]="highlight['richtext_9']"
             (inputChange)="onInputChange($event)"
             [disabled]="readOnlyForm"
           />
@@ -322,6 +323,7 @@
             testId="richtext_10"
             name="richtext_10"
             [value]="values['richtext_10']"
+            [isHighlight]="highlight['richtext_10']"
             (inputChange)="onInputChange($event)"
             [disabled]="readOnlyForm"
           />
@@ -335,6 +337,7 @@
             testId="richtext_11"
             name="richtext_11"
             [value]="values['richtext_11']"
+            [isHighlight]="highlight['richtext_11']"
             (inputChange)="onInputChange($event)"
             [disabled]="readOnlyForm"
           />
@@ -353,6 +356,7 @@
             testId="richtext_12"
             name="richtext_12"
             [value]="values['richtext_12']"
+            [isHighlight]="highlight['richtext_12']"
             (inputChange)="onInputChange($event)"
             [disabled]="readOnlyForm"
           />
@@ -388,12 +392,12 @@
     </div>
   </div>
 </div>
-<app-saet-mensaje-usuario
-  [show]="userMessage.showMessage"
-  [message]="userMessage.message"
-  [title]="userMessage.titleMessage"
-  [messageType]="userMessage.type"
-/>
+<!--<app-saet-mensaje-usuario-->
+<!--  [show]="userMessage.showMessage"-->
+<!--  [message]="userMessage.message"-->
+<!--  [title]="userMessage.titleMessage"-->
+<!--  [messageType]="userMessage.type"-->
+<!--/>-->
 <button
   class="scroll-up-btn"
   (click)="scrollToTop()"

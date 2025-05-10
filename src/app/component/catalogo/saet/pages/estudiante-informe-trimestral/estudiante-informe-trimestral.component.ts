@@ -51,11 +51,21 @@ export class EstudianteInformeTrimestralComponent
   currentTrimester = 0;
   override ngOnInit(): void {
     super.initialize();
+    this.init();
     this.setDefaultTrimester();
   }
   @ViewChild('bottomAnchor') override bottomAnchor!: ElementRef<HTMLDivElement>;
   @ViewChild('topAnchor') override topAnchor!: ElementRef<HTMLDivElement>;
 
+  init() {
+    this.route.paramMap.subscribe(() => {
+      const storedValues = localStorage.getItem(this.localStorageKey);
+      console.log(`stored values -> %%% ${this.localStorageKey}`, storedValues);
+      if (storedValues) {
+        this.values = JSON.parse(storedValues);
+      }
+    })
+  }
   isTrimesterEnabled(numero: number): boolean {
     return numero <= this.currentTrimester;
   }
@@ -120,6 +130,10 @@ export class EstudianteInformeTrimestralComponent
     console.log('current trimester ', this.currentTrimester);
     try {
       const answers = await this.catalogoServiceQuarterReport.getAnswers(2025, this.selectedTrimester);
+      const storedValues = localStorage.getItem(this.localStorageKey);
+      if (storedValues) {
+        this.values = JSON.parse(storedValues);
+      }
       if(this.selectedTrimester === this.currentTrimester){
         this.readOnlyForm = false;
       }
@@ -129,14 +143,22 @@ export class EstudianteInformeTrimestralComponent
       if (answers && answers.respuestas) {
         this.reportId = answers.id_informe_pk;
         this.mainButtonText = 'Actualizar y continuar';
-        this.values = {}; // limpia valores anteriores
-
+        this.storedValues = {};
         for (const respuesta of answers.respuestas) {
 
           const inputKey = `richtext_${respuesta.id_pregunta}`;
-          this.values[inputKey] = respuesta.respuesta ?? '';
+          this.storedValues[inputKey] = respuesta.respuesta ?? '';
         }
       }
+      console.log('STORED VALUES HERE ', this.storedValues);
+      console.log('VALUES HERE ', this.values);
+      this.values = {
+        ...this.storedValues,
+        ...this.values,
+      };
+      this.updateHighlights();
+      console.log('stored ###########', this.storedValues);
+      console.log('values ###########', this.values);
     } catch (e) {
       console.error('Error cargando respuestas:', e);
     }
@@ -172,8 +194,8 @@ export class EstudianteInformeTrimestralComponent
             answerPromise.respuestas ?? []
           );
           this.values = {
-            ...this.values,
             ...respuestas,
+            ...this.values,
           };
         })
         .catch(([answerCatch]) => {
@@ -210,7 +232,8 @@ export class EstudianteInformeTrimestralComponent
 
 
     if (this.reportId !== 0) {
-      await this.catalogoServiceQuarterReport.update(objToSave);
+      const updated = await this.catalogoServiceQuarterReport.update(objToSave);
+      console.log('updated obj', updated);
     } else {
       await this.catalogoServiceQuarterReport.save(objToSave);
     }
@@ -221,15 +244,32 @@ export class EstudianteInformeTrimestralComponent
     this.userMessage.message = '¡Los datos han sido guardados exitosamente!';
     this.userMessage.titleMessage = 'Datos actualizados';
   }
+  highlight: { [key: string]: boolean } = {};
   values: { [key: string]: string } = {};
+  storedValues: { [key: string]: string } = {};
   onInputNIEChange(keyValue: KeyValue) {
     this.inputNIE = keyValue.value;
+  }
+  isDifferent(key: string): boolean {
+    const value = this.values[key] !== null && this.values[key] !== undefined  ? this.values[key] : '';
+    const storedValue = this.storedValues[key] !== null && this.storedValues[key] !== undefined  ? this.storedValues[key] : '';
+    console.log('stored -->',storedValue);
+    console.log('value -->',value);
+    console.log('------------');
+    return value !== storedValue;
+  }
+  updateHighlights() {
+    this.highlight = {};
+    for (const key of Object.keys(this.values)) {
+      this.highlight[key] = this.isDifferent(key);
+    }
   }
   onInputChange(keyValue: KeyValue) {
     console.log('on change ', keyValue);
     this.values[keyValue.key] = keyValue.value;
+    this.highlight[keyValue.key] = this.isDifferent(keyValue.key);
     localStorage.setItem(
-      `${this.localStorageKey}-${this.nie}`,
+      `${this.localStorageKey}`,
       JSON.stringify(this.values)
     );
   }

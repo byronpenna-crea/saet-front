@@ -16,7 +16,11 @@ import {
 import { ActivatedRoute, Router } from '@angular/router';
 import jsPDF from 'jspdf';
 import { CatalogoServiceDei } from '../../../../../services/catalogo/catalogo.service.dei';
+import { CatalogoServiceQuarterReport } from '../../../../../services/catalogo/catalogo.service.quater_report';
+import { Content, TDocumentDefinitions } from 'pdfmake/interfaces';
+import * as pdfMake from 'pdfmake/build/pdfmake';
 
+import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 @Component({
   selector: 'app-estudiante-dei-informe-trimestral',
   templateUrl: './estudiante-dei-informe-trimestral.component.html',
@@ -30,9 +34,11 @@ export class EstudianteDeiInformeTrimestralComponent extends DeiBaseComponent {
     @Inject(DOCUMENT) protected document: Document,
     protected catalogoServiceDei: CatalogoServiceDei,
     private route: ActivatedRoute,
-    protected override router: Router
+    protected override router: Router,
+    private catalogoServiceQuarterReport: CatalogoServiceQuarterReport,
   ) {
     super(router);
+
     this.route.paramMap.subscribe(params => {
       const dui = params.get('dui');
       if (dui) {
@@ -56,8 +62,62 @@ export class EstudianteDeiInformeTrimestralComponent extends DeiBaseComponent {
   onInputChange(keyValue: KeyValue) {
     this.inputNIE = keyValue.value;
   }
+  getBase64Image(url: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = 'Anonymous';
+      img.src = url;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(img, 0, 0);
+          resolve(
+            canvas
+              .toDataURL('image/png')
+              .replace(/^data:image\/(png|jpg);base64,/, '')
+          );
+        } else {
+          reject('No se pudo obtener el contexto del canvas');
+        }
+      };
+      img.onerror = err => reject(err);
+    });
+  }
+  ajustarTamanoImagenes(htmlContent: string): string {
+    const div = document.createElement('div');
+    div.innerHTML = htmlContent;
+
+    // Buscar todas las imágenes en el contenido HTML
+    const imgs = div.getElementsByTagName('img');
+    for (let img of imgs) {
+      const width = img.width;
+      const height = img.height;
+
+      // Calcular la relación de aspecto
+      const aspectRatio = width / height;
+
+      // Ajustar la dimensión mayor a 200 px, manteniendo la proporción
+      if (width > height) {
+        img.width = 200;
+        img.height = 200 / aspectRatio;
+      } else {
+        img.height = 200;
+        img.width = 200 * aspectRatio;
+      }
+
+      // Asegurarse de que ninguna dimensión supere 200 px
+      img.width = Math.min(img.width, 200);
+      img.height = Math.min(img.height, 200);
+    }
+
+    return div.innerHTML;
+  }
+
   async generateReport(nie: string) {
-    const doc = new jsPDF();
+    /*const doc = new jsPDF();
     const currentY = 30;
 
     const title = 'Informe trimestral COR';
@@ -79,36 +139,106 @@ export class EstudianteDeiInformeTrimestralComponent extends DeiBaseComponent {
 
     const logo = await loadImage(logoPath);
     console.log('logo ', logo);
-    doc.text(title, titleX, currentY);
+    doc.text(title, titleX, currentY);*/
+    this.pageLoading = true;
+    const docDefinition: TDocumentDefinitions = {
+      content: [] as Content[],
+      pageSize: 'A4',
+      pageMargins: [40, 60, 40, 60],
+      styles: {
+        header: {
+          fontSize: 18,
+          bold: true,
+          alignment: 'center',
+        },
+        subheader: {
+          fontSize: 14,
+          bold: true,
+          margin: [0, 20, 0, 10],
+        },
+        normal: {
+          fontSize: 12,
+          margin: [0, 0, 0, 20],
+        },
+      },
+    };
+    (pdfMake as any).vfs = pdfFonts.pdfMake.vfs;
+    const htmlToPdfmake = (await import('html-to-pdfmake')).default;
+    let logoBase64 = '';
+    try {
+      logoBase64 = await this.getBase64Image('/assets/logo.png');
+    } catch (err) {
+      console.error('Error al cargar el logo:', err);
+    }
+    if (logoBase64) {
+      (docDefinition.content as Content[]).push({
+        image: `data:image/png;base64,${logoBase64}`,
+        width: 100,
+        alignment: 'left',
+        margin: [0, 0, 0, 10], // Margen debajo del logo
+      });
+    }
+    const respuestas = await this.catalogoServiceQuarterReport.getAnswers(2025,2);
+    respuestas && respuestas.respuestas.forEach((respuestaObj, index) => {
+      console.log('respuestaObj --------- #########', respuestaObj);
+      const respuesta = respuestaObj.respuesta ?? '';
+
+      if(respuesta !== ''){
+        // Agregar la pregunta como subheader
+        (docDefinition.content as Content[]).push({
+          text: respuestaObj.pregunta ?? '',
+          style: 'subheader',
+        });
+
+        // Ajustar las dimensiones de las imágenes en el contenido HTML
+        const htmlContent = this.ajustarTamanoImagenes(respuesta);
+        console.log('html content', htmlContent);
+
+        // Convertir el contenido HTML a formato pdfMake
+        const convertedHtml = htmlToPdfmake(htmlContent, {
+          // @ts-ignore
+          window: window as Window,
+        });
+
+        (docDefinition.content as Content[]).push({
+          stack: [convertedHtml],
+          margin: [0, 0, 0, 20],
+        });
+      }
+    });
     //currentY += 10; // Espacio debajo del título principal
     //let pageNumber = 0;
-    doc.save(`informe-trimestral-cor.pdf`);
+    //doc.save(`informe-trimestral-cor.pdf`);
+    console.log('here ', docDefinition);
+
+    pdfMake
+      .createPdf(docDefinition)
+      .download(`informe-trimestral-cor.pdf`);
+    this.pageLoading = false;
   }
   async toggleTable() {
     this.userMessage.showMessage = false;
     this.pageLoading = true;
-    console.log('toggle trimestral ');
-    if (this.inputDui) {
-      try {
-        const result = await this.catalogoServiceDei.getPersonaApoyoByDui(
-          this.inputDui
-        );
-        console.log('result here ', result);
-        this.persona.dui = result.dui;
-        this.persona.nombreCompleto = result.nombre_completo;
-        this.cnResult = 1;
-        this.userMessage = {
-          showMessage: false,
-          message: '',
-          titleMessage: '',
-          type: MessageType.SUCCESS,
-        };
-        this.showTable = true;
-      } catch (e) {
-        const error = e as ResponseError;
-        if (error.status === 401) {
-          console.log('back to login', error.message);
-        }
+    console.log('toggle trimestral ', this.inputDui);
+    try {
+      const result = await this.catalogoServiceDei.getPersonaApoyoByDui(
+        '050350968'
+      );
+      console.log('result here ', result);
+      this.persona.dui = result.dui;
+      this.persona.nombreCompleto = result.nombre_completo;
+      this.cnResult = 1;
+      this.userMessage = {
+        showMessage: false,
+        message: '',
+        titleMessage: '',
+        type: MessageType.SUCCESS,
+      };
+      this.showTable = true;
+    } catch (e) {
+      const error = e as ResponseError;
+      if (error.status === 401) {
+        console.log('back to login', error.message);
       }
     }
     this.pageLoading = false;
