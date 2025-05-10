@@ -12,6 +12,7 @@ export class SaetTextAreaComponent {
   @Input() value: string = '';
   @Input() name: string = '';
   @Input() testId: string = '';
+  @Input() inputClases = '';
   onInputChange(newValue: string) {
     this.inputChange.emit({
       key: this.name,

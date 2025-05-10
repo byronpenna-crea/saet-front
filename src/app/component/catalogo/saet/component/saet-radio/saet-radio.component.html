@@ -9,6 +9,9 @@
           [checked]="option.key === selectedValue"
           (change)="onRadioChange($event)"
           [disabled]="disabled"
+          [style.background-color]="
+            inputClases === 'highlight' ? '#fff3cd' : null
+          "
         />
         {{ option.value }}
       </label>

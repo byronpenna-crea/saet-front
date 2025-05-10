@@ -1,10 +1,13 @@
+is hightligh {{ isHighlight }}
 <p-editor
   [(ngModel)]="value"
   (onTextChange)="onInputChange($event, name)"
   [name]="name"
-  [style]="{ height: '320px' }"
+  [style]="{
+    height: '320px'
+  }"
   [attr.data-testid]="testId"
   [readonly]="disabled"
-  (onInit)="setupEditor()"
+  (onInit)="setupEditor($event)"
 >
 </p-editor>

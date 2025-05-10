@@ -15,6 +15,13 @@
       [disabled]="readonly"
       [name]="'input_' + idPregunta.toString()"
       [inputArgs]="abiertaComponentArgs"
+      [inputClases]="
+        !readonly
+          ? isDifferent('input_' + idPregunta.toString())
+            ? 'highlight'
+            : ''
+          : ''
+      "
     />
   </div>
 </ng-container>
@@ -45,6 +52,13 @@
         [options]="options"
         [disabled]="readonly"
         (radioChange)="onInputChange($event)"
+        [inputClases]="
+          !readonly
+            ? isDifferent('input_' + idPregunta.toString())
+              ? 'highlight'
+              : ''
+            : ''
+        "
       />
     </div>
     <div style="margin-bottom: 20px">
@@ -55,6 +69,13 @@
         [disabled]="readonly"
         [name]="'input_' + idPregunta.toString()"
         [inputArgs]="abiertaComponentArgs"
+        [inputClases]="
+          !readonly
+            ? isDifferent('input_' + idPregunta.toString())
+              ? 'highlight'
+              : ''
+            : ''
+        "
       />
     </div>
   </div>
@@ -67,6 +88,13 @@
       [value]="values['textarea_' + idPregunta.toString()]"
       [disabled]="readonly"
       [name]="'textarea_' + idPregunta.toString()"
+      [inputClases]="
+        !readonly
+          ? isDifferent('input_' + idPregunta.toString())
+            ? 'highlight'
+            : ''
+          : ''
+      "
     />
   </div>
 </ng-container>
@@ -98,6 +126,13 @@
     [name]="'input_' + idPregunta.toString()"
     [disabled]="readonly"
     [inputArgs]="abiertaComponentArgs"
+    [inputClases]="
+      !readonly
+        ? isDifferent('input_' + idPregunta.toString())
+          ? 'highlight'
+          : ''
+        : ''
+    "
   />
 </ng-container>
 <ng-container *ngIf="type === QuestionType.OPCION_MULTIPLE">

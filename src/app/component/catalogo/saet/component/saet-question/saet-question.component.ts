@@ -18,9 +18,13 @@ export class SaetQuestionComponent {
   @Output() checkboxChange = new EventEmitter<KeyValue[]>();
   @Input() value: string = '';
   @Input() values: { [key: string]: string } = {};
+  @Input() storedValues: { [key: string]: string } = {};
   @Input() idPregunta: number = 0;
   @Input() readonly: boolean = false;
   constructor() {}
+  isDifferent(key: string): boolean {;
+    return this.values[key] !== this.storedValues[key];
+  }
   onCheckBoxChange(event: KeyValue[]) {
     this.checkboxChange.emit(event);
   }

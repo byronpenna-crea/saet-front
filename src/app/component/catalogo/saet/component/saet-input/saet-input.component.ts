@@ -37,7 +37,7 @@ export class SaetInputComponent implements OnChanges {
   };
   @Input() disabled: boolean = false;
   spanClases: string = '';
-
+  @Input() inputClases= '';
   onInputChange(event: Event) {
     const input = event.target as HTMLInputElement;
 

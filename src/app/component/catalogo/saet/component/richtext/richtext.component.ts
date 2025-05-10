@@ -7,19 +7,24 @@ import {
   Output,
 } from '@angular/core';
 import { KeyValue } from '../saet-input/saet-input.component';
+import { Editor } from 'primeng/editor';
+import Quill from 'quill';
 
+interface EditorInitEvent {
+  editor: Quill;
+}
 @Component({
   selector: 'app-richtext',
   templateUrl: './richtext.component.html',
   styleUrls: ['./richtext.component.css'],
 })
-export class RichtextComponent {
+export class RichtextComponent implements OnChanges {
   @Input() text: string = '';
   @Input() name: string = '';
   @Input() value: string = '';
   @Input() testId: string = '';
   @Input() disabled: boolean = false;
-
+  @Input() isHighlight: boolean = true;
   @Output() inputChange = new EventEmitter<KeyValue>();
 
   onInputChange(event: any, name: string) {
@@ -27,13 +32,33 @@ export class RichtextComponent {
     this.text = newValue;
     this.filterImagesFromURLs();
     this.emitInputChange(newValue, name);
+
+    if (!this.editorInstance) {
+      return;
+    }
+
+    const editorBody = this.editorInstance.root as HTMLElement;
+    if(this.isHighlight){
+      editorBody.style.backgroundColor = '#fff3cd';
+    }else{
+      editorBody.style.backgroundColor = '#ffffff';
+    }
+
+  }
+  private editorInstance?: Quill;
+  setupEditor(event: EditorInitEvent): void {
+    this.editorInstance = event.editor;
+    if (!this.editorInstance) {
+      return;
+    }
+    if(this.isHighlight){
+      console.log('here because highlight')
+      const editorBody = this.editorInstance.root as HTMLElement;
+      editorBody.style.backgroundColor = '#fff3cd';
+    }
+
   }
 
-  setupEditor() {
-    this.preventImagePaste();
-  }
-
-  // Bloquear la inserción de imágenes desde URLs
   preventImagePaste() {
     const editorElement = document.querySelector('.ql-editor');
     if (editorElement) {
@@ -48,7 +73,12 @@ export class RichtextComponent {
       });
     }
   }
-
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['isHighlight'] && this.editorInstance) {
+      const editorBody = this.editorInstance.root as HTMLElement;
+      editorBody.style.backgroundColor = this.isHighlight ? '#fff3cd' : '#ffffff';
+    }
+  }
   containsImageFromURL(content: string): boolean {
     const regex = /<img[^>]+src=["'](http|https):\/\/[^"']*["']/;
     return regex.test(content);

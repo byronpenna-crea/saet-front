@@ -12,7 +12,7 @@ export class SaetRadioComponent {
   @Input() options: KeyValue[] = [];
   @Input() selectedValue: string = '';
   @Input() disabled: boolean = false;
-
+  @Input() inputClases= '';
   onRadioChange(event: Event) {
     const input = event.target as HTMLInputElement;
     console.log('input radio ', input);
