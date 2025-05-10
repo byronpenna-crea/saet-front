@@ -56,6 +56,8 @@ export class EstudianteEvaluacionAgendaComponent
       .then(response => {
         this.idEvaluacion = response.id_evaluacion;
         console.log('response ', response);
+      }).catch((e) => {
+        console.log('error in constructor getTipoDeEvaluacion',e);
       });
 
     catalogoServiceCOR.getAgendaQuestions().then(result => {
@@ -65,9 +67,15 @@ export class EstudianteEvaluacionAgendaComponent
   }
 
   save() {
+    this.pageLoading = true;
     const objToSave:ISaveQuestionary = this.getQuestionaryObject();
+    objToSave.id_tipo_evaluacion = 2;
     objToSave.id_evaluacion = this.idEvaluacion;
+    // "id_evaluacion": 79
+    console.log('obj to save', objToSave);
     const x = this.catalogoServiceCOR.updatePsicologia(objToSave);
+    this.pageLoading = false;
+    console.log('response ', x);
   }
 
   override salirEditMode(): string {

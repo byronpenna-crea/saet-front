@@ -11,6 +11,7 @@
   [readOnlyEvaluaciones]="readOnlyEvaluaciones"
   [readOnlyPaei]="readOnlyPaei"
 />
+<app-saet-loading [isLoading]="pageLoading" />
 <app-saet-mensaje-usuario
   [show]="userMessage.showMessage"
   [message]="userMessage.message"
@@ -18,7 +19,7 @@
 />
 <div class="form-container">
   <ng-container *ngFor="let corSurvey of corSurveys">
-    <div style="margin-top: 5%">
+    <div style="margin-top: 2%">
       <app-tabs [legend]="corSurvey.titulo">
         <div
           *ngIf="!cuestionariosTableMode.includes(corSurvey.id_cuestionario)"

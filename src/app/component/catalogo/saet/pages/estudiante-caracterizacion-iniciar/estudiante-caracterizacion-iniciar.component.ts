@@ -95,9 +95,13 @@ export class EstudianteCaracterizacionIniciarComponent
         );
         return;
       }
+      const  respuestasDb = this.respuestasToValues(this.caracterizacion?.respuestas ?? [])
+      this.storedValues = {
+        ...respuestasDb
+      };
       this.values = {
+        ...respuestasDb,
         ...this.values,
-        ...this.respuestasToValues(this.caracterizacion?.respuestas ?? []),
       };
     });
   }
@@ -451,6 +455,7 @@ export class EstudianteCaracterizacionIniciarComponent
       const resp =
         await this.catalogoServiceCOR.updateCaracterizacion(objToSave);
       console.log('respuesta actualizacion ', resp);
+
       if(resp.id_caracterizacion === 0){
         this.userMessage.showMessage = true;
         this.userMessage.type = MessageType.DANGER;
@@ -465,6 +470,11 @@ export class EstudianteCaracterizacionIniciarComponent
       this.userMessage.titleMessage = 'Datos guardados';
 
       this.caracterizacion = await this.catalogoServiceCOR.getCaracterizacionPorNIE(this.nie);
+
+      const  respuestasDb = this.respuestasToValues(this.caracterizacion?.respuestas ?? []);
+      this.storedValues = {
+        ...respuestasDb
+      }
       if (this.caracterizacion.id_caracterizacion !== 0) {
         this.readOnlyPaei = false;
         this.readOnlyEvaluaciones = false;
@@ -577,6 +587,7 @@ export class EstudianteCaracterizacionIniciarComponent
     return this.convertString(name);
   }
   values: { [key: string]: string } = {};
+  storedValues: { [key: string]: string } = {};
   onCheckboxChange(keyValues: KeyValue[]) {
     const selectedValues = keyValues.map(e => e.value);
     this.values[keyValues[0].key] = selectedValues.toString();
