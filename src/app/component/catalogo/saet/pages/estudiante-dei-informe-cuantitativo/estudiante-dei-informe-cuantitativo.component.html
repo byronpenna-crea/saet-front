@@ -183,46 +183,54 @@
             </div>
           </div>
           <div class="graphic-container">
-            <h3>Evaluaciones por departamentos</h3>
+            <h3>Plan educativo integral (PAEI)</h3>
             <app-saet-grafica-barras
-              [single]="[
-                { name: 'La Paz', value: 30 },
-                { name: 'Cuscatlán', value: 40 },
-                { name: 'Morazán', value: 40 },
-                { name: 'La Unión', value: 50 },
-                { name: 'Santa Ana', value: 60 },
-                { name: 'San Vicente', value: 50 },
-                { name: 'San Miguel', value: 50 },
-                { name: 'Chalatenango', value: 30 },
-                { name: 'Cabañas', value: 50 },
-                { name: 'Sonsonate', value: 60 },
-                { name: 'La Libertad', value: 60 },
-                { name: 'San Salvador', value: 80 }
-              ]"
+              [single]="paeiData"
               [mode]="direction.LANDSCAPE"
             />
             <div class="radios">
-              <div>
-                <app-saet-individual-radio
-                  name="evaluaciones-departamento"
-                  value="1"
-                  label="Realizadas"
-                />
-              </div>
-              <div>
-                <app-saet-individual-radio
-                  name="evaluaciones-departamento"
-                  value="1"
-                  label="En proceso"
-                />
-              </div>
-              <div>
-                <app-saet-individual-radio
-                  name="evaluaciones-departamento"
-                  value="1"
-                  label="Programadas"
-                />
-              </div>
+              <app-saet-individual-radio
+                name="estado-paei"
+                value="1"
+                [checked]="estadoPaeiSeleccionado === '1'"
+                label="En proceso"
+                (click)="onEstadoPAEIChange(1)"
+              />
+              <app-saet-individual-radio
+                name="estado-paei"
+                value="3"
+                [checked]="estadoPaeiSeleccionado === '3'"
+                label="Socializado"
+                (click)="onEstadoPAEIChange(3)"
+              />
+              <app-saet-individual-radio
+                name="estado-paei"
+                value="4"
+                [checked]="estadoPaeiSeleccionado === '4'"
+                label="Finalizado"
+                (click)="onEstadoPAEIChange(4)"
+              />
+              <!--              <div>-->
+              <!--                <app-saet-individual-radio-->
+              <!--                  name="evaluaciones-departamento"-->
+              <!--                  value="1"-->
+              <!--                  label="Realizadas"-->
+              <!--                />-->
+              <!--              </div>-->
+              <!--              <div>-->
+              <!--                <app-saet-individual-radio-->
+              <!--                  name="evaluaciones-departamento"-->
+              <!--                  value="1"-->
+              <!--                  label="En proceso"-->
+              <!--                />-->
+              <!--              </div>-->
+              <!--              <div>-->
+              <!--                <app-saet-individual-radio-->
+              <!--                  name="evaluaciones-departamento"-->
+              <!--                  value="1"-->
+              <!--                  label="Programadas"-->
+              <!--                />-->
+              <!--              </div>-->
             </div>
           </div>
         </div>
@@ -307,6 +315,19 @@
               </div>
             </div>
           </div>
+        </div>
+        <div>
+          <app-saet-button
+            testId="btn-regresar"
+            [customClasses]="'return-button'"
+            (onClick)="btnRegresar()"
+            [buttonArgs]="{
+              text: 'Regresar',
+              buttonStyle: ButtonStyle.BLUE,
+
+              buttonIcon: IconCompoment.LEFT_ARROW
+            }"
+          />
         </div>
       </div>
     </p-tabPanel>

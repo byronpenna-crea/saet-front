@@ -7,7 +7,7 @@ import { DOCUMENT } from '@angular/common';
 import { ThemeService } from '../../../../../services/ThemeService';
 import { CatalogoServiceDai } from '../../../../../services/catalogo/catalogo.service.dai';
 import {
-  CatalogoServiceDei,
+  CatalogoServiceDei, PaeiGrafica,
   Schools,
 } from '../../../../../services/catalogo/catalogo.service.dei';
 
@@ -22,6 +22,7 @@ import {
   Zona,
 } from '../../shared/dei';
 import { linearMockData, LinearMockDataType } from './mock/linear-data';
+import { IconComponent } from '../../shared/component.config';
 
 @Component({
   selector: 'app-estudiante-dei-informe-cuantitativo',
@@ -40,7 +41,7 @@ export class EstudianteDeiInformeCuantitativoComponent
   @ViewChild('bottomAnchor') override bottomAnchor!: ElementRef<HTMLDivElement>;
   @ViewChild('topAnchor') override topAnchor!: ElementRef<HTMLDivElement>;
 
-
+  estadoPaeiSeleccionado = '';
   getFilteredData(data: LinearMockDataType) {
     return Object.keys(data).map(departamentoKey => {
       const departamentoName = EnumDepartamentos[
@@ -58,6 +59,21 @@ export class EstudianteDeiInformeCuantitativoComponent
     });
   }
   getFilteredDataByDep(departamentoKey: keyof typeof EnumDepartamentos) {}
+  paeiData: { name: string, value: number }[] = [];
+  async onEstadoPAEIChange(estado: number) {
+    try {
+      this.estadoPaeiSeleccionado = estado.toString();
+      const data = await this.deiService.getPAEIByEstado(estado);
+      console.log('estado paei ---> ', data);
+      this.paeiData = data.resultados.map((item: PaeiGrafica) => ({
+        name: item.departamento,
+        value: item.total,
+      }));
+    } catch (e) {
+      console.error('Error al cargar datos PAEI', e);
+      this.paeiData = [];
+    }
+  }
   selectedGraphics = {
     alcance: undefined as EnumDepartamentos | undefined,
     casos: undefined as EnumDepartamentos | undefined,
@@ -148,4 +164,6 @@ export class EstudianteDeiInformeCuantitativoComponent
     }
   }
   protected readonly EnumDepartamentos = EnumDepartamentos;
+  protected readonly IconCompoment = IconComponent;
+  protected readonly ButtonStyle = ButtonStyle;
 }
