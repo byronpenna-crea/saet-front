@@ -36,7 +36,11 @@ export interface Atendido {
   grado: string,
   edad: number,
   municipio: string,
-  centroEducativo: string
+  centroEducativo: string,
+  dificultades: {
+    idDificultad: number,
+    dificultad: string
+  }[]
 }
 @Injectable({
   providedIn: 'root',

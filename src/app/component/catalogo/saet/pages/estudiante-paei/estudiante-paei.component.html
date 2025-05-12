@@ -121,7 +121,65 @@
             </ng-template>
           </p-table>
         </p-tabPanel>
-        <p-tabPanel header="Seguimiento"> </p-tabPanel>
+        <p-tabPanel header="Seguimiento">
+          <p-table [value]="seguimientoData">
+            <ng-template pTemplate="header">
+              <tr>
+                <th rowspan="2">Referente</th>
+                <th colspan="3" class="th-center">Proceso de seguimiento</th>
+                <th rowspan="2">Estado</th>
+              </tr>
+              <tr>
+                <th class="th-center">Alerta de informado</th>
+                <th class="th-center">En proceso</th>
+                <th class="th-center">Reporte de aplicación</th>
+                <th></th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-row>
+              <tr>
+                <td>{{ row.referente }}</td>
+                <td>
+                  alertado
+                  <!--                  <p-checkbox-->
+                  <!--                    [(ngModel)]="row.alertado"-->
+                  <!--                    binary="true"-->
+                  <!--                    label="Alertado"-->
+                  <!--                  ></p-checkbox>-->
+                </td>
+                <td>
+                  en proceso
+                  <!--                  <p-checkbox-->
+                  <!--                    [(ngModel)]="row.enProceso"-->
+                  <!--                    binary="true"-->
+                  <!--                    label="En proceso"-->
+                  <!--                  ></p-checkbox>-->
+                </td>
+                <td>
+                  <button
+                    pButton
+                    type="button"
+                    icon="pi pi-plus"
+                    label="Avance en la implementación"
+                    class="p-button-outlined p-button-sm"
+                  ></button>
+                </td>
+                <td>
+                  <span
+                    [ngStyle]="{
+                      display: 'inline-block',
+                      width: '12px',
+                      height: '12px',
+                      'border-radius': '50%',
+                      'background-color': getEstadoColor(row.estadoColor)
+                    }"
+                  >
+                  </span>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </p-tabPanel>
       </p-tabView>
     </app-saet-tab>
   </div>

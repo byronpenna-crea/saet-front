@@ -43,9 +43,7 @@ export class EstudianteDeiInformeCualitativoComponent extends DeiBaseComponent {
   breadcrumb = [
     { href: '#/menu/saet-inicio', text: 'Inicio' },
   ]
-  async btnRegresar() {
-    await this.router.navigate(['menu/saet-inicio']);
-  }
+
   async generateReport(nie: string) {
     if(!this.atendidoCOR){
       return;

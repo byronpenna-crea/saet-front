@@ -39,6 +39,7 @@ export class EstudianteInformeTrimestralComponent
     tableHeaderStudentGrade: string;
     tableHeaderStudentSchool: string;
     tableHeaderStudentCity: string;
+    tableHeaderStudentIssue: string;
   }[] = [];
 
   trimestres = [
@@ -309,6 +310,9 @@ export class EstudianteInformeTrimestralComponent
           tableHeaderStudentGrade: atendido.grado,
           tableHeaderStudentSchool: atendido.centroEducativo,
           tableHeaderStudentCity: atendido.municipio,
+          tableHeaderStudentIssue: atendido.dificultades.length > 0 ? atendido.dificultades.map((dificultad) => {
+            return `<span>${dificultad.dificultad}</span><br />`;
+          }).join('') : 'Ninguna'
         };
       });
       this.cnResult = 1;

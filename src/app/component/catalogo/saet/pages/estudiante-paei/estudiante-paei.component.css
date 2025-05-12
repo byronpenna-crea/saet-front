@@ -9,6 +9,9 @@
 .margin-top {
   margin-top: 2%;
 }
+.th-center{
+  text-align: center !important;
+}
 @media screen and (max-width: 1920px) {
   .form-container {
     width: 77%;

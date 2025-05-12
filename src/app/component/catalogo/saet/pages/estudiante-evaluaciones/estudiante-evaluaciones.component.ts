@@ -2,7 +2,6 @@ import { ChangeDetectorRef, Component, Inject } from '@angular/core';
 import {
   IMessageComponent,
   MessageType,
-  UserMessage,
 } from '../../interfaces/message-component.interface';
 import { DOCUMENT } from '@angular/common';
 import {
@@ -11,11 +10,11 @@ import {
   ResponseError,
 } from '../../../../../services/catalogo/catalogo.service.cor';
 import { ActivatedRoute, Router } from '@angular/router';
-import { userMessageInit } from '../../shared/messages.model';
 import { CorBaseComponent } from '../../CorBaseComponent';
 import { TIPO_EVALUACION } from '../../shared/evaluaciones';
 import {
-  IAgendaEspecialista, IAgendaEvaluationParams,
+  IAgendaEspecialista,
+  IAgendaEvaluationParams,
   IAgendaParams,
   IOnCancelarAgenda,
 } from '../../component/saet-tab-agenda/saet-tab-agenda.component';
@@ -29,12 +28,15 @@ interface IUserMessage {
 export interface TabInput {
   agendado: boolean;
   readOnly: boolean;
+  readOnlyEvaluacion?: boolean;
   leyend: string;
   name: string;
   especialistaAgendado: {
     nombreCompleto: string;
     dui: string;
   };
+  current?:boolean;
+  agendadoEvaluacion?: boolean;
   horaAgendado?: string;
   fechaAgendado?: string;
   especialidad: iEspecialidadEvaluacion;
@@ -91,6 +93,7 @@ export class EstudianteEvaluacionesComponent
   };
 
   readOnlyTab = true;
+
   agendaTabs: TabInput[] = [];
 
   especialidad?: iEspecialidadEvaluacion;
@@ -161,7 +164,19 @@ export class EstudianteEvaluacionesComponent
       console.log('-- getTipoEvaluacionFromString --', this.especialidad);
       const enumEspecialidad: TIPO_EVALUACION =
         this.getTipoEvaluacionFromString(this.especialidad);
-
+      let enumEspecialidadAgenda:TIPO_EVALUACION | null = null;
+      switch (enumEspecialidad) {
+        case TIPO_EVALUACION.psicologo_perfil:
+          enumEspecialidadAgenda = TIPO_EVALUACION.psicologo_agenda;
+          break;
+      }
+      if(enumEspecialidadAgenda === null){
+        this.userMessage.showMessage = true;
+        this.userMessage.message = 'Error al obtener la agenda del especialista actual';
+        this.userMessage.type = MessageType.DANGER;
+        return;
+      }
+      /* Especialista actual */
       this.catalogoServiceCOR
         .getTipoDeEvaluacion(this.nie, enumEspecialidad)
         .then(response => {
@@ -188,13 +203,20 @@ export class EstudianteEvaluacionesComponent
           this.especialidad && this.updateTab(this.especialidad, true,{
             horaAgendado: response.hora,
             fechaAgendado: response.fecha,
-            perfilIniciado: response.respuestas.length > 0
+            perfilIniciado: response.respuestas.length > 0,
+            current: true
           });
         })
         .catch((ex: ResponseError) => {
           console.log('------- error ex --------', ex.status);
         });
-
+      this.catalogoServiceCOR
+        .getTipoDeEvaluacion(this.nie, enumEspecialidadAgenda)
+        .then(response => {
+          console.log('response for agenda',response);
+          this.especialidad && this.updateSubTabEvaluacion(this.especialidad,true,response.fecha ?? 'Error', response.hora ?? 'Error', true);
+        })
+      /* ################## */
       catalogoServiceCOR
         .getCorEspecialistas(this.nie)
         .then(response => {
@@ -208,14 +230,12 @@ export class EstudianteEvaluacionesComponent
                   nombreCompleto: especialista.nombre_completo,
                   dui: especialista.dui,
                 };
-                console.log('update tab psicologo --> ',{
-                  horaAgendado: especialista.hora_evaluacion,
-                  fechaAgendado: especialista.fecha_evaluacion,
-                })
+
                 this.updateTab('psicologo', true, {
                   horaAgendado: especialista.hora_evaluacion,
                   fechaAgendado: especialista.fecha_evaluacion,
-                  readonly: true
+                  readonly: true,
+                  readonlyEvaluacion: true
                 });
               }
               if (especialista.especialidad === 'Pedagogía') {
@@ -224,11 +244,13 @@ export class EstudianteEvaluacionesComponent
                   nombreCompleto: especialista.nombre_completo,
                   dui: especialista.dui,
                 };
+
                 this.updateTab(iEspecialidadEvaluacion.PEDAGOGIA, true,
                 {
                   horaAgendado: especialista.hora_evaluacion,
                   fechaAgendado: especialista.fecha_evaluacion,
-                  readonly: true
+                  readonly: true,
+                  readonlyEvaluacion: true
                 });
               }
               if (especialista.especialidad === 'Lenguaje y habla') {
@@ -244,7 +266,8 @@ export class EstudianteEvaluacionesComponent
                 this.updateTab(iEspecialidadEvaluacion.LENGUAJE, true,{
                   horaAgendado: especialista.hora_evaluacion,
                   fechaAgendado: especialista.fecha_evaluacion,
-                  readonly: true
+                  readonly: true,
+                  readonlyEvaluacion: true
                 });
               }
               //
@@ -264,11 +287,12 @@ export class EstudianteEvaluacionesComponent
     title: string;
     message: string;
     messageType: MessageType;
+    showMessage?: boolean;
   }) {
     this.userMessage.message = event.message;
     this.userMessage.titleMessage = event.title;
     this.userMessage.type = event.messageType;
-    this.userMessage.showMessage = true;
+    this.userMessage.showMessage = event.showMessage ?? true;
   }
   getIndexEspecialidad(
     especialidad: string
@@ -303,10 +327,10 @@ export class EstudianteEvaluacionesComponent
         leyend: 'Evaluación Habla y lenguaje',
         agendado: this.agendado[iEspecialidadEvaluacion.LENGUAJE],
         readOnly: this.readOnlyTab,
-
+        readOnlyEvaluacion: true,
         onAgendar: this.agendar.bind(this),
         onEvaluationAgendar: this.agendarEvaluacion.bind(this),
-
+        current: false,
         onCancelarAgenda: this.cancelar.bind(this),
         evaluationId: 0,
         onIniciar: this.iniciarLenguajeHabla.bind(this),
@@ -321,10 +345,10 @@ export class EstudianteEvaluacionesComponent
         leyend: 'Evaluación psicologica',
         agendado: this.agendado[iEspecialidadEvaluacion.PSICOLOGIA],
         readOnly: this.readOnlyTab,
-
+        readOnlyEvaluacion: true,
         onAgendar: this.agendar.bind(this),
         onEvaluationAgendar: this.agendarEvaluacion.bind(this),
-
+        current: false,
         onCancelarAgenda: this.cancelar.bind(this),
         evaluationId: this.psicologiaEvaluationId,
         onIniciar: this.iniciarPsicologia.bind(this),
@@ -334,15 +358,16 @@ export class EstudianteEvaluacionesComponent
         name: iEspecialidadEvaluacion.PSICOLOGIA,
         especialidad: iEspecialidadEvaluacion.PSICOLOGIA,
         tipoEvaluacion: TIPO_EVALUACION.psicologo_perfil,
+
       },
       {
         leyend: 'Evaluación pedagogica',
         agendado: this.agendado[iEspecialidadEvaluacion.PEDAGOGIA],
         readOnly: this.readOnlyTab,
-
+        readOnlyEvaluacion: true,
         onAgendar: this.agendar.bind(this),
         onEvaluationAgendar: this.agendarEvaluacion.bind(this),
-
+        current: false,
         onCancelarAgenda: this.cancelar.bind(this),
         onIniciar: this.iniciarPedagogia.bind(this),
         especialistaAgendado:
@@ -360,11 +385,29 @@ export class EstudianteEvaluacionesComponent
     const tab = tabs.find(tab => tab.name === name);
     return tab !== undefined ? [tab] : [];
   }
+  updateSubTabEvaluacion(tabName:string,agendado: boolean, fecha: string, hora:string, current?:boolean) {
+    const index = this.agendaTabs.findIndex(tab => tab.name === tabName);
+    console.log('agenda tab to update --> index -->', index);
+    if (index === -1) {
+      return;
+    }
+    this.agendaTabs[index] = this.getTabs(this.agendaTabs[index].name)[0];
+
+    console.log('agenda tab to update --> index -->', index);
+    console.log('agenda tab to update --> xxx -->', this.agendaTabs[index]);
+    this.agendaTabs[index].agendadoEvaluacion = agendado;
+    this.agendaTabs[index].horaAgendado = hora;
+    this.agendaTabs[index].fechaAgendado = fecha;
+    this.agendaTabs[index].current = current ?? false;
+
+  }
   updateTab(name: string, agendado: boolean, newTabData?: {
     horaAgendado?: string;
     fechaAgendado?: string;
     readonly?: boolean;
+    readonlyEvaluacion?: boolean;
     perfilIniciado?: boolean;
+    current?:boolean;
   }) {
     if (name === 'psicologo') {
       this.agendado[iEspecialidadEvaluacion.PSICOLOGIA] = agendado;
@@ -383,14 +426,20 @@ export class EstudianteEvaluacionesComponent
         this.agendaTabs[index] = tab;
         this.agendaTabs[index].readOnly = false;
         if (newTabData) {
+          console.log('to put ', newTabData.current ?? false);
           this.agendaTabs[index].fechaAgendado = newTabData.fechaAgendado;
           this.agendaTabs[index].horaAgendado = newTabData.horaAgendado;
           this.agendaTabs[index].readOnly = newTabData.readonly ?? false;
+          this.agendaTabs[index].readOnlyEvaluacion = newTabData.readonlyEvaluacion ?? false;
           this.agendaTabs[index].perfilIniciado = newTabData.perfilIniciado ?? false;
+          this.agendaTabs[index].current = newTabData.current;
+          console.log('to put 2', this.agendaTabs[index].current );
+          console.log('here new data --> ', this.agendaTabs[index]);
+          return;
         }
         console.log('index --> ', newTabData);
         console.log('index --> ', index);
-        console.log('here new data --> ', this.agendaTabs);
+        console.log('here new data --> ', this.agendaTabs[index]);
       }
       this.cdr.detectChanges();
     }
@@ -423,7 +472,8 @@ export class EstudianteEvaluacionesComponent
       this.agendado[event.especialidad] = false;
       this.updateTab(event.especialidad, false,{
         fechaAgendado: '',
-        horaAgendado: ''
+        horaAgendado: '',
+        current: true
       });
     } catch (ex: unknown) {
       const error = ex as ResponseError;
@@ -448,6 +498,10 @@ export class EstudianteEvaluacionesComponent
     return `${hours}:${minutes}`;
   }
   async agendarEvaluacion(event: IAgendaEvaluationParams) {
+    console.log('agendarEvaluacion in --> ','estudiante-evaluaciones');
+
+    console.log('event.evaluationTime', event.evaluationTime);
+    console.log('event.evaluationDate', event.evaluationDate);
     this.userMessage.showMessage = false;
     this.pageLoading = true;
     if (this.studentInfo?.id_est_pk === undefined) {
@@ -477,6 +531,8 @@ export class EstudianteEvaluacionesComponent
       this.pageLoading = false;
       return;
     }
+    console.log('event.evaluationTime', event.evaluationTime);
+    console.log('event.evaluationDate', event.evaluationDate);
 
     const timeToSave = this.formatTimeToHHMM(event.evaluationTime);
     const dateToSave = this.formatDateToDDMMYYYY(event.evaluationDate);
@@ -499,7 +555,7 @@ export class EstudianteEvaluacionesComponent
       id_evaluacion: null,
       respuestas: [],
     };
-
+    console.log('obj to save')
     if (event.especialidad === undefined) {
       this.userMessage.showMessage = true;
       this.userMessage.message = 'No existe especilidad para ser guardada';
@@ -517,13 +573,15 @@ export class EstudianteEvaluacionesComponent
       this.pageLoading = false;
       return;
     }
-
+    console.log('before try');
     try {
       const respuesta = await this.catalogoServiceCOR.saveEvaluacion(
         obj,
         event.especialidad
       );
+      console.log('respuesta ', respuesta);
     } catch (ex: unknown) {
+      console.log('catch estudiante evaluaciones');
       const error = ex as ResponseError;
       this.userMessage.showMessage = true;
       this.userMessage.titleMessage = 'Error';

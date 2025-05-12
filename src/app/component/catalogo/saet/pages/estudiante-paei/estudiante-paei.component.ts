@@ -32,6 +32,30 @@ export class EstudiantePaeiComponent
   };
   buttonStyle = ButtonStyle;
   buttonIcon = IconComponent;
+
+  seguimientoData = [
+    {
+      referente: 'Docente de aula',
+      alertado: false,
+      enProceso: false,
+      estadoColor: 'yellow'
+    },
+    {
+      referente: 'Docente de Apoyo a la Inclusión',
+      alertado: false,
+      enProceso: false,
+      estadoColor: 'pink'
+    },
+    {
+      referente: 'Director de Centro Escolar',
+      alertado: false,
+      enProceso: false,
+      estadoColor: 'yellow'
+    }
+  ];
+  getEstadoColor(color: string): string {
+    return color === 'yellow' ? '#F9D274' : color === 'pink' ? '#D08C9C' : '#ccc';
+  }
   nombreEspecialista: {
     [key in TIPO_EVALUACION]?: {
       nombre: string;

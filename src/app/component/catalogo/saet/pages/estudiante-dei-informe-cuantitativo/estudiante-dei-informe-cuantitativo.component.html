@@ -236,7 +236,7 @@
         </div>
         <div class="graphics-container">
           <div class="graphic-container">
-            <h3>Alcance por departamento</h3>
+            <h3>Concentracion de la demanda del servicio</h3>
             <app-saet-grafica-pastel
               [single]="[
                 { name: 'Ahuachapán', value: 15 },
@@ -271,35 +271,21 @@
             </div>
           </div>
           <div class="graphic-container">
-            <h3>Usuarios inscritos por departamento</h3>
+            <h3>Dificultades en el proceso educativo</h3>
             <app-saet-grafica-barras
               [mode]="direction.VERTICAL"
-              [single]="[
-                { name: 'ENE', value: 20 },
-                { name: 'FEB', value: 30 },
-                { name: 'MAR', value: 25 },
-                { name: 'ABR', value: 40 },
-                { name: 'MAY', value: 50 },
-                { name: 'JUN', value: 70 },
-                { name: 'JUL', value: 60 },
-                { name: 'AGO', value: 65 },
-                { name: 'SEP', value: 55 },
-                { name: 'OCT', value: 70 },
-                { name: 'NOV', value: 75 },
-                { name: 'DIC', value: 80 }
-              ]"
+              [single]="dificultadesGrafica"
             />
             <div style="display: flex; flex-direction: column; gap: 5px"></div>
           </div>
         </div>
         <div class="graphics-container">
           <div class="graphic-container">
-            <h3>Casos abordados</h3>
+            <h3>Concentracion de la demanda del servicio</h3>
             <app-saet-grafica-linear
               [view]="[1024, 300]"
               [multi]="filteredCasosAbordadosData"
             />
-
             <div class="flex-center filter-input" style="">
               <div class="filter-cell">
                 <div class="filter-label">Departamentos</div>

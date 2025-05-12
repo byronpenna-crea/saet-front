@@ -108,6 +108,10 @@ export class EstudianteDeiInformeCuantitativoComponent
   sexs: Sexo[] = catalogoSexo;
   zones: Zona[] = catalgoZona;
   schools: Schools[] = [];
+  dificultadesGrafica: {
+    name: string,
+    value: number
+  }[] = [];
   departamentos = catalogoDepartamento;
   corCount = 0;
   daiCount = 0;
@@ -138,6 +142,16 @@ export class EstudianteDeiInformeCuantitativoComponent
     });
     deiService.getDaiCount().then(x => {
       this.daiCount = x;
+    });
+    deiService.getGraficaDificultad().then(data => {
+      console.log('data is --> ', data);
+      this.dificultadesGrafica = data.resultados.map((dificultad) => {
+        return {
+          name: dificultad.dificultad,
+          value: dificultad.total
+        }
+      });
+      console.log(this.dificultadesGrafica);
     });
     this.pageLoading = false;
   }

@@ -100,7 +100,7 @@ export class BuscarEstudianteComponent
           }
           this.userMessage = {
             showMessage: true,
-            message: error.message,
+            message: error.message !== '' ? error.message: 'No se pudo obtener el estudiante',
             type: MessageType.DANGER,
           };
         })

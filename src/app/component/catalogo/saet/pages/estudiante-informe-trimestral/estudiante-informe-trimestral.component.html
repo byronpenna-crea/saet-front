@@ -120,8 +120,7 @@
                 <td>
                   {{ rowData['tableHeaderStudentCity'] }}
                 </td>
-                <td>
-                  {{ rowData['tableHeaderStudentIssue'] }}
+                <td [innerHTML]="rowData['tableHeaderStudentIssue']">
                 </td>
                 <!--            <td>-->
                 <!--              <div style="display: flex; flex-direction: Column; gap: 10px">-->

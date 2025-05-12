@@ -555,6 +555,10 @@ export class EstudianteCaracterizacionIniciarComponent
         type: MessageType.SUCCESS,
       };
       this.caracterizacion = await this.catalogoServiceCOR.getCaracterizacionPorNIE(this.nie);
+      const  respuestasDb = this.respuestasToValues(this.caracterizacion?.respuestas ?? []);
+      this.storedValues = {
+        ...respuestasDb
+      }
       if (this.caracterizacion.id_caracterizacion !== 0) {
         this.readOnlyPaei = false;
         this.readOnlyEvaluaciones = false;
