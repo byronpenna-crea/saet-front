@@ -42,6 +42,7 @@
                 (onChange)="onchangeQuestions($event)"
                 [type]="getQuestionType(pregunta.tipoPregunta)"
                 [idPregunta]="pregunta.id_pregunta"
+                [storedValues]="storedValues"
                 [value]="values[pregunta.id_pregunta.toString()]"
                 [values]="values"
                 [testId]="pregunta.id_pregunta.toString()"
@@ -87,6 +88,15 @@
                       [value]="
                         values['input_' + pregunta.id_pregunta.toString()]
                       "
+                      [inputClases]="
+                        formMode !== formModeEnum.VIEW
+                          ? isDifferent(
+                              'input_' + pregunta.id_pregunta.toString()
+                            )
+                            ? 'highlight'
+                            : ''
+                          : ''
+                      "
                       (inputChange)="onchangeQuestions($event)"
                     />
                   </td>
@@ -98,6 +108,23 @@
       </app-tabs>
     </div>
   </ng-container>
+  <div style="margin-top: 2%">
+    <app-tabs legend="Dificultad de aprendizaje">
+      <div>
+        Seleccione una o más de las dificultades de aprendizaje que se puedan
+        asociar a estas evaluaciones
+      </div>
+      <app-saet-checkbox
+        [name]="'check_dificultades'"
+        [options]="dificultades"
+        [disabled]="formMode === formModeEnum.VIEW"
+        [returnFullItem]="true"
+        [selectedValues]="dificultadesSelected"
+        (checkboxChange)="onDificultadesChange($event)"
+      >
+      </app-saet-checkbox>
+    </app-tabs>
+  </div>
   <app-saet-mensaje-usuario
     [show]="userMessage.showMessage"
     [message]="userMessage.message"

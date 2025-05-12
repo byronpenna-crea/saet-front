@@ -17,6 +17,7 @@ import { IconComponent } from '../../shared/component.config';
 import jsPDF from 'jspdf';
 import { iQuestion } from '../../shared/survey';
 import autoTable from 'jspdf-autotable';
+import { ISaveDificultad } from '../../../../../services/catalogo/catalogo.service.dei';
 
 @Component({
   selector: 'app-estudiante-cuestionario-psicologia',
@@ -36,6 +37,13 @@ export class EstudianteCuestionarioPsicologiaComponent
   };
   idEvaluacion = 0;
   baseUrl = '/menu/saet-psicologia';
+  isDifferent(key: string): boolean {
+    const value = this.values[key] !== null && this.values[key] !== undefined  ? this.values[key] : '';
+    const storedValue = this.storedValues[key] !== null && this.storedValues[key] !== undefined  ? this.storedValues[key] : '';
+    return value !== storedValue;
+  }
+  dificultades:KeyValue[] = [];
+  dificultadesSelected: string[] = [];
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceCOR: CatalogoServiceCor,
@@ -59,11 +67,19 @@ export class EstudianteCuestionarioPsicologiaComponent
       this.nie,
       TIPO_EVALUACION.psicologo_perfil
     );
+    const dificultadesPromise = this.catalogoServiceCOR.getDificultades();
     const psicologiaQuestionsPromise =
       this.catalogoServiceCOR.getPsicologiaQuestions();
 
-    Promise.all([tipoEvaluacionPromise, psicologiaQuestionsPromise])
-      .then(([responseEvaluacion, resultQuestions]) => {
+    console.log('dificultades seleccionadas in promise all 1', this.studentInfo?.id_est_pk);
+
+    Promise.all([tipoEvaluacionPromise, psicologiaQuestionsPromise,dificultadesPromise])
+      .then(async([responseEvaluacion, resultQuestions, dificultadesResult]) => {
+        const dificultadesSeleccionadas = await this.catalogoServiceCOR.getDificultadesByEstId(this.studentInfo?.id_est_pk ?? 0);
+
+        console.log('dificultades seleccionadas in promise all ', this.studentInfo?.id_est_pk);
+        console.log('dificultades seleccionadas in promise all ', dificultadesSeleccionadas);
+        this.dificultadesSelected = dificultadesSeleccionadas.map((dificultad) => dificultad.dificultad);
         this.idEvaluacion = responseEvaluacion.id_evaluacion;
         console.log('original response ', responseEvaluacion);
         this.handleMode(
@@ -71,15 +87,26 @@ export class EstudianteCuestionarioPsicologiaComponent
           'menu/saet-psicologia',
           this.formMode
         );
-        console.log('depurados ', this.responseToValues(responseEvaluacion));
+        const respuestasDb = this.responseToValues(responseEvaluacion);
+
+        this.storedValues = {
+          ...respuestasDb
+        }
         this.values = {
-          ...this.responseToValues(responseEvaluacion),
+          ...respuestasDb,
           ...this.values,
         };
         console.log('this values ... ', this.values);
 
         this.showActionButtons = true;
         this.corSurveys.push(...resultQuestions.cuestionarios);
+        console.log('dificultades result', dificultadesResult);
+        this.dificultades = dificultadesResult.catalogos.map((dificultad) => {
+          return {
+            key: dificultad.dificultadPk.toString(),
+            value: dificultad.dificultad
+          } as KeyValue
+        })
       })
       .catch(ex => {
         console.log('ex here', ex);
@@ -92,6 +119,16 @@ export class EstudianteCuestionarioPsicologiaComponent
     const selectedValues = keyValues.map(e => e.value);
     this.values[keyValues[0].key] = selectedValues.toString();
     localStorage.setItem('values', JSON.stringify(this.values));
+
+  }
+  onDificultadesChange(keyValues: KeyValue[]){
+
+    const selectedValues = keyValues.map(e => e.key);
+    console.log('key values', keyValues);
+    console.log('dificultades changed',selectedValues);
+    this.values['dificultades'] = selectedValues.toString();
+    localStorage.setItem('values', JSON.stringify(this.values));
+    console.log('new values', this.values);
   }
   async generarPDF() {
     this.pageLoading = true;
@@ -225,7 +262,24 @@ export class EstudianteCuestionarioPsicologiaComponent
     console.log('obj to save', objToSave);
     objToSave.id_evaluacion = this.idEvaluacion;
     try {
+      const dificultadesToSave = this.values['dificultades'].length > 0 ? this.values['dificultades'].split(',') : [];
+      if(dificultadesToSave.length > 0){
+        const dificultadesToSaveObj:ISaveDificultad = {
+          est_pk: objToSave.id_estudiante_fk,
+          dificultades: dificultadesToSave.map((dificultadId) => parseInt(dificultadId))
+        }
+        await this.catalogoServiceCOR.saveDificultades(dificultadesToSaveObj);
+      }
       const resp = await this.catalogoServiceCOR.updatePsicologia(objToSave);
+      console.log('respuesta al guardar ', resp);
+      const respuestas = await this.catalogoServiceCOR.getTipoDeEvaluacion(
+        this.nie,
+        TIPO_EVALUACION.psicologo_perfil
+      )
+      const  respuestasDb = this.responseToValues(respuestas);
+      this.storedValues = {
+        ...respuestasDb
+      }
       if (resp.id_evaluacion === 0) {
         this.userMessage.showMessage = true;
         this.userMessage.type = MessageType.DANGER;
@@ -234,7 +288,6 @@ export class EstudianteCuestionarioPsicologiaComponent
         this.userMessage.titleMessage = 'Error';
         return;
       }
-
 
       this.pageLoading = false;
       this.userMessage.showMessage = true;

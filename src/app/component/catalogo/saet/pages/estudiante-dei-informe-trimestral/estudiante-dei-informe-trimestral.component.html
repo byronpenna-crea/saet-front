@@ -87,7 +87,9 @@
                   <td>
                     <app-saet-button
                       testId="btn-buscar"
-                      [disabled]="!showTable"
+                      [disabled]="
+                        !showTable || statusTrimestres[1] !== 'Atendido'
+                      "
                       [buttonArgs]="{
                         text: 'Ver informe',
                         buttonStyle: ButtonStyle.WHITE,
@@ -104,7 +106,9 @@
                   <td>
                     <app-saet-button
                       testId="btn-buscar"
-                      [disabled]="!showTable"
+                      [disabled]="
+                        !showTable || statusTrimestres[2] !== 'Atendido'
+                      "
                       [buttonArgs]="{
                         text: 'Ver informe',
                         buttonStyle: ButtonStyle.WHITE,
@@ -121,7 +125,9 @@
                   <td>
                     <app-saet-button
                       testId="btn-buscar"
-                      [disabled]="!showTable"
+                      [disabled]="
+                        !showTable || statusTrimestres[3] !== 'Atendido'
+                      "
                       [buttonArgs]="{
                         text: 'Ver informe',
                         buttonStyle: ButtonStyle.WHITE,
@@ -138,7 +144,9 @@
                   <td>
                     <app-saet-button
                       testId="btn-buscar"
-                      [disabled]="!showTable"
+                      [disabled]="
+                        !showTable || statusTrimestres[4] !== 'Atendido'
+                      "
                       [buttonArgs]="{
                         text: 'Ver informe',
                         buttonStyle: ButtonStyle.WHITE,

@@ -22,7 +22,7 @@ export class SaetQuestionComponent {
   @Input() idPregunta: number = 0;
   @Input() readonly: boolean = false;
   constructor() {}
-  isDifferent(key: string): boolean {;
+  isDifferent(key: string): boolean {
     return this.values[key] !== this.storedValues[key];
   }
   onCheckBoxChange(event: KeyValue[]) {
