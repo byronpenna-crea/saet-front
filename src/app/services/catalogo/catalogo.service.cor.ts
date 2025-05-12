@@ -19,7 +19,7 @@ import { IQuestionaryAnswer } from '../../component/catalogo/saet/QuestionsCompo
 import { HttpMethod, iEspecialidadEvaluacion } from '../shared/saet-types';
 import { CatalogoService } from '../catalogo.service';
 import { CatalogoServiceSaet } from '../shared/saet';
-import { PersonaApoyo } from './catalogo.service.dei';
+import { ISaveDificultad, PersonaApoyo } from './catalogo.service.dei';
 
 export interface StudentDetail {
   nie: string;
@@ -202,6 +202,11 @@ export interface ISaveCaracterizacion {
     ocupacion: string;
   }[];
 }
+export interface IDificultad {
+  "dificultadPk": number,
+  "dificultad": string,
+  "descripcion": string
+}
 export class ResponseError extends Error {
   status: number;
 
@@ -230,6 +235,69 @@ export class CatalogoServiceCor extends CatalogoServiceSaet {
   ) {
     super(cookieService);
   }
+  public getDificultades(): Promise<{
+    catalogos: IDificultad[]
+  }> {
+    const url = `${environment.API_SERVER_URL}/evaluacion/cor/psicologia/catalogo-dificultades`;
+    return new Promise((resolve, reject) => {
+      fetch(url, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${this.cookieService.get('token')}`,
+          'Content-Type': 'application/json',
+        },
+      })
+        .then(response => {
+          if (response.ok) {
+            resolve(response.json());
+          } else {
+            reject(new Error('No se pudo obtener los datos'));
+          }
+        })
+        .catch(error => {
+          reject(
+            new Error('Hubo un error al obtener los datos: ' + error.message)
+          );
+        });
+    });
+  }
+  public getDificultadesByEstId(estId: number): Promise<IDificultad[]> {
+    const url = `${environment.API_SERVER_URL}/evaluacion/dificultades/estudiante/${estId}`;
+    return new Promise((resolve, reject) => {
+      fetch(url, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${this.cookieService.get('token')}`,
+          'Content-Type': 'application/json',
+        },
+      })
+        .then(response => {
+          if (response.ok) {
+            resolve(response.json());
+          } else {
+            reject(new Error('No se pudo obtener los datos'));
+          }
+        })
+        .catch(error => {
+          reject(
+            new Error('Hubo un error al obtener los datos: ' + error.message)
+          );
+        });
+    });
+  }
+  public saveDificultades = async(dificultades:ISaveDificultad) => {
+    const url = `${this.API_SERVER_URL}/evaluacion/cor/psicologia/catalogo-dificultades2`;
+    try {
+      return await this.postRequest<ISaveDificultad, boolean>(
+        url,
+        dificultades
+      );
+    } catch (e) {
+      console.log('error ---- ', e);
+      throw e;
+    }
+  }
+
   public getPersonaApoyoByDui(dui: string): Promise<PersonaApoyo> {
     const url = `${environment.API_SERVER_URL}/tempEstudiantesSigesv2/personaApoyoByDui/${dui}`;
     console.log('token is ', this.cookieService.get('token'));
