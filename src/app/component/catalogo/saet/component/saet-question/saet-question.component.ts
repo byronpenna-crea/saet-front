@@ -16,6 +16,7 @@ export class SaetQuestionComponent {
   @Input() testId: string = '';
   @Output() onChange = new EventEmitter<KeyValue>();
   @Output() checkboxChange = new EventEmitter<KeyValue[]>();
+  @Output() textAreaChange = new EventEmitter<KeyValue>();
   @Input() value: string = '';
   @Input() values: { [key: string]: string } = {};
   @Input() storedValues: { [key: string]: string } = {};
@@ -43,6 +44,9 @@ export class SaetQuestionComponent {
   }
   onInputChange(event: KeyValue) {
     this.onChange.emit(event);
+  }
+  onTextAreaChange(event: KeyValue){
+    this.textAreaChange.emit(event);
   }
   QuestionType = QuestionType;
   abiertaComponentArgs: SaetInputArgs = {

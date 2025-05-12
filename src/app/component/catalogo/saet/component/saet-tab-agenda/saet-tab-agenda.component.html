@@ -10,7 +10,7 @@
                 [disabled]="readOnly"
                 [showIcon]="true"
                 dateFormat="dd/mm/yy"
-                (onSelect)="onFechaEvaluacionSelect($event)"
+                (onSelect)="onFechaPerfilSelect($event)"
               >
               </p-calendar>
             </div>
@@ -21,10 +21,10 @@
               <p-calendar
                 inputId="calendar-timeonly"
                 [disabled]="readOnly"
-                (onSelect)="onEvaluationTimeSelect($event)"
+                (onSelect)="onHoraPerfilSelect($event)"
                 [timeOnly]="true"
                 [ngModel]="profileTime"
-                (ngModelChange)="onEvaluationTimeChange($event)"
+                (ngModelChange)="onHoraPerfilChange($event)"
               />
             </div>
           </div>

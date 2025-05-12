@@ -45,10 +45,12 @@
                 [idPregunta]="pregunta.id_pregunta"
                 [value]="values[pregunta.id_pregunta.toString()]"
                 [values]="values"
+                [storedValues]="storedValues"
                 [testId]="pregunta.id_pregunta.toString()"
                 [name]="getName(pregunta.pregunta)"
                 [options]="getOptions(pregunta.opcion)"
                 (checkboxChange)="onCheckboxChange($event)"
+                (textAreaChange)="onTextAreaChange($event)"
                 [readonly]="formMode === formModeEnum.VIEW"
               />
             </app-tab-item>
@@ -134,7 +136,7 @@
       <app-saet-button
         (onClick)="salirEditMode()"
         [buttonArgs]="{
-          text: 'Salir',
+          text: 'Salir edit mode',
           buttonStyle: btnStyle.BLUE,
           buttonIcon: btnIcon.CLOSE
         }"

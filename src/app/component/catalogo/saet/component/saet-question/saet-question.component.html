@@ -84,13 +84,13 @@
   <div class="margin-bottom">
     <app-saet-text-area
       [testId]="'textarea_' + idPregunta.toString()"
-      (inputChange)="onInputChange($event)"
+      (inputChange)="onTextAreaChange($event)"
       [value]="values['textarea_' + idPregunta.toString()]"
       [disabled]="readonly"
       [name]="'textarea_' + idPregunta.toString()"
       [inputClases]="
         !readonly
-          ? isDifferent('input_' + idPregunta.toString())
+          ? isDifferent('textarea_' + idPregunta.toString())
             ? 'highlight'
             : ''
           : ''

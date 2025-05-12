@@ -37,6 +37,7 @@ export class QuestionsComponent extends CorBaseComponent {
   corSurveys: iSurvey[] = [];
 
   values: IValuesForm = {};
+  storedValues: IValuesForm = {};
   valuesKey = '';
   showActionButtons = false;
   editMode = false;
@@ -121,7 +122,7 @@ export class QuestionsComponent extends CorBaseComponent {
       this.router.navigate([url, this.nie]);
     }
   }
-
+  textAreaIds = [157,158,159,160]
   responseToValues(response: IEvaluacionResponse): IValuesForm {
     const values: IValuesForm = {};
 
@@ -139,6 +140,8 @@ export class QuestionsComponent extends CorBaseComponent {
       if(respuesta.id_pregunta >= 161 && respuesta.id_pregunta <= 167){
         // manejo temporal de richtext
         values[`richtext_${respuesta.id_pregunta}`] = respuesta.respuesta;
+      }else if(this.textAreaIds.includes(respuesta.id_pregunta)){
+        values[`textarea_${respuesta.id_pregunta}`] = respuesta.respuesta;
       }else{
         values[inputKey] = respuesta.respuesta;
       }

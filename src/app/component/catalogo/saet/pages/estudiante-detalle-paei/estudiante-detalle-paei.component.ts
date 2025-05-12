@@ -93,8 +93,13 @@ export class EstudianteDetallePaeiComponent
               dui_especialista: ''
             };
             console.log('depurado --> ', this.responseToValues(obj));
+            const respuestasDb = this.responseToValues(obj);
+            this.storedValues = {
+              ...respuestasDb
+            }
+            console.log('stored values ', this.storedValues);
             this.values = {
-              ...this.responseToValues(obj),
+              ...respuestasDb,
               ...this.values,
             };
           })
@@ -567,10 +572,27 @@ export class EstudianteDetallePaeiComponent
     this.values[keyValues[0].key] = selectedValues.toString();
     localStorage.setItem('values', JSON.stringify(this.values));
   }
+  onTextAreaChange(keyValue: KeyValue){
+    console.log('text area change', keyValue);
+    this.values[keyValue.key] = keyValue.value;
+    const textareaMatch = keyValue.key.match(/^textarea_(\d+)$/);
+    if (textareaMatch) {
+      const suffix = textareaMatch[1];
+      const inputKey = `input_${suffix}`;
+      if (Object.prototype.hasOwnProperty.call(this.values, inputKey)) {
+        delete this.values[inputKey];
+        console.log(`Removed conflicting input: ${inputKey}`);
+      }
+    }
+
+    console.log('values', this.values);
+    localStorage.setItem(this.valuesKey, JSON.stringify(this.values));
+  }
   async save() {
     this.pageLoading = true;
     this.userMessage.showMessage = false;
 
+    console.log('values on save -->',this.values);
     const respuestas: IQuestionaryAnswer[] = this.getAnswerObject(this.values);
     const objToSave: iPaeiSave = {
       id_paei: this.paeiId,
@@ -601,6 +623,16 @@ export class EstudianteDetallePaeiComponent
       };
       const paei = await this.catalogoServiceCOR
         .getPAEIPerNIE(this.nie);
+      const obj: IEvaluacionResponse = {
+        respuestas: paei.respuestas,
+        id_evaluacion: paei.id_paei,
+        especialista_responsable: '',
+        dui_especialista: ''
+      };
+      const respuestasDb = this.responseToValues(obj);
+      this.storedValues = {
+        ...respuestasDb
+      }
       this.paeiId = paei.id_paei;
     } catch (e) {
       console.log('error ---- ', e);
