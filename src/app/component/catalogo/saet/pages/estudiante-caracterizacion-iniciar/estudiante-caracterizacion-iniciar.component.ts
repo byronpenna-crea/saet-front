@@ -108,6 +108,7 @@ export class EstudianteCaracterizacionIniciarComponent
   override async ngOnInit() {
     await super.ngOnInit();
     this.init();
+
   }
   formMode: FormMode = FormMode.CREATE;
   guardianControlData: FormTablePariente[] = [];
@@ -165,7 +166,6 @@ export class EstudianteCaracterizacionIniciarComponent
         }
         // handleMode(idCaracterizacion, url, this.formMode, this.nie, this.router);
       });
-
       const corQuestionPromise = catalogoServiceCOR.getCORQuestions();
       Promise.all([corQuestionPromise]).then(([corQuestionResult]) => {
         const cuestionariosOrdenados = corQuestionResult.cuestionarios.map(cuestionario => {
@@ -179,8 +179,19 @@ export class EstudianteCaracterizacionIniciarComponent
         this.corSurveys.push(...cuestionariosOrdenados);
         this.pageLoading = false;
       });
-
       this.init();
+
+      this.guardianControlData = this.caracterizacion?.grupoFamiliar ? this.caracterizacion?.grupoFamiliar.map((familiar) => {
+        const familiarToReturn:FormTablePariente = {
+          id: '',
+          nombreCompleto: `${familiar.primer_nombre ?? ''} ${familiar.segundo_nombre ?? ''} ${familiar.primer_apellido ?? ''} ${familiar.segundo_apellido ?? ''}`.trim(),
+          edad: familiar.edad ? familiar.edad.toString() : '',
+          nivelEducativo: familiar.nivel_educativo,
+          ocupacion: familiar.ocupacion,
+          parentesco: familiar.parentesco,
+        }
+        return familiarToReturn;
+      }): [];
     });
   }
 

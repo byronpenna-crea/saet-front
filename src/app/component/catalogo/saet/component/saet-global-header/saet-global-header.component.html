@@ -1,10 +1,18 @@
 <div class="titlePage">
-  <div class="form-container" style="display: flex;flex-direction: row;gap: 8px">
+  <div
+    class="form-container"
+    style="display: flex; flex-direction: row; gap: 8px"
+  >
     <ng-container *ngFor="let item of breadcrumb; let isLast = last">
       <a *ngIf="item.href !== ''" [href]="item.href">{{ item.text }}</a>
-      <span style="color: #00498d" *ngIf="item.href === ''">{{
-        item.text
-      }}</span>
+      <span
+        style="color: #00498d"
+        [ngClass]="{
+          'hightlight-header-text-menu': item.highlight
+        }"
+        *ngIf="item.href === ''"
+        >{{ item.text }}</span
+      >
       <span *ngIf="!isLast"> / </span>
     </ng-container>
   </div>

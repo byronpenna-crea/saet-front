@@ -69,7 +69,12 @@
   background: gray;
   color: lightgray;
 }
-
+.hightlight-header-text-menu{
+  background: #00498d;
+  color:white !important;
+  padding-left: 6px;
+  padding-right: 6px;
+}
 .titlePage h2 {
   padding-top: 20px;
 }

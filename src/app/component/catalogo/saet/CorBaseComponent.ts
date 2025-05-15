@@ -68,7 +68,7 @@ export class CorBaseComponent extends BaseComponent implements OnInit {
       const response = await this.catalogoServiceCOR.getCaracterizacionPorNIE(
         this.nie
       );
-
+      console.log('init caracterizacion ', response);
       this.caracterizacion = response;
       if (response.id_caracterizacion !== 0) {
         this.readOnlyPaei = false;

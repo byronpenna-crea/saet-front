@@ -4,6 +4,7 @@ import { SAET_MODULE } from '../../shared/evaluaciones';
 interface BreadcrumbItem {
   href: string;
   text: string;
+  highlight?: boolean;
 }
 @Component({
   selector: 'app-saet-global-header',

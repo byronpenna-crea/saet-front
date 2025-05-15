@@ -83,10 +83,7 @@ export class EstudianteDeiInformeCualitativoComponent extends DeiBaseComponent {
     protected override router: Router
   ) {
     super(router);
-    console.log('contructor ');
-
-
-
+    this.userMessage.showMessage = false;
     this.route.paramMap.subscribe(params => {
       const nie = params.get('nie');
       if (nie) {
