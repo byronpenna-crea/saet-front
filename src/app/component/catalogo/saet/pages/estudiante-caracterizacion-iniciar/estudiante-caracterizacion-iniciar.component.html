@@ -41,6 +41,7 @@
       (dataChange)="onGuardianTableChange($event)"
       [data]="guardianControlData"
       [mode]="formMode"
+      [resetChangesCounter]="guardianSavedCounter"
     />
   </app-tabs>
   <ng-container *ngIf="!pageLoading">

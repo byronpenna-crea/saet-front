@@ -1,7 +1,7 @@
 import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import {
-  CatalogoServiceCor,
+  CatalogoServiceCor, IGuardianData,
   ISaveCaracterizacion,
 } from '../../../../../services/catalogo/catalogo.service.cor';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -180,21 +180,22 @@ export class EstudianteCaracterizacionIniciarComponent
         this.pageLoading = false;
       });
       this.init();
-
-      this.guardianControlData = this.caracterizacion?.grupoFamiliar ? this.caracterizacion?.grupoFamiliar.map((familiar) => {
-        const familiarToReturn:FormTablePariente = {
-          id: '',
-          nombreCompleto: `${familiar.primer_nombre ?? ''} ${familiar.segundo_nombre ?? ''} ${familiar.primer_apellido ?? ''} ${familiar.segundo_apellido ?? ''}`.trim(),
-          edad: familiar.edad ? familiar.edad.toString() : '',
-          nivelEducativo: familiar.nivel_educativo,
-          ocupacion: familiar.ocupacion,
-          parentesco: familiar.parentesco,
-        }
-        return familiarToReturn;
-      }): [];
+      this.caracterizacion?.grupoFamiliar && this.guardiansLoad(this.caracterizacion?.grupoFamiliar);
     });
   }
-
+  guardiansLoad(guardians:IGuardianData[]) {
+    this.guardianControlData = guardians.map((familiar) => {
+      const familiarToReturn:FormTablePariente = {
+        id: familiar.grupo_familiar_pk ? familiar.grupo_familiar_pk.toString() : '',
+        nombreCompleto: `${familiar.primer_nombre ?? ''} ${familiar.segundo_nombre ?? ''} ${familiar.primer_apellido ?? ''} ${familiar.segundo_apellido ?? ''}`.trim(),
+        edad: familiar.edad ? familiar.edad.toString() : '',
+        nivelEducativo: familiar.nivel_educativo,
+        ocupacion: familiar.ocupacion,
+        parentesco: familiar.parentesco,
+      }
+      return familiarToReturn;
+    });
+  }
   QuestionType = QuestionType;
   getQuestionType(type: string): QuestionType {
     return QuestionType[type as keyof typeof QuestionType];
@@ -408,6 +409,7 @@ export class EstudianteCaracterizacionIniciarComponent
       tercer_apellido:  apellidos[2] ?? '',
     };
   }
+  guardianSavedCounter=0;
   async update() {
     this.pageLoading = true;
     this.userMessage.showMessage = false;
@@ -448,12 +450,14 @@ export class EstudianteCaracterizacionIniciarComponent
       respuestas: this.validarPreguntas(respuestas, this.corSurveys),
       grupoFamiliar: [],
     };
-    console.log('obj to save', objToSave);
-    objToSave.grupoFamiliar = this.guardianControlData.map(p => {
-      const parsed = this.parseFullName(p.nombreCompleto);
 
+    console.log('objeto familia', this.guardianControlData);
+    console.log('obj to save', objToSave);
+    this.guardianSavedCounter++;
+    const grupoFamiliar: IGuardianData[] = this.guardianControlData.map(p => {
+      const parsed = this.parseFullName(p.nombreCompleto);
       return {
-        grupo_familiar_pk: p.id.startsWith('temp-') ? null : Number(p.id),  // null = nuevo
+        grupo_familiar_pk: p.id.startsWith('temp-') ? undefined : Number(p.id),  // null = nuevo
         ...parsed,
         edad:            p.edad ? Number(p.edad) : 0,
         parentesco:      p.parentesco,
@@ -461,12 +465,16 @@ export class EstudianteCaracterizacionIniciarComponent
         ocupacion:       p.ocupacion,
       };
     });
-
+    console.log('obj to save con familiares', grupoFamiliar);
     try {
       const resp =
         await this.catalogoServiceCOR.updateCaracterizacion(objToSave);
-      console.log('respuesta actualizacion ', resp);
 
+      const respFamiliares = await this.catalogoServiceCOR.updateGuardian(grupoFamiliar,this.nie);
+      //this.guardiansLoad();
+      console.log('respuesta actualizacion ', resp);
+      console.log('respuesta familiares  ', respFamiliares);
+      this.guardiansLoad(respFamiliares);
       if(resp.id_caracterizacion === 0){
         this.userMessage.showMessage = true;
         this.userMessage.type = MessageType.DANGER;

@@ -7,6 +7,7 @@
       [disabled]="isView"
       (inputChange)="onInputChange($event, 'nombreCompleto')"
       name="input_nombre_completo"
+      [inputClases]="wasModified('nombreCompleto') ? 'highlight' : ''"
     />
   </app-tab-item>
 
@@ -17,6 +18,9 @@
       [disabled]="isView"
       (inputChange)="onInputChange($event, 'edad')"
       name="input_edad"
+      [ngStyle]="
+        wasModified('nombreCompleto') ? { 'background-color': '#fff8b3' } : {}
+      "
     />
   </app-tab-item>
 
@@ -27,6 +31,9 @@
       [disabled]="isView"
       (inputChange)="onInputChange($event, 'parentesco')"
       name="input_parentesco"
+      [ngStyle]="
+        wasModified('nombreCompleto') ? { 'background-color': '#fff8b3' } : {}
+      "
     />
   </app-tab-item>
 
@@ -37,6 +44,9 @@
       [disabled]="isView"
       (inputChange)="onInputChange($event, 'nivelEducativo')"
       name="input_nivel_educativo"
+      [ngStyle]="
+        wasModified('nombreCompleto') ? { 'background-color': '#fff8b3' } : {}
+      "
     />
   </app-tab-item>
 
@@ -47,6 +57,9 @@
       [disabled]="isView"
       (inputChange)="onInputChange($event, 'ocupacion')"
       name="input_ocupacion"
+      [ngStyle]="
+        wasModified('nombreCompleto') ? { 'background-color': '#fff8b3' } : {}
+      "
     />
   </app-tab-item>
   <div
@@ -58,7 +71,7 @@
       [buttonArgs]="{
         buttonIcon: IconComponent.PLUS,
         buttonStyle: ButtonStyle.WHITE,
-        text: 'Agregar miembro familiar'
+        text: isEditing ? 'Guardar cambios' : 'Agregar miembro familiar'
       }"
       [disabled]="!canAdd"
       (onClick)="agregarMiembroFamiliar()"
@@ -66,7 +79,11 @@
   </div>
 
   <!-- Tabla -------------------------------------------------------- -->
-  <p-table data-testid="table-information" [columns]="columns" [value]="data">
+  <p-table
+    data-testid="table-information"
+    [columns]="visibleColumns"
+    [value]="data"
+  >
     <ng-template pTemplate="header" let-cols>
       <tr>
         <th *ngFor="let col of cols">{{ col.header }}</th>
@@ -74,19 +91,33 @@
     </ng-template>
 
     <ng-template pTemplate="body" let-row>
-      <tr>
+      <tr
+        [ngStyle]="
+          highlightedRows.has(row.id) ? { 'background-color': '#fff3cd' } : {}
+        "
+      >
         <td>{{ row.nombreCompleto }}</td>
         <td>{{ row.edad }}</td>
         <td>{{ row.parentesco }}</td>
         <td>{{ row.nivelEducativo }}</td>
         <td>{{ row.ocupacion }}</td>
-        <td>
+        <td *ngIf="!isView">
+          <app-saet-button
+            [buttonArgs]="{
+              text: '',
+              buttonStyle: ButtonStyle.BLUE,
+              buttonIcon: IconComponent.EDIT
+            }"
+            [disabled]="isView"
+            (onClick)="editarMiembroFamiliar(row)"
+          />
           <app-saet-button
             [buttonArgs]="{
               text: '',
               buttonStyle: ButtonStyle.BLUE,
               buttonIcon: IconComponent.CLOSE
             }"
+            [disabled]="isView"
             (onClick)="eliminarMiembroFamiliar(row)"
           />
         </td>
