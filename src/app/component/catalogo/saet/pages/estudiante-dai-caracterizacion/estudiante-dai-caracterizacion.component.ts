@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { CorBaseComponent } from '../../CorBaseComponent';
 import {
   IMessageComponent,
@@ -28,6 +28,7 @@ import { SAET_MODULE } from '../../shared/evaluaciones';
 import { handleMode } from '../../shared/forms';
 
 import { ButtonStyle } from '../../component/saet-button/saet-button.component';
+import { textAreaIds } from '../../../../../services/shared/saet-types';
 
 @Component({
   selector: 'app-estudiante-dai-caracterizacion',
@@ -39,7 +40,11 @@ export class EstudianteDaiCaracterizacionComponent
   implements IMessageComponent
 {
   @ViewChild('cd') confirmDialog: any;
+  @ViewChild('bottomAnchor') override bottomAnchor!: ElementRef<HTMLDivElement>;
+  @ViewChild('topAnchor') override topAnchor!: ElementRef<HTMLDivElement>;
+
   values: { [key: string]: string } = {};
+  storedValues: { [key: string]: string } = {};
   corSurveys: iSurvey[] = [];
   baseUrl = '/menu/dai/saet-caracterizacion-estudiante';
   respuestasToValues(respuestas: iQuestion[]) {
@@ -48,10 +53,15 @@ export class EstudianteDaiCaracterizacionComponent
       const radioKey = `radio_${respuesta.id_pregunta}`;
       const inputKey = `input_${respuesta.id_pregunta}`;
 
-      if (respuesta.opcion.length > 0) {
-        values[radioKey] = respuesta.opcion[0].opcion_pregunta_pk.toString();
+      if(textAreaIds.includes(respuesta.id_pregunta)){
+        values[`textarea_${respuesta.id_pregunta}`] = respuesta.respuesta ?? '';
+      }else{
+        if (respuesta.opcion.length > 0) {
+          values[radioKey] = respuesta.opcion[0].opcion_pregunta_pk.toString();
+        }
+        values[inputKey] = respuesta.respuesta ?? '';
       }
-      values[inputKey] = respuesta.respuesta ?? '';
+
     });
     return values;
   }
@@ -59,14 +69,10 @@ export class EstudianteDaiCaracterizacionComponent
   stringBreadCrumbAction = '';
   init() {
     this.route.paramMap.subscribe(params => {
-      const storedValues = localStorage.getItem(
-        `dai-caracterizacion-${this.nie}`
-      );
-      if (storedValues) {
-        this.values = JSON.parse(storedValues);
-      }
+
       const formMode = params.get('mode');
       console.log('form mode on init', formMode);
+      console.log('caracterizacion dai', this.caracterizacion);
       switch (formMode) {
         case null:
           this.formMode = FormMode.CREATE;
@@ -81,16 +87,7 @@ export class EstudianteDaiCaracterizacionComponent
           this.stringBreadCrumbAction = 'Edición';
           break;
       }
-      if (this.formMode === FormMode.VIEW) {
-        this.values = this.respuestasToValues(
-          this.caracterizacion?.respuestas ?? []
-        );
-        return;
-      }
-      this.values = {
-        ...this.values,
-        ...this.respuestasToValues(this.caracterizacion?.respuestas ?? []),
-      };
+
     });
   }
 
@@ -105,66 +102,95 @@ export class EstudianteDaiCaracterizacionComponent
     super(document, catalogoServiceDai, route, router);
     this.pageLoading = true;
 
+    // Cargar datos de localStorage general
     const storedValues = localStorage.getItem('values');
     if (storedValues) {
       this.values = JSON.parse(storedValues);
     }
-    const caracterizacionNiePromise =
-      this.catalogoServiceDai.getCaracterizacionPorNIE(this.nie);
-    const questionPromise = catalogoServiceDai.getDaiCaracterizacionQuestion();
 
-    Promise.all([caracterizacionNiePromise])
-      .then(async ([caracterizacionNieResult]) => {
-        console.log('caracterizacion result ----> ', caracterizacionNieResult);
+    // Iniciar llamada a API
+    Promise.all([
+      this.catalogoServiceDai.getCaracterizacionPorNIE(this.nie),
+      this.catalogoServiceDai.getDaiCaracterizacionQuestion()
+    ])
+      .then(async ([caracterizacionNieResult, questionResult]) => {
+        console.log('Caracterización obtenida: ', caracterizacionNieResult);
         this.caracterizacion = caracterizacionNieResult;
 
+        // Redirección según estado
         if (
-          this.caracterizacion !== undefined &&
           this.caracterizacion?.id_caracterizacion !== 0 &&
           this.formMode === FormMode.CREATE
         ) {
-          await router.navigate([this.baseUrl, this.nie, 'view']);
+          await this.router.navigate([this.baseUrl, this.nie, 'view']);
+          return;
         }
 
         if (
-          this.caracterizacion === undefined ||
-          this.caracterizacion?.id_caracterizacion === 0 &&
+          (this.caracterizacion === undefined || this.caracterizacion?.id_caracterizacion === 0) &&
           this.formMode === FormMode.EDIT
         ) {
-          router.navigate([this.baseUrl, this.nie]);
+          await this.router.navigate([this.baseUrl, this.nie]);
+          return;
         }
 
-      })
-      .catch(e => {
-        if (
-          this.caracterizacion === undefined ||
-          this.caracterizacion?.id_caracterizacion === 0 &&
-          this.formMode === FormMode.CREATE
-        ) {
-          router.navigate([this.baseUrl, this.nie]);
-        }
-        console.log('Error cargando la caracterizacion dai', e);
-      });
-
-    Promise.all([questionPromise])
-      .then(([questionResult]) => {
+        // Cargar preguntas
         this.corSurveys.push(...questionResult.cuestionarios);
-      })
-      .catch(() => {})
-      .finally(() => {
+
+        // Cargar respuestas desde localStorage específico si existen
+        const daiStored = localStorage.getItem(`dai-caracterizacion-${this.nie}`);
+        if (daiStored) {
+          this.values = JSON.parse(daiStored);
+        }
+
+        // Mapear respuestas a valores
+        this.values = {
+          ...this.values,
+          ...this.respuestasToValues(this.caracterizacion?.respuestas ?? []),
+        };
+
+        // Finalizar carga
+        this.pageLoading = false;
+
+        // Log final ya con caracterización disponible
+        console.log('#$$$$$$$$$$$$$$$$$$$$$$$', this.caracterizacion);
         const storedValues = localStorage.getItem(
           `dai-caracterizacion-${this.nie}`
         );
         if (storedValues) {
           this.values = JSON.parse(storedValues);
         }
+
+        const respuestasDb = this.respuestasToValues(
+          this.caracterizacion?.respuestas ?? []
+        );
+        // if (this.formMode === FormMode.VIEW) {
+        //
+        //   return;
+        // }
+        console.log('respuestas db here ', respuestasDb)
+        this.storedValues = {
+          ...respuestasDb
+        }
         this.values = {
+          ...respuestasDb,
           ...this.values,
-          ...this.respuestasToValues(this.caracterizacion?.respuestas ?? []),
         };
+      })
+      .catch((e) => {
+        console.error('Error cargando la caracterización DAI', e);
+
+        if (
+          (this.caracterizacion === undefined || this.caracterizacion?.id_caracterizacion === 0) &&
+          this.formMode === FormMode.CREATE
+        ) {
+          this.router.navigate([this.baseUrl, this.nie]);
+        }
+
         this.pageLoading = false;
       });
 
+    // Inicializar cualquier otra lógica necesaria
     this.init();
   }
   formModeEnum = FormMode;
@@ -176,6 +202,24 @@ export class EstudianteDaiCaracterizacionComponent
       `dai-caracterizacion-${this.nie}`,
       JSON.stringify(this.values)
     );
+  }
+
+  onTextAreaChange(keyValue: KeyValue){
+    console.log('text area change', keyValue);
+    this.values[keyValue.key] = keyValue.value;
+    const textareaMatch = keyValue.key.match(/^textarea_(\d+)$/);
+    if (textareaMatch) {
+      const suffix = textareaMatch[1];
+      const inputKey = `input_${suffix}`;
+      if (Object.prototype.hasOwnProperty.call(this.values, inputKey)) {
+        delete this.values[inputKey];
+        console.log(`Removed conflicting input: ${inputKey}`);
+      }
+    }
+
+    console.log('values', this.values);
+    console.log('stored values', this.storedValues);
+    localStorage.setItem(`dai-caracterizacion-${this.nie}`, JSON.stringify(this.values));
   }
   onchange(keyValue: KeyValue) {
     console.log('onchange triggered', keyValue);
@@ -398,6 +442,12 @@ export class EstudianteDaiCaracterizacionComponent
         return;
       }
       this.caracterizacion = await this.catalogoServiceDai.getCaracterizacionPorNIE(this.nie);
+      const respuestasDb = this.respuestasToValues(
+        this.caracterizacion?.respuestas ?? []
+      );
+      this.storedValues = {
+        ...respuestasDb
+      }
       // success message
       this.userMessage.message = '¡Los datos han sido guardados exitosamente!';
       this.userMessage.showMessage = true;

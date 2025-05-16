@@ -69,6 +69,7 @@ export interface IGetCaracterizacion {
   id_caracterizacion: number;
   especialista_responsable: string;
   respuestas: iQuestion[];
+  grupoFamiliar?: IGuardianData[];
 }
 export interface IEvaluacionResponse2 {
   id_evaluacion: number;
@@ -77,7 +78,7 @@ export interface IEvaluacionResponse2 {
 }
 
 export interface IGuardianData {
-  grupo_familiar_pk: number;
+  grupo_familiar_pk?: number;
   primer_nombre: string;
   segundo_nombre: string;
   tercer_nombre: string;
@@ -373,12 +374,20 @@ export class CatalogoServiceCor extends CatalogoServiceSaet {
       );
     }
     const url = `${this.API_SERVER_URL}/grupo_familiar/${nie}`;
+    console.log('get grupo familiar ', nie);
     return this.getRequest<IGuardianData[]>(url);
   }
 
-  public async updateGuardian(guardians: IGuardianData[]) {
+  public async updateGuardian(guardians: IGuardianData[], nie:string) {
     const url = `${this.API_SERVER_URL}/grupo_familiar/`;
-    return this.putRequest<IGuardianData[], IGuardianData[]>(url, guardians);
+    const objToSave = {
+      nie: nie,
+      grupoFamiliar: guardians
+    }
+    return this.putRequest<{
+      nie:string,
+      grupoFamiliar: IGuardianData[]
+      }, IGuardianData[]>(url, objToSave);
   }
   public async savePsicologia(cuestionarioPsicologia: ISaveQuestionary) {
     const url = `${this.API_SERVER_URL}/evaluacion/cor/psicologia/`;

@@ -24,7 +24,9 @@ export class SaetQuestionComponent {
   @Input() readonly: boolean = false;
   constructor() {}
   isDifferent(key: string): boolean {
-    return this.values[key] !== this.storedValues[key];
+    const value = this.values[key] !== null && this.values[key] !== undefined  ? this.values[key] : '';
+    const storedValue = this.storedValues[key] !== null && this.storedValues[key] !== undefined  ? this.storedValues[key] : '';
+    return value !== storedValue;
   }
   onCheckBoxChange(event: KeyValue[]) {
     this.checkboxChange.emit(event);

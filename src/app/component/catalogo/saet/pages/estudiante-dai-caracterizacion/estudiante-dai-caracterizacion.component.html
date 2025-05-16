@@ -1,3 +1,4 @@
+<div #topAnchor style="height: 1px"></div>
 <app-saet-global-header
   [nie]="nie"
   [nombreCompleto]="studentInfo?.nombreCompleto ?? ''"
@@ -47,6 +48,8 @@
               [type]="getQuestionType(pregunta.tipoPregunta)"
               [idPregunta]="pregunta.id_pregunta"
               [value]="values[pregunta.id_pregunta.toString()]"
+              (textAreaChange)="onTextAreaChange($event)"
+              [storedValues]="storedValues"
               [values]="values"
               [testId]="pregunta.id_pregunta.toString()"
               [name]="getName(pregunta.pregunta)"
@@ -166,3 +169,18 @@
     </div>
   </div>
 </div>
+<button
+  class="scroll-up-btn"
+  (click)="scrollToTop()"
+  pButton
+  icon="pi pi-arrow-up"
+  label=""
+></button>
+<button
+  class="scroll-bottom-btn"
+  (click)="scrollToBottom()"
+  pButton
+  icon="pi pi-arrow-down"
+  label=""
+></button>
+<div #bottomAnchor style="height: 1px"></div>

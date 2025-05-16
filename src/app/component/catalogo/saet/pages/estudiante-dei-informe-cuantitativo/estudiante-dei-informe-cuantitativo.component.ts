@@ -143,6 +143,13 @@ export class EstudianteDeiInformeCuantitativoComponent
     deiService.getDaiCount().then(x => {
       this.daiCount = x;
     });
+    this.deiService.getPAEIByEstado(4).then((data) => {
+      console.log('estado paei ---> ', data);
+      this.paeiData = data.resultados.map((item: PaeiGrafica) => ({
+        name: item.departamento,
+        value: item.total,
+      }));
+    });
     deiService.getGraficaDificultad().then(data => {
       console.log('data is --> ', data);
       this.dificultadesGrafica = data.resultados.map((dificultad) => {
