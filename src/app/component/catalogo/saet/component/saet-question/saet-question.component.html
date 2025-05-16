@@ -1,11 +1,12 @@
 <ng-container *ngIf="type === QuestionType.ABIERTA_CON_FORMATO">
   <app-richtext
     (inputChange)="onInputChange($event)"
+    (blurChange)="onBlurRichTextChange($event)"
     [value]="values['richtext_' + idPregunta.toString()]"
-    [isHighlight]="isDifferent('richtext_' + idPregunta.toString())"
     [disabled]="readonly"
     [name]="'richtext_' + idPregunta.toString()"
   />
+  <!--    [isHighlight]="isDifferentRichText('richtext_' + idPregunta.toString())"-->
 </ng-container>
 <ng-container *ngIf="type === QuestionType.ABIERTA">
   <div>

@@ -26,7 +26,14 @@ export class RichtextComponent implements OnChanges {
   @Input() disabled: boolean = false;
   @Input() isHighlight: boolean = true;
   @Output() inputChange = new EventEmitter<KeyValue>();
+  @Output() blurChange = new EventEmitter<KeyValue>();
 
+  onBlurChange(name: string) {
+    if (!this.editorInstance) return;
+
+    const newValue = this.editorInstance.root.innerHTML.trim();
+    this.emitBlurChange(newValue, name);
+  }
   onInputChange(event: any, name: string) {
     const newValue = event.htmlValue;
     this.text = newValue;
@@ -38,12 +45,11 @@ export class RichtextComponent implements OnChanges {
     }
 
     const editorBody = this.editorInstance.root as HTMLElement;
-    if(this.isHighlight){
+    if (this.isHighlight) {
       editorBody.style.backgroundColor = '#fff3cd';
-    }else{
+    } else {
       editorBody.style.backgroundColor = '#ffffff';
     }
-
   }
   private editorInstance?: Quill;
   setupEditor(event: EditorInitEvent): void {
@@ -51,12 +57,10 @@ export class RichtextComponent implements OnChanges {
     if (!this.editorInstance) {
       return;
     }
-    if(this.isHighlight){
-      console.log('here because highlight')
+    if (this.isHighlight) {
       const editorBody = this.editorInstance.root as HTMLElement;
       editorBody.style.backgroundColor = '#fff3cd';
     }
-
   }
 
   preventImagePaste() {
@@ -76,7 +80,9 @@ export class RichtextComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['isHighlight'] && this.editorInstance) {
       const editorBody = this.editorInstance.root as HTMLElement;
-      editorBody.style.backgroundColor = this.isHighlight ? '#fff3cd' : '#ffffff';
+      editorBody.style.backgroundColor = this.isHighlight
+        ? '#fff3cd'
+        : '#ffffff';
     }
   }
   containsImageFromURL(content: string): boolean {
@@ -96,10 +102,18 @@ export class RichtextComponent implements OnChanges {
       });
     }
   }
+  private emitBlurChange(newValue: string, key: string) {
+    this.blurChange.emit({
+      key: key,
+      value: newValue,
+    });
+  }
   private emitInputChange(newValue: string, key: string) {
     this.inputChange.emit({
       key: key,
       value: newValue,
     });
   }
+
+  protected readonly onblur = onblur;
 }

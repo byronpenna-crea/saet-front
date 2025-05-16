@@ -1,6 +1,7 @@
 <p-editor
   [(ngModel)]="value"
   (onTextChange)="onInputChange($event, name)"
+  (focusout)="onBlurChange(name)"
   [name]="name"
   [style]="{
     height: '320px'
