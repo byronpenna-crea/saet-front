@@ -26,6 +26,19 @@ export interface ISaveDificultad {
   est_pk: number,
   dificultades: number[]
 }
+export interface IFiltroDatosPaei{
+  codigosDepartamentoRegion: string[]  | null,
+  fechaInicio: string | null,
+  fechaFin: string | null,
+  estadoSocializado: number,
+  estadoProceso: number,
+  estadoFinalizado: number
+}
+export interface IFiltrosDificultad {
+  codigosDepartamentoRegion: string[]  | null,
+  fechaInicio: string | null,
+  fechaFin: string | null
+}
 export interface PersonaApoyo {
   id: number,
   per_fk: {
@@ -60,28 +73,32 @@ export class CatalogoServiceDei extends CatalogoServiceSaet {
   ) {
     super(cookieService);
   }
-  public getPAEIByEstado(estado:number):Promise<PaeiGraficaResultado>{
-    console.log('estado', estado)
+  public getPAEIByEstado(obj:IFiltroDatosPaei):Promise<PaeiGraficaResultado>{
+    //console.log('estado', estado)
     const url = `${environment.API_SERVER_URL}/dei/datos-paei?estadoFinalizado=4`;
-    return new Promise((resolve, reject) => {
-      fetch(url, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${this.cookieService.get('token')}`,
-          'Content-Type': 'application/json'
-        }
-      })
-        .then(response => {
-          if (response.ok) {
-            resolve(response.json());
-          } else {
-            reject(new Error('No se pudo obtener los datos'));
-          }
-        })
-        .catch(error => {
-          reject(new Error('Hubo un error al obtener los datos: ' + error.message));
-        });
-    });
+    return this.postRequest<IFiltroDatosPaei,PaeiGraficaResultado>(
+      url,
+      obj,
+    );
+    // return new Promise((resolve, reject) => {
+    //   fetch(url, {
+    //     method: 'GET',
+    //     headers: {
+    //       'Authorization': `Bearer ${this.cookieService.get('token')}`,
+    //       'Content-Type': 'application/json'
+    //     }
+    //   })
+    //     .then(response => {
+    //       if (response.ok) {
+    //         resolve(response.json());
+    //       } else {
+    //         reject(new Error('No se pudo obtener los datos'));
+    //       }
+    //     })
+    //     .catch(error => {
+    //       reject(new Error('Hubo un error al obtener los datos: ' + error.message));
+    //     });
+    // });
   }
   public getPersonaApoyoByDui(dui:string):Promise<PersonaApoyo>{
     const url = `${environment.API_SERVER_URL}/tempEstudiantesSigesv2/personaApoyoByDui/${dui}`;
@@ -107,25 +124,33 @@ export class CatalogoServiceDei extends CatalogoServiceSaet {
   }
   public getGraficaDificultad():Promise<{resultados: IGetDificultad[]}> {
     const url = `${environment.API_SERVER_URL}/dei/datos-dificultad`;
-    return new Promise((resolve, reject) => {
-      fetch(url, {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${this.cookieService.get('token')}`,
-          'Content-Type': 'application/json'
-        }
-      })
-        .then(response => {
-          if (response.ok) {
-            resolve(response.json());
-          } else {
-            reject(new Error('No se pudo obtener los datos'));
-          }
-        })
-        .catch(error => {
-          reject(new Error('Hubo un error al obtener los datos: ' + error.message));
-        });
-    });
+    return this.postRequest<IFiltrosDificultad,{resultados: IGetDificultad[]} >(
+      url,
+      {
+        fechaFin: null,
+        codigosDepartamentoRegion: null,
+        fechaInicio: null
+      },
+    );
+    // return new Promise((resolve, reject) => {
+    //   fetch(url, {
+    //     method: 'POST',
+    //     headers: {
+    //       'Authorization': `Bearer ${this.cookieService.get('token')}`,
+    //       'Content-Type': 'application/json'
+    //     }
+    //   })
+    //     .then(response => {
+    //       if (response.ok) {
+    //         resolve(response.json());
+    //       } else {
+    //         reject(new Error('No se pudo obtener los datos'));
+    //       }
+    //     })
+    //     .catch(error => {
+    //       reject(new Error('Hubo un error al obtener los datos: ' + error.message));
+    //     });
+    // });
   }
   public getDaiCount():Promise<number> {
     const url = `${environment.API_SERVER_URL}/tempEstudiantesSigesv2/dai/count`;

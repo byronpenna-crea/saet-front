@@ -42,6 +42,12 @@ export class EstudianteDeiInformeCuantitativoComponent
   @ViewChild('topAnchor') override topAnchor!: ElementRef<HTMLDivElement>;
 
   estadoPaeiSeleccionado = '';
+  onDateChange(event:Date){
+    const day = String(event.getDate()).padStart(2, '0');
+    const month = String(event.getMonth() + 1).padStart(2, '0');
+    const year = event.getFullYear();
+    console.log('event',`${year}-${month}-${day}` );
+  }
   getFilteredData(data: LinearMockDataType) {
     return Object.keys(data).map(departamentoKey => {
       const departamentoName = EnumDepartamentos[
@@ -63,7 +69,14 @@ export class EstudianteDeiInformeCuantitativoComponent
   async onEstadoPAEIChange(estado: number) {
     try {
       this.estadoPaeiSeleccionado = estado.toString();
-      const data = await this.deiService.getPAEIByEstado(estado);
+      const data = await this.deiService.getPAEIByEstado({
+        fechaFin: null,
+        codigosDepartamentoRegion: null,
+        fechaInicio: null,
+        estadoSocializado: 1,
+        estadoProceso: 2,
+        estadoFinalizado: 3
+      });
       console.log('estado paei ---> ', data);
       this.paeiData = data.resultados.map((item: PaeiGrafica) => ({
         name: item.departamento,
@@ -115,7 +128,22 @@ export class EstudianteDeiInformeCuantitativoComponent
   departamentos = catalogoDepartamento;
   corCount = 0;
   daiCount = 0;
-
+  async refreshGraphics() {
+    this.deiService.getPAEIByEstado({
+      fechaFin: null,
+      codigosDepartamentoRegion: null,
+      fechaInicio: null,
+      estadoSocializado: 1,
+      estadoProceso: 2,
+      estadoFinalizado: 3
+    }).then((data) => {
+      console.log('estado paei ---> ', data);
+      this.paeiData = data.resultados.map((item: PaeiGrafica) => ({
+        name: item.departamento,
+        value: item.total,
+      }));
+    });
+  }
   constructor(
     private deiService: CatalogoServiceDei,
     @Inject(DOCUMENT) private document: Document,
@@ -143,13 +171,7 @@ export class EstudianteDeiInformeCuantitativoComponent
     deiService.getDaiCount().then(x => {
       this.daiCount = x;
     });
-    this.deiService.getPAEIByEstado(4).then((data) => {
-      console.log('estado paei ---> ', data);
-      this.paeiData = data.resultados.map((item: PaeiGrafica) => ({
-        name: item.departamento,
-        value: item.total,
-      }));
-    });
+    this.refreshGraphics().then();
     deiService.getGraficaDificultad().then(data => {
       console.log('data is --> ', data);
       this.dificultadesGrafica = data.resultados.map((dificultad) => {
