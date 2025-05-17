@@ -116,7 +116,7 @@
                       [showIcon]="true"
                       dateFormat="dd/mm/yy"
                       styleClass="periodo-tiempo-input"
-                      (onSelect)="onDateChange($event)"
+                      (onSelect)="onStartDateChange($event)"
                     >
                     </p-calendar>
                   </div>
@@ -129,6 +129,7 @@
                       [showIcon]="true"
                       dateFormat="dd/mm/yy"
                       styleClass="periodo-tiempo-input"
+                      (onSelect)="onEndDateChange($event)"
                     >
                     </p-calendar>
                   </div>

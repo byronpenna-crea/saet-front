@@ -42,11 +42,26 @@ export class EstudianteDeiInformeCuantitativoComponent
   @ViewChild('topAnchor') override topAnchor!: ElementRef<HTMLDivElement>;
 
   estadoPaeiSeleccionado = '';
-  onDateChange(event:Date){
+  startDate:Date| null = null;
+  endDate:Date| null = null;
+  formatDate(event:Date){
     const day = String(event.getDate()).padStart(2, '0');
     const month = String(event.getMonth() + 1).padStart(2, '0');
     const year = event.getFullYear();
-    console.log('event',`${year}-${month}-${day}` );
+    return `${year}-${month}-${day}`;
+  }
+  async onStartDateChange(event:Date){
+    this.startDate = event;
+
+    if(this.startDate != null && this.endDate != null){
+      await this.refreshGraphics();
+    }
+  }
+  async onEndDateChange(event:Date){
+    this.endDate = event;
+    if(this.startDate != null && this.endDate != null){
+      await this.refreshGraphics();
+    }
   }
   getFilteredData(data: LinearMockDataType) {
     return Object.keys(data).map(departamentoKey => {
@@ -69,6 +84,7 @@ export class EstudianteDeiInformeCuantitativoComponent
   async onEstadoPAEIChange(estado: number) {
     try {
       this.estadoPaeiSeleccionado = estado.toString();
+
       const data = await this.deiService.getPAEIByEstado({
         fechaFin: null,
         codigosDepartamentoRegion: null,
@@ -129,10 +145,18 @@ export class EstudianteDeiInformeCuantitativoComponent
   corCount = 0;
   daiCount = 0;
   async refreshGraphics() {
+    let startDate:string | null = null;
+    let endDate:string | null = null;
+
+    if(this.startDate != null && this.endDate != null){
+      startDate = this.formatDate(this.startDate);
+      endDate = this.formatDate(this.endDate);
+    }
+
     this.deiService.getPAEIByEstado({
-      fechaFin: null,
+      fechaFin: endDate,
+      fechaInicio: startDate,
       codigosDepartamentoRegion: null,
-      fechaInicio: null,
       estadoSocializado: 1,
       estadoProceso: 2,
       estadoFinalizado: 3
