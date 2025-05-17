@@ -49,6 +49,7 @@
               [idPregunta]="pregunta.id_pregunta"
               [value]="values[pregunta.id_pregunta.toString()]"
               (textAreaChange)="onTextAreaChange($event)"
+              (blurChange)="onBlurRichTextChange($event)"
               [storedValues]="storedValues"
               [values]="values"
               [testId]="pregunta.id_pregunta.toString()"

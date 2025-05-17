@@ -267,8 +267,42 @@ export class EstudianteInformeTrimestralComponent
   updateHighlights() {
     this.highlight = {};
     for (const key of Object.keys(this.values)) {
-      this.highlight[key] = this.isDifferent(key);
+      this.highlightRichText[key] = this.isDifferent(key);
     }
+  }
+  highlightRichText: { [key: string]: boolean } = {};
+  isDifferentRichText(key: string): boolean {
+    const rawValue = this.values[key] ?? '';
+    const rawStoredValue = this.storedValues[key] ?? '';
+
+    // Función para normalizar HTML
+    const normalizeHtml = (html: string): string => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      return doc.body.innerHTML.trim();
+    };
+
+    const value = normalizeHtml(rawValue);
+    const storedValue = normalizeHtml(rawStoredValue);
+
+    console.log('Normalized value:', value);
+    console.log('Normalized storedValue:', storedValue);
+
+    return value !== storedValue;
+  }
+  richTextInit(event:{name:string}){
+    console.log('blur inside trimestral', event);
+    const changed = this.isDifferentRichText(event.name);
+    console.log('changed trimestral', changed);
+    this.highlightRichText[event.name] = changed;
+    console.log('blur emmited');
+  }
+  onBlurChange(keyValue: KeyValue){
+    console.log('blur inside trimestral', keyValue);
+    const changed = this.isDifferentRichText(keyValue.key);
+    console.log('changed trimestral', changed);
+    this.highlightRichText[keyValue.key] = changed;
+    console.log('blur emmited');
   }
   onInputChange(keyValue: KeyValue) {
     console.log('on change ', keyValue);

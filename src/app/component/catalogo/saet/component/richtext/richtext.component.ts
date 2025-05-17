@@ -24,8 +24,9 @@ export class RichtextComponent implements OnChanges {
   @Input() value: string = '';
   @Input() testId: string = '';
   @Input() disabled: boolean = false;
-  @Input() isHighlight: boolean = true;
+  @Input() isHighlight: boolean = false;
   @Output() inputChange = new EventEmitter<KeyValue>();
+  @Output() init = new EventEmitter<{ name: string }>();
   @Output() blurChange = new EventEmitter<KeyValue>();
 
   onBlurChange(name: string) {
@@ -61,6 +62,10 @@ export class RichtextComponent implements OnChanges {
       const editorBody = this.editorInstance.root as HTMLElement;
       editorBody.style.backgroundColor = '#fff3cd';
     }
+    setTimeout(() => {
+      this.init.emit({ name: this.name });
+    },4000);
+    // this.init.emit({name: this.name});
   }
 
   preventImagePaste() {

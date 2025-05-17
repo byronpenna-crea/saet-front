@@ -41,7 +41,7 @@ export class SaetQuestionComponent {
   isDifferentRichText(key: string): boolean {
     const rawValue = this.values[key] ?? '';
     const rawStoredValue = this.storedValues[key] ?? '';
-
+    console.log('raw stored ', rawStoredValue);
     // Función para normalizar HTML
     const normalizeHtml = (html: string): string => {
       const parser = new DOMParser();
@@ -51,10 +51,6 @@ export class SaetQuestionComponent {
 
     const value = normalizeHtml(rawValue);
     const storedValue = normalizeHtml(rawStoredValue);
-
-    console.log('Normalized value:', value);
-    console.log('Normalized storedValue:', storedValue);
-
     return value !== storedValue;
   }
   onCheckBoxChange(event: KeyValue[]) {
@@ -76,9 +72,14 @@ export class SaetQuestionComponent {
   onInputChange(event: KeyValue) {
     this.onChange.emit(event);
   }
+  richTextInit(event:{name:string}){
+    console.log('raw ', this.storedValues[event.name]);
+    console.log(`is diferent ${event.name} `,this.isDifferentRichText(event.name));
+    this.highlightRichText[event.name] = this.isDifferentRichText(event.name);
+  }
   onBlurRichTextChange(event: KeyValue) {
     console.log('blur inside', event);
-
+    console.log('raw in blur', this.storedValues[event.key]);
     const changed = this.isDifferentRichText(event.key);
     this.highlightRichText[event.key] = changed;
 

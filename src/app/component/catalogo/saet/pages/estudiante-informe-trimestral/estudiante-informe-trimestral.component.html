@@ -150,10 +150,12 @@
           <app-richtext
             testId="richtext_1"
             name="richtext_1"
-            [isHighlight]="highlight['richtext_1']"
+            (init)="richTextInit($event)"
             [value]="values['richtext_1']"
             (inputChange)="onInputChange($event)"
+            [isHighlight]="highlightRichText['richtext_1']"
             [disabled]="readOnlyForm"
+            (blurChange)="onBlurChange($event)"
           />
         </div>
       </div>
@@ -168,14 +170,13 @@
           <app-richtext
             testId="richtext_2"
             name="richtext_2"
-            [isHighlight]="highlight['richtext_2']"
             [value]="values['richtext_2']"
             (inputChange)="onInputChange($event)"
             [disabled]="readOnlyForm"
+            [isHighlight]="highlightRichText['richtext_2']"
           />
         </div>
       </div>
-
       <app-saet-underlined-title></app-saet-underlined-title>
 <!--      <div class="mt-2 mb-2 parent-rich">-->
 <!--        <span-->

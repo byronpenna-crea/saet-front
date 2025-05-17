@@ -1,3 +1,4 @@
+<div #topAnchor style="height: 1px"></div>
 <app-saet-global-header
   [nie]="nie"
   [nombreCompleto]="studentInfo?.nombreCompleto ?? ''"
@@ -45,13 +46,16 @@
               <app-saet-question
                 (onChange)="onchangeQuestions($event)"
                 [type]="getQuestionType(pregunta.tipoPregunta)"
+                (blurChange)="onRichTextBlurChange($event)"
                 [idPregunta]="pregunta.id_pregunta"
                 [value]="values[pregunta.id_pregunta.toString()]"
+                [storedValues]="storedValues"
                 [values]="values"
                 [testId]="pregunta.id_pregunta.toString()"
                 [name]="getName(pregunta.pregunta)"
                 [options]="getOptions(pregunta.opcion)"
                 (checkboxChange)="onCheckboxChange($event)"
+                (textAreaChange)="onTextAreaChange($event)"
                 [readonly]="formMode === formModeEnum.VIEW"
               />
             </app-tab-item>
@@ -78,7 +82,7 @@
       />
 
       <app-saet-button
-        (onClick)="this.idEvaluacion === 0 ? save(): update()"
+        (onClick)="this.idEvaluacion === 0 ? save() : update()"
         [buttonArgs]="{ text: 'Guardar', buttonStyle: btnStyle.BLUE }"
       />
     </div>
@@ -102,10 +106,10 @@
         <app-saet-button
           (onClick)="generatePDF()"
           [buttonArgs]="{
-              text: 'Generar PDF',
-              buttonIcon: btnIcon.PRINTER,
-              buttonStyle: btnStyle.BLUE
-            }"
+            text: 'Generar PDF',
+            buttonIcon: btnIcon.PRINTER,
+            buttonStyle: btnStyle.BLUE
+          }"
         />
       </div>
     </div>
@@ -139,3 +143,18 @@
     </div>
   </div>
 </div>
+<button
+  class="scroll-up-btn"
+  (click)="scrollToTop()"
+  pButton
+  icon="pi pi-arrow-up"
+  label=""
+></button>
+<button
+  class="scroll-bottom-btn"
+  (click)="scrollToBottom()"
+  pButton
+  icon="pi pi-arrow-down"
+  label=""
+></button>
+<div #bottomAnchor style="height: 1px"></div>

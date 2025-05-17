@@ -19,3 +19,72 @@
     { href: '', text: 'Edición' }
   ]"
 />
+<app-saet-loading [isLoading]="pageLoading" />
+<div class="form-container">
+  <app-saet-mensaje-usuario
+    [show]="userMessage.showMessage"
+    [message]="userMessage.message"
+    [title]="userMessage.titleMessage"
+    [messageType]="userMessage.type"
+  />
+  <app-saet-tab leyend="Plan de atencion individual">
+    <p-tabView>
+      <p-tabPanel header="PAI">
+        <div>
+          <app-tab-item
+            marginTop="3%"
+            label="DAI responsable de reportar Plan de Atención Individual:"
+          >
+            <app-saet-input
+              [disabled]="true"
+              value="especialistaAgendado.nombreCompleto"
+            />
+            <div>
+              <app-tab-item label=""> 050350968 | Docente </app-tab-item>
+            </div>
+          </app-tab-item>
+        </div>
+      </p-tabPanel>
+      <p-tabPanel header="Seguimiento">
+        <div>
+          <app-tab-item
+            marginTop="3%"
+            label="Especialista responsable de agendar xx"
+          >
+          </app-tab-item>
+        </div>
+      </p-tabPanel>
+    </p-tabView>
+  </app-saet-tab>
+  <div style="margin-top: 3%">
+    <app-saet-tab leyend="Plan de atencion individual">
+      <p-tabView>
+        <p-tabPanel header="Ficha de visita al aula">
+          <div>
+            <app-tab-item
+              marginTop="3%"
+              label="DAI responsable de reportar ficha de visita al aula:"
+            >
+              <app-saet-input
+                [disabled]="true"
+                value="especialistaAgendado.nombreCompleto"
+              />
+              <div>
+                <app-tab-item label=""> 050350968 | Docente </app-tab-item>
+              </div>
+            </app-tab-item>
+          </div>
+        </p-tabPanel>
+        <p-tabPanel header="Bitácora de atención">
+          <div>
+            <app-tab-item
+              marginTop="3%"
+              label="Especialista responsable de agendar xx"
+            >
+            </app-tab-item>
+          </div>
+        </p-tabPanel>
+      </p-tabView>
+    </app-saet-tab>
+  </div>
+</div>

@@ -3,6 +3,8 @@
     (inputChange)="onInputChange($event)"
     (blurChange)="onBlurRichTextChange($event)"
     [value]="values['richtext_' + idPregunta.toString()]"
+    [isHighlight]="highlightRichText['richtext_' + idPregunta.toString()]"
+    (init)="richTextInit($event)"
     [disabled]="readonly"
     [name]="'richtext_' + idPregunta.toString()"
   />

@@ -203,7 +203,9 @@ export class EstudianteDaiCaracterizacionComponent
       JSON.stringify(this.values)
     );
   }
-
+  onBlurRichTextChange(keyValue: KeyValue){
+    console.log('blur ----> ',keyValue);
+  }
   onTextAreaChange(keyValue: KeyValue){
     console.log('text area change', keyValue);
     this.values[keyValue.key] = keyValue.value;

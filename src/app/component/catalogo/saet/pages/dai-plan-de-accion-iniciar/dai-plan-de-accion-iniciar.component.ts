@@ -1,4 +1,4 @@
-import { Component, Inject, ViewChild } from '@angular/core';
+import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { DaiBaseComponent } from '../../DaiBaseComponent';
 import {
   IMessageComponent,
@@ -33,7 +33,13 @@ export class DaiPlanDeAccionIniciarComponent
   implements IMessageComponent
 {
   @ViewChild('cd') confirmDialog: any;
+  @ViewChild('bottomAnchor') override bottomAnchor!: ElementRef<HTMLDivElement>;
+  @ViewChild('topAnchor') override topAnchor!: ElementRef<HTMLDivElement>;
+
   values: { [key: string]: string } = {};
+  storedValues: { [key: string]: string } = {};
+  highlightedRich = new Set<string>();
+
   corSurveys: iSurvey[] = [];
   baseUrl = '/menu/dai/plan-accion-iniciar';
 
@@ -431,8 +437,12 @@ export class DaiPlanDeAccionIniciarComponent
             };
             console.log('evaluation @@@@@@@@@@', evaluation);
             console.log('depurados ', this.responseToValues(evaluation));
+            const respuestasDb = this.responseToValues(evaluation);
+            this.storedValues = {
+              ...respuestasDb
+            };
             this.values = {
-              ...this.responseToValues(evaluation),
+              ...respuestasDb,
               ...this.values,
             };
             console.log('values constructo --> ', this.values);
@@ -488,6 +498,8 @@ export class DaiPlanDeAccionIniciarComponent
   }
   onchangeQuestions(keyValue: KeyValue) {
     console.log('onchange ', keyValue);
+    console.log('onchange values ------->', keyValue);
+    console.log('onchange stored values->', keyValue);
     this.values[keyValue.key] = keyValue.value;
     localStorage.setItem(this.valuesKey, JSON.stringify(this.values));
   }
@@ -496,6 +508,45 @@ export class DaiPlanDeAccionIniciarComponent
   }
   getName(name: string): string {
     return this.convertString(name);
+  }
+  isDifferentRichText(key: string): boolean {
+    const rawValue = this.values[key] ?? '';
+    const rawStoredValue = this.storedValues[key] ?? '';
+
+    // Función para normalizar HTML
+    const normalizeHtml = (html: string): string => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      return doc.body.innerHTML.trim();
+    };
+
+    const value = normalizeHtml(rawValue);
+    const storedValue = normalizeHtml(rawStoredValue);
+
+    console.log('Normalized value:', value);
+    console.log('Normalized storedValue:', storedValue);
+
+    return value !== storedValue;
+  }
+  onRichTextBlurChange(keyValue: KeyValue){
+    const isDifferent = this.isDifferentRichText(keyValue.key)
+    console.log('is difent', isDifferent)
+  }
+  onTextAreaChange(keyValue: KeyValue){
+    console.log('text area change', keyValue);
+    this.values[keyValue.key] = keyValue.value;
+    const textareaMatch = keyValue.key.match(/^textarea_(\d+)$/);
+    if (textareaMatch) {
+      const suffix = textareaMatch[1];
+      const inputKey = `input_${suffix}`;
+      if (Object.prototype.hasOwnProperty.call(this.values, inputKey)) {
+        delete this.values[inputKey];
+        console.log(`Removed conflicting input: ${inputKey}`);
+      }
+    }
+
+    console.log('values', this.values);
+    localStorage.setItem(this.valuesKey, JSON.stringify(this.values));
   }
   onCheckboxChange(keyValues: KeyValue[]) {
     const selectedValues = keyValues.map(e => e.value);
