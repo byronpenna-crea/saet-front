@@ -62,9 +62,10 @@
                     <p-dropdown
                       [options]="schools"
                       id="centro-educativo-global"
+                      (onChange)="onCentroEducativoChange($event)"
                       optionLabel="sed_nombre"
                       placeholder="Selecciona"
-                      optionValue="sed_pk"
+                      optionValue="sed_codigo"
                     />
                   </div>
                   <div class="filter-cell">
@@ -72,9 +73,10 @@
                     <p-dropdown
                       [options]="sexs"
                       id="sexo-global"
-                      optionLabel="sex_nombre"
+                      optionLabel="nombre"
+                      (onChange)="onSexChange($event)"
                       placeholder="Selecciona"
-                      optionValue="sex_codigo"
+                      optionValue="codigo"
                     />
                   </div>
                   <div class="filter-cell">
@@ -117,6 +119,7 @@
                       dateFormat="dd/mm/yy"
                       styleClass="periodo-tiempo-input"
                       (onSelect)="onStartDateChange($event)"
+                      [ngModel]="null"
                     >
                     </p-calendar>
                   </div>
@@ -140,25 +143,9 @@
         </div>
         <div class="graphics-container">
           <div class="graphic-container">
-            <h3>Caracterizaciones por departamentos</h3>
+            <h3>Proceso de evaluación psicopedagógica</h3>
             <app-saet-grafica-pastel
-              [single]="[
-                { name: 'Ahuachapán', value: 15 },
-                { name: 'Usulután', value: 13 },
-                { name: 'Sonsonate', value: 8 },
-                { name: 'Cuscatlán', value: 3 },
-
-                { name: 'La Paz', value: 3 },
-                { name: 'La Unión', value: 3 },
-                { name: 'La Libertad', value: 3 },
-                { name: 'San Vicente', value: 3 },
-                { name: 'Morazán', value: 3 },
-                { name: 'San Miguel', value: 3 },
-                { name: 'San Salvador', value: 3 },
-                { name: 'Santa Ana', value: 3 },
-                { name: 'Chalatenango', value: 3 },
-                { name: 'Cabañas', value: 3 }
-              ]"
+              [single]="psicopedagogicoData"
             />
             <div class="radios">
               <div>

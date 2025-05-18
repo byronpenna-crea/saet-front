@@ -6,14 +6,25 @@ import {Departamentos} from "../../models/departamentos";
 import {environment} from "../../environments/environment";
 import {Injectable} from "@angular/core";
 export interface Schools {
-  sed_pk: number,
-  sed_codigo: number,
+  sed_pk: number | null,
+  sed_codigo: number | null,
   sed_nombre: string,
   sed_correo_electronico: string
 }
 export interface PaeiGraficaResultado {
   resultados: PaeiGrafica[];
 }
+export interface ISexoResultado {
+  codigo: number,
+  nombre: string
+}
+export interface IPsicopedagogicoResultado{
+  resultados: {
+    departamento: string,
+    total: number
+  }[]
+}
+
 export interface PaeiGrafica {
   departamento: string;
   total: number;
@@ -32,9 +43,24 @@ export interface IFiltroDatosPaei{
   fechaFin: string | null,
   estadoSocializado: number,
   estadoProceso: number,
+  estadoFinalizado: number,
+  codigoSexo: number | null,
+  codigoCentroEducativo: number | null
+}
+export interface IFiltroDatosPedagogicos{
+  codigosDepartamentoRegion: string[]  | null,
+  fechaInicio: string | null,
+  fechaFin: string | null,
+  estadoAgendado: number,
+  estadoProceso: number,
   estadoFinalizado: number
 }
 export interface IFiltrosDificultad {
+  codigosDepartamentoRegion: string[]  | null,
+  fechaInicio: string | null,
+  fechaFin: string | null
+}
+export interface IFiltrosDatosPsicopedagogicos {
   codigosDepartamentoRegion: string[]  | null,
   fechaInicio: string | null,
   fechaFin: string | null
@@ -73,6 +99,13 @@ export class CatalogoServiceDei extends CatalogoServiceSaet {
   ) {
     super(cookieService);
   }
+  public getPsicoPedagogica(obj:IFiltroDatosPedagogicos):Promise<IPsicopedagogicoResultado>{
+    const url = `${environment.API_SERVER_URL}/dei/datos-psicopedagogicos`;
+    return this.postRequest<IFiltroDatosPedagogicos,IPsicopedagogicoResultado>(
+      url,
+      obj,
+    );
+  }
   public getPAEIByEstado(obj:IFiltroDatosPaei):Promise<PaeiGraficaResultado>{
     //console.log('estado', estado)
     const url = `${environment.API_SERVER_URL}/dei/datos-paei?estadoFinalizado=4`;
@@ -80,25 +113,6 @@ export class CatalogoServiceDei extends CatalogoServiceSaet {
       url,
       obj,
     );
-    // return new Promise((resolve, reject) => {
-    //   fetch(url, {
-    //     method: 'GET',
-    //     headers: {
-    //       'Authorization': `Bearer ${this.cookieService.get('token')}`,
-    //       'Content-Type': 'application/json'
-    //     }
-    //   })
-    //     .then(response => {
-    //       if (response.ok) {
-    //         resolve(response.json());
-    //       } else {
-    //         reject(new Error('No se pudo obtener los datos'));
-    //       }
-    //     })
-    //     .catch(error => {
-    //       reject(new Error('Hubo un error al obtener los datos: ' + error.message));
-    //     });
-    // });
   }
   public getPersonaApoyoByDui(dui:string):Promise<PersonaApoyo>{
     const url = `${environment.API_SERVER_URL}/tempEstudiantesSigesv2/personaApoyoByDui/${dui}`;
@@ -122,38 +136,40 @@ export class CatalogoServiceDei extends CatalogoServiceSaet {
         });
     });
   }
-  public getGraficaDificultad():Promise<{resultados: IGetDificultad[]}> {
+  public getGraficaDificultad(obj:IFiltrosDificultad):Promise<{resultados: IGetDificultad[]}> {
     const url = `${environment.API_SERVER_URL}/dei/datos-dificultad`;
     return this.postRequest<IFiltrosDificultad,{resultados: IGetDificultad[]} >(
       url,
-      {
-        fechaFin: null,
-        codigosDepartamentoRegion: null,
-        fechaInicio: null
-      },
+      obj,
     );
-    // return new Promise((resolve, reject) => {
-    //   fetch(url, {
-    //     method: 'POST',
-    //     headers: {
-    //       'Authorization': `Bearer ${this.cookieService.get('token')}`,
-    //       'Content-Type': 'application/json'
-    //     }
-    //   })
-    //     .then(response => {
-    //       if (response.ok) {
-    //         resolve(response.json());
-    //       } else {
-    //         reject(new Error('No se pudo obtener los datos'));
-    //       }
-    //     })
-    //     .catch(error => {
-    //       reject(new Error('Hubo un error al obtener los datos: ' + error.message));
-    //     });
-    // });
+  }
+  public getDatosPsicopedagogicos(){
+
   }
   public getDaiCount():Promise<number> {
     const url = `${environment.API_SERVER_URL}/tempEstudiantesSigesv2/dai/count`;
+    return new Promise((resolve, reject) => {
+      fetch(url, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${this.cookieService.get('token')}`,
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => {
+          if (response.ok) {
+            resolve(response.json());
+          } else {
+            reject(new Error('No se pudo obtener los datos'));
+          }
+        })
+        .catch(error => {
+          reject(new Error('Hubo un error al obtener los datos: ' + error.message));
+        });
+    });
+  }
+  public getSexo():Promise<ISexoResultado[]>{
+    const url = `${environment.API_SERVER_URL}/dei/sexos`;
     return new Promise((resolve, reject) => {
       fetch(url, {
         method: 'GET',

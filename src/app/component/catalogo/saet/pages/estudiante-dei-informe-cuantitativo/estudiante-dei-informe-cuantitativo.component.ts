@@ -17,13 +17,14 @@ import {
   catalgoZona,
   catalogoDepartamento,
   catalogoSexo,
-  EnumDepartamentos,
-  Sexo,
+  EnumDepartamentos, ISexo,
   Zona,
 } from '../../shared/dei';
 import { linearMockData, LinearMockDataType } from './mock/linear-data';
 import { IconComponent } from '../../shared/component.config';
-
+interface iFrontEndGrafica {
+  name: string, value: number
+}
 @Component({
   selector: 'app-estudiante-dei-informe-cuantitativo',
   templateUrl: './estudiante-dei-informe-cuantitativo.component.html',
@@ -42,24 +43,27 @@ export class EstudianteDeiInformeCuantitativoComponent
   @ViewChild('topAnchor') override topAnchor!: ElementRef<HTMLDivElement>;
 
   estadoPaeiSeleccionado = '';
-  startDate:Date| null = null;
-  endDate:Date| null = null;
-  formatDate(event:Date){
+  startDate: Date | null = null;
+  endDate: Date | null = null;
+  selectedSex: number | null = null;
+  selectedSed: number | null = null;
+  formatDate(event: Date) {
     const day = String(event.getDate()).padStart(2, '0');
     const month = String(event.getMonth() + 1).padStart(2, '0');
     const year = event.getFullYear();
     return `${year}-${month}-${day}`;
   }
-  async onStartDateChange(event:Date){
+  async onStartDateChange(event: Date) {
     this.startDate = event;
 
-    if(this.startDate != null && this.endDate != null){
+    if (this.startDate != null && this.endDate != null) {
       await this.refreshGraphics();
     }
   }
-  async onEndDateChange(event:Date){
+  async onEndDateChange(event: Date) {
+    console.log('end date', event);
     this.endDate = event;
-    if(this.startDate != null && this.endDate != null){
+    if (this.startDate != null && this.endDate != null) {
       await this.refreshGraphics();
     }
   }
@@ -80,7 +84,8 @@ export class EstudianteDeiInformeCuantitativoComponent
     });
   }
   getFilteredDataByDep(departamentoKey: keyof typeof EnumDepartamentos) {}
-  paeiData: { name: string, value: number }[] = [];
+  paeiData: { name: string; value: number }[] = [];
+  psicopedagogicoData: { name: string; value: number }[] = [];
   async onEstadoPAEIChange(estado: number) {
     try {
       this.estadoPaeiSeleccionado = estado.toString();
@@ -89,9 +94,11 @@ export class EstudianteDeiInformeCuantitativoComponent
         fechaFin: null,
         codigosDepartamentoRegion: null,
         fechaInicio: null,
-        estadoSocializado: 1,
+        codigoSexo: this.selectedSex,
+        estadoSocializado: estado === 1 ? 1 : 0,
         estadoProceso: 2,
-        estadoFinalizado: 3
+        estadoFinalizado: 3,
+        codigoCentroEducativo: this.selectedSed,
       });
       console.log('estado paei ---> ', data);
       this.paeiData = data.resultados.map((item: PaeiGrafica) => ({
@@ -108,6 +115,18 @@ export class EstudianteDeiInformeCuantitativoComponent
     casos: undefined as EnumDepartamentos | undefined,
     evaluaciones: undefined as EnumDepartamentos | undefined,
   };
+  async onCentroEducativoChange(event: { value: number }) {
+    if(event.value !== this.selectedSed){
+      this.selectedSed = event.value;
+      await this.refreshGraphics();
+    }
+  }
+  async onSexChange(event: { value: number }) {
+    if (event.value !== this.selectedSex) {
+      this.selectedSex = event.value;
+      await this.refreshGraphics();
+    }
+  }
   onGlobalDepartmentChange(event: { value: EnumDepartamentos }) {
     const index: EnumDepartamentos = event.value;
     this.selectedGraphics['alcance'] = index;
@@ -134,39 +153,78 @@ export class EstudianteDeiInformeCuantitativoComponent
   }
 
   cities: Departamentos[] = catalogoDepartamento;
-  sexs: Sexo[] = catalogoSexo;
+  sexs: ISexo[] = catalogoSexo;
   zones: Zona[] = catalgoZona;
   schools: Schools[] = [];
   dificultadesGrafica: {
-    name: string,
-    value: number
+    name: string;
+    value: number;
   }[] = [];
   departamentos = catalogoDepartamento;
   corCount = 0;
   daiCount = 0;
   async refreshGraphics() {
-    let startDate:string | null = null;
-    let endDate:string | null = null;
+    let startDate: string | null = null;
+    let endDate: string | null = null;
 
-    if(this.startDate != null && this.endDate != null){
+    if (this.startDate != null && this.endDate != null) {
       startDate = this.formatDate(this.startDate);
       endDate = this.formatDate(this.endDate);
     }
 
-    this.deiService.getPAEIByEstado({
-      fechaFin: endDate,
-      fechaInicio: startDate,
-      codigosDepartamentoRegion: null,
-      estadoSocializado: 1,
-      estadoProceso: 2,
-      estadoFinalizado: 3
-    }).then((data) => {
-      console.log('estado paei ---> ', data);
-      this.paeiData = data.resultados.map((item: PaeiGrafica) => ({
-        name: item.departamento,
-        value: item.total,
-      }));
-    });
+    this.deiService
+      .getPAEIByEstado({
+        fechaFin: endDate,
+        fechaInicio: startDate,
+        codigoSexo: this.selectedSex,
+        codigosDepartamentoRegion: null,
+        estadoSocializado: 1,
+        estadoProceso: 2,
+        estadoFinalizado: 3,
+        codigoCentroEducativo: this.selectedSed,
+      })
+      .then(data => {
+        console.log('estado paei ---> ', data);
+        this.paeiData = data.resultados.map((item: PaeiGrafica) => ({
+          name: item.departamento,
+          value: item.total,
+        }));
+      });
+
+    this.deiService
+      .getPsicoPedagogica({
+        fechaFin: endDate,
+        fechaInicio: startDate,
+        codigosDepartamentoRegion: null,
+        estadoAgendado: 1,
+        estadoProceso: 2,
+        estadoFinalizado: 3,
+      })
+      .then(data => {
+        console.log('psicopedagogico ----', data);
+        this.psicopedagogicoData = data.resultados.map(psicopedagogico => {
+          return {
+            name: psicopedagogico.departamento,
+            value: psicopedagogico.total,
+          } as iFrontEndGrafica;
+        });
+      });
+    this.deiService
+      .getGraficaDificultad({
+        fechaFin: endDate,
+        fechaInicio: startDate,
+        codigosDepartamentoRegion: null,
+      })
+      .then(data => {
+        console.log('data is --> ', data);
+        this.dificultadesGrafica = data.resultados.map(dificultad => {
+          return {
+            name: dificultad.dificultad,
+            value: dificultad.total,
+          };
+        });
+        console.log(this.dificultadesGrafica);
+      });
   }
   constructor(
     private deiService: CatalogoServiceDei,
@@ -184,11 +242,33 @@ export class EstudianteDeiInformeCuantitativoComponent
         //this.toggleTable();
       }
     });
-
-    deiService.getAllSchools().then(x => {
-      this.schools = x;
+    deiService.getSexo().then(x => {
+      this.sexs = [
+        {
+          codigo: null,
+          nombre: 'Todos',
+        },
+        ...x.map(sexo => {
+          return {
+            nombre: sexo.nombre,
+            codigo: sexo.codigo,
+          } as ISexo;
+        }),
+      ];
+    });
+    deiService.getAllSchools().then(schools => {
+      this.schools = [
+        {
+          sed_pk: null,
+          sed_nombre: 'Todos',
+          sed_codigo: null,
+          sed_correo_electronico: '',
+        },
+        ...schools,
+      ];
       console.log('schools here', this.schools);
     });
+
     deiService.getCorCount().then(x => {
       this.corCount = x;
     });
@@ -196,16 +276,6 @@ export class EstudianteDeiInformeCuantitativoComponent
       this.daiCount = x;
     });
     this.refreshGraphics().then();
-    deiService.getGraficaDificultad().then(data => {
-      console.log('data is --> ', data);
-      this.dificultadesGrafica = data.resultados.map((dificultad) => {
-        return {
-          name: dificultad.dificultad,
-          value: dificultad.total
-        }
-      });
-      console.log(this.dificultadesGrafica);
-    });
     this.pageLoading = false;
   }
 

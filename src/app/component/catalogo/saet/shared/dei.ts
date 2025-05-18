@@ -18,9 +18,9 @@ export interface Departamento {
   codigo_departamento: string;
   nombre_departamento: string;
 }
-export interface Sexo {
-  sex_codigo: string;
-  sex_nombre: string;
+export interface ISexo {
+  codigo: number | null;
+  nombre: string;
 }
 export interface Zona {
   zone_codigo: string;
@@ -40,20 +40,7 @@ export const catalgoZona: Zona[] = [
     zone_nombre: 'occidental',
   },
 ];
-export const catalogoSexo: Sexo[] = [
-  {
-    sex_codigo: '0',
-    sex_nombre: 'Desconocido',
-  },
-  {
-    sex_codigo: '1',
-    sex_nombre: 'Hombre',
-  },
-  {
-    sex_codigo: '2',
-    sex_nombre: 'Mujer',
-  },
-];
+export const catalogoSexo: ISexo[] = [];
 export const catalogoDepartamento: Departamento[] = [
   {
     codigo_departamento: EnumDepartamentos.AHUACHAPAN.toString(),
