@@ -7,7 +7,7 @@ import { DOCUMENT } from '@angular/common';
 import { ThemeService } from '../../../../../services/ThemeService';
 import { CatalogoServiceDai } from '../../../../../services/catalogo/catalogo.service.dai';
 import {
-  CatalogoServiceDei, PaeiGrafica,
+  CatalogoServiceDei, IDepartamentoResultado, PaeiGrafica,
   Schools,
 } from '../../../../../services/catalogo/catalogo.service.dei';
 
@@ -17,7 +17,7 @@ import {
   catalgoZona,
   catalogoDepartamento,
   catalogoSexo,
-  EnumDepartamentos, ISexo,
+  EnumDepartamentos, IPeriodSearch,  ISexo,
   Zona,
 } from '../../shared/dei';
 import { linearMockData, LinearMockDataType } from './mock/linear-data';
@@ -47,6 +47,8 @@ export class EstudianteDeiInformeCuantitativoComponent
   endDate: Date | null = null;
   selectedSex: number | null = null;
   selectedSed: number | null = null;
+  selectedState: string[] | null = null;
+  selectedPeriod = 1;
   formatDate(event: Date) {
     const day = String(event.getDate()).padStart(2, '0');
     const month = String(event.getMonth() + 1).padStart(2, '0');
@@ -127,13 +129,13 @@ export class EstudianteDeiInformeCuantitativoComponent
       await this.refreshGraphics();
     }
   }
-  onGlobalDepartmentChange(event: { value: EnumDepartamentos }) {
-    const index: EnumDepartamentos = event.value;
-    this.selectedGraphics['alcance'] = index;
-    this.selectedGraphics.casos = index;
-    this.selectedGraphics.evaluaciones = index;
-    this.onCasesChange({ value: index });
-    console.log('selected graphics ----', this.selectedGraphics);
+  async onGlobalDepartmentChange(event: { value: string }) {
+    if(this.selectedState === null || (this.selectedState && event.value !== this.selectedState[0] )){
+      console.log('event value', event.value);
+      this.selectedState = event.value === null ? event.value : [event.value];
+      await this.refreshGraphics();
+      console.log('selected graphics ----', this.selectedGraphics);
+    }
   }
   onCasesChange(event: { value: EnumDepartamentos }) {
     const index: EnumDepartamentos = event.value;
@@ -153,6 +155,21 @@ export class EstudianteDeiInformeCuantitativoComponent
   }
 
   cities: Departamentos[] = catalogoDepartamento;
+  periodSearch: IPeriodSearch[] = [
+    {
+      code: 1,
+      name: 'Año'
+    },
+    {
+      code: 2,
+      name: 'Trimestre'
+    },
+    {
+
+      code: 3,
+      name: 'Mes'
+    }
+  ]
   sexs: ISexo[] = catalogoSexo;
   zones: Zona[] = catalgoZona;
   schools: Schools[] = [];
@@ -160,7 +177,7 @@ export class EstudianteDeiInformeCuantitativoComponent
     name: string;
     value: number;
   }[] = [];
-  departamentos = catalogoDepartamento;
+  departamentos:IDepartamentoResultado[] = [];
   corCount = 0;
   daiCount = 0;
   async refreshGraphics() {
@@ -177,11 +194,12 @@ export class EstudianteDeiInformeCuantitativoComponent
         fechaFin: endDate,
         fechaInicio: startDate,
         codigoSexo: this.selectedSex,
-        codigosDepartamentoRegion: null,
+        codigosDepartamentoRegion: this.selectedState,
         estadoSocializado: 1,
         estadoProceso: 2,
         estadoFinalizado: 3,
         codigoCentroEducativo: this.selectedSed,
+
       })
       .then(data => {
         console.log('estado paei ---> ', data);
@@ -199,6 +217,8 @@ export class EstudianteDeiInformeCuantitativoComponent
         estadoAgendado: 1,
         estadoProceso: 2,
         estadoFinalizado: 3,
+        codigoCentroEducativo: this.selectedSed,
+        codigoSexo: this.selectedSex
       })
       .then(data => {
         console.log('psicopedagogico ----', data);
@@ -255,6 +275,12 @@ export class EstudianteDeiInformeCuantitativoComponent
           } as ISexo;
         }),
       ];
+    });
+    deiService.getDepartamentos().then(x => {
+      this.departamentos = [
+        {codigo: null, nombre: 'Todos',nombreBusqueda: 'Todos', habilitado: true,id: 1},
+        ...x
+      ]
     });
     deiService.getAllSchools().then(schools => {
       this.schools = [

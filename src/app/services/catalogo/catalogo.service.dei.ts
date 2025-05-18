@@ -14,6 +14,13 @@ export interface Schools {
 export interface PaeiGraficaResultado {
   resultados: PaeiGrafica[];
 }
+export interface IDepartamentoResultado {
+  id: number,
+  nombre: string,
+  nombreBusqueda: string,
+  codigo: string | null,
+  habilitado: boolean
+}
 export interface ISexoResultado {
   codigo: number,
   nombre: string
@@ -53,7 +60,9 @@ export interface IFiltroDatosPedagogicos{
   fechaFin: string | null,
   estadoAgendado: number,
   estadoProceso: number,
-  estadoFinalizado: number
+  estadoFinalizado: number,
+  codigoSexo: number | null,
+  codigoCentroEducativo: number | null,
 }
 export interface IFiltrosDificultad {
   codigosDepartamentoRegion: string[]  | null,
@@ -148,6 +157,28 @@ export class CatalogoServiceDei extends CatalogoServiceSaet {
   }
   public getDaiCount():Promise<number> {
     const url = `${environment.API_SERVER_URL}/tempEstudiantesSigesv2/dai/count`;
+    return new Promise((resolve, reject) => {
+      fetch(url, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${this.cookieService.get('token')}`,
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => {
+          if (response.ok) {
+            resolve(response.json());
+          } else {
+            reject(new Error('No se pudo obtener los datos'));
+          }
+        })
+        .catch(error => {
+          reject(new Error('Hubo un error al obtener los datos: ' + error.message));
+        });
+    });
+  }
+  public getDepartamentos():Promise<IDepartamentoResultado[]>{
+    const url = `${environment.API_SERVER_URL}/departamentos`;
     return new Promise((resolve, reject) => {
       fetch(url, {
         method: 'GET',

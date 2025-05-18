@@ -82,12 +82,12 @@
                   <div class="filter-cell">
                     <label>Departamento</label>
                     <p-dropdown
-                      [options]="cities"
+                      [options]="departamentos"
                       id="departamento-global"
                       (onChange)="onGlobalDepartmentChange($event)"
-                      optionLabel="nombre_departamento"
+                      optionLabel="nombre"
                       placeholder="Selecciona departamento"
-                      optionValue="codigo_departamento"
+                      optionValue="codigo"
                     />
                   </div>
                   <div class="filter-cell">
@@ -248,12 +248,12 @@
             <div style="display: flex; flex-direction: column; gap: 5px">
               <div class="flex-center filter-input" style="">
                 <div class="filter-cell">
-                  <div class="filter-label">Departamentos</div>
+                  <div class="filter-label">DepartamentosX</div>
                   <p-dropdown
-                    [options]="cities"
-                    optionLabel="nombre_departamento"
+                    [options]="departamentos"
+                    optionLabel="nombre"
                     placeholder="Selecciona departamento"
-                    optionValue="nombre_departamento"
+                    optionValue="codigo"
                   />
                 </div>
               </div>
@@ -270,7 +270,7 @@
         </div>
         <div class="graphics-container">
           <div class="graphic-container">
-            <h3>Concentracion de la demanda del servicio</h3>
+            <h3>Estudiantes evaluados</h3>
             <app-saet-grafica-linear
               [view]="[1024, 300]"
               [multi]="filteredCasosAbordadosData"
@@ -286,6 +286,26 @@
                   placeholder="Selecciona departamento"
                   optionValue="codigo_departamento"
                   [ngModel]="selectedGraphics.casos"
+                />
+                <div class="filter-label">Periodo de tiempo</div>
+                <p-dropdown
+                  [options]="cities"
+                  id="periodo-tiempo"
+                  (onChange)="onCasesChange($event)"
+                  optionLabel="nombre_departamento"
+                  placeholder="Selecciona departamento"
+                  optionValue="codigo_departamento"
+                  [ngModel]="selectedGraphics.casos"
+                />
+                <div class="filter-label">Periodo de tiempo</div>
+                <p-dropdown
+                  [options]="periodSearch"
+                  id="tipo"
+                  (onChange)="onCasesChange($event)"
+                  optionLabel="name"
+                  placeholder="Tipo"
+                  optionValue="code"
+                  [ngModel]="selectedPeriod"
                 />
               </div>
             </div>

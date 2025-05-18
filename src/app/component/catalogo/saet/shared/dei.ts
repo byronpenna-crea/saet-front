@@ -18,6 +18,10 @@ export interface Departamento {
   codigo_departamento: string;
   nombre_departamento: string;
 }
+export interface IPeriodSearch {
+  code: number;
+  name:string;
+}
 export interface ISexo {
   codigo: number | null;
   nombre: string;
