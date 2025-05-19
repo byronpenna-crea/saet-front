@@ -14,6 +14,7 @@ import { TabInput } from '../estudiante-evaluaciones/estudiante-evaluaciones.com
 import { ButtonStyle } from '../../component/saet-button/saet-button.component';
 import { IconComponent } from '../../shared/component.config';
 import { IAgendaEspecialista } from '../../component/saet-tab-agenda/saet-tab-agenda.component';
+import { KeyValue } from '../../component/saet-input/saet-input.component';
 
 @Component({
   selector: 'app-dai-plan-de-accion',
@@ -55,53 +56,88 @@ export class DaiPlanDeAccionComponent
       especialidad: '',
     };
     console.log('obtener especialista');
+    this.catalogoServiceDai
+      .getPlanAccionPerNIE(this.nie)
+      .then(resp => {
+        this.planAccionId = resp.plan_accion_pk;
+        console.log('resp', resp);
+      }).catch((e) => {
+        console.log('e', e);
+      });
+
     this.pageLoading = false;
   }
-
+  planAccionId: number | null = null;
   protected readonly SAET_MODULE = SAET_MODULE;
   async saveReferencia() {
     try {
+      this.pageLoading = true;
       const idPersona = localStorage.getItem('id_persona');
-      if(idPersona === null){
+      if (idPersona === null) {
         this.userMessage.type = MessageType.WARNING;
-        this.userMessage.message = "Especialista no fue cargado adecuadamente";
+        this.userMessage.message = 'Especialista no fue cargado adecuadamente';
         this.userMessage.showMessage = true;
         return;
       }
-      if(
-        this.referenciaForm.referenciaExterna === ''
-        || this.referenciaForm.motivoReferencia === ''
-        || this.referenciaForm.personalEjecucion === ''
-        || this.referenciaForm.servicioApoyo === ''
-      ){
+      console.log('start');
+      console.log(this.referenciaForm.referenciaExterna);
+      console.log(this.referenciaForm.motivoReferencia);
+      console.log(this.referenciaForm.personalEjecucion);
+      console.log(this.referenciaForm.servicioApoyo);
+      if (
+        this.referenciaForm.referenciaExterna === '' ||
+        this.referenciaForm.motivoReferencia === '' ||
+        this.referenciaForm.personalEjecucion === '' ||
+        this.referenciaForm.servicioApoyo === ''
+      ) {
         this.userMessage.type = MessageType.WARNING;
-        this.userMessage.message = "Todos los campos son requeridos";
+        this.userMessage.message = 'Todos los campos son requeridos';
         this.userMessage.showMessage = true;
         return;
       }
 
       const objToSave: ISaveReferencia = {
-        departamento: '',
+        departamento: this.referenciaForm.departamento,
         nie: parseFloat(this.nie),
         motivo: this.referenciaForm.motivoReferencia,
         id_docente_apoyo: parseFloat(idPersona),
         referencia_externa: this.referenciaForm.referenciaExterna,
         personal_ejecucion: this.referenciaForm.personalEjecucion,
-        servicio_apoyo: this.referenciaForm.servicioApoyo
-      }
+        servicio_apoyo: this.referenciaForm.servicioApoyo,
+      };
       console.log('obj to save', objToSave);
-      return;
-      const resp = this.catalogoServiceDai.saveReferencia(objToSave);
+      const resp = await this.catalogoServiceDai.saveReferencia(objToSave);
+      console.log('resp', resp);
+      await this.loadTabReferencia();
       this.userMessage.type = MessageType.WARNING;
-      this.userMessage.message = "¡Se ha enviado un correo electrónico a los demás responsables COR!";
+      this.userMessage.message =
+        '¡Se ha enviado un correo electrónico a los demás responsables COR!';
+      this.userMessage.titleMessage = "Guardado exitosamente";
       this.userMessage.showMessage = true;
-    }catch (e){
+
+    } catch (e) {
       this.userMessage.type = MessageType.DANGER;
-      this.userMessage.message = "Error";
+      this.userMessage.message = 'Error';
       this.userMessage.showMessage = true;
     }
-
-
+    this.pageLoading = false;
+  }
+  async onMotivoReferenciaChange(event: KeyValue) {
+    console.log('motivo referencia change ', event);
+    this.referenciaForm.motivoReferencia = event.value;
+  }
+  async onDepartamentoChange(event: { value:string }) {
+    this.referenciaForm.departamento = event.value
+    console.log('event', event);
+  }
+  async onReferenciaExternaChange(event: KeyValue) {
+    this.referenciaForm.referenciaExterna = event.value;
+  }
+  async onPersonalEjecucionChange(event: KeyValue) {
+    this.referenciaForm.personalEjecucion = event.value;
+  }
+  async onServicioApoyoChange(event: KeyValue) {
+    this.referenciaForm.servicioApoyo = event.value;
   }
   async onTabChange(event: { index: number }) {
     console.log('event -->', event);
@@ -128,7 +164,7 @@ export class DaiPlanDeAccionComponent
     servicioApoyo: '',
     referenciaExterna: '',
     motivoReferencia: '',
-    departamento: 'Centro de Orientación y Recursos (COR)'
+    departamento: 'Centro de Orientación y Recursos (COR)',
   };
   readonlyForm = false;
   async loadTabReferencia() {

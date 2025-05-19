@@ -357,13 +357,8 @@ export class DaiPlanDeAccionIniciarComponent
   }
   async salir() {
     this.userMessage.showMessage = false;
-    // this.confirmationService.confirm({
-    //   message:
-    //     'Al darle click en <b>Salir de edición sin guardar</b> perderá todo el progreso de edición realizado.',
-    //   icon: 'pi pi-exclamation-triangle',
-    // });
     await this.router.navigate([
-      'dai/saet-plan-accion/',
+      'menu/dai/saet-plan-accion',
       this.nie,
     ]);
   }

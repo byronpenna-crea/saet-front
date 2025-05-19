@@ -17,7 +17,7 @@
       href: '#/menu/dai/saet-plan-accion/' + nie,
       text: 'Plan de accion'
     },
-    { href: '', text: 'Edición' }
+    { href: '', text: 'Acciones y referencias' }
   ]"
 />
 <app-saet-loading [isLoading]="pageLoading" />
@@ -75,16 +75,18 @@
               <app-saet-button
                 (onClick)="iniciar()"
                 [buttonArgs]="{
-                  buttonIcon: buttonIcon.PLUS,
+                  buttonIcon:
+                    planAccionId === null ? buttonIcon.PLUS : buttonIcon.EYE,
                   buttonStyle: buttonStyle.BLUE,
-                  text: 'Reportar acciones'
+                  text:
+                    planAccionId === null ? 'Reportar acciones' : 'Ver Acciones'
                 }"
               />
             </div>
           </div>
         </div>
       </p-tabPanel>
-      <p-tabPanel header="Realizar referenciaxxx">
+      <p-tabPanel header="Realizar referencia">
         <app-saet-mensaje-usuario
           [show]="userMessage.showMessage"
           [message]="userMessage.message"
@@ -106,7 +108,9 @@
             optionValue="code"
             class="w-full"
             style="width: 100%"
+            [ngModel]="referenciaForm.departamento"
             [disabled]="readonlyForm"
+            (onChange)="onDepartamentoChange($event)"
           />
         </app-tab-item>
         <app-tab-item label="Servicio de apoyo:">
@@ -114,6 +118,7 @@
             [value]="referenciaForm.servicioApoyo"
             testId="txt-servicio-apoyo"
             [disabled]="readonlyForm"
+            (inputChange)="onServicioApoyoChange($event)"
           />
         </app-tab-item>
 
@@ -122,6 +127,7 @@
             [value]="referenciaForm.personalEjecucion"
             testId="txt-personal-ejecucion"
             [disabled]="readonlyForm"
+            (inputChange)="onPersonalEjecucionChange($event)"
           />
         </app-tab-item>
 
@@ -130,6 +136,7 @@
             [value]="referenciaForm.referenciaExterna"
             testId="input-referencia"
             [disabled]="readonlyForm"
+            (inputChange)="onReferenciaExternaChange($event)"
           />
         </app-tab-item>
 
@@ -137,6 +144,7 @@
           <app-saet-text-area
             testId="textarea"
             [value]="referenciaForm.motivoReferencia"
+            (inputChange)="onMotivoReferenciaChange($event)"
             [disabled]="readonlyForm"
           />
         </app-tab-item>
