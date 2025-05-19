@@ -254,6 +254,7 @@
                     optionLabel="nombre"
                     placeholder="Selecciona departamento"
                     optionValue="codigo"
+
                   />
                 </div>
               </div>
@@ -279,39 +280,39 @@
               <div class="filter-cell">
                 <div class="filter-label">Departamentos</div>
                 <p-dropdown
-                  [options]="cities"
+                  [options]="departamentos"
                   id="casos-abordados"
-                  (onChange)="onCasesChange($event)"
-                  optionLabel="nombre_departamento"
+                  optionLabel="nombre"
                   placeholder="Selecciona departamento"
-                  optionValue="codigo_departamento"
-                  [ngModel]="selectedGraphics.casos"
+                  optionValue="codigo"
+                  (onChange)="onEvaluadosDepartmentChange($event)"
+                  [ngModel]="selectedStateEvaluados !== null ? selectedStateEvaluados[0] : null"
                 />
-                <div class="filter-label">Periodo de tiempo</div>
-                <p-dropdown
-                  [options]="cities"
-                  id="periodo-tiempo"
-                  (onChange)="onCasesChange($event)"
-                  optionLabel="nombre_departamento"
-                  placeholder="Selecciona departamento"
-                  optionValue="codigo_departamento"
-                  [ngModel]="selectedGraphics.casos"
-                />
+<!--                <div class="filter-label">Periodo de tiempo</div>-->
+<!--                <p-dropdown-->
+<!--                  [options]="cities"-->
+<!--                  id="periodo-tiempo"-->
+<!--                  optionLabel="nombre"-->
+<!--                  placeholder="Selecciona departamento"-->
+<!--                  optionValue="codigo"-->
+<!--                  [ngModel]="selectedGraphics.casos"-->
+<!--                />-->
                 <div class="filter-label">Periodo de tiempo</div>
                 <p-dropdown
                   [options]="periodSearch"
                   id="tipo"
-                  (onChange)="onCasesChange($event)"
                   optionLabel="name"
                   placeholder="Tipo"
                   optionValue="code"
-                  [ngModel]="selectedPeriod"
+                  [ngModel]="selectedPeriodType"
+                  (onChange)="onPeriodChange($event)"
                 />
+
               </div>
             </div>
           </div>
         </div>
-        <div>
+        <div style="margin-top: 60px;">
           <app-saet-button
             testId="btn-regresar"
             [customClasses]="'return-button'"

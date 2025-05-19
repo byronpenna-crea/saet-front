@@ -1,3 +1,4 @@
+<div #topAnchor style="height: 1px"></div>
 <app-saet-global-header
   [nie]="nie"
   [nombreCompleto]="studentInfo?.nombreCompleto ?? ''"
@@ -37,6 +38,7 @@
               (onChange)="onchangeQuestions($event)"
               [type]="getQuestionType(pregunta.tipoPregunta)"
               [idPregunta]="pregunta.id_pregunta"
+              [storedValues]="storedValues"
               [value]="values[pregunta.id_pregunta.toString()]"
               [values]="values"
               [testId]="pregunta.id_pregunta.toString()"
@@ -70,13 +72,22 @@
     <div *ngIf="formMode === formModeEnum.EDIT" class="actionsButton">
       <app-saet-button
         (onClick)="salirEditMode()"
-        [buttonArgs]="{ text: 'Salir', buttonStyle: 1, buttonIcon: 6 }"
+        [buttonArgs]="{ text: 'Salir', buttonStyle: btnStyle.BLUE, buttonIcon: btnIcon.CLOSE }"
       />
-
-      <app-saet-button
-        (onClick)="save()"
-        [buttonArgs]="{ text: 'Actualizar registro', buttonStyle: 1 }"
-      />
+      <div class="right-buttons">
+        <app-saet-button
+          (onClick)="save()"
+          [buttonArgs]="{ text: 'Actualizar registro', buttonStyle: 1 }"
+        />
+        <app-saet-button
+          (onClick)="generarPDF()"
+          [buttonArgs]="{
+            text: 'Generar PDF',
+            buttonIcon: btnIcon.PRINTER,
+            buttonStyle: btnStyle.BLUE
+          }"
+        />
+      </div>
     </div>
     <div *ngIf="formMode === formModeEnum.VIEW" class="actionsButton">
       <app-saet-button
@@ -100,3 +111,18 @@
     </div>
   </div>
 </div>
+<button
+  class="scroll-up-btn"
+  (click)="scrollToTop()"
+  pButton
+  icon="pi pi-arrow-up"
+  label=""
+></button>
+<button
+  class="scroll-bottom-btn"
+  (click)="scrollToBottom()"
+  pButton
+  icon="pi pi-arrow-down"
+  label=""
+></button>
+<div #bottomAnchor style="height: 1px"></div>

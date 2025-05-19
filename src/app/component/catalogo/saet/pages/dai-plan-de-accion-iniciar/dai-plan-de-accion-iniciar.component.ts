@@ -355,13 +355,17 @@ export class DaiPlanDeAccionIniciarComponent
       respuestas: this.getAnswerObject(this.values),
     };
   }
-  salir() {
+  async salir() {
     this.userMessage.showMessage = false;
-    this.confirmationService.confirm({
-      message:
-        'Al darle click en <b>Salir de edición sin guardar</b> perderá todo el progreso de edición realizado.',
-      icon: 'pi pi-exclamation-triangle',
-    });
+    // this.confirmationService.confirm({
+    //   message:
+    //     'Al darle click en <b>Salir de edición sin guardar</b> perderá todo el progreso de edición realizado.',
+    //   icon: 'pi pi-exclamation-triangle',
+    // });
+    await this.router.navigate([
+      'dai/saet-plan-accion/',
+      this.nie,
+    ]);
   }
   acceptConfirmDialog() {
     this.confirmationService.close();

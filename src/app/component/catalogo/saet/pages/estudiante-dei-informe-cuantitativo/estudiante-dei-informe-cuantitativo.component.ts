@@ -22,6 +22,7 @@ import {
 } from '../../shared/dei';
 import { linearMockData, LinearMockDataType } from './mock/linear-data';
 import { IconComponent } from '../../shared/component.config';
+import { Multi, Series } from '../../component/saet-grafica-linear/saet-grafica-linear.component';
 interface iFrontEndGrafica {
   name: string, value: number
 }
@@ -37,8 +38,8 @@ export class EstudianteDeiInformeCuantitativoComponent
   style = ButtonStyle;
   direction = Direction;
   linearGraphicData = linearMockData;
-  filteredCasosAbordadosData = this.getFilteredData(this.linearGraphicData);
-
+  // filteredCasosAbordadosData = this.getFilteredData(this.linearGraphicData);
+  filteredCasosAbordadosData:Multi[] = [];
   @ViewChild('bottomAnchor') override bottomAnchor!: ElementRef<HTMLDivElement>;
   @ViewChild('topAnchor') override topAnchor!: ElementRef<HTMLDivElement>;
 
@@ -48,7 +49,8 @@ export class EstudianteDeiInformeCuantitativoComponent
   selectedSex: number | null = null;
   selectedSed: number | null = null;
   selectedState: string[] | null = null;
-  selectedPeriod = 1;
+  selectedStateEvaluados: string[] | null = null;
+  selectedPeriodType = 1; // by year
   formatDate(event: Date) {
     const day = String(event.getDate()).padStart(2, '0');
     const month = String(event.getMonth() + 1).padStart(2, '0');
@@ -129,30 +131,53 @@ export class EstudianteDeiInformeCuantitativoComponent
       await this.refreshGraphics();
     }
   }
+  async onPeriodChange(event: { value: string }){
+    let selectedPeriodType = 1;
+    try {
+      selectedPeriodType = parseInt(event.value);
+    }catch (e){
+      console.log('Error casting', e);
+    }
+
+    if( (selectedPeriodType !== this.selectedPeriodType )) {
+      this.selectedPeriodType = selectedPeriodType;
+
+      await this.refreshGraphics();
+    }
+  }
+  async onEvaluadosDepartmentChange(event: { value: string }) {
+    console.log('------- event --------', event);
+    if(this.selectedStateEvaluados === null || (this.selectedStateEvaluados && event.value !== this.selectedStateEvaluados[0] )) {
+      this.selectedStateEvaluados = event.value === null ? event.value : [event.value];
+      console.log('------- selectedStateEvaluados --------', this.selectedStateEvaluados);
+      await this.refreshGraphics();
+    }
+  }
   async onGlobalDepartmentChange(event: { value: string }) {
     if(this.selectedState === null || (this.selectedState && event.value !== this.selectedState[0] )){
       console.log('event value', event.value);
       this.selectedState = event.value === null ? event.value : [event.value];
+      this.selectedStateEvaluados = this.selectedState;
       await this.refreshGraphics();
       console.log('selected graphics ----', this.selectedGraphics);
     }
   }
-  onCasesChange(event: { value: EnumDepartamentos }) {
-    const index: EnumDepartamentos = event.value;
-    console.log('index here --- ', index);
-    //this.filteredCasosAbordadosData = this.linearGraphicData[index as EnumDepartamentos] || [];
-    this.filteredCasosAbordadosData = [
-      {
-        name: EnumDepartamentos[index],
-        series: this.linearGraphicData[index].map(item => ({
-          name: item.name,
-          value: item.value,
-        })),
-      },
-    ];
-    console.log('filteredCasosAbordados');
-    this.selectedGraphics.casos = index;
-  }
+  // onCasesChange(event: { value: EnumDepartamentos }) {
+  //   const index: EnumDepartamentos = event.value;
+  //   console.log('index here --- ', index);
+  //   //this.filteredCasosAbordadosData = this.linearGraphicData[index as EnumDepartamentos] || [];
+  //   this.filteredCasosAbordadosData = [
+  //     {
+  //       name: EnumDepartamentos[index],
+  //       series: this.linearGraphicData[index].map(item => ({
+  //         name: item.name,
+  //         value: item.value,
+  //       })),
+  //     },
+  //   ];
+  //   console.log('filteredCasosAbordados');
+  //   this.selectedGraphics.casos = index;
+  // }
 
   cities: Departamentos[] = catalogoDepartamento;
   periodSearch: IPeriodSearch[] = [
@@ -188,7 +213,52 @@ export class EstudianteDeiInformeCuantitativoComponent
       startDate = this.formatDate(this.startDate);
       endDate = this.formatDate(this.endDate);
     }
-
+    this.deiService.getEstudiantesEvaluados({
+      fechaFin: endDate,
+      fechaInicio: startDate,
+      estadoAgendado: 1,
+      estadoProceso: 2,
+      estadoFinalizado: 3,
+      codigosDepartamentoRegion: this.selectedStateEvaluados,
+      tipoPeriodo: this.selectedPeriodType
+    }).then(data => {
+      console.log('evaluados ---> ', data);
+      console.log()
+      const series:Series[] = data.resultados.map((resultado) => {
+        return {
+          name: resultado.periodo,
+          value: resultado.total
+        } as Series
+      });
+      console.log('series --> ', series);
+      let name = '';
+      switch (this.selectedPeriodType){
+        case 1:
+          name = 'Año';
+          break;
+        case 2:
+          name = 'Trimestre';
+          break;
+        case 3:
+          name = 'Mes';
+          break;
+      }
+      this.filteredCasosAbordadosData = [{
+        name: name,
+        series: series,
+      }] as Multi[];
+      //   [{
+      //   name: 'NAME 1',
+      //   series: [
+      //     {name: "x", value: 5},
+      //     {name: "y", value: 5}
+      //   ]
+      // }]
+      // this.paeiData = data.resultados.map((item) => ({
+      //   name: item.departamento,
+      //   value: item.total,
+      // }));
+    });
     this.deiService
       .getPAEIByEstado({
         fechaFin: endDate,
@@ -262,7 +332,12 @@ export class EstudianteDeiInformeCuantitativoComponent
         //this.toggleTable();
       }
     });
-    deiService.getSexo().then(x => {
+    this.configurationLoad().then();
+    this.refreshGraphics().then();
+    this.pageLoading = false;
+  }
+  async configurationLoad(){
+    this.deiService.getSexo().then(x => {
       this.sexs = [
         {
           codigo: null,
@@ -276,13 +351,13 @@ export class EstudianteDeiInformeCuantitativoComponent
         }),
       ];
     });
-    deiService.getDepartamentos().then(x => {
+    this.deiService.getDepartamentos().then(x => {
       this.departamentos = [
         {codigo: null, nombre: 'Todos',nombreBusqueda: 'Todos', habilitado: true,id: 1},
         ...x
       ]
     });
-    deiService.getAllSchools().then(schools => {
+    this.deiService.getAllSchools().then(schools => {
       this.schools = [
         {
           sed_pk: null,
@@ -294,17 +369,13 @@ export class EstudianteDeiInformeCuantitativoComponent
       ];
       console.log('schools here', this.schools);
     });
-
-    deiService.getCorCount().then(x => {
+    this.deiService.getCorCount().then(x => {
       this.corCount = x;
     });
-    deiService.getDaiCount().then(x => {
+    this.deiService.getDaiCount().then(x => {
       this.daiCount = x;
     });
-    this.refreshGraphics().then();
-    this.pageLoading = false;
   }
-
   ngOnInit(): void {
     this.deiService
       .getAllDepartamentos()

@@ -140,7 +140,11 @@ export class SaetTabAgendaComponent {
           case TIPO_EVALUACION.psicologo_perfil:
             tipoEvaluacion = TIPO_EVALUACION.psicologo_agenda;
             break;
+          case TIPO_EVALUACION.pedagogo_perfil:
+            tipoEvaluacion = TIPO_EVALUACION.pedagogo_agenda;
+            break;
         }
+
         if(tipoEvaluacion === null){
           this.onMessage.emit({
             message: 'Tipo de evaluacion no definida correctamente',

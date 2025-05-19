@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, ElementRef, Inject, ViewChild } from '@angular/core';
 import { QuestionsComponent } from '../../QuestionsComponent';
 import {
   IMessageComponent,
@@ -16,6 +16,7 @@ import { TIPO_EVALUACION } from '../../shared/evaluaciones';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { KeyValue } from '../../component/saet-input/saet-input.component';
+import { IconComponent } from '../../shared/component.config';
 
 @Component({
   selector: 'app-estudiante-cuestionario-pedagogia',
@@ -31,6 +32,8 @@ export class EstudianteCuestionarioPedagogiaComponent
   };
   idEvaluacion = 0;
   baseUrl = '/menu/saet-pedagogia';
+  @ViewChild('bottomAnchor') override bottomAnchor!: ElementRef<HTMLDivElement>;
+  @ViewChild('topAnchor') override topAnchor!: ElementRef<HTMLDivElement>;
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceCOR: CatalogoServiceCor,
@@ -64,6 +67,16 @@ export class EstudianteCuestionarioPedagogiaComponent
           'menu/saet-pedagogia',
           this.formMode
         );
+
+        const respuestasDb = this.responseToValues(tipoEvaluacionResponse);
+
+        this.storedValues = {
+          ...respuestasDb
+        }
+        this.values = {
+          ...respuestasDb,
+          ...this.values,
+        };
       })
       .catch(e => {
         console.log('error in promise -----------zzzz ----- ', e);
@@ -88,7 +101,7 @@ export class EstudianteCuestionarioPedagogiaComponent
     );
     console.log('respuestas guardadas --- > ', respuestasServer);
 
-    const title = 'Perfil psicológico de estudiante';
+    const title = 'Perfil pedagogico de estudiante';
     const studentName =
       `${this.studentInfo?.nombreCompleto} | ${this.studentInfo?.nie}` ||
       'Nombre del estudiante no disponible';
@@ -212,11 +225,27 @@ export class EstudianteCuestionarioPedagogiaComponent
         this.userMessage.titleMessage = 'Error';
         return;
       }
-      await this.router.navigate([this.baseUrl, this.nie, 'view']);
+      const tipoEvaluacionResponse = await this.catalogoServiceCOR.getTipoDeEvaluacion(
+        this.nie,
+        TIPO_EVALUACION.pedagogo_perfil
+      );
+      const  respuestasDb = this.responseToValues(tipoEvaluacionResponse);
+      this.storedValues = {
+        ...respuestasDb
+      }
+
+      this.pageLoading = false;
+      this.userMessage.showMessage = true;
+      this.userMessage.type = MessageType.SUCCESS;
+      this.userMessage.message = '¡Los datos han sido guardados exitosamente!';
+      this.userMessage.titleMessage = 'Datos actualizados';
+      //await this.router.navigate([this.baseUrl, this.nie, 'view']);
     } catch (e) {
       console.log('Error ---- ', e);
     } finally {
       this.pageLoading = false;
     }
   }
+
+  protected readonly btnIcon = IconComponent;
 }

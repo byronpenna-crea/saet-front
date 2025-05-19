@@ -151,6 +151,17 @@ export interface IPlanAccionResponse {
   responsable_plan_accion: string;
   respuestas: iQuestionSave[];
 }
+export interface IReferencaResponse {
+  referencia_pk: number,
+  nie: number,
+  id_docente_apoyo: number,
+  departamento: string,
+  servicio_apoyo: string,
+  personal_ejecucion: string,
+  referencia_externa: string,
+  motivo: string
+}
+
 export interface IPaeiResponse {
   id_paei: number;
   respuestas: iQuestionSave[];
@@ -592,6 +603,28 @@ export class CatalogoServiceCor extends CatalogoServiceSaet {
       const errorDetails = JSON.parse(error.message);
       throw new Error(errorDetails.message);
     }
+  }
+  public async getReferencia(nie:string):Promise<IReferencaResponse>{
+    const url = `${environment.API_SERVER_URL}/dai/referencia/nie/${nie}`;
+    return new Promise((resolve, reject) => {
+      fetch(url, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${this.cookieService.get('token')}`,
+          'Content-Type': 'application/json'
+        }
+      })
+        .then(response => {
+          if (response.ok) {
+            resolve(response.json());
+          } else {
+            reject(new Error('No se pudo obtener los datos'));
+          }
+        })
+        .catch(error => {
+          reject(new Error('Hubo un error al obtener los datos: ' + error.message));
+        });
+    });
   }
   public async getPAEIPerNIE(nie: string): Promise<IPaeiResponse> {
     try {

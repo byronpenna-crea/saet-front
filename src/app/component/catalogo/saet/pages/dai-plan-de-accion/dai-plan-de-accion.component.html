@@ -42,7 +42,7 @@
 />
 <div class="form-container">
   <app-saet-tab leyend="Plan de acción">
-    <p-tabView>
+    <p-tabView (onChange)="onTabChange($event)">
       <p-tabPanel header="Acciones">
         <div>
           <app-tab-item
@@ -84,42 +84,73 @@
           </div>
         </div>
       </p-tabPanel>
-      <p-tabPanel header="Realizar referencia">
+      <p-tabPanel header="Realizar referenciaxxx">
+        <app-saet-mensaje-usuario
+          [show]="userMessage.showMessage"
+          [message]="userMessage.message"
+          [title]="userMessage.titleMessage"
+          [messageType]="userMessage.type"
+        />
+        <div *ngIf="readonlyForm">
+          <app-tab-item label="DAI responsable de realizar referencia:">
+            <app-saet-input value="Pablo Jose Modales" [disabled]="true" />
+            050350968-8 | Docente de Apoyo a la Inclusión
+          </app-tab-item>
+        </div>
         <app-tab-item label="Selecionar departamento">
           <p-dropdown
-            [options]="cities"
-            id="departamento-global"
-            optionLabel="nombre_departamento"
-            placeholder="Selecciona departamento"
-            optionValue="codigo_departamento"
+            [options]="departamentosModulo"
+            id="departamento-modulo"
+            optionLabel="value"
+            placeholder="Departamento a referir"
+            optionValue="code"
             class="w-full"
             style="width: 100%"
+            [disabled]="readonlyForm"
           />
         </app-tab-item>
         <app-tab-item label="Servicio de apoyo:">
-          <app-saet-input testId="input-nie" [disabled]="true" />
+          <app-saet-input
+            [value]="referenciaForm.servicioApoyo"
+            testId="txt-servicio-apoyo"
+            [disabled]="readonlyForm"
+          />
         </app-tab-item>
 
         <app-tab-item label="Personal de ejecución:">
-          <app-saet-input testId="input-nie" />
+          <app-saet-input
+            [value]="referenciaForm.personalEjecucion"
+            testId="txt-personal-ejecucion"
+            [disabled]="readonlyForm"
+          />
         </app-tab-item>
 
         <app-tab-item label="Referencia externa">
-          <app-saet-input testId="input-referencia" [disabled]="true" />
+          <app-saet-input
+            [value]="referenciaForm.referenciaExterna"
+            testId="input-referencia"
+            [disabled]="readonlyForm"
+          />
         </app-tab-item>
 
         <app-tab-item label="Motivo de referencia">
-          <app-saet-text-area testId="textarea" />
+          <app-saet-text-area
+            testId="textarea"
+            [value]="referenciaForm.motivoReferencia"
+            [disabled]="readonlyForm"
+          />
         </app-tab-item>
-
-        <app-saet-button
-          testId="btn-guardar-referencia"
-          [buttonArgs]="{
-            text: 'Guardar',
-            buttonStyle: btnStyle.WHITE,
-            buttonIcon: iconCompoment.PLUS
-          }"
-        />
+        <div *ngIf="!readonlyForm">
+          <app-saet-button
+            testId="btn-guardar-referencia"
+            [buttonArgs]="{
+              text: 'Guardar',
+              buttonStyle: btnStyle.WHITE,
+              buttonIcon: iconCompoment.PLUS
+            }"
+            (onClick)="saveReferencia()"
+          />
+        </div>
       </p-tabPanel>
     </p-tabView>
   </app-saet-tab>

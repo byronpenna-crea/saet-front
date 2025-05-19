@@ -161,18 +161,26 @@ export class EstudianteEvaluacionesComponent
       const indexEspecialidad: iEspecialidadEvaluacion | undefined =
         this.getIndexEspecialidad(this.especialidad);
 
-      console.log('-- getTipoEvaluacionFromString --', this.especialidad);
+
       const enumEspecialidad: TIPO_EVALUACION =
         this.getTipoEvaluacionFromString(this.especialidad);
       let enumEspecialidadAgenda:TIPO_EVALUACION | null = null;
+      console.log('-- getTipoEvaluacionFromString --', this.especialidad);
+      console.log('-- enum --', enumEspecialidad);
+
       switch (enumEspecialidad) {
         case TIPO_EVALUACION.psicologo_perfil:
           enumEspecialidadAgenda = TIPO_EVALUACION.psicologo_agenda;
           break;
+        case TIPO_EVALUACION.pedagogo_perfil:
+          enumEspecialidadAgenda = TIPO_EVALUACION.pedagogo_agenda;
+          break;
+        case TIPO_EVALUACION.logopeda_perfil:
+          enumEspecialidadAgenda = TIPO_EVALUACION.logopeda_agenda;
       }
       if(enumEspecialidadAgenda === null){
         this.userMessage.showMessage = true;
-        this.userMessage.message = 'Error al obtener la agenda del especialista actual';
+        this.userMessage.message = 'Error al obtener la agenda del especialista actualx';
         this.userMessage.type = MessageType.DANGER;
         return;
       }

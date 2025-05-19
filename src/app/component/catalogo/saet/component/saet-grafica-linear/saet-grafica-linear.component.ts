@@ -1,11 +1,11 @@
 import { Component, Input } from '@angular/core';
 
-interface Series {
+export interface Series {
   name: string;
   value: number;
 }
 
-interface Multi {
+export interface Multi {
   name: string;
   series: Series[];
 }

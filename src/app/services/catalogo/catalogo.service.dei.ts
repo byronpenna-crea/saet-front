@@ -11,8 +11,15 @@ export interface Schools {
   sed_nombre: string,
   sed_correo_electronico: string
 }
+export interface IEvaluadosGrafica {
+  periodo: string,
+  total: number
+}
 export interface PaeiGraficaResultado {
   resultados: PaeiGrafica[];
+}
+export interface evaluadosGraficaResultado {
+  resultados: IEvaluadosGrafica[]
 }
 export interface IDepartamentoResultado {
   id: number,
@@ -43,6 +50,15 @@ export interface IGetDificultad {
 export interface ISaveDificultad {
   est_pk: number,
   dificultades: number[]
+}
+export interface IFiltroEvaluado {
+  codigosDepartamentoRegion: string[] | null,
+  fechaInicio: string | null,
+  fechaFin: string | null,
+  tipoPeriodo: number,
+  estadoAgendado: number,
+  estadoProceso: number,
+  estadoFinalizado: number
 }
 export interface IFiltroDatosPaei{
   codigosDepartamentoRegion: string[]  | null,
@@ -115,6 +131,13 @@ export class CatalogoServiceDei extends CatalogoServiceSaet {
       obj,
     );
   }
+  public getEstudiantesEvaluados(obj:IFiltroEvaluado): Promise<evaluadosGraficaResultado>{
+    const url = `${environment.API_SERVER_URL}/dei/estudiantes-evaluados`;
+    return this.postRequest<IFiltroEvaluado,evaluadosGraficaResultado>(
+      url,
+      obj,
+    );
+  }
   public getPAEIByEstado(obj:IFiltroDatosPaei):Promise<PaeiGraficaResultado>{
     //console.log('estado', estado)
     const url = `${environment.API_SERVER_URL}/dei/datos-paei?estadoFinalizado=4`;
@@ -123,6 +146,7 @@ export class CatalogoServiceDei extends CatalogoServiceSaet {
       obj,
     );
   }
+
   public getPersonaApoyoByDui(dui:string):Promise<PersonaApoyo>{
     const url = `${environment.API_SERVER_URL}/tempEstudiantesSigesv2/personaApoyoByDui/${dui}`;
     return new Promise((resolve, reject) => {
