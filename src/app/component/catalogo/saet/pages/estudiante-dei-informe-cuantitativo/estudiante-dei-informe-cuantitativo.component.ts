@@ -50,6 +50,7 @@ export class EstudianteDeiInformeCuantitativoComponent
   selectedSed: number | null = null;
   selectedState: string[] | null = null;
   selectedStateEvaluados: string[] | null = null;
+  selectedStateDemanda: string[] | null = null;
   selectedPeriodType = 1; // by year
   formatDate(event: Date) {
     const day = String(event.getDate()).padStart(2, '0');
@@ -89,6 +90,7 @@ export class EstudianteDeiInformeCuantitativoComponent
   }
   getFilteredDataByDep(departamentoKey: keyof typeof EnumDepartamentos) {}
   paeiData: { name: string; value: number }[] = [];
+  demandaData: { name: string; value: number }[] = [];
   psicopedagogicoData: { name: string; value: number }[] = [];
   async onEstadoPAEIChange(estado: number) {
     try {
@@ -145,6 +147,12 @@ export class EstudianteDeiInformeCuantitativoComponent
       await this.refreshGraphics();
     }
   }
+  async onDemandaDepartmentChange(event: {value: string}){
+    if(this.selectedStateDemanda === null || (this.selectedStateDemanda && event.value !== this.selectedStateDemanda[0] )) {
+      this.selectedStateDemanda = event.value === null ? event.value : [event.value];
+      await this.refreshGraphics();
+    }
+  }
   async onEvaluadosDepartmentChange(event: { value: string }) {
     console.log('------- event --------', event);
     if(this.selectedStateEvaluados === null || (this.selectedStateEvaluados && event.value !== this.selectedStateEvaluados[0] )) {
@@ -158,6 +166,7 @@ export class EstudianteDeiInformeCuantitativoComponent
       console.log('event value', event.value);
       this.selectedState = event.value === null ? event.value : [event.value];
       this.selectedStateEvaluados = this.selectedState;
+      this.selectedStateDemanda = this.selectedState;
       await this.refreshGraphics();
       console.log('selected graphics ----', this.selectedGraphics);
     }
@@ -213,6 +222,32 @@ export class EstudianteDeiInformeCuantitativoComponent
       startDate = this.formatDate(this.startDate);
       endDate = this.formatDate(this.endDate);
     }
+
+    this.deiService.getDemanda({
+      codigoDepartamentoServicio: null,
+      codigosDepartamentoRegion: this.selectedStateDemanda,
+      fechaFin: endDate,
+      fechaInicio: startDate,
+      codigoCentroEducativo: this.selectedSed,
+      estadoSocializado: 1,
+      estadoProceso: 2,
+      estadoFinalizado: 3,
+      codigoSexo: this.selectedSex,
+    }).then((data) => {
+      this.demandaData = [{
+        name: "Total estudiantes",
+        value: data.totalEstudiantes
+      },
+        {
+          name: "Total docentes",
+          value: data.totalDocentes
+        },
+        {
+          name: "Total padres",
+          value: data.totalPadres
+        }
+      ]
+    })
     this.deiService.getEstudiantesEvaluados({
       fechaFin: endDate,
       fechaInicio: startDate,

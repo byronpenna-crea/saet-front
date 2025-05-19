@@ -144,9 +144,7 @@
         <div class="graphics-container">
           <div class="graphic-container">
             <h3>Proceso de evaluación psicopedagógica</h3>
-            <app-saet-grafica-pastel
-              [single]="psicopedagogicoData"
-            />
+            <app-saet-grafica-pastel [single]="psicopedagogicoData" />
             <div class="radios">
               <div>
                 <app-saet-individual-radio
@@ -226,35 +224,17 @@
         <div class="graphics-container">
           <div class="graphic-container">
             <h3>Concentracion de la demanda del servicio</h3>
-            <app-saet-grafica-pastel
-              [single]="[
-                { name: 'Ahuachapán', value: 15 },
-                { name: 'Usulután', value: 13 },
-                { name: 'Sonsonate', value: 8 },
-                { name: 'Cuscatlán', value: 3 },
-
-                { name: 'La Paz', value: 3 },
-                { name: 'La Unión', value: 3 },
-                { name: 'La Libertad', value: 3 },
-                { name: 'San Vicente', value: 3 },
-                { name: 'Morazán', value: 3 },
-                { name: 'San Miguel', value: 3 },
-                { name: 'San Salvador', value: 3 },
-                { name: 'Santa Ana', value: 3 },
-                { name: 'Chalatenango', value: 3 },
-                { name: 'Cabañas', value: 3 }
-              ]"
-            />
+            <app-saet-grafica-pastel [single]="demandaData" />
             <div style="display: flex; flex-direction: column; gap: 5px">
               <div class="flex-center filter-input" style="">
                 <div class="filter-cell">
-                  <div class="filter-label">DepartamentosX</div>
+                  <div class="filter-label">Departamentos</div>
                   <p-dropdown
                     [options]="departamentos"
                     optionLabel="nombre"
                     placeholder="Selecciona departamento"
                     optionValue="codigo"
-
+                    (onChange)="onDemandaDepartmentChange($event)"
                   />
                 </div>
               </div>
@@ -286,17 +266,21 @@
                   placeholder="Selecciona departamento"
                   optionValue="codigo"
                   (onChange)="onEvaluadosDepartmentChange($event)"
-                  [ngModel]="selectedStateEvaluados !== null ? selectedStateEvaluados[0] : null"
+                  [ngModel]="
+                    selectedStateEvaluados !== null
+                      ? selectedStateEvaluados[0]
+                      : null
+                  "
                 />
-<!--                <div class="filter-label">Periodo de tiempo</div>-->
-<!--                <p-dropdown-->
-<!--                  [options]="cities"-->
-<!--                  id="periodo-tiempo"-->
-<!--                  optionLabel="nombre"-->
-<!--                  placeholder="Selecciona departamento"-->
-<!--                  optionValue="codigo"-->
-<!--                  [ngModel]="selectedGraphics.casos"-->
-<!--                />-->
+                <!--                <div class="filter-label">Periodo de tiempo</div>-->
+                <!--                <p-dropdown-->
+                <!--                  [options]="cities"-->
+                <!--                  id="periodo-tiempo"-->
+                <!--                  optionLabel="nombre"-->
+                <!--                  placeholder="Selecciona departamento"-->
+                <!--                  optionValue="codigo"-->
+                <!--                  [ngModel]="selectedGraphics.casos"-->
+                <!--                />-->
                 <div class="filter-label">Periodo de tiempo</div>
                 <p-dropdown
                   [options]="periodSearch"
@@ -307,12 +291,11 @@
                   [ngModel]="selectedPeriodType"
                   (onChange)="onPeriodChange($event)"
                 />
-
               </div>
             </div>
           </div>
         </div>
-        <div style="margin-top: 60px;">
+        <div style="margin-top: 60px">
           <app-saet-button
             testId="btn-regresar"
             [customClasses]="'return-button'"

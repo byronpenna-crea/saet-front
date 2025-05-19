@@ -15,6 +15,12 @@ export interface IEvaluadosGrafica {
   periodo: string,
   total: number
 }
+
+export interface DemandaResultado {
+  totalEstudiantes: number,
+  totalPadres: number,
+  totalDocentes: number
+}
 export interface PaeiGraficaResultado {
   resultados: PaeiGrafica[];
 }
@@ -59,6 +65,17 @@ export interface IFiltroEvaluado {
   estadoAgendado: number,
   estadoProceso: number,
   estadoFinalizado: number
+}
+export interface IFiltroDemanda{
+  codigosDepartamentoRegion: string[]  | null,
+  codigoDepartamentoServicio: null,
+  fechaInicio: string | null,
+  fechaFin: string | null,
+  estadoSocializado: number,
+  estadoProceso: number,
+  estadoFinalizado: number,
+  codigoSexo: number | null,
+  codigoCentroEducativo: number | null
 }
 export interface IFiltroDatosPaei{
   codigosDepartamentoRegion: string[]  | null,
@@ -134,6 +151,13 @@ export class CatalogoServiceDei extends CatalogoServiceSaet {
   public getEstudiantesEvaluados(obj:IFiltroEvaluado): Promise<evaluadosGraficaResultado>{
     const url = `${environment.API_SERVER_URL}/dei/estudiantes-evaluados`;
     return this.postRequest<IFiltroEvaluado,evaluadosGraficaResultado>(
+      url,
+      obj,
+    );
+  }
+  public getDemanda(obj:IFiltroDemanda): Promise<DemandaResultado>{
+    const url = `${environment.API_SERVER_URL}/dei/demanda-servicios`;
+    return this.postRequest<IFiltroDatosPaei,DemandaResultado>(
       url,
       obj,
     );

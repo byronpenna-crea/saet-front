@@ -400,7 +400,7 @@ export class BuscarEstudianteComponent
         }
         this.userMessage = {
           showMessage: true,
-          message: error.message,
+          message: error.message !== '' ? error.message : 'NIE invalido',
           type: MessageType.DANGER,
         };
 
