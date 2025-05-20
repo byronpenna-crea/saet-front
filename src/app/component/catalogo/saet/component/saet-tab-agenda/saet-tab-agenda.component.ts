@@ -158,6 +158,12 @@ export class SaetTabAgendaComponent {
   onHoraPerfilSelect(event: Date) {
     this.profileTime = event;
   }
+  async irAgenda(){
+    console.log('ir a agenda');
+    await this.router.navigate(['menu/saet-evaluacion-agenda', this.nie]);
+    console.log('here');
+    //saet-evaluacion-agenda
+  }
   agendarEvaluacion() {
     console.log('on emit evaluation date', this.evaluationDate);
     console.log('on emit evaluation time', this.evaluationTime);

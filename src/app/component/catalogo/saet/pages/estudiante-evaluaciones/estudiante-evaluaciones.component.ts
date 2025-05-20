@@ -112,184 +112,136 @@ export class EstudianteEvaluacionesComponent
     this.pageLoading = true;
     this.userMessage.showMessage = false;
 
+    // Reiniciamos los estados de agendado
     Object.values(iEspecialidadEvaluacion).forEach(especialidad => {
       this.agendado[especialidad] = false;
     });
 
+    // Obtenemos el NIE desde los parámetros de la ruta
     this.route.paramMap.subscribe(params => {
       const nie = params.get('nie');
-      if (nie) {
-        this.nie = nie;
-      }
+      if (nie) this.nie = nie;
     });
-    this.initCaracterizacion().then(() => {
-      catalogoServiceCOR
-        .getStudentInfo(this.nie)
-        .then(result => {
-          this.studentInfo = result.estudiante;
-        })
-        .catch(ex => {
-          console.log('<--- error on getStudentInfo', ex);
-        });
 
-      this.especialidad = localStorage.getItem(
-        'especialidad'
-      ) as iEspecialidadEvaluacion;
-      console.log('especialidad logueado ', this.especialidad);
+    this.initCaracterizacion().then(async () => {
+      await this.loadStudentInfo();
+
+      // Cargar especialidad y persona desde localStorage
+      this.especialidad = localStorage.getItem('especialidad') as iEspecialidadEvaluacion;
       const idPersonaStr = localStorage.getItem('id_persona') ?? '0';
-      this.idPersona = isNaN(parseInt(idPersonaStr, 10))
-        ? 0
-        : parseInt(idPersonaStr, 10);
+      this.idPersona = isNaN(parseInt(idPersonaStr)) ? 0 : parseInt(idPersonaStr);
 
+      // Inicializamos tabs
       const tabs = this.getTabs();
-      if (tabs !== undefined) {
-        this.agendaTabs = tabs;
+      if (tabs) {
+        this.agendaTabs = tabs.map(tab => ({ ...tab, readOnly: true }));
+        this.agendaTabs = this.agendaTabs.sort(a => a.name === this.especialidad ? -1 : 1);
+        this.agendaTabs[0].readOnly = false;
       }
 
-      this.agendaTabs = this.agendaTabs.sort(a =>
-        a.name === this.especialidad ? -1 : 1
-      );
-      if (tabs !== undefined) {
-        this.agendaTabs = tabs.map(tab => ({
-          ...tab,
-          // readOnly: tab.name !== this.especialidad,
-          readOnly: true
-        }));
-      }
-      console.log('agenda tabs here --> ', this.agendaTabs);
-      this.agendaTabs[0].readOnly = false;
-      const indexEspecialidad: iEspecialidadEvaluacion | undefined =
-        this.getIndexEspecialidad(this.especialidad);
+      // Cargar información de especialistas relacionados
+      await this.loadEspecialistasRelacionados();
+
+      // Cargar información del especialista actual y evaluación
+      await this.loadEspecialistaActual();
 
 
-      const enumEspecialidad: TIPO_EVALUACION =
-        this.getTipoEvaluacionFromString(this.especialidad);
-      let enumEspecialidadAgenda:TIPO_EVALUACION | null = null;
-      console.log('-- getTipoEvaluacionFromString --', this.especialidad);
-      console.log('-- enum --', enumEspecialidad);
 
-      switch (enumEspecialidad) {
-        case TIPO_EVALUACION.psicologo_perfil:
-          enumEspecialidadAgenda = TIPO_EVALUACION.psicologo_agenda;
-          break;
-        case TIPO_EVALUACION.pedagogo_perfil:
-          enumEspecialidadAgenda = TIPO_EVALUACION.pedagogo_agenda;
-          break;
-        case TIPO_EVALUACION.logopeda_perfil:
-          enumEspecialidadAgenda = TIPO_EVALUACION.logopeda_agenda;
-      }
-      if(enumEspecialidadAgenda === null){
-        this.userMessage.showMessage = true;
-        this.userMessage.message = 'Error al obtener la agenda del especialista actualx';
-        this.userMessage.type = MessageType.DANGER;
+      this.pageLoading = false;
+    });
+  }
+
+  private async loadEspecialistasRelacionados() {
+    try {
+      const response = await this.catalogoServiceCOR.getCorEspecialistas(this.nie);
+
+      response.forEach(especialista => {
+        const esp = especialista.especialidad;
+        const espKey = esp === 'Psicologia' ? iEspecialidadEvaluacion.PSICOLOGIA :
+          esp === 'Pedagogía' ? iEspecialidadEvaluacion.PEDAGOGIA :
+            esp === 'Lenguaje y habla' ? iEspecialidadEvaluacion.LENGUAJE : null;
+
+        if (!espKey) return;
+
+        this.agendado[espKey] = true;
+        this.especialista[espKey] = {
+          nombreCompleto: especialista.nombre_completo,
+          dui: especialista.dui
+        };
+
+        this.updateTab(espKey, true, {
+          horaAgendado: especialista.hora_evaluacion,
+          fechaAgendado: especialista.fecha_evaluacion,
+          readonly: true,
+          readonlyEvaluacion: true
+        });
+      });
+    } catch (ex) {
+      console.error('Error al obtener especialistas relacionados', ex);
+    }
+  }
+  private getAgendaTipoEvaluacion(tipoPerfil: TIPO_EVALUACION): TIPO_EVALUACION | null {
+    switch (tipoPerfil) {
+      case TIPO_EVALUACION.psicologo_perfil:
+        return TIPO_EVALUACION.psicologo_agenda;
+      case TIPO_EVALUACION.pedagogo_perfil:
+        return TIPO_EVALUACION.pedagogo_agenda;
+      case TIPO_EVALUACION.logopeda_perfil:
+        return TIPO_EVALUACION.logopeda_agenda;
+      default:
+        return null;
+    }
+  }
+
+  private async loadEspecialistaActual() {
+    const tipoPerfil = this.getTipoEvaluacionFromString(this.especialidad ?? '');
+    const tipoAgenda = this.getAgendaTipoEvaluacion(tipoPerfil);
+
+    if (!tipoAgenda) {
+      this.userMessage = {
+        showMessage: true,
+        titleMessage: '',
+        message: 'Error al obtener la agenda del especialista actual',
+        type: MessageType.DANGER
+      };
+      return;
+    }
+
+    try {
+      const perfil = await this.catalogoServiceCOR.getTipoDeEvaluacion(this.nie, tipoPerfil);
+      if (perfil.id_evaluacion === 0) {
+        this.userMessage = {
+          showMessage: true,
+          titleMessage: '',
+          message: 'Evaluacion obtenida no es válida',
+          type: MessageType.WARNING
+        };
         return;
       }
-      /* Especialista actual */
-      this.catalogoServiceCOR
-        .getTipoDeEvaluacion(this.nie, enumEspecialidad)
-        .then(response => {
-          console.log('response ', response);
-          if (response.id_evaluacion === 0) {
-            this.userMessage.showMessage = true;
-            this.userMessage.message = 'Evaluacion obtenida no es valida ';
-            return;
-          }
 
-          this.psicologiaEspecilistaAgendado =
-            response.especialista_responsable;
+      const indexEspecialidad = this.getIndexEspecialidad(this.especialidad ?? '');
+      if (indexEspecialidad) {
+        this.psicologiaEvaluationId = perfil.id_evaluacion;
+        this.especialista[indexEspecialidad] = {
+          nombreCompleto: perfil.especialista_responsable,
+          dui: '',
+        };
+        this.agendaId[indexEspecialidad] = perfil.id_evaluacion;
 
-          if (indexEspecialidad) {
-            this.especialista[indexEspecialidad] = {
-              nombreCompleto: response.especialista_responsable,
-              dui: '',
-            };
-            this.agendaId[indexEspecialidad] = response.id_evaluacion;
-          }
-          this.psicologiaEvaluationId = response.id_evaluacion;
-          console.log('to update tab------> ', response.respuestas.length);
-          console.log('to update ------> ', response.respuestas.length > 0);
-          this.especialidad && this.updateTab(this.especialidad, true,{
-            horaAgendado: response.hora,
-            fechaAgendado: response.fecha,
-            perfilIniciado: response.respuestas.length > 0,
-            current: true
-          });
-        })
-        .catch((ex: ResponseError) => {
-          console.log('------- error ex --------', ex.status);
+        this.updateTab(this.especialidad!, true, {
+          horaAgendado: perfil.hora,
+          fechaAgendado: perfil.fecha,
+          perfilIniciado: perfil.respuestas.length > 0,
+          current: true
         });
-      this.catalogoServiceCOR
-        .getTipoDeEvaluacion(this.nie, enumEspecialidadAgenda)
-        .then(response => {
-          console.log('response for agenda',response);
-          this.especialidad && this.updateSubTabEvaluacion(this.especialidad,true,response.fecha ?? 'Error', response.hora ?? 'Error', true);
-        })
-      /* ################## */
-      catalogoServiceCOR
-        .getCorEspecialistas(this.nie)
-        .then(response => {
-          console.log('response getCorEspecialistas ', response);
-          response.forEach(especialista => {
-            if (this.especialidades.includes(especialista.especialidad)) {
-              console.log('here includes zzz', especialista);
-              if (especialista.especialidad === 'Psicologia') {
-                this.agendado[iEspecialidadEvaluacion.PSICOLOGIA] = true;
-                this.especialista[iEspecialidadEvaluacion.PSICOLOGIA] = {
-                  nombreCompleto: especialista.nombre_completo,
-                  dui: especialista.dui,
-                };
+      }
 
-                this.updateTab('psicologo', true, {
-                  horaAgendado: especialista.hora_evaluacion,
-                  fechaAgendado: especialista.fecha_evaluacion,
-                  readonly: true,
-                  readonlyEvaluacion: true
-                });
-              }
-              if (especialista.especialidad === 'Pedagogía') {
-                this.agendado[iEspecialidadEvaluacion.PEDAGOGIA] = true;
-                this.especialista[iEspecialidadEvaluacion.PEDAGOGIA] = {
-                  nombreCompleto: especialista.nombre_completo,
-                  dui: especialista.dui,
-                };
-
-                this.updateTab(iEspecialidadEvaluacion.PEDAGOGIA, true,
-                {
-                  horaAgendado: especialista.hora_evaluacion,
-                  fechaAgendado: especialista.fecha_evaluacion,
-                  readonly: true,
-                  readonlyEvaluacion: true
-                });
-              }
-              if (especialista.especialidad === 'Lenguaje y habla') {
-                console.log(
-                  '################# here inside ###############',
-                  especialista
-                );
-                this.agendado[iEspecialidadEvaluacion.LENGUAJE] = true;
-                this.especialista[iEspecialidadEvaluacion.LENGUAJE] = {
-                  nombreCompleto: especialista.nombre_completo,
-                  dui: especialista.dui,
-                };
-                this.updateTab(iEspecialidadEvaluacion.LENGUAJE, true,{
-                  horaAgendado: especialista.hora_evaluacion,
-                  fechaAgendado: especialista.fecha_evaluacion,
-                  readonly: true,
-                  readonlyEvaluacion: true
-                });
-              }
-              //
-            }
-          });
-        })
-        .finally(() => {
-          this.pageLoading = false;
-        });
-
-    });
-
-
-    this.pageLoading = false;
+      const agenda = await this.catalogoServiceCOR.getTipoDeEvaluacion(this.nie, tipoAgenda);
+      console.log('AGENDA PARA ACTUAL ---> ', agenda);
+      this.updateSubTabEvaluacion(this.especialidad!, true, agenda.fecha ?? '', agenda.hora ?? '', true);
+    } catch (ex) {
+      console.error('Error al cargar especialista actual', ex);
+    }
   }
   onMessage(event: {
     title: string;

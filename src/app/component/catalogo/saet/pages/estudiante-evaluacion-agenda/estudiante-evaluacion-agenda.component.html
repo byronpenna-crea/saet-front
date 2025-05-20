@@ -12,12 +12,13 @@
   [readOnlyPaei]="readOnlyPaei"
 />
 <app-saet-loading [isLoading]="pageLoading" />
-<app-saet-mensaje-usuario
-  [show]="userMessage.showMessage"
-  [message]="userMessage.message"
-  [title]="userMessage.titleMessage"
-/>
+
 <div class="form-container">
+  <app-saet-mensaje-usuario
+    [show]="userMessage.showMessage"
+    [message]="userMessage.message"
+    [title]="userMessage.titleMessage"
+  />
   <ng-container *ngFor="let corSurvey of corSurveys">
     <div style="margin-top: 2%">
       <app-tabs [legend]="corSurvey.titulo">
@@ -31,11 +32,13 @@
                 [type]="getQuestionType(pregunta.tipoPregunta)"
                 [idPregunta]="pregunta.id_pregunta"
                 [value]="values[pregunta.id_pregunta.toString()]"
+                [storedValues]="storedValues"
                 [values]="values"
                 [testId]="pregunta.id_pregunta.toString()"
                 [name]="getName(pregunta.pregunta)"
                 [options]="getOptions(pregunta.opcion)"
                 (checkboxChange)="onCheckboxChange($event)"
+                (textAreaChange)="onTextAreaChange($event)"
                 [readonly]="formMode === formModeEnum.VIEW"
               />
             </app-tab-item>
@@ -44,7 +47,11 @@
       </app-tabs>
     </div>
   </ng-container>
-
+  <app-saet-mensaje-usuario
+    [show]="userMessage.showMessage"
+    [message]="userMessage.message"
+    [title]="userMessage.titleMessage"
+  />
   <div *ngIf="showActionButtons" style="margin-top: 30px">
     <div *ngIf="formMode === formModeEnum.CREATE" class="actionsButton">
       <app-saet-button

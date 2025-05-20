@@ -34,8 +34,10 @@ export class SaetQuestionComponent {
       this.storedValues[key] !== null && this.storedValues[key] !== undefined
         ? this.storedValues[key]
         : '';
+    console.log('-------- is different ------');
     console.log('value 1', value);
     console.log('storedvalue 2', storedValue);
+    console.log('-------- is different ------');
     return value !== storedValue;
   }
   isDifferentRichText(key: string): boolean {

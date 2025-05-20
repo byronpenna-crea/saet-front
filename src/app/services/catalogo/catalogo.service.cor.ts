@@ -465,6 +465,12 @@ export class CatalogoServiceCor extends CatalogoServiceSaet {
   }
   // update
   evaluacionURL = `${this.API_SERVER_URL}/evaluacion/cor/`;
+  public updateEvaluacionPsicologia(obj:ISaveQuestionary){
+    return this.putRequest<ISaveQuestionary, ISaveQuestionary>(
+      `${this.evaluacionURL}reporte/psicologia/`,
+      obj
+    );
+  }
   public updatePsicologia(cuestionarioPsicologia: ISaveQuestionary) {
     return this.putRequest<ISaveQuestionary, ISaveQuestionary>(
       `${this.evaluacionURL}psicologia/`,

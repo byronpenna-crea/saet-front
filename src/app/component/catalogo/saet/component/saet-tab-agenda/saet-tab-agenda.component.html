@@ -133,7 +133,7 @@
     <p-tabPanel header="Agendar evaluación">
       <div *ngIf="!agendadoEvaluacion">
         <!--        pestana de evaluacion-->
-        {{ readOnlyEvaluacion }}
+        READ ONLY EVALUACION - {{ readOnlyEvaluacion }} agendadoEvaluacion - {{agendadoEvaluacion}}
         <div class="flex wrap margin-top">
           <div class="first-column">
             <label class="first-item">Fecha de evaluación XXX:</label>
@@ -174,22 +174,6 @@
           />
         </div>
       </div>
-      <div *ngIf="!agendado">
-        <div class="actionsButton">
-          <div></div>
-          <!--          <div class="right-buttons">-->
-          <!--            <app-saet-button-->
-          <!--              (onClick)="agendarEvaluacion()"-->
-          <!--              [disabled]="readOnly"-->
-          <!--              [buttonArgs]="{-->
-          <!--                buttonIcon: buttonIcon.PLUS,-->
-          <!--                buttonStyle: buttonStyle.WHITE,-->
-          <!--                text: 'Agendar evaluacion'-->
-          <!--              }"-->
-          <!--            />-->
-          <!--          </div>-->
-        </div>
-      </div>
       <div *ngIf="agendadoEvaluacion">
         <div class="agendado-row">
           <div class="agendado-tiempo">
@@ -203,6 +187,16 @@
             <app-saet-input [disabled]="true" [value]="horaAgendado">
             </app-saet-input>
           </div>
+        </div>
+        <div style="display: flex; justify-content: flex-end; margin: 2%">
+          <app-saet-button
+            (onClick)="irAgenda()"
+            [buttonArgs]="{
+              buttonIcon: buttonIcon.PLUS,
+              buttonStyle: buttonStyle.WHITE,
+              text: 'ver evaluacion'
+            }"
+          />
         </div>
       </div>
 
