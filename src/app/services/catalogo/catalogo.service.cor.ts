@@ -340,7 +340,42 @@ export class CatalogoServiceCor extends CatalogoServiceSaet {
     return this.postRequest<IQuestionaryHeader, IQuestionaryHeader>(url, obj);
   }
   //
+  public async saveReporte(
+    cuestionario: ISaveQuestionary,
+    especialidadEvaluacion: iEspecialidadEvaluacion
+  ){
+    console.log('save reporte -------------');
+    return;
+    const especialidadMap: Record<iEspecialidadEvaluacion, string> = {
+      [iEspecialidadEvaluacion.LENGUAJE]: 'lenguaje_habla',
+      [iEspecialidadEvaluacion.PSICOLOGIA]: 'psicologia',
+      [iEspecialidadEvaluacion.PEDAGOGIA]: 'pedagogia',
+    };
 
+    const especialidad =
+      especialidadMap[especialidadEvaluacion as iEspecialidadEvaluacion];
+
+    if (!especialidad) {
+      throw new Error(`Especialidad no válida: ${especialidadEvaluacion}`);
+    }
+    /*
+    const especialidad =
+      especialidadEvaluacion === iEspecialidadEvaluacion.LENGUAJE
+        ? 'lenguaje_habla'
+        : especialidadEvaluacion === iEspecialidadEvaluacion.PSICOLOGIA ? 'psicologia'
+        :
+        especialidadEvaluacion;*/
+    const url = `${this.API_SERVER_URL}/evaluacion/cor/${especialidad}/`;
+    try {
+      return await this.postRequest<ISaveQuestionary, ISaveQuestionary>(
+        url,
+        cuestionario
+      );
+    } catch (e) {
+      console.log('error ---- ', e);
+      throw e;
+    }
+  }
   // save
   public async saveEvaluacion(
     cuestionario: ISaveQuestionary,

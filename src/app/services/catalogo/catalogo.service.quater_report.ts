@@ -37,6 +37,7 @@ export interface Atendido {
   edad: number,
   municipio: string,
   centroEducativo: string,
+  nie: string,
   dificultades: {
     idDificultad: number,
     dificultad: string

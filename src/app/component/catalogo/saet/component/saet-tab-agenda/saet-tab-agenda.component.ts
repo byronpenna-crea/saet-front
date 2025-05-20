@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, Output } from '@angular/core';
 import {
   MessageType,
   UserMessage,
@@ -8,6 +8,9 @@ import { IconComponent } from '../../shared/component.config';
 
 import { TIPO_EVALUACION } from '../../shared/evaluaciones';
 import { iEspecialidadEvaluacion } from '../../../../../services/shared/saet-types';
+import { DOCUMENT } from '@angular/common';
+import { CatalogoServiceCor } from '../../../../../services/catalogo/catalogo.service.cor';
+import { ActivatedRoute, Router } from '@angular/router';
 
 export interface IAgendaParams {
   profileDate: Date | null;
@@ -45,13 +48,12 @@ export class SaetTabAgendaComponent {
   @Input() agendado: boolean = false;
   @Input() agendadoEvaluacion: boolean = false;
 
-
   @Input() readOnly: boolean = false;
   @Input() readOnlyEvaluacion: boolean = false;
 
   @Input() horaAgendado: string = '';
   @Input() fechaAgendado: string = '';
-  @Input() current:boolean = false;
+  @Input() current: boolean = false;
   @Input() leyend: string = '';
   @Input() especialistaAgendado: IAgendaEspecialista = {
     dui: '',
@@ -63,6 +65,7 @@ export class SaetTabAgendaComponent {
   } | null = null;
   @Input() evaluationId: number = 0;
   @Input() agendaId: number = 0;
+  @Input() nie: string = "";
   @Output() onIniciar = new EventEmitter<void>();
   @Output() onAgendar = new EventEmitter<IAgendaParams>();
   @Output() onEvaluationAgendar = new EventEmitter<IAgendaEvaluationParams>();
@@ -80,6 +83,15 @@ export class SaetTabAgendaComponent {
     type: MessageType.SUCCESS,
   };
   @Input() tipoEvaluacion: TIPO_EVALUACION = TIPO_EVALUACION.psicologo_perfil;
+  constructor(
+    @Inject(DOCUMENT) protected document: Document,
+    protected catalogoServiceCOR: CatalogoServiceCor,
+    protected route: ActivatedRoute,
+    protected router: Router
+  ) {
+
+  }
+
   buttonStyle = ButtonStyle;
   buttonIcon = IconComponent;
 
@@ -88,14 +100,38 @@ export class SaetTabAgendaComponent {
 
   evaluationDate: Date | null = new Date();
   evaluationTime: Date | null = null;
-
-  getSpecialistLabel(specialist:iEspecialidadEvaluacion){
+  onLoadView(event:any){
+    console.log('mmmmmm load mmmm', event);
+  }
+  onChangeView(event: { index:number }) {
+    switch (event.index){
+      case 0:
+        // perfil
+        break;
+      case 1:
+        // agenda
+        console.log('agendado evaluacion ->',this.agendadoEvaluacion);
+        console.log('read only evaluacion value ->',this.readOnlyEvaluacion);
+        if(this.nie === ""){
+          console.log('Nie debe ser definido para poder continuar');
+          break;
+        }
+        this.catalogoServiceCOR
+          .getTipoDeEvaluacion(this.nie, TIPO_EVALUACION.psicologo_agenda)
+          .then(response => {
+            console.log('tipo de valuacion response XX ->', response);
+          })
+        break;
+    }
+    console.log('zzzzzzzzzzzz event zzzzzzzzzzzz', event);
+  }
+  getSpecialistLabel(specialist: iEspecialidadEvaluacion) {
     switch (specialist) {
       case iEspecialidadEvaluacion.PSICOLOGIA: {
-        return "psicólogo";
+        return 'psicólogo';
       }
-      case iEspecialidadEvaluacion.LENGUAJE:{
-        return "lenguaje y habla";
+      case iEspecialidadEvaluacion.LENGUAJE: {
+        return 'lenguaje y habla';
       }
       case iEspecialidadEvaluacion.PEDAGOGIA: {
         return 'pedagogia';
@@ -109,10 +145,10 @@ export class SaetTabAgendaComponent {
     this.profileDate = event;
   }
   // ############
-  onEvaluationTimeSelect(event: Date){
+  onEvaluationTimeSelect(event: Date) {
     this.evaluationTime = event;
   }
-  onEvaluationTimeChange(event: Date){
+  onEvaluationTimeChange(event: Date) {
     this.evaluationTime = event;
   }
   // ##########
@@ -123,14 +159,14 @@ export class SaetTabAgendaComponent {
     this.profileTime = event;
   }
   agendarEvaluacion() {
-    console.log('on emit evaluation date',this.evaluationDate)
-    console.log('on emit evaluation time',this.evaluationTime)
+    console.log('on emit evaluation date', this.evaluationDate);
+    console.log('on emit evaluation time', this.evaluationTime);
 
     this.onMessage.emit({
       message: '',
       messageType: MessageType.SUCCESS,
       title: '¡Atención!',
-      showMessage: false
+      showMessage: false,
     });
     if (!this.readOnlyEvaluacion) {
       if (this.evaluationDate !== null && this.evaluationTime !== null) {
@@ -145,7 +181,7 @@ export class SaetTabAgendaComponent {
             break;
         }
 
-        if(tipoEvaluacion === null){
+        if (tipoEvaluacion === null) {
           this.onMessage.emit({
             message: 'Tipo de evaluacion no definida correctamente',
             messageType: MessageType.WARNING,
@@ -167,8 +203,6 @@ export class SaetTabAgendaComponent {
           title: '¡Atención!',
         });
       }
-
-
     }
   }
   agendar() {

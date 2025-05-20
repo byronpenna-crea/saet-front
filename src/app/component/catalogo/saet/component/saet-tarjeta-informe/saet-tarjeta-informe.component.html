@@ -1,6 +1,9 @@
-<div [class]="styleClasses">
-  <div class="numero">{{ numero }}</div>
-  <div class="detalle">
+<div
+  [class]="styleClasses"
+  [style]="disabled ? 'background: #F2F2F2;border-color:#F2F2F2' : ''"
+>
+  <div class="numero" [style]="disabled ? 'color: gray' : ''">{{ numero }}</div>
+  <div class="detalle" [style]="disabled ? 'color: gray' : ''">
     <h3>{{ titulo }}</h3>
     <p>{{ descripcion }}</p>
   </div>

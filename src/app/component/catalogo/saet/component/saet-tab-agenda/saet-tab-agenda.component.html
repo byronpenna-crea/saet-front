@@ -1,5 +1,6 @@
 <app-saet-tab [readOnly]="readOnly" [leyend]="leyend">
-  <p-tabView>
+  <p-tabView (onChange)="onChangeView($event)"
+             (load)="onLoadView($event)">
     <p-tabPanel header="Agendar perfil">
       <div *ngIf="!agendado">
         <div class="flex wrap margin-top">
@@ -135,26 +136,27 @@
         {{ readOnlyEvaluacion }}
         <div class="flex wrap margin-top">
           <div class="first-column">
-            <label class="first-item">Fecha de evaluación:</label>
+            <label class="first-item">Fecha de evaluación XXX:</label>
             <div class="second-item">
               <p-calendar
                 [disabled]="readOnlyEvaluacion"
                 [showIcon]="true"
                 dateFormat="dd/mm/yy"
                 (onSelect)="onFechaEvaluacionSelect($event)"
+                [ngModel]="evaluationDate"
               >
               </p-calendar>
             </div>
           </div>
           <div class="second-column">
-            <label class="first-item">Hora de evaluación:</label>
+            <label class="first-item">Hora de evaluación XXX:</label>
             <div class="second-item-time">
               <p-calendar
                 inputId="calendar-timeonly"
                 [disabled]="readOnlyEvaluacion"
                 (onSelect)="onEvaluationTimeSelect($event)"
                 [timeOnly]="true"
-                [ngModel]="profileTime"
+                [ngModel]="evaluationTime"
                 (ngModelChange)="onEvaluationTimeSelect($event)"
               />
             </div>

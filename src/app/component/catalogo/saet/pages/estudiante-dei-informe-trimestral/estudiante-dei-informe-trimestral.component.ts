@@ -39,6 +39,7 @@ export class EstudianteDeiInformeTrimestralComponent extends DeiBaseComponent {
         this.toggleTable();
       }
     });
+    this.toggleTable().then();
   }
   persona: {
     dui: string;

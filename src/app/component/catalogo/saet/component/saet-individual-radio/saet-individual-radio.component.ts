@@ -14,7 +14,7 @@ export class SaetIndividualRadioComponent {
   @Input() label: string = '';
   @Input() disabled: boolean = false;
   @Input() checked: boolean = false;
-
+  @Input() readOnly:boolean = false;
   onRadioChange(event: Event) {
     console.log('---- change event -----');
     const input = event.target as HTMLInputElement;

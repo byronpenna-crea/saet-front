@@ -11,6 +11,7 @@ export class SaetTarjetaInformeComponent implements OnChanges {
   @Input() titulo: string = '';
   @Input() descripcion: string = '';
   @Input() style: ButtonStyle = ButtonStyle.WHITE;
+  @Input() disabled: boolean = false;
   styleClasses: string = 'tarjeta-informe';
   ngOnChanges(changes: SimpleChanges) {
     this.updateStyleClasses();

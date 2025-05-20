@@ -20,23 +20,26 @@
           [numero]="0"
           titulo="Total de miembros"
           descripcion="Consejería Escolar (CE)"
+          [disabled]="true"
         />
         <app-saet-tarjeta-informe
           [numero]="0"
           titulo="Total de instituciones"
           descripcion="Escuela de Educación Especial (EEE)"
+          [disabled]="true"
         />
         <app-saet-tarjeta-informe
           [numero]="0"
           titulo="Total de Comités"
           descripcion="Comité Departamental de Apoyo a la Inclusión (CODAI)"
+          [disabled]="true"
         />
         <app-saet-tarjeta-informe
           [numero]="0"
           titulo="Total de cries"
           descripcion="Centro de recursos para la inclusion de estudiantes con discapacidad visual (CRIEDV)"
+          [disabled]="true"
         />
-        <!--        Comité Departamental de Apoyo a la Inclusión (CODAI)-->
       </div>
 
       <div style="display: flex; flex-direction: column; gap: 20px">
@@ -258,39 +261,33 @@
             />
             <div class="flex-center filter-input" style="">
               <div class="filter-cell">
-                <div class="filter-label">Departamentos</div>
-                <p-dropdown
-                  [options]="departamentos"
-                  id="casos-abordados"
-                  optionLabel="nombre"
-                  placeholder="Selecciona departamento"
-                  optionValue="codigo"
-                  (onChange)="onEvaluadosDepartmentChange($event)"
-                  [ngModel]="
-                    selectedStateEvaluados !== null
-                      ? selectedStateEvaluados[0]
-                      : null
-                  "
-                />
-                <!--                <div class="filter-label">Periodo de tiempo</div>-->
-                <!--                <p-dropdown-->
-                <!--                  [options]="cities"-->
-                <!--                  id="periodo-tiempo"-->
-                <!--                  optionLabel="nombre"-->
-                <!--                  placeholder="Selecciona departamento"-->
-                <!--                  optionValue="codigo"-->
-                <!--                  [ngModel]="selectedGraphics.casos"-->
-                <!--                />-->
-                <div class="filter-label">Periodo de tiempo</div>
-                <p-dropdown
-                  [options]="periodSearch"
-                  id="tipo"
-                  optionLabel="name"
-                  placeholder="Tipo"
-                  optionValue="code"
-                  [ngModel]="selectedPeriodType"
-                  (onChange)="onPeriodChange($event)"
-                />
+                <div style="display: flex; align-items: center; gap: 20px">
+                  <div class="filter-label">Departamentos</div>
+                  <p-dropdown
+                    [options]="departamentos"
+                    id="casos-abordados"
+                    optionLabel="nombre"
+                    placeholder="Selecciona departamento"
+                    optionValue="codigo"
+                    (onChange)="onEvaluadosDepartmentChange($event)"
+                    [ngModel]="
+                      selectedStateEvaluados !== null
+                        ? selectedStateEvaluados[0]
+                        : null
+                    "
+                    [style]="{ 'min-width': '300px' }"
+                  />
+                  <div class="filter-label">Periodo de tiempo</div>
+                  <p-dropdown
+                    [options]="periodSearch"
+                    id="tipo"
+                    optionLabel="name"
+                    placeholder="Tipo"
+                    optionValue="code"
+                    [ngModel]="selectedPeriodType"
+                    (onChange)="onPeriodChange($event)"
+                  />
+                </div>
               </div>
             </div>
           </div>

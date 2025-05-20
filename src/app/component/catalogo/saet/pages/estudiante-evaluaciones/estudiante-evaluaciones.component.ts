@@ -583,7 +583,7 @@ export class EstudianteEvaluacionesComponent
     }
     console.log('before try');
     try {
-      const respuesta = await this.catalogoServiceCOR.saveEvaluacion(
+      const respuesta = await this.catalogoServiceCOR.saveReporte(
         obj,
         event.especialidad
       );

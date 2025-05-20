@@ -57,7 +57,7 @@
       <app-saet-underlined-title>
         Informe trimestral de estudiantes atendidos en el COR
       </app-saet-underlined-title>
-      <div class="form-container">
+      <div>
         <div
           *ngIf="tableData.length === 0"
           style="
@@ -86,6 +86,10 @@
               {
                 key: 'tableHeaderStudentIssue',
                 header: 'Dificultad que representa'
+              },
+              {
+                key: 'tableHeaderStudentPaeiStatus',
+                header: 'Estatus PAEI'
               }
             ]"
             [value]="tableData"
@@ -120,14 +124,21 @@
                 <td>
                   {{ rowData['tableHeaderStudentCity'] }}
                 </td>
-                <td [innerHTML]="rowData['tableHeaderStudentIssue']">
+                <td [innerHTML]="rowData['tableHeaderStudentIssue']"></td>
+                <td style="width: 15%">
+                  <div style="display: flex; flex-direction: Column; gap: 10px">
+                    <app-saet-individual-radio
+                      label="Entregado"
+                      [disabled]="true"
+                      [checked]="rowData['tableHeaderStudentPaeiStatus'] !== 0"
+                    ></app-saet-individual-radio>
+                    <app-saet-individual-radio
+                      label="Pendiente"
+                      [disabled]="true"
+                      [checked]="rowData['tableHeaderStudentPaeiStatus'] === 0"
+                    />
+                  </div>
                 </td>
-                <!--            <td>-->
-                <!--              <div style="display: flex; flex-direction: Column; gap: 10px">-->
-                <!--                <app-saet-individual-radio label="Entregado" />-->
-                <!--                <app-saet-individual-radio label="Pendiente" />-->
-                <!--              </div>-->
-                <!--            </td>-->
               </tr>
             </ng-template>
           </p-table>
@@ -178,20 +189,20 @@
         </div>
       </div>
       <app-saet-underlined-title></app-saet-underlined-title>
-<!--      <div class="mt-2 mb-2 parent-rich">-->
-<!--        <span-->
-<!--          >Dificultades de memoria, atención, percepción, Dificultades de-->
-<!--          lenguaje receptivo, expresivo, dislalias entre otros.pensamiento de-->
-<!--          integración social, hiperactividad.</span-->
-<!--        >-->
-<!--        <div class="container-rich">-->
-<!--          <app-richtext-->
-<!--            text="xxx"-->
-<!--            [isHighlight]="highlight['richtext_1']"-->
-<!--            [disabled]="readOnlyForm"-->
-<!--          />-->
-<!--        </div>-->
-<!--      </div>-->
+      <!--      <div class="mt-2 mb-2 parent-rich">-->
+      <!--        <span-->
+      <!--          >Dificultades de memoria, atención, percepción, Dificultades de-->
+      <!--          lenguaje receptivo, expresivo, dislalias entre otros.pensamiento de-->
+      <!--          integración social, hiperactividad.</span-->
+      <!--        >-->
+      <!--        <div class="container-rich">-->
+      <!--          <app-richtext-->
+      <!--            text="xxx"-->
+      <!--            [isHighlight]="highlight['richtext_1']"-->
+      <!--            [disabled]="readOnlyForm"-->
+      <!--          />-->
+      <!--        </div>-->
+      <!--      </div>-->
 
       <app-saet-underlined-title></app-saet-underlined-title>
       <div class="mt-2 mb-2">

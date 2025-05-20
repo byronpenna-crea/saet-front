@@ -4,7 +4,7 @@ import {
   MessageType,
 } from '../../interfaces/message-component.interface';
 import { DOCUMENT } from '@angular/common';
-import { ResponseError } from '../../../../../services/catalogo/catalogo.service.cor';
+import { CatalogoServiceCor, ResponseError } from '../../../../../services/catalogo/catalogo.service.cor';
 import { ActivatedRoute, Router } from '@angular/router';
 import { KeyValue } from '../../component/saet-input/saet-input.component';
 import { IconComponent } from '../../shared/component.config';
@@ -40,6 +40,7 @@ export class EstudianteInformeTrimestralComponent
     tableHeaderStudentSchool: string;
     tableHeaderStudentCity: string;
     tableHeaderStudentIssue: string;
+    tableHeaderStudentPaeiStatus: number;
   }[] = [];
 
   trimestres = [
@@ -167,6 +168,7 @@ export class EstudianteInformeTrimestralComponent
   constructor(
     @Inject(DOCUMENT) document: Document,
     catalogoServiceQuarterReport: CatalogoServiceQuarterReport,
+    private catalogoServiceCOR: CatalogoServiceCor,
     private cdr: ChangeDetectorRef,
     route: ActivatedRoute,
     router: Router
@@ -335,9 +337,17 @@ export class EstudianteInformeTrimestralComponent
       console.log('result here ', atentidos);
       this.tableData = [];
       console.log('atendidos map ----------', atentidos);
-      this.tableData = atentidos.map(atendido => {
+      this.tableData = await Promise.all(atentidos.map(async(atendido,index) => {
+        let paeiId = 0;
+        try {
+          const paei = await this.catalogoServiceCOR
+            .getPAEIPerNIE(atendido.nie.toString());
+          paeiId = paei.id_paei;
+        }catch (e){
+          console.log('error paei', e);
+          /* empty */ }
         return {
-          number: '',
+          number: (index + 1).toString(),
           tableHeaderStudentName: `${atendido.nombres} ${atendido.apellidos}`,
           tableHeaderStudentSex: atendido.sexo,
           tableHeaderStudentAge: atendido.edad,
@@ -346,9 +356,10 @@ export class EstudianteInformeTrimestralComponent
           tableHeaderStudentCity: atendido.municipio,
           tableHeaderStudentIssue: atendido.dificultades.length > 0 ? atendido.dificultades.map((dificultad) => {
             return `<span>${dificultad.dificultad}</span><br />`;
-          }).join('') : 'Ninguna'
+          }).join('') : 'Ninguna',
+          tableHeaderStudentPaeiStatus: paeiId
         };
-      });
+      }));
       this.cnResult = 1;
       this.showTable = true;
     } catch (e: unknown) {

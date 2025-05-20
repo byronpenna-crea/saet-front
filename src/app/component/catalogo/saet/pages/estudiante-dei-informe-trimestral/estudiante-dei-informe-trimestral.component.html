@@ -4,33 +4,36 @@
   <p-tabPanel header="Informe cuantitativo"></p-tabPanel>
   <p-tabPanel header="Informe Trimestral COR" [selected]="true">
     <div class="form-container">
-      <p class="title">DUI del COR.</p>
-      <app-saet-input
-        testId="input-dui-cor-busqueda"
-        [inputArgs]="{ text: inputDui }"
-        [value]="inputDui"
-        [disabled]="showTable"
-        (inputChange)="onInputChange($event)"
-      />
-      <div class="button-container">
-        <app-saet-button
-          testId="btn-buscar"
+      <div style="display: none">
+        <p class="title">DUI del COR.</p>
+        <app-saet-input
+          testId="input-dui-cor-busqueda"
+          [inputArgs]="{ text: inputDui }"
+          [value]="inputDui"
           [disabled]="showTable"
-          [buttonArgs]="{
-            text: 'Buscar',
-            buttonStyle: ButtonStyle.BLUE,
-            buttonIcon: IconCompoment.SEARCH
-          }"
-          (onClick)="toggleTable()"
+          (inputChange)="onInputChange($event)"
         />
-        <button
-          data-testId="btn-clean"
-          class="clear-text"
-          (click)="cleanInput()"
-        >
-          limpiar búsqueda
-        </button>
+        <div class="button-container">
+          <app-saet-button
+            testId="btn-buscar"
+            [disabled]="showTable"
+            [buttonArgs]="{
+              text: 'Buscar',
+              buttonStyle: ButtonStyle.BLUE,
+              buttonIcon: IconCompoment.SEARCH
+            }"
+            (onClick)="toggleTable()"
+          />
+          <button
+            data-testId="btn-clean"
+            class="clear-text"
+            (click)="cleanInput()"
+          >
+            limpiar búsqueda
+          </button>
+        </div>
       </div>
+
       <div *ngIf="showTable">
         <app-saet-underlined-title>
           <div style="display: flex; flex-direction: row">
